@@ -13,14 +13,37 @@
         margin-top: 20px;
     }
 
+    button {
+        font-size: 20px;
+        padding: 15px 25px;
+        cursor: pointer;
+        margin: 5px;
+        border-radius: 10px;
+        border: 2px solid #333;
+    }
+
+    /* SCREENS */
+
     #loginScreen {
+        display: block;
         margin-top: 80px;
     }
 
-    #gameScreen,
+    #gameScreen {
+        display: none;
+    }
+
     #dexScreen {
         display: none;
     }
+
+    /* LOGIN */
+
+    #loginMessage {
+        font-size: 18px;
+    }
+
+    /* USER */
 
     #userInfo {
         margin: 15px;
@@ -35,18 +58,11 @@
         margin: 10px;
     }
 
+    /* COINS */
+
     #money {
         font-size: 20px;
         margin: 20px;
-    }
-
-    button {
-        font-size: 20px;
-        padding: 15px 25px;
-        cursor: pointer;
-        margin: 5px;
-        border-radius: 10px;
-        border: 2px solid #333;
     }
 
     #message {
@@ -54,7 +70,7 @@
         margin: 20px;
     }
 
-    /* CARD */
+    /* NORMAL CARDS */
 
     .card {
         display: inline-block;
@@ -80,6 +96,11 @@
 
     /* DEX */
 
+    #dexProgress {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
     #dexCards {
         max-width: 1200px;
         margin: auto;
@@ -89,7 +110,7 @@
         display: inline-block;
         vertical-align: top;
         width: 180px;
-        min-height: 280px;
+        height: 280px;
         background: white;
         border: 3px solid #333;
         border-radius: 15px;
@@ -113,6 +134,7 @@
     .dexName {
         font-size: 18px;
         font-weight: bold;
+        margin-top: 5px;
     }
 
     .locked {
@@ -120,9 +142,16 @@
         border-color: #888;
     }
 
-    .locked img {
-        filter: grayscale(100%);
-        opacity: 0.25;
+    .unknown {
+        width: 150px;
+        height: 200px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 45px;
+        font-weight: bold;
+        color: #555;
     }
 
     .comingSoon {
@@ -131,18 +160,12 @@
     }
 
     .comingSoonText {
-        font-size: 18px;
+        height: 210px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
         font-weight: bold;
-        margin-top: 80px;
-    }
-
-    .rare {
-        border: 3px solid gold;
-    }
-
-    .sectionTitle {
-        margin-top: 35px;
-        font-size: 28px;
     }
 
 </style>
@@ -153,7 +176,7 @@
 
 <p>Sign in to save your collection.</p>
 
-<button onclick="loginWithGoogle()">
+<button id="googleLoginButton">
     🔵 Sign in with Google
 </button>
 
@@ -168,15 +191,15 @@
     <span id="coins">50</span>
 </div>
 
-<button onclick="openPack()">
+<button id="openPackButton">
     OPEN PACK - 10 COINS
 </button>
 
-<button onclick="showDex()">
+<button id="dexButton">
     📖 DEX
 </button>
 
-<button onclick="logout()">
+<button id="logoutButton">
     LOG OUT
 </button>
 
@@ -186,22 +209,20 @@
 
 </div><!-- ========================= --><!-- DEX --><!-- ========================= --><div id="dexScreen"><h1>📖 Doll Ball Dex</h1>
 
-<p id="dexProgress"></p>
+<p id="dexProgress">
+    Collected: 0 / 12
+</p>
 
-<button onclick="backToGame()">
+<button id="backButton">
     ← BACK TO PACKS
 </button>
-
-<h2 class="sectionTitle">
-    Main Cards
-</h2>
 
 <div id="dexCards"></div>
 
 </div><!-- ========================= --><!-- FIREBASE --><!-- ========================= --><script type="module">
 
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
     getAuth,
@@ -210,12 +231,12 @@ import {
     signOut,
     onAuthStateChanged
 }
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
 
 /* =========================
-   FIREBASE CONFIG
+   FIREBASE
 ========================= */
 
 const firebaseConfig = {
@@ -246,7 +267,7 @@ const provider = new GoogleAuthProvider();
 
 
 /* =========================
-   GAME DATA
+   GAME VARIABLES
 ========================= */
 
 let money = 50;
@@ -256,10 +277,10 @@ let collection = [];
 
 
 /* =========================
-   MAIN 12 CARDS
+   12 MAIN CARDS
 ========================= */
 
-const mainCards = [
+const cards = [
 
     {
         id: 1,
@@ -350,94 +371,31 @@ const mainCards = [
 
 
 /* =========================
-   6 RARES
-========================= */
-
-const rareCards = [
-
-    {
-        id: 13,
-        name: "Rare 1",
-        image: "",
-        rare: true
-    },
-
-    {
-        id: 14,
-        name: "Rare 2",
-        image: "",
-        rare: true
-    },
-
-    {
-        id: 15,
-        name: "Rare 3",
-        image: "",
-        rare: true
-    },
-
-    {
-        id: 16,
-        name: "Rare 4",
-        image: "",
-        rare: true
-    },
-
-    {
-        id: 17,
-        name: "Rare 5",
-        image: "",
-        rare: true
-    },
-
-    {
-        id: 18,
-        name: "Rare 6",
-        image: "",
-        rare: true
-    }
-
-];
-
-
-
-/* =========================
-   ALL PACK CARDS
-========================= */
-
-const cards = mainCards;
-
-
-
-/* =========================
    GOOGLE LOGIN
 ========================= */
 
-window.loginWithGoogle = async function () {
+document
+    .getElementById("googleLoginButton")
+    .addEventListener("click", async function() {
 
-    try {
+        try {
 
-        const result =
             await signInWithPopup(auth, provider);
 
-        console.log(
-            "Logged in:",
-            result.user.displayName
-        );
+        }
 
-    }
+        catch(error) {
 
-    catch (error) {
+            console.error(error);
 
-        console.error(error);
+            document
+                .getElementById("loginMessage")
+                .textContent =
+                "❌ Login failed: " + error.message;
 
-        document.getElementById("loginMessage")
-            .textContent =
-            "❌ Login failed: " + error.message;
+        }
 
-    }
-
-};
+    });
 
 
 
@@ -445,11 +403,13 @@ window.loginWithGoogle = async function () {
    LOGOUT
 ========================= */
 
-window.logout = async function () {
+document
+    .getElementById("logoutButton")
+    .addEventListener("click", async function() {
 
-    await signOut(auth);
+        await signOut(auth);
 
-};
+    });
 
 
 
@@ -461,13 +421,16 @@ onAuthStateChanged(auth, function(user) {
 
     if (user) {
 
-        document.getElementById("loginScreen")
+        document
+            .getElementById("loginScreen")
             .style.display = "none";
 
-        document.getElementById("gameScreen")
+        document
+            .getElementById("gameScreen")
             .style.display = "block";
 
-        document.getElementById("dexScreen")
+        document
+            .getElementById("dexScreen")
             .style.display = "none";
 
 
@@ -479,7 +442,8 @@ onAuthStateChanged(auth, function(user) {
 
             userInfo.innerHTML =
                 `<img id="userPhoto"
-                src="${user.photoURL}">
+                src="${user.photoURL}"
+                alt="Profile">
                 Welcome, ${user.displayName}!`;
 
         }
@@ -495,13 +459,16 @@ onAuthStateChanged(auth, function(user) {
 
     else {
 
-        document.getElementById("loginScreen")
+        document
+            .getElementById("loginScreen")
             .style.display = "block";
 
-        document.getElementById("gameScreen")
+        document
+            .getElementById("gameScreen")
             .style.display = "none";
 
-        document.getElementById("dexScreen")
+        document
+            .getElementById("dexScreen")
             .style.display = "none";
 
     }
@@ -518,7 +485,7 @@ function getRandomCard() {
 
     let total = 0;
 
-    for (let card of cards) {
+    for (const card of cards) {
 
         total += card.chance;
 
@@ -529,7 +496,7 @@ function getRandomCard() {
         Math.random() * total;
 
 
-    for (let card of cards) {
+    for (const card of cards) {
 
         random -= card.chance;
 
@@ -549,64 +516,70 @@ function getRandomCard() {
    OPEN PACK
 ========================= */
 
-window.openPack = function() {
+document
+    .getElementById("openPackButton")
+    .addEventListener("click", function() {
 
-    if (money < 10) {
+        if (money < 10) {
 
-        document.getElementById("message")
+            document
+                .getElementById("message")
+                .textContent =
+                "❌ Not enough coins!";
+
+            return;
+
+        }
+
+
+        money -= 10;
+
+
+        document
+            .getElementById("coins")
+            .textContent = money;
+
+
+        document
+            .getElementById("cards")
+            .innerHTML = "";
+
+
+        const pack = [];
+
+
+        for (let i = 0; i < 3; i++) {
+
+            const card = getRandomCard();
+
+            pack.push(card);
+
+            collection.push(card);
+
+        }
+
+
+        document
+            .getElementById("message")
             .textContent =
-            "❌ Not enough coins!";
-
-        return;
-
-    }
+            "🎉 You got 3 cards!";
 
 
-    money -= 10;
+        for (const card of pack) {
 
+            displayCard(
+                card,
+                document.getElementById("cards")
+            );
 
-    document.getElementById("coins")
-        .textContent = money;
+        }
 
-
-    document.getElementById("cards")
-        .innerHTML = "";
-
-
-    let pack = [];
-
-
-    for (let i = 0; i < 3; i++) {
-
-        let card = getRandomCard();
-
-        pack.push(card);
-
-        collection.push(card);
-
-    }
-
-
-    document.getElementById("message")
-        .textContent =
-        "🎉 You got 3 cards!";
-
-
-    for (let card of pack) {
-
-        displayCard(
-            card,
-            document.getElementById("cards")
-        );
-
-    }
-
-};
+    });
 
 
 
 /* =========================
-   DISPLAY NORMAL CARD
+   DISPLAY CARD
 ========================= */
 
 function displayCard(card, container) {
@@ -635,7 +608,6 @@ function displayCard(card, container) {
 
     cardDiv.appendChild(name);
 
-
     container.appendChild(cardDiv);
 
 }
@@ -643,21 +615,27 @@ function displayCard(card, container) {
 
 
 /* =========================
-   SHOW DEX
+   OPEN DEX
 ========================= */
 
-window.showDex = function() {
+document
+    .getElementById("dexButton")
+    .addEventListener("click", function() {
 
-    document.getElementById("gameScreen")
-        .style.display = "none";
+        document
+            .getElementById("gameScreen")
+            .style.display = "none";
 
-    document.getElementById("dexScreen")
-        .style.display = "block";
+        document
+            .getElementById("dexScreen")
+            .style.display = "block";
 
 
-    buildDex();
+        buildDex();
 
-};
+        window.scrollTo(0, 0);
+
+    });
 
 
 
@@ -673,30 +651,19 @@ function buildDex() {
     container.innerHTML = "";
 
 
-    const allDexCards =
-        [...mainCards, ...rareCards];
-
-
-    let owned = 0;
+    let uniqueOwned = 0;
 
 
     /* =========================
-       MAIN 12 + RARES
+       CARDS #001 - #012
     ========================= */
 
-    for (let card of allDexCards) {
+    for (const card of cards) {
 
         const div =
             document.createElement("div");
 
         div.className = "dexCard";
-
-
-        if (card.rare) {
-
-            div.classList.add("rare");
-
-        }
 
 
         const number =
@@ -707,54 +674,28 @@ function buildDex() {
         number.textContent =
             "#" + String(card.id).padStart(3, "0");
 
-
         div.appendChild(number);
 
 
-        const hasCard =
+        const owned =
             collection.some(
-                c => c.id === card.id
+                ownedCard => ownedCard.id === card.id
             );
 
 
-        if (hasCard) {
+        if (owned) {
 
-            owned++;
+            uniqueOwned++;
 
 
-            if (card.image) {
+            const image =
+                document.createElement("img");
 
-                const img =
-                    document.createElement("img");
+            image.src = card.image;
 
-                img.src = card.image;
+            image.alt = card.name;
 
-                img.alt = card.name;
-
-                div.appendChild(img);
-
-            }
-
-            else {
-
-                const placeholder =
-                    document.createElement("div");
-
-                placeholder.style.height = "200px";
-
-                placeholder.style.display = "flex";
-
-                placeholder.style.alignItems = "center";
-
-                placeholder.style.justifyContent = "center";
-
-                placeholder.style.fontSize = "50px";
-
-                placeholder.textContent = "⭐";
-
-                div.appendChild(placeholder);
-
-            }
+            div.appendChild(image);
 
 
             const name =
@@ -762,8 +703,7 @@ function buildDex() {
 
             name.className = "dexName";
 
-            name.textContent =
-                card.name;
+            name.textContent = card.name;
 
             div.appendChild(name);
 
@@ -777,15 +717,7 @@ function buildDex() {
             const unknown =
                 document.createElement("div");
 
-            unknown.style.height = "200px";
-
-            unknown.style.display = "flex";
-
-            unknown.style.alignItems = "center";
-
-            unknown.style.justifyContent = "center";
-
-            unknown.style.fontSize = "55px";
+            unknown.className = "unknown";
 
             unknown.textContent = "???";
 
@@ -811,10 +743,11 @@ function buildDex() {
 
 
     /* =========================
+       #013 - #123
        111 COMING SOON
     ========================= */
 
-    for (let i = 19; i <= 129; i++) {
+    for (let i = 13; i <= 123; i++) {
 
         const div =
             document.createElement("div");
@@ -854,9 +787,12 @@ function buildDex() {
     }
 
 
-    document.getElementById("dexProgress")
+    document
+        .getElementById("dexProgress")
         .textContent =
-        "Collected: " + owned + " / 18";
+        "Collected: " +
+        uniqueOwned +
+        " / 12";
 
 }
 
@@ -866,15 +802,20 @@ function buildDex() {
    BACK TO GAME
 ========================= */
 
-window.backToGame = function() {
+document
+    .getElementById("backButton")
+    .addEventListener("click", function() {
 
-    document.getElementById("dexScreen")
-        .style.display = "none";
+        document
+            .getElementById("dexScreen")
+            .style.display = "none";
 
-    document.getElementById("gameScreen")
-        .style.display = "block";
+        document
+            .getElementById("gameScreen")
+            .style.display = "block";
 
-};
+        window.scrollTo(0, 0);
 
-</script></body>
-</html>
+    });
+
+</script></body></html>
