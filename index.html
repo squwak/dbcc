@@ -81,17 +81,12 @@ h1 {
 .card {
     display: inline-block;
     vertical-align: top;
-
     background: white;
-
     border: 2px solid #333;
     border-radius: 15px;
-
     padding: 10px;
     margin: 10px;
-
     width: 180px;
-
     cursor: pointer;
 }
 
@@ -110,6 +105,12 @@ h1 {
     font-weight: bold;
 }
 
+.sellText {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
 /* COLLECTION */
 
 #collectionCards {
@@ -120,12 +121,6 @@ h1 {
 #collectionCount {
     font-size: 20px;
     font-weight: bold;
-}
-
-.sellText {
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 5px;
 }
 
 /* DEX */
@@ -252,14 +247,6 @@ h1 {
     font-weight: bold;
 }
 
-#sellButton {
-    background: #eee;
-}
-
-#cancelSellButton {
-    background: #eee;
-}
-
 #popupBackground {
     display: none;
 
@@ -284,20 +271,18 @@ h1 {
 <body>
 
 
-<!-- =========================
-     LOGIN
-========================= -->
+<!-- LOGIN -->
 
 <div id="loginScreen">
 
-    <h1>🎴 Doll Ball Collector Cards</h1>
+    <h1>Doll Ball Collector Cards</h1>
 
     <h2>Welcome to DBCC!</h2>
 
     <p>Sign in to play.</p>
 
     <button id="googleLoginButton">
-        🔵 Sign in with Google
+        Sign in with Google
     </button>
 
     <p id="loginMessage"></p>
@@ -306,9 +291,7 @@ h1 {
 
 
 
-<!-- =========================
-     MAIN GAME
-========================= -->
+<!-- MAIN GAME -->
 
 <div id="gameScreen">
 
@@ -317,30 +300,25 @@ h1 {
     <div id="userInfo"></div>
 
     <div id="money">
-        🪙 Coins:
+        Coins:
         <span id="coins">75</span>
     </div>
-
 
     <button id="openPackButton">
         OPEN PACK - 15 COINS
     </button>
 
-
     <button id="collectionButton">
-        🃏 COLLECTION
+        COLLECTION
     </button>
-
 
     <button id="dexButton">
-        📖 DEX
+        DEX
     </button>
-
 
     <button id="logoutButton">
         LOG OUT
     </button>
-
 
     <p id="message"></p>
 
@@ -350,13 +328,11 @@ h1 {
 
 
 
-<!-- =========================
-     COLLECTION
-========================= -->
+<!-- COLLECTION -->
 
 <div id="collectionScreen">
 
-    <h1>🃏 My Collection</h1>
+    <h1>My Collection</h1>
 
     <p id="collectionCount">
         Cards collected: 0
@@ -366,11 +342,9 @@ h1 {
         Tap a card to sell it.
     </p>
 
-
     <button id="collectionBackButton">
-        ← BACK TO PACKS
+        BACK TO PACKS
     </button>
-
 
     <div id="collectionCards"></div>
 
@@ -378,23 +352,19 @@ h1 {
 
 
 
-<!-- =========================
-     DEX
-========================= -->
+<!-- DEX -->
 
 <div id="dexScreen">
 
-    <h1>📖 Doll Ball Dex</h1>
+    <h1>Doll Ball Dex</h1>
 
     <p id="dexProgress">
         Collected: 0 / 12
     </p>
 
-
     <button id="dexBackButton">
-        ← BACK TO PACKS
+        BACK TO PACKS
     </button>
-
 
     <div id="dexCards"></div>
 
@@ -402,12 +372,9 @@ h1 {
 
 
 
-<!-- =========================
-     SELL POPUP
-========================= -->
+<!-- SELL POPUP -->
 
 <div id="popupBackground"></div>
-
 
 <div id="sellPopup">
 
@@ -420,7 +387,7 @@ h1 {
     <p id="sellPrice"></p>
 
     <button id="sellButton">
-        🪙 SELL
+        SELL
     </button>
 
     <button id="cancelSellButton">
@@ -431,34 +398,32 @@ h1 {
 
 
 
-<!-- =========================
-     FIREBASE
-========================= -->
+<!-- FIREBASE -->
 
 <script type="module">
 
 import { initializeApp }
-
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-
 import {
-
     getAuth,
     GoogleAuthProvider,
     signInWithPopup,
     signOut,
     onAuthStateChanged
-
 }
-
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
-/* =========================
-   FIREBASE CONFIG
-========================= */
+/* FIREBASE CONFIG */
 
 const firebaseConfig = {
 
@@ -492,14 +457,14 @@ const app =
 const auth =
     getAuth(app);
 
+const db =
+    getFirestore(app);
+
 const provider =
     new GoogleAuthProvider();
 
 
-
-/* =========================
-   GAME DATA
-========================= */
+/* GAME VARIABLES */
 
 let money = 75;
 
@@ -507,11 +472,10 @@ let collection = [];
 
 let selectedCardIndex = null;
 
+let currentUser = null;
 
 
-/* =========================
-   CURRENT CARDS
-========================= */
+/* CARD DATA */
 
 const cards = [
 
@@ -614,10 +578,164 @@ const cards = [
 ];
 
 
+/* SAVE GAME */
 
-/* =========================
-   LOGIN
-========================= */
+async function saveGame() {
+
+    if (!currentUser) {
+        return;
+    }
+
+    try {
+
+        const userRef =
+            doc(
+                db,
+                "players",
+                currentUser.uid
+            );
+
+        await setDoc(
+            userRef,
+            {
+                coins: money,
+
+                collection:
+                    collection.map(
+                        card => card.id
+                    )
+            },
+            {
+                merge: true
+            }
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Save error:",
+            error
+        );
+
+        document
+            .getElementById("message")
+            .textContent =
+            "Could not save game.";
+
+    }
+
+}
+
+
+/* LOAD GAME */
+
+async function loadGame(user) {
+
+    currentUser = user;
+
+    try {
+
+        const userRef =
+            doc(
+                db,
+                "players",
+                user.uid
+            );
+
+        const snapshot =
+            await getDoc(userRef);
+
+
+        if (snapshot.exists()) {
+
+            const data =
+                snapshot.data();
+
+
+            if (
+                typeof data.coins ===
+                "number"
+            ) {
+
+                money =
+                    data.coins;
+
+            }
+
+            else {
+
+                money = 75;
+
+            }
+
+
+            if (
+                Array.isArray(
+                    data.collection
+                )
+            ) {
+
+                collection =
+                    data.collection
+                    .map(id =>
+                        cards.find(
+                            card =>
+                                card.id === id
+                        )
+                    )
+                    .filter(
+                        card => card
+                    );
+
+            }
+
+            else {
+
+                collection = [];
+
+            }
+
+        }
+
+        else {
+
+            money = 75;
+
+            collection = [];
+
+            await saveGame();
+
+        }
+
+
+        updateMoney();
+
+        showOnly(
+            "gameScreen"
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Load error:",
+            error
+        );
+
+        document
+            .getElementById("loginMessage")
+            .textContent =
+            "Could not load your game.";
+
+    }
+
+}
+
+
+/* GOOGLE LOGIN */
 
 document
 .getElementById("googleLoginButton")
@@ -639,9 +757,9 @@ document
             console.error(error);
 
             document
-            .getElementById("loginMessage")
-            .textContent =
-                "❌ Login failed: " +
+                .getElementById("loginMessage")
+                .textContent =
+                "Login failed: " +
                 error.message;
 
         }
@@ -650,10 +768,7 @@ document
 );
 
 
-
-/* =========================
-   LOGOUT
-========================= */
+/* LOGOUT */
 
 document
 .getElementById("logoutButton")
@@ -661,27 +776,21 @@ document
     "click",
     async function() {
 
+        await saveGame();
+
         await signOut(auth);
 
     }
 );
 
 
-
-/* =========================
-   AUTH STATE
-========================= */
+/* AUTH STATE */
 
 onAuthStateChanged(
     auth,
-    function(user) {
+    async function(user) {
 
-        if(user) {
-
-            showOnly(
-                "gameScreen"
-            );
-
+        if (user) {
 
             const userInfo =
                 document.getElementById(
@@ -689,7 +798,7 @@ onAuthStateChanged(
                 );
 
 
-            if(user.photoURL) {
+            if (user.photoURL) {
 
                 userInfo.innerHTML =
 
@@ -710,9 +819,14 @@ onAuthStateChanged(
 
             }
 
+
+            await loadGame(user);
+
         }
 
         else {
+
+            currentUser = null;
 
             showOnly(
                 "loginScreen"
@@ -724,33 +838,30 @@ onAuthStateChanged(
 );
 
 
-
-/* =========================
-   SCREEN SWITCHING
-========================= */
+/* SCREEN SWITCHING */
 
 function showOnly(screenId) {
 
     document
-    .getElementById("loginScreen")
-    .style.display = "none";
+        .getElementById("loginScreen")
+        .style.display = "none";
 
     document
-    .getElementById("gameScreen")
-    .style.display = "none";
+        .getElementById("gameScreen")
+        .style.display = "none";
 
     document
-    .getElementById("collectionScreen")
-    .style.display = "none";
+        .getElementById("collectionScreen")
+        .style.display = "none";
 
     document
-    .getElementById("dexScreen")
-    .style.display = "none";
+        .getElementById("dexScreen")
+        .style.display = "none";
 
 
     document
-    .getElementById(screenId)
-    .style.display = "block";
+        .getElementById(screenId)
+        .style.display = "block";
 
 
     window.scrollTo(
@@ -761,17 +872,14 @@ function showOnly(screenId) {
 }
 
 
-
-/* =========================
-   RANDOM CARD
-========================= */
+/* RANDOM CARD */
 
 function getRandomCard() {
 
     let total = 0;
 
 
-    for(const card of cards) {
+    for (const card of cards) {
 
         total += card.chance;
 
@@ -782,12 +890,12 @@ function getRandomCard() {
         Math.random() * total;
 
 
-    for(const card of cards) {
+    for (const card of cards) {
 
         random -= card.chance;
 
 
-        if(random <= 0) {
+        if (random <= 0) {
 
             return card;
 
@@ -798,23 +906,20 @@ function getRandomCard() {
 }
 
 
-
-/* =========================
-   OPEN PACK
-========================= */
+/* OPEN PACK */
 
 document
 .getElementById("openPackButton")
 .addEventListener(
     "click",
-    function() {
+    async function() {
 
-        if(money < 15) {
+        if (money < 15) {
 
             document
-            .getElementById("message")
-            .textContent =
-                "❌ Not enough coins!";
+                .getElementById("message")
+                .textContent =
+                "Not enough coins.";
 
             return;
 
@@ -824,18 +929,15 @@ document
         money -= 15;
 
 
-        updateMoney();
-
-
         document
-        .getElementById("cards")
-        .innerHTML = "";
+            .getElementById("cards")
+            .innerHTML = "";
 
 
         const pack = [];
 
 
-        for(
+        for (
             let i = 0;
             i < 3;
             i++
@@ -844,22 +946,25 @@ document
             const card =
                 getRandomCard();
 
-
             pack.push(card);
-
 
             collection.push(card);
 
         }
 
 
+        updateMoney();
+
+        await saveGame();
+
+
         document
-        .getElementById("message")
-        .textContent =
-            "🎉 You got 3 cards!";
+            .getElementById("message")
+            .textContent =
+            "You got 3 cards.";
 
 
-        for(const card of pack) {
+        for (const card of pack) {
 
             displayCard(
                 card,
@@ -875,25 +980,19 @@ document
 );
 
 
-
-/* =========================
-   UPDATE MONEY
-========================= */
+/* UPDATE MONEY */
 
 function updateMoney() {
 
     document
-    .getElementById("coins")
-    .textContent =
+        .getElementById("coins")
+        .textContent =
         money;
 
 }
 
 
-
-/* =========================
-   DISPLAY CARD
-========================= */
+/* DISPLAY CARD */
 
 function displayCard(
     card,
@@ -946,7 +1045,7 @@ function displayCard(
     );
 
 
-    if(sellable) {
+    if (sellable) {
 
         const sellText =
             document.createElement(
@@ -959,7 +1058,7 @@ function displayCard(
 
 
         sellText.textContent =
-            "🪙 Sell for " +
+            "Sell for " +
             card.price +
             " coins";
 
@@ -990,10 +1089,7 @@ function displayCard(
 }
 
 
-
-/* =========================
-   OPEN COLLECTION
-========================= */
+/* COLLECTION BUTTON */
 
 document
 .getElementById("collectionButton")
@@ -1011,10 +1107,7 @@ document
 );
 
 
-
-/* =========================
-   BUILD COLLECTION
-========================= */
+/* BUILD COLLECTION */
 
 function buildCollection() {
 
@@ -1028,18 +1121,20 @@ function buildCollection() {
 
 
     document
-    .getElementById(
-        "collectionCount"
-    )
-    .textContent =
+        .getElementById(
+            "collectionCount"
+        )
+        .textContent =
         "Cards collected: " +
         collection.length;
 
 
-    if(collection.length === 0) {
+    if (
+        collection.length === 0
+    ) {
 
         container.innerHTML =
-            "<h2>Your collection is empty!</h2>" +
+            "<h2>Your collection is empty.</h2>" +
             "<p>Open a pack to get cards.</p>";
 
         return;
@@ -1063,10 +1158,7 @@ function buildCollection() {
 }
 
 
-
-/* =========================
-   OPEN SELL POPUP
-========================= */
+/* OPEN SELL POPUP */
 
 function openSellPopup(index) {
 
@@ -1078,65 +1170,61 @@ function openSellPopup(index) {
         collection[index];
 
 
+    if (!card) {
+        return;
+    }
+
+
     document
-    .getElementById("sellImage")
-    .src =
+        .getElementById("sellImage")
+        .src =
         card.image;
 
 
     document
-    .getElementById("sellName")
-    .textContent =
+        .getElementById("sellName")
+        .textContent =
         card.name;
 
 
     document
-    .getElementById("sellPrice")
-    .textContent =
-        "🪙 You will receive " +
+        .getElementById("sellPrice")
+        .textContent =
+        "You will receive " +
         card.price +
         " coins";
 
 
     document
-    .getElementById("popupBackground")
-    .style.display =
+        .getElementById("popupBackground")
+        .style.display =
         "block";
 
 
     document
-    .getElementById("sellPopup")
-    .style.display =
+        .getElementById("sellPopup")
+        .style.display =
         "block";
 
 }
 
 
-
-/* =========================
-   CANCEL SELL
-========================= */
+/* CLOSE SELL POPUP */
 
 document
-.getElementById(
-    "cancelSellButton"
-)
+.getElementById("cancelSellButton")
 .addEventListener(
     "click",
     closeSellPopup
 );
 
 
-
 document
-.getElementById(
-    "popupBackground"
-)
+.getElementById("popupBackground")
 .addEventListener(
     "click",
     closeSellPopup
 );
-
 
 
 function closeSellPopup() {
@@ -1146,31 +1234,28 @@ function closeSellPopup() {
 
 
     document
-    .getElementById("popupBackground")
-    .style.display =
+        .getElementById("popupBackground")
+        .style.display =
         "none";
 
 
     document
-    .getElementById("sellPopup")
-    .style.display =
+        .getElementById("sellPopup")
+        .style.display =
         "none";
 
 }
 
 
-
-/* =========================
-   SELL CARD
-========================= */
+/* SELL CARD */
 
 document
 .getElementById("sellButton")
 .addEventListener(
     "click",
-    function() {
+    async function() {
 
-        if(
+        if (
             selectedCardIndex === null
         ) {
 
@@ -1185,7 +1270,7 @@ document
             ];
 
 
-        if(!card) {
+        if (!card) {
 
             closeSellPopup();
 
@@ -1194,18 +1279,8 @@ document
         }
 
 
-        /*
-           Give the player the
-           current market price.
-        */
-
         money += card.price;
 
-
-        /*
-           Remove ONLY the selected
-           copy from collection.
-        */
 
         collection.splice(
             selectedCardIndex,
@@ -1215,37 +1290,30 @@ document
 
         updateMoney();
 
+        await saveGame();
 
         closeSellPopup();
-
 
         buildCollection();
 
 
         document
-        .getElementById(
-            "message"
-        )
-        .textContent =
-            "💰 Sold " +
+            .getElementById("message")
+            .textContent =
+            "Sold " +
             card.name +
             " for " +
             card.price +
-            " coins!";
+            " coins.";
 
     }
 );
 
 
-
-/* =========================
-   COLLECTION BACK
-========================= */
+/* COLLECTION BACK */
 
 document
-.getElementById(
-    "collectionBackButton"
-)
+.getElementById("collectionBackButton")
 .addEventListener(
     "click",
     function() {
@@ -1258,10 +1326,7 @@ document
 );
 
 
-
-/* =========================
-   DEX BUTTON
-========================= */
+/* DEX BUTTON */
 
 document
 .getElementById("dexButton")
@@ -1279,10 +1344,7 @@ document
 );
 
 
-
-/* =========================
-   BUILD DEX
-========================= */
+/* BUILD DEX */
 
 function buildDex() {
 
@@ -1298,9 +1360,7 @@ function buildDex() {
     let uniqueOwned = 0;
 
 
-    /* CURRENT 12 */
-
-    for(const card of cards) {
+    for (const card of cards) {
 
         const div =
             document.createElement(
@@ -1325,7 +1385,7 @@ function buildDex() {
         number.textContent =
             "#" +
             String(card.id)
-            .padStart(3, "0");
+                .padStart(3, "0");
 
 
         div.appendChild(
@@ -1341,7 +1401,7 @@ function buildDex() {
             );
 
 
-        if(owned) {
+        if (owned) {
 
             uniqueOwned++;
 
@@ -1439,10 +1499,7 @@ function buildDex() {
     }
 
 
-
-    /* #013 - #123 */
-
-    for(
+    for (
         let i = 13;
         i <= 123;
         i++
@@ -1471,7 +1528,7 @@ function buildDex() {
         number.textContent =
             "#" +
             String(i)
-            .padStart(3, "0");
+                .padStart(3, "0");
 
 
         div.appendChild(
@@ -1505,12 +1562,11 @@ function buildDex() {
     }
 
 
-
     document
-    .getElementById(
-        "dexProgress"
-    )
-    .textContent =
+        .getElementById(
+            "dexProgress"
+        )
+        .textContent =
         "Collected: " +
         uniqueOwned +
         " / 12";
@@ -1518,15 +1574,10 @@ function buildDex() {
 }
 
 
-
-/* =========================
-   DEX BACK
-========================= */
+/* DEX BACK */
 
 document
-.getElementById(
-    "dexBackButton"
-)
+.getElementById("dexBackButton")
 .addEventListener(
     "click",
     function() {
@@ -1543,3 +1594,34 @@ document
 </body>
 
 </html>
+
+Firebase Firestore setup
+
+Because this version saves the game online, enable Firestore:
+
+1. Open Firebase Console.
+2. Open your "dbcc-login" project.
+3. Go to Build.
+4. Open Firestore Database.
+5. Click Create database.
+6. After creating it, open Rules.
+7. Use:
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /players/{userId} {
+
+      allow read, write:
+        if request.auth != null
+        && request.auth.uid == userId;
+
+    }
+  }
+}
+
+After this, each Google account gets its own saved game.
+
+Refreshing, logging out, or coming back later will keep the player's coins and cards.
