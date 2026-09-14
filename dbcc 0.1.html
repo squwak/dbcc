@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Doll Ball Collector Cards</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        #loginScreen {
+            margin-top: 80px;
+        }
+
+        #gameScreen {
+            display: none;
+        }
+
+        #userInfo {
+            margin: 15px;
+            font-size: 18px;
+        }
+
+        #userPhoto {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            vertical-align: middle;
+            margin: 10px;
+        }
+
+        #money {
+            font-size: 20px;
+            margin: 20px;
+        }
+
+        button {
+            font-size: 20px;
+            padding: 15px 25px;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 10px;
+            border: 2px solid #333;
+        }
+
+        #message {
+            font-size: 20px;
+            margin: 20px;
+        }
+
+        .card {
+            display: inline-block;
+            vertical-align: top;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 10px;
+            margin: 10px;
+            width: 180px;
+        }
+
+        .card img {
+            width: 160px;
+            height: 220px;
+            object-fit: contain;
+        }
+
+        .card p {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #collection {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN -->
+    <div id="loginScreen">
+
+        <h1>🎴 Doll Ball Collector Cards</h1>
+
+        <h2>Welcome to DBCC!</h2>
+
+        <p>Sign in to save your collection.</p>
+
+        <button onclick="loginWithGoogle()">
+            🔵 Sign in with Google
+        </button>
+
+        <p id="loginMessage"></p>
+
+    </div>
+
+
+    <!-- GAME -->
+    <div id="gameScreen">
+
+        <h1>Doll Ball Collector Cards</h1>
+
+        <div id="userInfo"></div>
+
+        <div id="money">
+            🪙 Coins: <span id="coins">50</span>
+        </div>
+
+        <button onclick="openPack()">
+            OPEN PACK - 10 COINS
+        </button>
+
+        <button onclick="showCollection()">
+            COLLECTION
+        </button>
+
+        <button onclick="logout()">
+            LOG OUT
+        </button>
+
+        <p id="message"></p>
+
+        <div id="cards"></div>
+
+    </div>
+
+
+    <!-- COLLECTION -->
+    <div id="collection">
+
+        <h2>My DBCC Collection</h2>
+
+        <div id="collectionCards"></div>
+
+        <br>
+
+        <button onclick="backToPacks()">
+            BACK TO PACKS
+        </button>
+
+    </div>
+
+
+    <!-- FIREBASE -->
+    <script type="module">
+
+        import { initializeApp } from
+            "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+        import {
+            getAuth,
+            GoogleAuthProvider,
+            signInWithPopup,
+            signOut,
+            onAuthStateChanged
+        } from
+            "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+        // =========================
+        // FIREBASE CONFIG
+        // =========================
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
+
+            authDomain: "dbcc-login.firebaseapp.com",
+
+            projectId: "dbcc-login",
+
+            storageBucket: "dbcc-login.firebasestorage.app",
+
+            messagingSenderId: "878902780767",
+
+            appId: "1:878902780767:web:4020d11730e5d9c0ee0cea",
+
+            measurementId: "G-PT9S1K4E2K"
+
+        };
+
+
+        // Start Firebase
+        const app = initializeApp(firebaseConfig);
+
+        const auth = getAuth(app);
+
+        const provider = new GoogleAuthProvider();
+
+
+        // =========================
+        // GAME DATA
+        // =========================
+
+        let money = 50;
+
+        let collection = [];
+
+
+        // =========================
+        // CARDS
+        // =========================
+
+        const cards = [
+
+            {
+                name: "Baby Pickels",
+                image: "baby pickels 01.png",
+                chance: 14
+            },
+
+            {
+                name: "Mr Pickels",
+                image: "mr pickels 2.png",
+                chance: 9
+            },
+
+            {
+                name: "Wily",
+                image: "wily.png",
+                chance: 14
+            },
+
+            {
+                name: "Will",
+                image: "will.png",
+                chance: 9
+            },
+
+            {
+                name: "Waffle",
+                image: "waffle.png",
+                chance: 14
+            },
+
+            {
+                name: "Cute Cake",
+                image: "cute cake.png",
+                chance: 9
+            },
+
+            {
+                name: "Buttyr",
+                image: "buttyr.png",
+                chance: 20
+            },
+
+            {
+                name: "Blossem",
+                image: "blossem.png",
+                chance: 20
+            },
+
+            {
+                name: "Buzzy",
+                image: "buzzy.png",
+                chance: 5
+            },
+
+            {
+                name: "Nico",
+                image: "nico.png",
+                chance: 20
+            },
+
+            {
+                name: "Choper",
+                image: "choper.png",
+                chance: 10
+            },
+
+            {
+                name: "Bullet",
+                image: "bullet.png",
+                chance: 10
+            }
+
+        ];
+
+
+        // =========================
+        // GOOGLE LOGIN
+        // =========================
+
+        window.loginWithGoogle = async function () {
+
+            try {
+
+                const result =
+                    await signInWithPopup(auth, provider);
+
+                console.log(
+                    "Logged in:",
+                    result.user.displayName
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                document.getElementById("loginMessage").textContent =
+                    "❌ Login failed: " + error.message;
+
+            }
+
+        };
+
+
+        // =========================
+        // LOGOUT
+        // =========================
+
+        window.logout = async function () {
+
+            await signOut(auth);
+
+        };
+
+
+        // =========================
+        // CHECK LOGIN
+        // =========================
+
+        onAuthStateChanged(auth, function (user) {
+
+            if (user) {
+
+                // User is logged in
+
+                document.getElementById("loginScreen")
+                    .style.display = "none";
+
+                document.getElementById("gameScreen")
+                    .style.display = "block";
+
+
+                let userInfo =
+                    document.getElementById("userInfo");
+
+
+                if (user.photoURL) {
+
+                    userInfo.innerHTML =
+                        `<img id="userPhoto"
+                        src="${user.photoURL}">
+                        Welcome, ${user.displayName}!`;
+
+                } else {
+
+                    userInfo.textContent =
+                        "Welcome, " + user.displayName + "!";
+
+                }
+
+            } else {
+
+                // User is logged out
+
+                document.getElementById("loginScreen")
+                    .style.display = "block";
+
+                document.getElementById("gameScreen")
+                    .style.display = "none";
+
+                document.getElementById("collection")
+                    .style.display = "none";
+
+            }
+
+        });
+
+
+        // =========================
+        // RANDOM CARD
+        // =========================
+
+        function getRandomCard() {
+
+            let total = 0;
+
+            for (let card of cards) {
+
+                total += card.chance;
+
+            }
+
+            let random = Math.random() * total;
+
+
+            for (let card of cards) {
+
+                random -= card.chance;
+
+                if (random <= 0) {
+
+                    return card;
+
+                }
+
+            }
+
+        }
+
+
+        // =========================
+        // OPEN PACK
+        // =========================
+
+        window.openPack = function () {
+
+            if (money < 10) {
+
+                document.getElementById("message")
+                    .textContent =
+                    "❌ Not enough coins!";
+
+                return;
+
+            }
+
+
+            money -= 10;
+
+            document.getElementById("coins")
+                .textContent = money;
+
+
+            document.getElementById("cards")
+                .innerHTML = "";
+
+
+            let pack = [];
+
+
+            for (let i = 0; i < 3; i++) {
+
+                let card = getRandomCard();
+
+                pack.push(card);
+
+                collection.push(card);
+
+            }
+
+
+            document.getElementById("message")
+                .textContent =
+                "🎉 You got 3 cards!";
+
+
+            for (let card of pack) {
+
+                displayCard(
+                    card,
+                    document.getElementById("cards")
+                );
+
+            }
+
+        };
+
+
+        // =========================
+        // DISPLAY CARD
+        // =========================
+
+        function displayCard(card, container) {
+
+            let cardDiv =
+                document.createElement("div");
+
+            cardDiv.className = "card";
+
+
+            let image =
+                document.createElement("img");
+
+            image.src = card.image;
+
+            image.alt = card.name;
+
+
+            let name =
+                document.createElement("p");
+
+            name.textContent = card.name;
+
+
+            cardDiv.appendChild(image);
+
+            cardDiv.appendChild(name);
+
+
+            container.appendChild(cardDiv);
+
+        }
+
+
+        // =========================
+        // COLLECTION
+        // =========================
+
+        window.showCollection = function () {
+
+            document.getElementById("gameScreen")
+                .style.display = "none";
+
+
+            document.getElementById("collection")
+                .style.display = "block";
+
+
+            let container =
+                document.getElementById("collectionCards");
+
+
+            container.innerHTML = "";
+
+
+            if (collection.length === 0) {
+
+                container.innerHTML =
+                    "<p>You don't have any cards yet!</p>";
+
+                return;
+
+            }
+
+
+            for (let card of collection) {
+
+                displayCard(card, container);
+
+            }
+
+        };
+
+
+        // =========================
+        // BACK TO PACKS
+        // =========================
+
+        window.backToPacks = function () {
+
+            document.getElementById("collection")
+                .style.display = "none";
+
+
+            document.getElementById("gameScreen")
+                .style.display = "block";
+
+        };
+
+    </script>
+
+</body>
+
+</html>
+ 
