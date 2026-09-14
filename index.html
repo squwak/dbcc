@@ -1594,3 +1594,34 @@ document
 </body>
 
 </html>
+
+Firebase Firestore setup
+
+Because this version saves the game online, enable Firestore:
+
+1. Open Firebase Console.
+2. Open your "dbcc-login" project.
+3. Go to Build.
+4. Open Firestore Database.
+5. Click Create database.
+6. After creating it, open Rules.
+7. Use:
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /players/{userId} {
+
+      allow read, write:
+        if request.auth != null
+        && request.auth.uid == userId;
+
+    }
+  }
+}
+
+After this, each Google account gets its own saved game.
+
+Refreshing, logging out, or coming back later will keep the player's coins and cards.
