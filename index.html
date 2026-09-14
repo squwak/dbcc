@@ -1,289 +1,374 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Doll Ball Collector Cards</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
+    <title>Doll Ball Collector Cards</title>
 
-    body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        background: #f5f5f5;
-        margin: 0;
-        padding: 20px;
-    }
+    <style>
 
-    h1 {
-        margin-top: 20px;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
 
-    button {
-        font-size: 20px;
-        padding: 15px 25px;
-        cursor: pointer;
-        margin: 5px;
-        border-radius: 10px;
-        border: 2px solid #333;
-        background: white;
-    }
+        h1 {
+            margin-top: 20px;
+        }
 
-    button:active {
-        transform: scale(0.97);
-    }
+        button {
+            font-size: 20px;
+            padding: 15px 25px;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 10px;
+            border: 2px solid #333;
+            background: white;
+        }
 
-    /* =========================
-       SCREENS
-    ========================= */
+        button:active {
+            transform: scale(0.97);
+        }
 
-    #loginScreen {
-        display: block;
-        margin-top: 80px;
-    }
+        /* =========================
+           SCREENS
+        ========================= */
 
-    #gameScreen {
-        display: none;
-    }
+        #loginScreen {
+            display: block;
+            margin-top: 80px;
+        }
 
-    #dexScreen {
-        display: none;
-    }
+        #gameScreen {
+            display: none;
+        }
 
-    /* =========================
-       LOGIN
-    ========================= */
+        #collectionScreen {
+            display: none;
+        }
 
-    #loginMessage {
-        font-size: 18px;
-    }
+        #dexScreen {
+            display: none;
+        }
 
-    /* =========================
-       USER
-    ========================= */
+        /* =========================
+           LOGIN
+        ========================= */
 
-    #userInfo {
-        margin: 15px;
-        font-size: 18px;
-    }
+        #loginMessage {
+            font-size: 18px;
+        }
 
-    #userPhoto {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        vertical-align: middle;
-        margin: 10px;
-    }
+        /* =========================
+           USER
+        ========================= */
 
-    /* =========================
-       MONEY
-    ========================= */
+        #userInfo {
+            margin: 15px;
+            font-size: 18px;
+        }
 
-    #money {
-        font-size: 20px;
-        margin: 20px;
-    }
+        #userPhoto {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            vertical-align: middle;
+            margin: 10px;
+        }
 
-    #message {
-        font-size: 20px;
-        margin: 20px;
-    }
+        /* =========================
+           MONEY
+        ========================= */
 
-    /* =========================
-       PACK CARDS
-    ========================= */
+        #money {
+            font-size: 20px;
+            margin: 20px;
+        }
 
-    .card {
-        display: inline-block;
-        vertical-align: top;
-        background: white;
-        border: 2px solid #333;
-        border-radius: 15px;
-        padding: 10px;
-        margin: 10px;
-        width: 180px;
-    }
+        #message {
+            font-size: 20px;
+            margin: 20px;
+        }
 
-    .card img {
-        width: 160px;
-        height: 220px;
-        object-fit: contain;
-    }
+        /* =========================
+           NORMAL CARDS
+        ========================= */
 
-    .card p {
-        font-size: 18px;
-        font-weight: bold;
-    }
+        .card {
+            display: inline-block;
+            vertical-align: top;
 
-    /* =========================
-       DEX
-    ========================= */
+            background: white;
 
-    #dexProgress {
-        font-size: 20px;
-        font-weight: bold;
-        margin: 15px;
-    }
+            border: 2px solid #333;
+            border-radius: 15px;
 
-    #dexCards {
-        max-width: 1200px;
-        margin: auto;
-    }
+            padding: 10px;
+            margin: 10px;
 
-    /*
-       ALL DEX CARDS USE THE SAME
-       NORMAL BORDER.
-       NO GOLD.
-       NO RARES.
-    */
+            width: 180px;
+        }
 
-    .dexCard {
-        display: inline-block;
-        vertical-align: top;
+        .card img {
+            width: 160px;
+            height: 220px;
+            object-fit: contain;
+        }
 
-        width: 180px;
-        height: 285px;
+        .card p {
+            font-size: 18px;
+            font-weight: bold;
+        }
 
-        background: white;
+        /* =========================
+           COLLECTION
+        ========================= */
 
-        border: 2px solid #333;
-        border-radius: 15px;
+        #collectionCards {
+            max-width: 1200px;
+            margin: auto;
+        }
 
-        margin: 8px;
-        padding: 10px;
+        #collectionCount {
+            font-size: 20px;
+            font-weight: bold;
+        }
 
-        box-sizing: border-box;
-    }
+        /* =========================
+           DEX
+        ========================= */
 
-    .dexNumber {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
+        #dexProgress {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px;
+        }
 
-    .dexCard img {
-        width: 150px;
-        height: 205px;
-        object-fit: contain;
-    }
+        #dexCards {
+            max-width: 1200px;
+            margin: auto;
+        }
 
-    .dexName {
-        font-size: 18px;
-        font-weight: bold;
-        margin-top: 5px;
-    }
+        /*
+           EVERY DEX CARD HAS THE SAME
+           NORMAL BORDER.
+        */
 
-    /* =========================
-       LOCKED DEX CARD
-    ========================= */
+        .dexCard {
+            display: inline-block;
+            vertical-align: top;
 
-    .locked {
-        background: #ddd;
-        border: 2px solid #333;
-    }
+            width: 180px;
+            height: 285px;
 
-    .unknown {
-        width: 150px;
-        height: 205px;
+            background: white;
 
-        margin: auto;
+            border: 2px solid #333;
+            border-radius: 15px;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+            margin: 8px;
+            padding: 10px;
 
-        font-size: 45px;
-        font-weight: bold;
+            box-sizing: border-box;
+        }
 
-        color: #555;
-    }
+        .dexNumber {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
 
-    /* =========================
-       COMING SOON
-    ========================= */
+        .dexCard img {
+            width: 150px;
+            height: 205px;
+            object-fit: contain;
+        }
 
-    .comingSoon {
-        background: #e8e8e8;
-        border: 2px solid #999;
-    }
+        .dexName {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
 
-    .comingSoonText {
-        height: 215px;
+        /* =========================
+           LOCKED DEX CARD
+        ========================= */
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        .locked {
+            background: #ddd;
+            border: 2px solid #333;
+        }
 
-        font-size: 20px;
-        font-weight: bold;
-        color: #666;
-    }
+        .unknown {
+            width: 150px;
+            height: 205px;
 
-</style>
+            margin: auto;
 
-</head><body><!-- ==================================================
-     LOGIN SCREEN
-================================================== --><div id="loginScreen"><h1>🎴 Doll Ball Collector Cards</h1>
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-<h2>Welcome to DBCC!</h2>
+            font-size: 45px;
+            font-weight: bold;
 
-<p>Sign in to save your collection.</p>
+            color: #555;
+        }
 
-<button id="googleLoginButton">
-    🔵 Sign in with Google
-</button>
+        /* =========================
+           COMING SOON
+        ========================= */
 
-<p id="loginMessage"></p>
+        .comingSoon {
+            background: #e8e8e8;
+            border: 2px solid #999;
+        }
 
-</div><!-- ==================================================
-     MAIN GAME
-================================================== --><div id="gameScreen"><h1>Doll Ball Collector Cards</h1>
+        .comingSoonText {
+            height: 215px;
 
-<div id="userInfo"></div>
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-<div id="money">
+            font-size: 20px;
+            font-weight: bold;
 
-    🪙 Coins:
-    <span id="coins">50</span>
+            color: #666;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     LOGIN
+================================================== -->
+
+<div id="loginScreen">
+
+    <h1>🎴 Doll Ball Collector Cards</h1>
+
+    <h2>Welcome to DBCC!</h2>
+
+    <p>Sign in to save your collection.</p>
+
+    <button id="googleLoginButton">
+        🔵 Sign in with Google
+    </button>
+
+    <p id="loginMessage"></p>
 
 </div>
 
 
-<button id="openPackButton">
-    OPEN PACK - 10 COINS
-</button>
+
+<!-- ==================================================
+     MAIN GAME
+================================================== -->
+
+<div id="gameScreen">
+
+    <h1>Doll Ball Collector Cards</h1>
+
+    <div id="userInfo"></div>
+
+    <div id="money">
+        🪙 Coins:
+        <span id="coins">50</span>
+    </div>
 
 
-<button id="dexButton">
-    📖 DEX
-</button>
+    <button id="openPackButton">
+        OPEN PACK - 10 COINS
+    </button>
 
 
-<button id="logoutButton">
-    LOG OUT
-</button>
+    <button id="collectionButton">
+        🃏 COLLECTION
+    </button>
 
 
-<p id="message"></p>
-
-<div id="cards"></div>
-
-</div><!-- ==================================================
-     DEX
-================================================== --><div id="dexScreen"><h1>📖 Doll Ball Dex</h1>
-
-<p id="dexProgress">
-    Collected: 0 / 12
-</p>
+    <button id="dexButton">
+        📖 DEX
+    </button>
 
 
-<button id="backButton">
-    ← BACK TO PACKS
-</button>
+    <button id="logoutButton">
+        LOG OUT
+    </button>
 
 
-<div id="dexCards"></div>
+    <p id="message"></p>
 
-</div><!-- ==================================================
+    <div id="cards"></div>
+
+</div>
+
+
+
+<!-- ==================================================
+     COLLECTION SCREEN
+================================================== -->
+
+<div id="collectionScreen">
+
+    <h1>🃏 My DBCC Collection</h1>
+
+    <p id="collectionCount">
+        Cards collected: 0
+    </p>
+
+
+    <button id="collectionBackButton">
+        ← BACK TO PACKS
+    </button>
+
+
+    <div id="collectionCards"></div>
+
+</div>
+
+
+
+<!-- ==================================================
+     DEX SCREEN
+================================================== -->
+
+<div id="dexScreen">
+
+    <h1>📖 Doll Ball Dex</h1>
+
+    <p id="dexProgress">
+        Collected: 0 / 12
+    </p>
+
+
+    <button id="dexBackButton">
+        ← BACK TO PACKS
+    </button>
+
+
+    <div id="dexCards"></div>
+
+</div>
+
+
+
+<!-- ==================================================
      FIREBASE
-================================================== --><script type="module">
+================================================== -->
+
+<script type="module">
 
 import { initializeApp }
 
@@ -358,7 +443,7 @@ let collection = [];
 
 
 /* ==================================================
-   THE CURRENT 12 DOLLS
+   CURRENT 12 DOLLS
 ================================================== */
 
 const cards = [
@@ -457,30 +542,33 @@ const cards = [
 
 document
     .getElementById("googleLoginButton")
-    .addEventListener("click", async function () {
+    .addEventListener(
+        "click",
+        async function () {
 
-        try {
+            try {
 
-            await signInWithPopup(
-                auth,
-                provider
-            );
+                await signInWithPopup(
+                    auth,
+                    provider
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                document
+                    .getElementById("loginMessage")
+                    .textContent =
+                    "❌ Login failed: " +
+                    error.message;
+
+            }
 
         }
-
-        catch (error) {
-
-            console.error(error);
-
-            document
-                .getElementById("loginMessage")
-                .textContent =
-                "❌ Login failed: " +
-                error.message;
-
-        }
-
-    });
+    );
 
 
 
@@ -490,11 +578,14 @@ document
 
 document
     .getElementById("logoutButton")
-    .addEventListener("click", async function () {
+    .addEventListener(
+        "click",
+        async function () {
 
-        await signOut(auth);
+            await signOut(auth);
 
-    });
+        }
+    );
 
 
 
@@ -508,23 +599,15 @@ onAuthStateChanged(
 
         if (user) {
 
-            document
-                .getElementById("loginScreen")
-                .style.display = "none";
-
-
-            document
-                .getElementById("gameScreen")
-                .style.display = "block";
-
-
-            document
-                .getElementById("dexScreen")
-                .style.display = "none";
+            showOnly(
+                "gameScreen"
+            );
 
 
             const userInfo =
-                document.getElementById("userInfo");
+                document.getElementById(
+                    "userInfo"
+                );
 
 
             if (user.photoURL) {
@@ -552,24 +635,51 @@ onAuthStateChanged(
 
         else {
 
-            document
-                .getElementById("loginScreen")
-                .style.display = "block";
-
-
-            document
-                .getElementById("gameScreen")
-                .style.display = "none";
-
-
-            document
-                .getElementById("dexScreen")
-                .style.display = "none";
+            showOnly(
+                "loginScreen"
+            );
 
         }
 
     }
 );
+
+
+
+/* ==================================================
+   SHOW ONE SCREEN
+================================================== */
+
+function showOnly(screenId) {
+
+    document
+        .getElementById("loginScreen")
+        .style.display = "none";
+
+    document
+        .getElementById("gameScreen")
+        .style.display = "none";
+
+    document
+        .getElementById("collectionScreen")
+        .style.display = "none";
+
+    document
+        .getElementById("dexScreen")
+        .style.display = "none";
+
+
+    document
+        .getElementById(screenId)
+        .style.display = "block";
+
+
+    window.scrollTo(
+        0,
+        0
+    );
+
+}
 
 
 
@@ -616,72 +726,81 @@ function getRandomCard() {
 
 document
     .getElementById("openPackButton")
-    .addEventListener("click", function () {
+    .addEventListener(
+        "click",
+        function () {
 
-        if (money < 10) {
+            if (money < 10) {
+
+                document
+                    .getElementById("message")
+                    .textContent =
+                    "❌ Not enough coins!";
+
+                return;
+
+            }
+
+
+            money -= 10;
+
+
+            document
+                .getElementById("coins")
+                .textContent =
+                money;
+
+
+            document
+                .getElementById("cards")
+                .innerHTML = "";
+
+
+            const pack = [];
+
+
+            for (
+                let i = 0;
+                i < 3;
+                i++
+            ) {
+
+                const card =
+                    getRandomCard();
+
+
+                pack.push(card);
+
+
+                collection.push(card);
+
+            }
+
 
             document
                 .getElementById("message")
                 .textContent =
-                "❌ Not enough coins!";
-
-            return;
-
-        }
+                "🎉 You got 3 cards!";
 
 
-        money -= 10;
+            for (const card of pack) {
 
+                displayCard(
+                    card,
+                    document.getElementById(
+                        "cards"
+                    )
+                );
 
-        document
-            .getElementById("coins")
-            .textContent =
-            money;
-
-
-        document
-            .getElementById("cards")
-            .innerHTML = "";
-
-
-        const pack = [];
-
-
-        for (let i = 0; i < 3; i++) {
-
-            const card =
-                getRandomCard();
-
-
-            pack.push(card);
-
-
-            collection.push(card);
+            }
 
         }
-
-
-        document
-            .getElementById("message")
-            .textContent =
-            "🎉 You got 3 cards!";
-
-
-        for (const card of pack) {
-
-            displayCard(
-                card,
-                document.getElementById("cards")
-            );
-
-        }
-
-    });
+    );
 
 
 
 /* ==================================================
-   DISPLAY PACK CARD
+   DISPLAY CARD
 ================================================== */
 
 function displayCard(
@@ -690,7 +809,9 @@ function displayCard(
 ) {
 
     const cardDiv =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     cardDiv.className =
@@ -698,7 +819,9 @@ function displayCard(
 
 
     const image =
-        document.createElement("img");
+        document.createElement(
+            "img"
+        );
 
 
     image.src =
@@ -710,21 +833,126 @@ function displayCard(
 
 
     const name =
-        document.createElement("p");
+        document.createElement(
+            "p"
+        );
 
 
     name.textContent =
         card.name;
 
 
-    cardDiv.appendChild(image);
+    cardDiv.appendChild(
+        image
+    );
 
-    cardDiv.appendChild(name);
+
+    cardDiv.appendChild(
+        name
+    );
 
 
-    container.appendChild(cardDiv);
+    container.appendChild(
+        cardDiv
+    );
 
 }
+
+
+
+/* ==================================================
+   OPEN COLLECTION
+================================================== */
+
+document
+    .getElementById("collectionButton")
+    .addEventListener(
+        "click",
+        function () {
+
+            buildCollection();
+
+            showOnly(
+                "collectionScreen"
+            );
+
+        }
+    );
+
+
+
+/* ==================================================
+   BUILD COLLECTION
+================================================== */
+
+function buildCollection() {
+
+    const container =
+        document.getElementById(
+            "collectionCards"
+        );
+
+
+    container.innerHTML = "";
+
+
+    document
+        .getElementById(
+            "collectionCount"
+        )
+        .textContent =
+        "Cards collected: " +
+        collection.length;
+
+
+    if (
+        collection.length === 0
+    ) {
+
+        container.innerHTML =
+            "<h2>Your collection is empty!</h2>" +
+            "<p>Open a pack to get your first cards.</p>";
+
+        return;
+
+    }
+
+
+    /*
+       Shows duplicates too.
+    */
+
+    for (const card of collection) {
+
+        displayCard(
+            card,
+            container
+        );
+
+    }
+
+}
+
+
+
+/* ==================================================
+   COLLECTION BACK BUTTON
+================================================== */
+
+document
+    .getElementById(
+        "collectionBackButton"
+    )
+    .addEventListener(
+        "click",
+        function () {
+
+            showOnly(
+                "gameScreen"
+            );
+
+        }
+    );
 
 
 
@@ -734,27 +962,18 @@ function displayCard(
 
 document
     .getElementById("dexButton")
-    .addEventListener("click", function () {
+    .addEventListener(
+        "click",
+        function () {
 
-        document
-            .getElementById("gameScreen")
-            .style.display = "none";
+            buildDex();
 
+            showOnly(
+                "dexScreen"
+            );
 
-        document
-            .getElementById("dexScreen")
-            .style.display = "block";
-
-
-        buildDex();
-
-
-        window.scrollTo(
-            0,
-            0
-        );
-
-    });
+        }
+    );
 
 
 
@@ -765,7 +984,9 @@ document
 function buildDex() {
 
     const container =
-        document.getElementById("dexCards");
+        document.getElementById(
+            "dexCards"
+        );
 
 
     container.innerHTML = "";
@@ -777,13 +998,15 @@ function buildDex() {
 
     /* ==============================================
        #001 - #012
-       CURRENT DOLLS
+       CURRENT 12 DOLLS
     ============================================== */
 
     for (const card of cards) {
 
         const div =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         div.className =
@@ -791,7 +1014,9 @@ function buildDex() {
 
 
         const number =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         number.className =
@@ -804,14 +1029,17 @@ function buildDex() {
                 .padStart(3, "0");
 
 
-        div.appendChild(number);
+        div.appendChild(
+            number
+        );
 
 
 
         const owned =
             collection.some(
                 ownedCard =>
-                    ownedCard.id === card.id
+                    ownedCard.id ===
+                    card.id
             );
 
 
@@ -822,7 +1050,9 @@ function buildDex() {
 
 
             const image =
-                document.createElement("img");
+                document.createElement(
+                    "img"
+                );
 
 
             image.src =
@@ -833,11 +1063,15 @@ function buildDex() {
                 card.name;
 
 
-            div.appendChild(image);
+            div.appendChild(
+                image
+            );
 
 
             const name =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             name.className =
@@ -848,7 +1082,9 @@ function buildDex() {
                 card.name;
 
 
-            div.appendChild(name);
+            div.appendChild(
+                name
+            );
 
         }
 
@@ -860,7 +1096,9 @@ function buildDex() {
 
 
             const unknown =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             unknown.className =
@@ -877,7 +1115,9 @@ function buildDex() {
 
 
             const name =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             name.className =
@@ -915,7 +1155,9 @@ function buildDex() {
     ) {
 
         const div =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         div.className =
@@ -923,7 +1165,9 @@ function buildDex() {
 
 
         const number =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         number.className =
@@ -942,7 +1186,9 @@ function buildDex() {
 
 
         const text =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         text.className =
@@ -967,7 +1213,9 @@ function buildDex() {
 
 
     document
-        .getElementById("dexProgress")
+        .getElementById(
+            "dexProgress"
+        )
         .textContent =
         "Collected: " +
         uniqueOwned +
@@ -978,29 +1226,26 @@ function buildDex() {
 
 
 /* ==================================================
-   BACK TO PACKS
+   DEX BACK BUTTON
 ================================================== */
 
 document
-    .getElementById("backButton")
-    .addEventListener("click", function () {
+    .getElementById(
+        "dexBackButton"
+    )
+    .addEventListener(
+        "click",
+        function () {
 
-        document
-            .getElementById("dexScreen")
-            .style.display = "none";
+            showOnly(
+                "gameScreen"
+            );
 
+        }
+    );
 
-        document
-            .getElementById("gameScreen")
-            .style.display = "block";
+</script>
 
+</body>
 
-        window.scrollTo(
-            0,
-            0
-        );
-
-    });
-
-</script></body></html>
-
+</html>
