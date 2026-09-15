@@ -642,43 +642,54 @@
         DISPLAY SELLABLE CARD
         */
 
-        function displaySellableCard(card, container) {
+function displaySellableCard(card, container) {
 
     const div = document.createElement("div");
 
     div.className = "card";
 
-    // Count how many copies you own
+    div.style.position = "relative";
+
+
+    // Count copies of this card
     const count = collection.filter(
         c => c.name === card.name
     ).length;
 
-    // Number in top corner
+
+    // Number in top-right corner
     const countBadge = document.createElement("div");
 
-    countBadge.textContent = "x" + count;
+    countBadge.textContent = count;
 
     countBadge.style.position = "absolute";
     countBadge.style.top = "8px";
     countBadge.style.right = "8px";
-    countBadge.style.background = "#333";
+    countBadge.style.zIndex = "100";
+    countBadge.style.background = "black";
     countBadge.style.color = "white";
-    countBadge.style.padding = "4px 8px";
-    countBadge.style.borderRadius = "10px";
+    countBadge.style.width = "30px";
+    countBadge.style.height = "30px";
+    countBadge.style.borderRadius = "50%";
+    countBadge.style.display = "flex";
+    countBadge.style.alignItems = "center";
+    countBadge.style.justifyContent = "center";
     countBadge.style.fontWeight = "bold";
-    countBadge.style.fontSize = "14px";
+    countBadge.style.fontSize = "16px";
+    countBadge.style.boxSizing = "border-box";
 
-    div.style.position = "relative";
 
     const img = document.createElement("img");
 
     img.src = card.image;
     img.alt = card.name;
 
+
     const name = document.createElement("div");
 
     name.className = "cardName";
     name.textContent = card.name;
+
 
     const price = document.createElement("div");
 
@@ -686,8 +697,8 @@
     price.textContent =
         "Sell for " + card.sellPrice + " coins";
 
-    const sellButton =
-        document.createElement("button");
+
+    const sellButton = document.createElement("button");
 
     sellButton.className = "sellButton";
     sellButton.textContent = "SELL";
@@ -695,6 +706,7 @@
     sellButton.onclick = function() {
         sellCard(card);
     };
+
 
     div.appendChild(countBadge);
     div.appendChild(img);
