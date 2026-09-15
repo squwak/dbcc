@@ -1,1355 +1,855 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Doll Ball Collector Cards</title>
-
-<style>
-
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background: #f5f5f5;
-    margin: 0;
-    padding: 20px;
-}
-
-button {
-    font-size: 18px;
-    padding: 14px 22px;
-    cursor: pointer;
-    margin: 5px;
-    border-radius: 10px;
-    border: 2px solid #333;
-    background: white;
-}
-
-button:active {
-    transform: scale(0.97);
-}
-
-h1 {
-    margin-top: 20px;
-}
-
-/* SCREENS */
-
-#loginScreen {
-    display: block;
-    margin-top: 70px;
-}
-
-#gameScreen,
-#collectionScreen,
-#dexScreen {
-    display: none;
-}
-
-/* USER */
-
-#userInfo {
-    margin: 15px;
-    font-size: 18px;
-}
-
-#userPhoto {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    vertical-align: middle;
-    margin: 10px;
-}
-
-/* MONEY */
-
-#money {
-    font-size: 22px;
-    font-weight: bold;
-    margin: 20px;
-}
-
-#message {
-    font-size: 20px;
-    margin: 20px;
-}
-
-/* CARDS */
-
-.card {
-    display: inline-block;
-    vertical-align: top;
-
-    background: white;
-
-    border: 2px solid #333;
-    border-radius: 15px;
-
-    padding: 10px;
-    margin: 10px;
-
-    width: 180px;
-
-    cursor: pointer;
-}
-
-.card:hover {
-    transform: scale(1.03);
-}
-
-.card img {
-    width: 160px;
-    height: 220px;
-    object-fit: contain;
-}
-
-.card p {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-/* COLLECTION */
-
-#collectionCards {
-    max-width: 1200px;
-    margin: auto;
-}
-
-#collectionCount {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.sellText {
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 5px;
-}
-
-/* DEX */
-
-#dexProgress {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 15px;
-}
-
-#dexCards {
-    max-width: 1200px;
-    margin: auto;
-}
-
-.dexCard {
-    display: inline-block;
-    vertical-align: top;
-
-    width: 180px;
-    height: 285px;
-
-    background: white;
-
-    border: 2px solid #333;
-    border-radius: 15px;
-
-    margin: 8px;
-    padding: 10px;
-
-    box-sizing: border-box;
-}
-
-.dexNumber {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.dexCard img {
-    width: 150px;
-    height: 205px;
-    object-fit: contain;
-}
-
-.dexName {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 5px;
-}
-
-.locked {
-    background: #ddd;
-}
-
-.unknown {
-    width: 150px;
-    height: 205px;
-
-    margin: auto;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 45px;
-    font-weight: bold;
-
-    color: #555;
-}
-
-.comingSoon {
-    background: #e8e8e8;
-    border: 2px solid #999;
-}
-
-.comingSoonText {
-    height: 215px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 20px;
-    font-weight: bold;
-
-    color: #666;
-}
-
-/* SELL POPUP */
-
-#sellPopup {
-    display: none;
-
-    position: fixed;
-
-    left: 50%;
-    top: 50%;
-
-    transform: translate(-50%, -50%);
-
-    background: white;
-
-    border: 3px solid #333;
-    border-radius: 15px;
-
-    padding: 25px;
-
-    width: 280px;
-
-    box-shadow: 0 5px 25px rgba(0,0,0,0.3);
-
-    z-index: 100;
-}
-
-#sellPopup img {
-    width: 150px;
-    height: 200px;
-    object-fit: contain;
-}
-
-#sellPrice {
-    font-size: 22px;
-    font-weight: bold;
-}
-
-#sellButton {
-    background: #eee;
-}
-
-#cancelSellButton {
-    background: #eee;
-}
-
-#popupBackground {
-    display: none;
-
-    position: fixed;
-
-    left: 0;
-    top: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: rgba(0,0,0,0.4);
-
-    z-index: 99;
-}
-
-</style>
-
+    <title>Doll Ball Collector Cards</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        #money {
+            font-size: 20px;
+            margin: 20px;
+        }
+
+        button {
+            font-size: 20px;
+            padding: 15px 25px;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 10px;
+            border: 2px solid #333;
+            background: white;
+        }
+
+        button:hover {
+            background: #eee;
+        }
+
+        #message {
+            font-size: 20px;
+            margin: 20px;
+        }
+
+        .card {
+            display: inline-block;
+            vertical-align: top;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 10px;
+            margin: 10px;
+            width: 180px;
+        }
+
+        .card img {
+            width: 160px;
+            height: 220px;
+            object-fit: contain;
+        }
+
+        .card p {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #collection,
+        #dex {
+            display: none;
+        }
+
+        #collectionCards,
+        #dexCards {
+            margin-top: 20px;
+        }
+
+        #search {
+            font-size: 18px;
+            padding: 12px;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            border: 2px solid #333;
+            margin: 10px;
+        }
+
+        .dexCard {
+            display: inline-block;
+            vertical-align: top;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 10px;
+            margin: 10px;
+            width: 180px;
+        }
+
+        .dexCard img {
+            width: 160px;
+            height: 220px;
+            object-fit: contain;
+        }
+
+        .comingSoon {
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        #loginScreen {
+            display: block;
+        }
+
+        #gameScreen {
+            display: none;
+        }
+
+        #userInfo {
+            margin: 15px;
+            font-size: 18px;
+        }
+    </style>
 </head>
-
 
 <body>
 
+    <!-- ========================= -->
+    <!-- LOGIN SCREEN -->
+    <!-- ========================= -->
 
-<!-- =========================
-     LOGIN
-========================= -->
+    <div id="loginScreen">
 
-<div id="loginScreen">
+        <h1>Doll Ball Collector Cards</h1>
 
-    <h1>🎴 Doll Ball Collector Cards</h1>
+        <h2>Login</h2>
 
-    <h2>Welcome to DBCC!</h2>
+        <button id="googleLoginButton">
+            LOGIN WITH GOOGLE
+        </button>
 
-    <p>Sign in to play.</p>
+        <p id="loginMessage"></p>
 
-    <button id="googleLoginButton">
-        🔵 Sign in with Google
-    </button>
-
-    <p id="loginMessage"></p>
-
-</div>
-
-
-
-<!-- =========================
-     MAIN GAME
-========================= -->
-
-<div id="gameScreen">
-
-    <h1>Doll Ball Collector Cards</h1>
-
-    <div id="userInfo"></div>
-
-    <div id="money">
-        🪙 Coins:
-        <span id="coins">75</span>
     </div>
 
 
-    <button id="openPackButton">
-        OPEN PACK - 15 COINS
-    </button>
+    <!-- ========================= -->
+    <!-- GAME SCREEN -->
+    <!-- ========================= -->
 
+    <div id="gameScreen">
 
-    <button id="collectionButton">
-        🃏 COLLECTION
-    </button>
+        <h1>Doll Ball Collector Cards</h1>
 
+        <div id="userInfo">
+            <span id="userName"></span>
+            <br>
+            <button id="logoutButton">
+                LOG OUT
+            </button>
+        </div>
 
-    <button id="dexButton">
-        📖 DEX
-    </button>
 
+        <!-- ========================= -->
+        <!-- PACK SCREEN -->
+        <!-- ========================= -->
 
-    <button id="logoutButton">
-        LOG OUT
-    </button>
+        <div id="packScreen">
 
+            <div id="money">
+                Coins: <span id="coins">50</span>
+            </div>
 
-    <p id="message"></p>
+            <button onclick="openPack()">
+                OPEN PACK - 10 COINS
+            </button>
 
-    <div id="cards"></div>
+            <button onclick="showCollection()">
+                COLLECTION
+            </button>
 
-</div>
+            <button onclick="showDex()">
+                DEX
+            </button>
 
+            <p id="message"></p>
 
+            <div id="cards"></div>
 
-<!-- =========================
-     COLLECTION
-========================= -->
+        </div>
 
-<div id="collectionScreen">
 
-    <h1>🃏 My Collection</h1>
+        <!-- ========================= -->
+        <!-- COLLECTION -->
+        <!-- ========================= -->
 
-    <p id="collectionCount">
-        Cards collected: 0
-    </p>
+        <div id="collection">
 
-    <p>
-        Tap a card to sell it.
-    </p>
+            <h2>My DBCC Collection</h2>
 
+            <input
+                id="search"
+                type="text"
+                placeholder="Search collection..."
+                oninput="searchCollection()"
+            >
 
-    <button id="collectionBackButton">
-        ← BACK TO PACKS
-    </button>
+            <div id="collectionCards"></div>
 
+            <br>
 
-    <div id="collectionCards"></div>
+            <button onclick="backToPacks()">
+                BACK TO PACKS
+            </button>
 
-</div>
+        </div>
 
 
+        <!-- ========================= -->
+        <!-- DEX -->
+        <!-- ========================= -->
 
-<!-- =========================
-     DEX
-========================= -->
+        <div id="dex">
 
-<div id="dexScreen">
+            <h2>DBCC DEX</h2>
 
-    <h1>📖 Doll Ball Dex</h1>
+            <button onclick="showDollsDex()">
+                DOLLS
+            </button>
 
-    <p id="dexProgress">
-        Collected: 0 / 12
-    </p>
+            <button onclick="showRaresDex()">
+                RARES
+            </button>
 
+            <div id="dexCards"></div>
 
-    <button id="dexBackButton">
-        ← BACK TO PACKS
-    </button>
+            <br>
 
+            <button onclick="backToPacks()">
+                BACK TO PACKS
+            </button>
 
-    <div id="dexCards"></div>
+        </div>
 
-</div>
+    </div>
 
 
+    <!-- ========================= -->
+    <!-- FIREBASE -->
+    <!-- ========================= -->
 
-<!-- =========================
-     SELL POPUP
-========================= -->
+    <script type="module">
 
-<div id="popupBackground"></div>
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
+        import {
+            getAuth,
+            GoogleAuthProvider,
+            signInWithPopup,
+            signOut,
+            onAuthStateChanged
+        }
+        from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-<div id="sellPopup">
+        import {
+            getFirestore,
+            doc,
+            getDoc,
+            setDoc
+        }
+        from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-    <h2>Sell Card?</h2>
 
-    <img id="sellImage">
+        // =====================================
+        // FIREBASE CONFIG
+        // =====================================
 
-    <h3 id="sellName"></h3>
+        const firebaseConfig = {
 
-    <p id="sellPrice"></p>
+            apiKey: "YOUR_API_KEY",
 
-    <button id="sellButton">
-        🪙 SELL
-    </button>
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
 
-    <button id="cancelSellButton">
-        CANCEL
-    </button>
+            projectId: "YOUR_PROJECT_ID",
 
-</div>
+            storageBucket: "YOUR_PROJECT.firebasestorage.app",
 
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
 
+            appId: "YOUR_APP_ID"
 
-<!-- =========================
-     FIREBASE
-========================= -->
+        };
 
-<script type="module">
 
-import { initializeApp }
+        // =====================================
+        // START FIREBASE
+        // =====================================
 
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        const app = initializeApp(firebaseConfig);
 
+        const auth = getAuth(app);
 
-import {
+        const db = getFirestore(app);
 
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged
+        const provider = new GoogleAuthProvider();
 
-}
 
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+        // =====================================
+        // GAME DATA
+        // =====================================
 
+        let money = 50;
 
+        let collection = [];
 
-/* =========================
-   FIREBASE CONFIG
-========================= */
+        let currentUser = null;
 
-const firebaseConfig = {
 
-    apiKey:
-        "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
+        // =====================================
+        // DBCC CARDS
+        // =====================================
 
-    authDomain:
-        "dbcc-login.firebaseapp.com",
+        const cards = [
 
-    projectId:
-        "dbcc-login",
+            {
+                name: "Baby Pickels",
+                image: "baby pikels.png",
+                chance: 14
+            },
 
-    storageBucket:
-        "dbcc-login.firebasestorage.app",
+            {
+                name: "Mr Pickels",
+                image: "mr. pickels.png",
+                chance: 9
+            },
 
-    messagingSenderId:
-        "878902780767",
+            {
+                name: "Wily",
+                image: "wily.png",
+                chance: 14
+            },
 
-    appId:
-        "1:878902780767:web:4020d11730e5d9c0ee0cea",
+            {
+                name: "Will",
+                image: "will.png",
+                chance: 9
+            },
 
-    measurementId:
-        "G-PT9S1K4E2K"
+            {
+                name: "Waffle",
+                image: "waffle.png",
+                chance: 14
+            },
 
-};
+            {
+                name: "Cute Cake",
+                image: "cute cake.png",
+                chance: 9
+            },
 
+            {
+                name: "Buttyr",
+                image: "buttyr.png",
+                chance: 20
+            },
 
-const app =
-    initializeApp(firebaseConfig);
+            {
+                name: "Blossem",
+                image: "blossem.png",
+                chance: 20
+            },
 
-const auth =
-    getAuth(app);
+            {
+                name: "Buzzy",
+                image: "buzzy.png",
+                chance: 5
+            },
 
-const provider =
-    new GoogleAuthProvider();
+            {
+                name: "Nico",
+                image: "nico.png",
+                chance: 20
+            },
 
+            {
+                name: "Choper",
+                image: "choper.png",
+                chance: 10
+            },
 
+            {
+                name: "Bullet",
+                image: "bullet.png",
+                chance: 10
+            }
 
-/* =========================
-   GAME DATA
-========================= */
+        ];
 
-let money = 75;
 
-let collection = [];
+        // =====================================
+        // DEX DOLLS
+        // =====================================
 
-let selectedCardIndex = null;
+        const dexDolls = [...cards];
 
 
+        for (let i = 13; i <= 123; i++) {
 
-/* =========================
-   CURRENT CARDS
-========================= */
+            dexDolls.push({
 
-const cards = [
+                name: "Coming Soon",
 
-    {
-        id: 1,
-        name: "Baby Pickels",
-        image: "baby pikels.png",
-        chance: 14,
-        price: 5
-    },
+                image: "",
 
-    {
-        id: 2,
-        name: "Mr Pickels",
-        image: "mr. pickels.png",
-        chance: 9,
-        price: 7
-    },
+                chance: 0
 
-    {
-        id: 3,
-        name: "Wily",
-        image: "wily.png",
-        chance: 14,
-        price: 5
-    },
-
-    {
-        id: 4,
-        name: "Will",
-        image: "will.png",
-        chance: 9,
-        price: 7
-    },
-
-    {
-        id: 5,
-        name: "Waffle",
-        image: "waffle.png",
-        chance: 14,
-        price: 5
-    },
-
-    {
-        id: 6,
-        name: "Cute Cake",
-        image: "cute cake.png",
-        chance: 9,
-        price: 7
-    },
-
-    {
-        id: 7,
-        name: "Buttyr",
-        image: "buttyr.png",
-        chance: 20,
-        price: 7
-    },
-
-    {
-        id: 8,
-        name: "Blossem",
-        image: "blossem.png",
-        chance: 20,
-        price: 7
-    },
-
-    {
-        id: 9,
-        name: "Buzzy",
-        image: "buzzy.png",
-        chance: 5,
-        price: 10
-    },
-
-    {
-        id: 10,
-        name: "Nico",
-        image: "nico.png",
-        chance: 20,
-        price: 3
-    },
-
-    {
-        id: 11,
-        name: "Choper",
-        image: "choper.png",
-        chance: 10,
-        price: 3
-    },
-
-    {
-        id: 12,
-        name: "Bullet",
-        image: "bullet.png",
-        chance: 10,
-        price: 5
-    }
-
-];
-
-
-
-/* =========================
-   LOGIN
-========================= */
-
-document
-.getElementById("googleLoginButton")
-.addEventListener(
-    "click",
-    async function() {
-
-        try {
-
-            await signInWithPopup(
-                auth,
-                provider
-            );
+            });
 
         }
 
-        catch(error) {
 
-            console.error(error);
+        // =====================================
+        // DEX RARES
+        // =====================================
 
-            document
-            .getElementById("loginMessage")
-            .textContent =
-                "❌ Login failed: " +
-                error.message;
+        const dexRares = [
+
+            {
+                name: "Coming Soon",
+                image: ""
+            },
+
+            {
+                name: "Coming Soon",
+                image: ""
+            },
+
+            {
+                name: "Coming Soon",
+                image: ""
+            },
+
+            {
+                name: "Coming Soon",
+                image: ""
+            },
+
+            {
+                name: "Coming Soon",
+                image: ""
+            },
+
+            {
+                name: "Coming Soon",
+                image: ""
+            }
+
+        ];
+
+
+        // =====================================
+        // RANDOM CARD
+        // =====================================
+
+        function getRandomCard() {
+
+            let total = 0;
+
+            for (let card of cards) {
+
+                total += card.chance;
+
+            }
+
+
+            let random = Math.random() * total;
+
+
+            for (let card of cards) {
+
+                random -= card.chance;
+
+                if (random <= 0) {
+
+                    return card;
+
+                }
+
+            }
 
         }
 
-    }
-);
+
+        // =====================================
+        // GOOGLE LOGIN
+        // =====================================
+
+        document
+            .getElementById("googleLoginButton")
+            .addEventListener("click", async function () {
+
+                try {
+
+                    document
+                        .getElementById("loginMessage")
+                        .textContent = "Logging in...";
 
 
+                    await signInWithPopup(
+                        auth,
+                        provider
+                    );
 
-/* =========================
-   LOGOUT
-========================= */
+                }
 
-document
-.getElementById("logoutButton")
-.addEventListener(
-    "click",
-    async function() {
+                catch (error) {
 
-        await signOut(auth);
+                    console.error(error);
 
-    }
-);
+                    document
+                        .getElementById("loginMessage")
+                        .textContent =
+                        "Login failed: " + error.message;
 
+                }
 
-
-/* =========================
-   AUTH STATE
-========================= */
-
-onAuthStateChanged(
-    auth,
-    function(user) {
-
-        if(user) {
-
-            showOnly(
-                "gameScreen"
-            );
+            });
 
 
-            const userInfo =
-                document.getElementById(
-                    "userInfo"
+        // =====================================
+        // LOGOUT
+        // =====================================
+
+        document
+            .getElementById("logoutButton")
+            .addEventListener("click", async function () {
+
+                await signOut(auth);
+
+            });
+
+
+        // =====================================
+        // AUTH STATE
+        // =====================================
+
+        onAuthStateChanged(
+            auth,
+            async function (user) {
+
+                if (user) {
+
+                    currentUser = user;
+
+
+                    document
+                        .getElementById("loginScreen")
+                        .style.display = "none";
+
+
+                    document
+                        .getElementById("gameScreen")
+                        .style.display = "block";
+
+
+                    document
+                        .getElementById("userName")
+                        .textContent =
+                        "Logged in as: " +
+                        (user.displayName || user.email);
+
+
+                    await loadPlayerData(user);
+
+                }
+
+                else {
+
+                    currentUser = null;
+
+
+                    document
+                        .getElementById("loginScreen")
+                        .style.display = "block";
+
+
+                    document
+                        .getElementById("gameScreen")
+                        .style.display = "none";
+
+                }
+
+            }
+        );
+
+
+        // =====================================
+        // LOAD PLAYER DATA
+        // =====================================
+
+        async function loadPlayerData(user) {
+
+            try {
+
+                const playerRef =
+                    doc(
+                        db,
+                        "players",
+                        user.uid
+                    );
+
+
+                const playerSnap =
+                    await getDoc(playerRef);
+
+
+                if (playerSnap.exists()) {
+
+                    const data =
+                        playerSnap.data();
+
+
+                    money =
+                        Number(data.money ?? 50);
+
+
+                    collection = [];
+
+
+                    const savedCollection =
+                        data.collection ?? [];
+
+
+                    for (
+                        let cardName
+                        of savedCollection
+                    ) {
+
+                        const card =
+                            cards.find(
+                                c =>
+                                c.name === cardName
+                            );
+
+
+                        if (card) {
+
+                            collection.push(card);
+
+                        }
+
+                    }
+
+                }
+
+                else {
+
+                    money = 50;
+
+                    collection = [];
+
+
+                    await savePlayerData(user);
+
+                }
+
+
+                updateCoins();
+
+                showPackScreen();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "LOAD ERROR:",
+                    error
+                );
+
+                document
+                    .getElementById("message")
+                    .textContent =
+                    "Could not load your save.";
+
+            }
+
+        }
+
+
+        // =====================================
+        // SAVE PLAYER DATA
+        // =====================================
+
+        async function savePlayerData(user) {
+
+            if (!user) return;
+
+
+            const playerRef =
+                doc(
+                    db,
+                    "players",
+                    user.uid
                 );
 
 
-            if(user.photoURL) {
+            await setDoc(
+                playerRef,
+                {
 
-                userInfo.innerHTML =
+                    money: money,
 
-                    `<img
-                        id="userPhoto"
-                        src="${user.photoURL}"
-                        alt="Profile">
-                    Welcome, ${user.displayName}!`;
+                    collection:
+                        collection.map(
+                            card => card.name
+                        )
 
-            }
-
-            else {
-
-                userInfo.textContent =
-                    "Welcome, " +
-                    user.displayName +
-                    "!";
-
-            }
-
-        }
-
-        else {
-
-            showOnly(
-                "loginScreen"
+                }
             );
 
         }
 
-    }
-);
 
+        // =====================================
+        // UPDATE COINS
+        // =====================================
 
-
-/* =========================
-   SCREEN SWITCHING
-========================= */
-
-function showOnly(screenId) {
-
-    document
-    .getElementById("loginScreen")
-    .style.display = "none";
-
-    document
-    .getElementById("gameScreen")
-    .style.display = "none";
-
-    document
-    .getElementById("collectionScreen")
-    .style.display = "none";
-
-    document
-    .getElementById("dexScreen")
-    .style.display = "none";
-
-
-    document
-    .getElementById(screenId)
-    .style.display = "block";
-
-
-    window.scrollTo(
-        0,
-        0
-    );
-
-}
-
-
-
-/* =========================
-   RANDOM CARD
-========================= */
-
-function getRandomCard() {
-
-    let total = 0;
-
-
-    for(const card of cards) {
-
-        total += card.chance;
-
-    }
-
-
-    let random =
-        Math.random() * total;
-
-
-    for(const card of cards) {
-
-        random -= card.chance;
-
-
-        if(random <= 0) {
-
-            return card;
-
-        }
-
-    }
-
-}
-
-
-
-/* =========================
-   OPEN PACK
-========================= */
-
-document
-.getElementById("openPackButton")
-.addEventListener(
-    "click",
-    function() {
-
-        if(money < 15) {
+        function updateCoins() {
 
             document
-            .getElementById("message")
-            .textContent =
-                "❌ Not enough coins!";
-
-            return;
+                .getElementById("coins")
+                .textContent = money;
 
         }
 
 
-        money -= 15;
+        // =====================================
+        // OPEN PACK
+        // =====================================
+
+        window.openPack = async function () {
+
+            if (!currentUser) {
+
+                return;
+
+            }
 
 
-        updateMoney();
+            if (money < 10) {
+
+                document
+                    .getElementById("message")
+                    .textContent =
+                    "Not enough coins!";
+
+                return;
+
+            }
 
 
-        document
-        .getElementById("cards")
-        .innerHTML = "";
+            money -= 10;
 
 
-        const pack = [];
+            updateCoins();
 
 
-        for(
-            let i = 0;
-            i < 3;
-            i++
-        ) {
-
-            const card =
-                getRandomCard();
+            document
+                .getElementById("cards")
+                .innerHTML = "";
 
 
-            pack.push(card);
+            let pack = [];
 
 
-            collection.push(card);
+            for (let i = 0; i < 3; i++) {
 
-        }
-
-
-        document
-        .getElementById("message")
-        .textContent =
-            "🎉 You got 3 cards!";
+                const card =
+                    getRandomCard();
 
 
-        for(const card of pack) {
-
-            displayCard(
-                card,
-                document.getElementById(
-                    "cards"
-                ),
-                false
-            );
-
-        }
-
-    }
-);
+                pack.push(card);
 
 
+                collection.push(card);
 
-/* =========================
-   UPDATE MONEY
-========================= */
-
-function updateMoney() {
-
-    document
-    .getElementById("coins")
-    .textContent =
-        money;
-
-}
+            }
 
 
-
-/* =========================
-   DISPLAY CARD
-========================= */
-
-function displayCard(
-    card,
-    container,
-    sellable = false,
-    index = null
-) {
-
-    const cardDiv =
-        document.createElement(
-            "div"
-        );
+            document
+                .getElementById("message")
+                .textContent =
+                "You got 3 cards!";
 
 
-    cardDiv.className =
-        "card";
+            for (let card of pack) {
 
-
-    const image =
-        document.createElement(
-            "img"
-        );
-
-
-    image.src =
-        card.image;
-
-
-    image.alt =
-        card.name;
-
-
-    const name =
-        document.createElement(
-            "p"
-        );
-
-
-    name.textContent =
-        card.name;
-
-
-    cardDiv.appendChild(
-        image
-    );
-
-
-    cardDiv.appendChild(
-        name
-    );
-
-
-    if(sellable) {
-
-        const sellText =
-            document.createElement(
-                "div"
-            );
-
-
-        sellText.className =
-            "sellText";
-
-
-        sellText.textContent =
-            "🪙 Sell for " +
-            card.price +
-            " coins";
-
-
-        cardDiv.appendChild(
-            sellText
-        );
-
-
-        cardDiv.addEventListener(
-            "click",
-            function() {
-
-                openSellPopup(
-                    index
+                displayCard(
+                    card,
+                    document.getElementById("cards")
                 );
 
             }
-        );
 
-    }
 
+            // SAVE AFTER PACK OPEN
+            try {
 
-    container.appendChild(
-        cardDiv
-    );
+                await savePlayerData(
+                    currentUser
+                );
 
-}
+            }
 
+            catch (error) {
 
+                console.error(
+                    "SAVE ERROR:",
+                    error
+                );
 
-/* =========================
-   OPEN COLLECTION
-========================= */
+                document
+                    .getElementById("message")
+                    .textContent =
+                    "Cards opened, but save failed.";
 
-document
-.getElementById("collectionButton")
-.addEventListener(
-    "click",
-    function() {
+            }
 
-        buildCollection();
+        };
 
-        showOnly(
-            "collectionScreen"
-        );
 
-    }
-);
+        // =====================================
+        // DISPLAY CARD
+        // =====================================
 
-
-
-/* =========================
-   BUILD COLLECTION
-========================= */
-
-function buildCollection() {
-
-    const container =
-        document.getElementById(
-            "collectionCards"
-        );
-
-
-    container.innerHTML = "";
-
-
-    document
-    .getElementById(
-        "collectionCount"
-    )
-    .textContent =
-        "Cards collected: " +
-        collection.length;
-
-
-    if(collection.length === 0) {
-
-        container.innerHTML =
-            "<h2>Your collection is empty!</h2>" +
-            "<p>Open a pack to get cards.</p>";
-
-        return;
-
-    }
-
-
-    collection.forEach(
-        function(card, index) {
-
-            displayCard(
-                card,
-                container,
-                true,
-                index
-            );
-
-        }
-    );
-
-}
-
-
-
-/* =========================
-   OPEN SELL POPUP
-========================= */
-
-function openSellPopup(index) {
-
-    selectedCardIndex =
-        index;
-
-
-    const card =
-        collection[index];
-
-
-    document
-    .getElementById("sellImage")
-    .src =
-        card.image;
-
-
-    document
-    .getElementById("sellName")
-    .textContent =
-        card.name;
-
-
-    document
-    .getElementById("sellPrice")
-    .textContent =
-        "🪙 You will receive " +
-        card.price +
-        " coins";
-
-
-    document
-    .getElementById("popupBackground")
-    .style.display =
-        "block";
-
-
-    document
-    .getElementById("sellPopup")
-    .style.display =
-        "block";
-
-}
-
-
-
-/* =========================
-   CANCEL SELL
-========================= */
-
-document
-.getElementById(
-    "cancelSellButton"
-)
-.addEventListener(
-    "click",
-    closeSellPopup
-);
-
-
-
-document
-.getElementById(
-    "popupBackground"
-)
-.addEventListener(
-    "click",
-    closeSellPopup
-);
-
-
-
-function closeSellPopup() {
-
-    selectedCardIndex =
-        null;
-
-
-    document
-    .getElementById("popupBackground")
-    .style.display =
-        "none";
-
-
-    document
-    .getElementById("sellPopup")
-    .style.display =
-        "none";
-
-}
-
-
-
-/* =========================
-   SELL CARD
-========================= */
-
-document
-.getElementById("sellButton")
-.addEventListener(
-    "click",
-    function() {
-
-        if(
-            selectedCardIndex === null
+        function displayCard(
+            card,
+            container
         ) {
 
-            return;
+            const cardDiv =
+                document.createElement("div");
 
-        }
 
-
-        const card =
-            collection[
-                selectedCardIndex
-            ];
-
-
-        if(!card) {
-
-            closeSellPopup();
-
-            return;
-
-        }
-
-
-        /*
-           Give the player the
-           current market price.
-        */
-
-        money += card.price;
-
-
-        /*
-           Remove ONLY the selected
-           copy from collection.
-        */
-
-        collection.splice(
-            selectedCardIndex,
-            1
-        );
-
-
-        updateMoney();
-
-
-        closeSellPopup();
-
-
-        buildCollection();
-
-
-        document
-        .getElementById(
-            "message"
-        )
-        .textContent =
-            "💰 Sold " +
-            card.name +
-            " for " +
-            card.price +
-            " coins!";
-
-    }
-);
-
-
-
-/* =========================
-   COLLECTION BACK
-========================= */
-
-document
-.getElementById(
-    "collectionBackButton"
-)
-.addEventListener(
-    "click",
-    function() {
-
-        showOnly(
-            "gameScreen"
-        );
-
-    }
-);
-
-
-
-/* =========================
-   DEX BUTTON
-========================= */
-
-document
-.getElementById("dexButton")
-.addEventListener(
-    "click",
-    function() {
-
-        buildDex();
-
-        showOnly(
-            "dexScreen"
-        );
-
-    }
-);
-
-
-
-/* =========================
-   BUILD DEX
-========================= */
-
-function buildDex() {
-
-    const container =
-        document.getElementById(
-            "dexCards"
-        );
-
-
-    container.innerHTML = "";
-
-
-    let uniqueOwned = 0;
-
-
-    /* CURRENT 12 */
-
-    for(const card of cards) {
-
-        const div =
-            document.createElement(
-                "div"
-            );
-
-
-        div.className =
-            "dexCard";
-
-
-        const number =
-            document.createElement(
-                "div"
-            );
-
-
-        number.className =
-            "dexNumber";
-
-
-        number.textContent =
-            "#" +
-            String(card.id)
-            .padStart(3, "0");
-
-
-        div.appendChild(
-            number
-        );
-
-
-        const owned =
-            collection.some(
-                ownedCard =>
-                    ownedCard.id ===
-                    card.id
-            );
-
-
-        if(owned) {
-
-            uniqueOwned++;
+            cardDiv.className =
+                "card";
 
 
             const image =
-                document.createElement(
-                    "img"
-                );
+                document.createElement("img");
 
 
             image.src =
@@ -1360,186 +860,409 @@ function buildDex() {
                 card.name;
 
 
-            div.appendChild(
-                image
-            );
-
-
             const name =
-                document.createElement(
-                    "div"
-                );
-
-
-            name.className =
-                "dexName";
+                document.createElement("p");
 
 
             name.textContent =
                 card.name;
 
 
-            div.appendChild(
-                name
-            );
+            cardDiv.appendChild(image);
 
-        }
-
-        else {
-
-            div.classList.add(
-                "locked"
-            );
+            cardDiv.appendChild(name);
 
 
-            const unknown =
-                document.createElement(
-                    "div"
-                );
-
-
-            unknown.className =
-                "unknown";
-
-
-            unknown.textContent =
-                "???";
-
-
-            div.appendChild(
-                unknown
-            );
-
-
-            const name =
-                document.createElement(
-                    "div"
-                );
-
-
-            name.className =
-                "dexName";
-
-
-            name.textContent =
-                "???";
-
-
-            div.appendChild(
-                name
+            container.appendChild(
+                cardDiv
             );
 
         }
 
 
-        container.appendChild(
-            div
-        );
+        // =====================================
+        // SHOW COLLECTION
+        // =====================================
 
-    }
+        window.showCollection =
+            function () {
 
-
-
-    /* #013 - #123 */
-
-    for(
-        let i = 13;
-        i <= 123;
-        i++
-    ) {
-
-        const div =
-            document.createElement(
-                "div"
-            );
+                document
+                    .getElementById("packScreen")
+                    .style.display = "none";
 
 
-        div.className =
-            "dexCard comingSoon";
+                document
+                    .getElementById("dex")
+                    .style.display = "none";
 
 
-        const number =
-            document.createElement(
-                "div"
-            );
+                document
+                    .getElementById("collection")
+                    .style.display = "block";
 
 
-        number.className =
-            "dexNumber";
+                document
+                    .getElementById("search")
+                    .value = "";
 
 
-        number.textContent =
-            "#" +
-            String(i)
-            .padStart(3, "0");
+                renderCollection("");
+
+            };
 
 
-        div.appendChild(
-            number
-        );
+        // =====================================
+        // RENDER COLLECTION
+        // OFFICIAL CARD ORDER
+        // =====================================
+
+        function renderCollection(
+            searchText
+        ) {
+
+            const container =
+                document.getElementById(
+                    "collectionCards"
+                );
 
 
-        const text =
-            document.createElement(
-                "div"
-            );
+            container.innerHTML = "";
 
 
-        text.className =
-            "comingSoonText";
+            const search =
+                searchText
+                    .toLowerCase()
+                    .trim();
 
 
-        text.textContent =
-            "COMING SOON";
+            let found = false;
 
 
-        div.appendChild(
-            text
-        );
+            // Uses official card order
+            for (
+                let card of cards
+            ) {
+
+                const owned =
+                    collection.includes(
+                        card
+                    );
 
 
-        container.appendChild(
-            div
-        );
+                if (!owned) {
 
-    }
+                    continue;
 
-
-
-    document
-    .getElementById(
-        "dexProgress"
-    )
-    .textContent =
-        "Collected: " +
-        uniqueOwned +
-        " / 12";
-
-}
+                }
 
 
+                if (
+                    search &&
+                    !card.name
+                        .toLowerCase()
+                        .includes(search)
+                ) {
 
-/* =========================
-   DEX BACK
-========================= */
+                    continue;
 
-document
-.getElementById(
-    "dexBackButton"
-)
-.addEventListener(
-    "click",
-    function() {
+                }
 
-        showOnly(
-            "gameScreen"
-        );
 
-    }
-);
+                found = true;
 
-</script>
+
+                displayCard(
+                    card,
+                    container
+                );
+
+            }
+
+
+            if (!found) {
+
+                const message =
+                    document.createElement(
+                        "p"
+                    );
+
+
+                if (search) {
+
+                    message.textContent =
+                        "No cards found.";
+
+                }
+
+                else {
+
+                    message.textContent =
+                        "You don't have any cards yet! Open a pack first.";
+
+                }
+
+
+                container.appendChild(
+                    message
+                );
+
+            }
+
+        }
+
+
+        // =====================================
+        // SEARCH COLLECTION
+        // =====================================
+
+        window.searchCollection =
+            function () {
+
+                const search =
+                    document.getElementById(
+                        "search"
+                    ).value;
+
+
+                renderCollection(
+                    search
+                );
+
+            };
+
+
+        // =====================================
+        // SHOW DEX
+        // =====================================
+
+        window.showDex =
+            function () {
+
+                document
+                    .getElementById("packScreen")
+                    .style.display = "none";
+
+
+                document
+                    .getElementById("collection")
+                    .style.display = "none";
+
+
+                document
+                    .getElementById("dex")
+                    .style.display = "block";
+
+
+                showDollsDex();
+
+            };
+
+
+        // =====================================
+        // DOLLS DEX
+        // =====================================
+
+        window.showDollsDex =
+            function () {
+
+                const container =
+                    document.getElementById(
+                        "dexCards"
+                    );
+
+
+                container.innerHTML = "";
+
+
+                for (
+                    let i = 0;
+                    i < dexDolls.length;
+                    i++
+                ) {
+
+                    const card =
+                        dexDolls[i];
+
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    div.className =
+                        "dexCard";
+
+
+                    if (
+                        card.name ===
+                        "Coming Soon"
+                    ) {
+
+                        const coming =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        coming.className =
+                            "comingSoon";
+
+
+                        coming.textContent =
+                            "Coming Soon";
+
+
+                        div.appendChild(
+                            coming
+                        );
+
+                    }
+
+                    else {
+
+                        const image =
+                            document.createElement(
+                                "img"
+                            );
+
+
+                        image.src =
+                            card.image;
+
+
+                        image.alt =
+                            card.name;
+
+
+                        const name =
+                            document.createElement(
+                                "p"
+                            );
+
+
+                        name.textContent =
+                            card.name;
+
+
+                        div.appendChild(
+                            image
+                        );
+
+
+                        div.appendChild(
+                            name
+                        );
+
+                    }
+
+
+                    container.appendChild(
+                        div
+                    );
+
+                }
+
+            };
+
+
+        // =====================================
+        // RARES DEX
+        // =====================================
+
+        window.showRaresDex =
+            function () {
+
+                const container =
+                    document.getElementById(
+                        "dexCards"
+                    );
+
+
+                container.innerHTML = "";
+
+
+                for (
+                    let card of dexRares
+                ) {
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    div.className =
+                        "dexCard";
+
+
+                    const coming =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    coming.className =
+                        "comingSoon";
+
+
+                    coming.textContent =
+                        "Coming Soon";
+
+
+                    div.appendChild(
+                        coming
+                    );
+
+
+                    container.appendChild(
+                        div
+                    );
+
+                }
+
+            };
+
+
+        // =====================================
+        // BACK TO PACKS
+        // =====================================
+
+        window.backToPacks =
+            function () {
+
+                showPackScreen();
+
+            };
+
+
+        // =====================================
+        // SHOW PACK SCREEN
+        // =====================================
+
+        function showPackScreen() {
+
+            document
+                .getElementById("collection")
+                .style.display = "none";
+
+
+            document
+                .getElementById("dex")
+                .style.display = "none";
+
+
+            document
+                .getElementById("packScreen")
+                .style.display = "block";
+
+
+            updateCoins();
+
+        }
+
+    </script>
 
 </body>
-
-    </html>
+</html>
