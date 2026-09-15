@@ -6,461 +6,550 @@
 <title>Doll Ball Collector Cards</title>
 
 <style>
-*{box-sizing:border-box}
-
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#071525;
-    color:white;
+* {
+    box-sizing: border-box;
 }
 
-button{
-    border:none;
-    border-radius:10px;
-    padding:12px 16px;
-    font-weight:bold;
-    cursor:pointer;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #071525;
+    color: white;
 }
 
-button:disabled{
-    opacity:.45;
-    cursor:not-allowed;
+button {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.hidden{display:none!important}
-
-#loginScreen{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
 }
 
-.loginBox{
-    background:#10243d;
-    padding:35px;
-    border-radius:20px;
-    width:min(90%,420px);
+.hidden {
+    display: none !important;
 }
 
-.loginBox h1{margin-top:0}
+/* LOGIN */
 
-.googleButton{
-    background:white;
-    color:#222;
-    width:100%;
-    font-size:16px;
+#loginScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-#gameScreen{min-height:100vh}
-
-.topBar{
-    background:#10243d;
-    padding:10px;
-    display:flex;
-    gap:7px;
-    overflow-x:auto;
-    align-items:center;
+.loginBox {
+    background: #10243d;
+    padding: 35px;
+    border-radius: 20px;
+    width: min(90%, 420px);
 }
 
-.topBar button{
-    background:#183653;
-    color:white;
-    white-space:nowrap;
+.loginBox h1 {
+    margin-top: 0;
 }
 
-.topBar button:hover{background:#234b70}
-
-.moneyBox{
-    background:#183653;
-    padding:10px 14px;
-    border-radius:10px;
-    white-space:nowrap;
-    order:-1;
+.googleButton {
+    background: white;
+    color: #222;
+    width: 100%;
+    font-size: 16px;
 }
 
-.page{
-    padding:20px;
-    max-width:1200px;
-    margin:auto;
+/* TOP BAR */
+
+#gameScreen {
+    min-height: 100vh;
 }
 
-h1,h2,h3{margin-top:0}
-
-.homeBox{
-    background:#10243d;
-    padding:25px;
-    border-radius:18px;
+.topBar {
+    background: #10243d;
+    padding: 10px;
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    align-items: center;
 }
 
-.username{
-    font-size:20px;
-    font-weight:bold;
+.topBar button {
+    background: #183653;
+    color: white;
+    white-space: nowrap;
 }
 
-.packButton{
-    background:#2674d9;
-    color:white;
-    font-size:18px;
-    margin-top:15px;
+.topBar button:hover {
+    background: #234b70;
 }
 
-.tabs{
-    display:flex;
-    gap:8px;
-    margin-bottom:18px;
+.moneyBox {
+    background: #183653;
+    padding: 10px 14px;
+    border-radius: 10px;
+    white-space: nowrap;
+    order: -1;
 }
 
-.tabs button{
-    background:#183653;
-    color:white;
+/* PAGES */
+
+.page {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
 }
 
-.tabs button.active{background:#2674d9}
-
-.searchBox{
-    width:100%;
-    padding:13px;
-    border-radius:10px;
-    border:none;
-    margin-bottom:20px;
-    font-size:16px;
+h1,
+h2,
+h3 {
+    margin-top: 0;
 }
 
-.cardGrid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
-    gap:18px;
+/* HOME */
+
+.homeBox {
+    background: #10243d;
+    padding: 25px;
+    border-radius: 18px;
 }
 
-.card{
-    background:#10243d;
-    border-radius:15px;
-    padding:10px;
-    position:relative;
-    text-align:center;
-    border:3px solid transparent;
+.username {
+    font-size: 20px;
+    font-weight: bold;
 }
 
-.card img{
-    width:100%;
-    aspect-ratio:1/1.35;
-    object-fit:contain;
-    border-radius:10px;
-    background:#091a2d;
-    cursor:pointer;
+.packButton {
+    background: #2674d9;
+    color: white;
+    font-size: 18px;
+    margin-top: 15px;
 }
 
-.cardName{
-    font-weight:bold;
-    margin-top:8px;
+/* TABS */
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
 }
 
-.cardCount{
-    position:absolute;
-    top:7px;
-    right:7px;
-    background:#2674d9;
-    min-width:28px;
-    height:28px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
+.tabs button {
+    background: #183653;
+    color: white;
 }
 
-.starButton{
-    position:absolute;
-    top:7px;
-    left:7px;
-    width:31px;
-    height:31px;
-    padding:0;
-    border-radius:50%;
-    background:#172b43;
-    color:white;
-    font-size:17px;
-    z-index:10;
+.tabs button.active {
+    background: #2674d9;
 }
 
-.starButton.favorite{color:#36b9ff}
+/* SEARCH */
 
-.favoriteCard{
-    border:4px solid #36b9ff;
-    box-shadow:0 0 0 2px #8ee0ff,0 0 12px #36b9ff;
+.searchBox {
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 20px;
+    font-size: 16px;
 }
 
-.tradedFavoriteCard{
-    border:4px solid #36b9ff;
-    box-shadow:0 0 0 2px #8ee0ff,0 0 8px #36b9ff,0 0 18px white;
+/* CARDS */
+
+.cardGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    gap: 18px;
 }
 
-.tradedFavoriteCard::before{
-    content:"✦ ✧ ✦";
-    position:absolute;
-    top:-15px;
-    left:50%;
-    transform:translateX(-50%);
-    color:#36b9ff;
-    font-size:17px;
-    white-space:nowrap;
-    z-index:102;
+.card {
+    background: #10243d;
+    border-radius: 15px;
+    padding: 10px;
+    position: relative;
+    text-align: center;
+    border: 3px solid transparent;
 }
 
-.rareFavoriteCard{
-    border:4px solid gold;
-    box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700;
+.card img {
+    width: 100%;
+    aspect-ratio: 1 / 1.35;
+    object-fit: contain;
+    border-radius: 10px;
+    background: #091a2d;
+    cursor: pointer;
 }
 
-.rareTradedFavoriteCard{
-    border:4px solid gold;
-    box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700,0 0 32px white;
+.cardName {
+    font-weight: bold;
+    margin-top: 8px;
 }
 
-.rareTradedFavoriteCard::before{
-    content:"✦ ◆ ✧ ◆ ✦";
-    position:absolute;
-    top:-16px;
-    left:50%;
-    transform:translateX(-50%);
-    color:gold;
-    font-size:17px;
-    white-space:nowrap;
-    z-index:102;
+.cardCount {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    background: #2674d9;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 
-.sellButton{
-    width:100%;
-    margin-top:8px;
-    background:#176f46;
-    color:white;
+.starButton {
+    position: absolute;
+    top: 7px;
+    left: 7px;
+    width: 31px;
+    height: 31px;
+    padding: 0;
+    border-radius: 50%;
+    background: #172b43;
+    color: white;
+    font-size: 17px;
+    z-index: 10;
 }
 
-.sellButton.favoriteLocked{background:#555}
-
-.dexCard{
-    background:#10243d;
-    border-radius:15px;
-    padding:10px;
-    text-align:center;
+.starButton.favorite {
+    color: #36b9ff;
 }
 
-.dexCard img{
-    width:100%;
-    aspect-ratio:1/1.35;
-    object-fit:contain;
-    background:#091a2d;
-    border-radius:10px;
-    cursor:pointer;
+.favoriteCard {
+    border: 4px solid #36b9ff;
+    box-shadow:
+        0 0 0 2px #8ee0ff,
+        0 0 12px #36b9ff;
 }
 
-.comingSoon{opacity:.5}
-
-.tradeNotice{
-    background:#10243d;
-    border-radius:15px;
-    padding:18px;
-    margin-bottom:18px;
+.tradedFavoriteCard {
+    border: 4px solid #36b9ff;
+    box-shadow:
+        0 0 0 2px #8ee0ff,
+        0 0 8px #36b9ff,
+        0 0 18px white;
 }
 
-.tradeSearchArea{
-    display:flex;
-    gap:8px;
+.tradedFavoriteCard::before {
+    content: "✦ ✧ ✦";
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #36b9ff;
+    font-size: 17px;
+    white-space: nowrap;
+    z-index: 102;
 }
 
-.tradeSearchArea input{
-    flex:1;
-    min-width:0;
-    padding:13px;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
+.rareFavoriteCard {
+    border: 4px solid gold;
+    box-shadow:
+        0 0 0 2px #fff0a3,
+        0 0 10px gold,
+        0 0 22px #ffd700;
 }
 
-.tradeSearchButton{
-    background:#2674d9;
-    color:white;
+.rareTradedFavoriteCard {
+    border: 4px solid gold;
+    box-shadow:
+        0 0 0 2px #fff0a3,
+        0 0 10px gold,
+        0 0 22px #ffd700,
+        0 0 32px white;
 }
 
-.tradePlayerResult{margin-top:15px}
-
-.tradeRequest{
-    background:#183653;
-    padding:15px;
-    border-radius:12px;
-    margin-top:10px;
+.rareTradedFavoriteCard::before {
+    content: "✦ ◆ ✧ ◆ ✦";
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: gold;
+    font-size: 17px;
+    white-space: nowrap;
+    z-index: 102;
 }
 
-.tradeArea{
-    background:#10243d;
-    padding:18px;
-    border-radius:18px;
-    margin-top:20px;
+.sellButton {
+    width: 100%;
+    margin-top: 8px;
+    background: #176f46;
+    color: white;
 }
 
-.tradeColumns{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
+.sellButton.favoriteLocked {
+    background: #555;
 }
 
-.tradeSide{
-    background:#091a2d;
-    padding:15px;
-    border-radius:15px;
+/* DEX */
+
+.dexCard {
+    background: #10243d;
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
 }
 
-.tradeSide h3{text-align:center}
-
-.tradeCardGrid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
+.dexCard img {
+    width: 100%;
+    aspect-ratio: 1 / 1.35;
+    object-fit: contain;
+    background: #091a2d;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
-.tradeCard{
-    background:#10243d;
-    border-radius:10px;
-    padding:7px;
-    text-align:center;
-    border:2px solid transparent;
-    cursor:pointer;
+.comingSoon {
+    opacity: 0.5;
 }
 
-.tradeCard.selected{
-    border-color:#36b9ff;
-    box-shadow:0 0 10px #36b9ff;
+/* TRADE */
+
+.tradeNotice {
+    background: #10243d;
+    border-radius: 15px;
+    padding: 18px;
+    margin-bottom: 18px;
 }
 
-.tradeCard img{
-    width:100%;
-    aspect-ratio:1/1.25;
-    object-fit:contain;
+.tradeSearchArea {
+    display: flex;
+    gap: 8px;
 }
 
-.tradeStatus{
-    text-align:center;
-    margin:15px 0;
-    font-size:18px;
-    font-weight:bold;
+.tradeSearchArea input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
 }
 
-.confirmButton{
-    background:#198754;
-    color:white;
-    width:100%;
+.tradeSearchButton {
+    background: #2674d9;
+    color: white;
 }
 
-.cancelButton{
-    background:#9b2929;
-    color:white;
-    width:100%;
-    margin-top:8px;
+.tradePlayerResult {
+    margin-top: 15px;
 }
 
-.changeOfferButton{
-    background:#2674d9;
-    color:white;
-    width:100%;
-    margin-top:8px;
+.tradeRequest {
+    background: #183653;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 10px;
 }
 
-.settingsOverlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.8);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:999;
+.tradeArea {
+    background: #10243d;
+    padding: 18px;
+    border-radius: 18px;
+    margin-top: 20px;
 }
 
-.settingsBox{
-    background:#10243d;
-    padding:25px;
-    width:min(90%,450px);
-    border-radius:20px;
+.tradeColumns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
 }
 
-.settingsButton{
-    width:100%;
-    background:#183653;
-    color:white;
-    margin-top:10px;
+.tradeSide {
+    background: #091a2d;
+    padding: 15px;
+    border-radius: 15px;
 }
 
-.resetButton{background:#8d2525}
-
-.logoutButton{background:#c62828!important}
-
-#message{
-    position:fixed;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    background:#183653;
-    padding:13px 18px;
-    border-radius:12px;
-    z-index:2000;
-    display:none;
-    text-align:center;
+.tradeSide h3 {
+    text-align: center;
 }
 
-.cardViewer{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.94);
-    z-index:5000;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
+.tradeCardGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
 }
 
-.cardViewerImage{
-    max-width:95vw;
-    max-height:90vh;
-    width:auto;
-    height:auto;
-    object-fit:contain;
-    border-radius:12px;
+.tradeCard {
+    background: #10243d;
+    border-radius: 10px;
+    padding: 7px;
+    text-align: center;
+    border: 2px solid transparent;
+    cursor: pointer;
 }
 
-.cardViewerClose{
-    position:fixed;
-    top:15px;
-    right:15px;
-    background:#183653;
-    color:white;
-    font-size:24px;
-    width:48px;
-    height:48px;
-    padding:0;
-    z-index:5001;
+.tradeCard.selected {
+    border-color: #36b9ff;
+    box-shadow: 0 0 10px #36b9ff;
 }
 
-@media(max-width:650px){
-    .tradeColumns{grid-template-columns:1fr}
-    .topBar{flex-wrap:nowrap}
-    .moneyBox{margin-left:0}
+.tradeCard img {
+    width: 100%;
+    aspect-ratio: 1 / 1.25;
+    object-fit: contain;
+}
+
+.tradeStatus {
+    text-align: center;
+    margin: 15px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.confirmButton {
+    background: #198754;
+    color: white;
+    width: 100%;
+}
+
+.cancelButton {
+    background: #9b2929;
+    color: white;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.changeOfferButton {
+    background: #2674d9;
+    color: white;
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* SETTINGS */
+
+.settingsOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.settingsBox {
+    background: #10243d;
+    padding: 25px;
+    width: min(90%, 450px);
+    border-radius: 20px;
+}
+
+.settingsButton {
+    width: 100%;
+    background: #183653;
+    color: white;
+    margin-top: 10px;
+}
+
+.resetButton {
+    background: #8d2525;
+}
+
+.logoutButton {
+    background: #c62828 !important;
+}
+
+/* MESSAGE */
+
+#message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #183653;
+    padding: 13px 18px;
+    border-radius: 12px;
+    z-index: 2000;
+    display: none;
+    text-align: center;
+}
+
+/* CARD VIEWER */
+
+.cardViewer {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.94);
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.cardViewerImage {
+    max-width: 95vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.cardViewerClose {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: #183653;
+    color: white;
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    z-index: 5001;
+}
+
+@media (max-width: 650px) {
+    .tradeColumns {
+        grid-template-columns: 1fr;
+    }
+
+    .topBar {
+        flex-wrap: nowrap;
+    }
+
+    .moneyBox {
+        margin-left: 0;
+    }
 }
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
+
 <div id="loginScreen">
+
     <div class="loginBox">
+
         <h1>Doll Ball Collector Cards</h1>
+
         <p>Log in to play.</p>
-        <button class="googleButton" onclick="loginGoogle()">
+
+        <button
+            class="googleButton"
+            onclick="loginGoogle()">
+
             Sign in with Google
+
         </button>
+
     </div>
+
 </div>
+
+
+<!-- GAME -->
 
 <div id="gameScreen" class="hidden">
 
@@ -470,17 +559,38 @@ h1,h2,h3{margin-top:0}
             Coins: <span id="money">0</span>
         </div>
 
-        <button onclick="showPage('home')">HOME</button>
-        <button onclick="showPage('collection')">COLLECTION</button>
-        <button onclick="showPage('dex')">DEX</button>
-        <button onclick="showPage('trade')">TRADE</button>
-        <button onclick="openSettings()">SETTINGS</button>
+        <button onclick="showPage('home')">
+            HOME
+        </button>
 
-        <button class="logoutButton" onclick="logout()">
+        <button onclick="showPage('collection')">
+            COLLECTION
+        </button>
+
+        <button onclick="showPage('dex')">
+            DEX
+        </button>
+
+        <button onclick="showPage('trade')">
+            TRADE
+        </button>
+
+        <button onclick="openSettings()">
+            SETTINGS
+        </button>
+
+        <button
+            class="logoutButton"
+            onclick="logout()">
+
             LOG OUT
+
         </button>
 
     </div>
+
+
+    <!-- HOME -->
 
     <div id="homePage" class="page">
 
@@ -495,7 +605,10 @@ h1,h2,h3{margin-top:0}
 
             <p>
                 Username:
-                <span class="username" id="usernameDisplay"></span>
+                <span
+                    class="username"
+                    id="usernameDisplay">
+                </span>
             </p>
 
             <hr>
@@ -503,19 +616,28 @@ h1,h2,h3{margin-top:0}
             <h2>Open a Pack</h2>
 
             <p>
-                Cost: 50 coins<br>
+                Cost: 25 coins<br>
                 Cards: 3
             </p>
 
-            <button class="packButton" onclick="openPack()">
-                OPEN PACK - 50 COINS
+            <button
+                class="packButton"
+                onclick="openPack()">
+
+                OPEN PACK - 25 COINS
+
             </button>
 
         </div>
 
     </div>
 
-    <div id="collectionPage" class="page hidden">
+
+    <!-- COLLECTION -->
+
+    <div
+        id="collectionPage"
+        class="page hidden">
 
         <h1>Collection</h1>
 
@@ -525,13 +647,17 @@ h1,h2,h3{margin-top:0}
                 id="collectionAllButton"
                 class="active"
                 onclick="setCollectionTab('all')">
+
                 ALL
+
             </button>
 
             <button
                 id="collectionFavoritesButton"
                 onclick="setCollectionTab('favorites')">
+
                 FAVORITES
+
             </button>
 
         </div>
@@ -542,11 +668,19 @@ h1,h2,h3{margin-top:0}
             placeholder="Search cards..."
             oninput="renderCollection()">
 
-        <div id="collectionGrid" class="cardGrid"></div>
+        <div
+            id="collectionGrid"
+            class="cardGrid">
+        </div>
 
     </div>
 
-    <div id="dexPage" class="page hidden">
+
+    <!-- DEX -->
+
+    <div
+        id="dexPage"
+        class="page hidden">
 
         <h1>DEX</h1>
 
@@ -556,22 +690,34 @@ h1,h2,h3{margin-top:0}
                 id="dexDollsButton"
                 class="active"
                 onclick="setDexTab('dolls')">
+
                 DOLLS
+
             </button>
 
             <button
                 id="dexRaresButton"
                 onclick="setDexTab('rares')">
+
                 RARES
+
             </button>
 
         </div>
 
-        <div id="dexGrid" class="cardGrid"></div>
+        <div
+            id="dexGrid"
+            class="cardGrid">
+        </div>
 
     </div>
 
-    <div id="tradePage" class="page hidden">
+
+    <!-- TRADE -->
+
+    <div
+        id="tradePage"
+        class="page hidden">
 
         <h1>Trading</h1>
 
@@ -579,7 +725,9 @@ h1,h2,h3{margin-top:0}
 
             <b>Find a player</b>
 
-            <p>Search using their username.</p>
+            <p>
+                Search using their username.
+            </p>
 
             <div class="tradeSearchArea">
 
@@ -590,7 +738,9 @@ h1,h2,h3{margin-top:0}
                 <button
                     class="tradeSearchButton"
                     onclick="findPlayer()">
+
                     SEARCH
+
                 </button>
 
             </div>
@@ -600,13 +750,19 @@ h1,h2,h3{margin-top:0}
         </div>
 
         <div id="incomingTrades"></div>
+
         <div id="activeTrade"></div>
 
     </div>
 
 </div>
 
-<div id="settingsOverlay" class="settingsOverlay hidden">
+
+<!-- SETTINGS -->
+
+<div
+    id="settingsOverlay"
+    class="settingsOverlay hidden">
 
     <div class="settingsBox">
 
@@ -620,18 +776,25 @@ h1,h2,h3{margin-top:0}
         <button
             class="settingsButton resetButton"
             onclick="resetAccount()">
+
             RESET ACCOUNT
+
         </button>
 
         <button
             class="settingsButton"
             onclick="closeSettings()">
+
             CLOSE
+
         </button>
 
     </div>
 
 </div>
+
+
+<!-- CARD VIEWER -->
 
 <div
     id="cardViewer"
@@ -641,7 +804,9 @@ h1,h2,h3{margin-top:0}
     <button
         class="cardViewerClose"
         onclick="closeCardViewer(event)">
+
         X
+
     </button>
 
     <img
@@ -653,7 +818,9 @@ h1,h2,h3{margin-top:0}
 
 </div>
 
+
 <div id="message"></div>
+
 
 <script type="module">
 
@@ -683,159 +850,310 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
+/* FIREBASE */
+
 const firebaseConfig = {
-    apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
-    authDomain:"dbcc-login.firebaseapp.com",
-    databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId:"dbcc-login",
-    storageBucket:"dbcc-login.firebasestorage.app",
-    messagingSenderId:"878902780767",
-    appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
-    measurementId:"G-PT9S1K4E2K"
+    apiKey: "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
+    authDomain: "dbcc-login.firebaseapp.com",
+    databaseURL: "https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "dbcc-login",
+    storageBucket: "dbcc-login.firebasestorage.app",
+    messagingSenderId: "878902780767",
+    appId: "1:878902780767:web:4020d11730e5d9c0ee0cea",
+    measurementId: "G-PT9S1K4E2K"
 };
 
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
+const app = initializeApp(firebaseConfig);
 
-const PACK_PRICE=50;
-const STARTING_COINS=250;
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+
+/* ECONOMY */
+
+const PACK_PRICE = 25;
+const STARTING_COINS = 125;
 
 
 /* CARDS */
 
-const cards=[
-    {name:"Baby Pickels",image:"baby pikels.png",weight:14,price:5,rarity:"doll"},
-    {name:"Mr. Pickels",image:"mr. pickels.png",weight:9,price:7,rarity:"doll"},
-    {name:"Wily",image:"wily.png",weight:14,price:5,rarity:"doll"},
-    {name:"Will",image:"will.png",weight:9,price:7,rarity:"doll"},
-    {name:"Waffle",image:"waffle.png",weight:14,price:5,rarity:"doll"},
-    {name:"Cute Cake",image:"cute cake.png",weight:9,price:7,rarity:"doll"},
-    {name:"Buttyr",image:"buttyr.png",weight:20,price:7,rarity:"doll"},
-    {name:"Blossem",image:"blossem.png",weight:20,price:7,rarity:"doll"},
-    {name:"Buzzy",image:"buzzy.png",weight:5,price:12,rarity:"doll"},
-    {name:"Nico",image:"nico.png",weight:20,price:3,rarity:"doll"},
-    {name:"Choper",image:"choper.png",weight:10,price:5,rarity:"doll"},
-    {name:"Bullet",image:"bullet.png",weight:10,price:5,rarity:"doll"}
+const cards = [
+
+    {
+        name: "Baby Pickels",
+        image: "baby pikels.png",
+        weight: 14,
+        price: 5,
+        rarity: "doll"
+    },
+
+    {
+        name: "Mr. Pickels",
+        image: "mr. pickels.png",
+        weight: 9,
+        price: 7,
+        rarity: "doll"
+    },
+
+    {
+        name: "Wily",
+        image: "wily.png",
+        weight: 14,
+        price: 5,
+        rarity: "doll"
+    },
+
+    {
+        name: "Will",
+        image: "will.png",
+        weight: 9,
+        price: 7,
+        rarity: "doll"
+    },
+
+    {
+        name: "Waffle",
+        image: "waffle.png",
+        weight: 14,
+        price: 5,
+        rarity: "doll"
+    },
+
+    {
+        name: "Cute Cake",
+        image: "cute cake.png",
+        weight: 9,
+        price: 7,
+        rarity: "doll"
+    },
+
+    {
+        name: "Buttyr",
+        image: "buttyr.png",
+        weight: 20,
+        price: 7,
+        rarity: "doll"
+    },
+
+    {
+        name: "Blossem",
+        image: "blossem.png",
+        weight: 20,
+        price: 7,
+        rarity: "doll"
+    },
+
+    {
+        name: "Buzzy",
+        image: "buzzy.png",
+        weight: 5,
+        price: 12,
+        rarity: "doll"
+    },
+
+    {
+        name: "Nico",
+        image: "nico.png",
+        weight: 20,
+        price: 3,
+        rarity: "doll"
+    },
+
+    {
+        name: "Choper",
+        image: "choper.png",
+        weight: 10,
+        price: 5,
+        rarity: "doll"
+    },
+
+    {
+        name: "Bullet",
+        image: "bullet.png",
+        weight: 10,
+        price: 5,
+        rarity: "doll"
+    }
+
 ];
 
 
 /* STATE */
 
-let currentUser=null;
-let money=STARTING_COINS;
-let username="";
-let collection=[];
-let favorites=[];
-let completedTradeIds=[];
-let collectionTab="all";
-let dexTab="dolls";
-let activeTrade=null;
-let selectedTradeCards=[];
-let tradeRequests=[];
-let tradeListener=null;
-let applyingTradeIds=new Set();
+let currentUser = null;
+
+let money = STARTING_COINS;
+
+let username = "";
+
+let collection = [];
+
+let favorites = [];
+
+let completedTradeIds = [];
+
+let collectionTab = "all";
+
+let dexTab = "dolls";
+
+let activeTrade = null;
+
+let selectedTradeCards = [];
+
+let tradeRequests = [];
+
+let tradeListener = null;
+
+let applyingTradeIds = new Set();
 
 
 /* HELPERS */
 
-function createCardId(){
-    return Date.now().toString(36)+Math.random().toString(36).slice(2);
+function createCardId() {
+
+    return Date.now().toString(36) +
+        Math.random().toString(36).slice(2);
+
 }
 
-function createCardCopy(name,traded=false){
-    return{
-        id:createCardId(),
-        name:name,
-        traded:traded
+
+function createCardCopy(name, traded = false) {
+
+    return {
+        id: createCardId(),
+        name: name,
+        traded: traded
     };
+
 }
 
-function getCard(name){
-    return cards.find(card=>card.name===name);
+
+function getCard(name) {
+
+    return cards.find(
+        card => card.name === name
+    );
+
 }
 
-function escapeHtml(value){
+
+function escapeHtml(value) {
+
     return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
 }
 
-function encoded(value){
+
+function encoded(value) {
+
     return encodeURIComponent(String(value));
+
 }
 
-window.openEncodedCardViewer=function(image,name){
+
+window.openEncodedCardViewer = function(image, name) {
+
     openCardViewer(
         decodeURIComponent(image),
         decodeURIComponent(name)
     );
+
 };
 
-function showMessage(text){
-    const el=document.getElementById("message");
-    el.textContent=text;
-    el.style.display="block";
 
-    setTimeout(()=>{
-        el.style.display="none";
-    },2500);
+function showMessage(text) {
+
+    const el =
+        document.getElementById("message");
+
+    el.textContent = text;
+
+    el.style.display = "block";
+
+    setTimeout(() => {
+
+        el.style.display = "none";
+
+    }, 2500);
+
 }
 
 
 /* CARD VIEWER */
 
-window.openCardViewer=function(image,name){
-    const viewer=document.getElementById("cardViewer");
-    const imageEl=document.getElementById("cardViewerImage");
+window.openCardViewer = function(image, name) {
 
-    imageEl.src=image;
-    imageEl.alt=name;
+    const viewer =
+        document.getElementById("cardViewer");
+
+    const imageEl =
+        document.getElementById("cardViewerImage");
+
+    imageEl.src = image;
+
+    imageEl.alt = name;
 
     viewer.classList.remove("hidden");
+
 };
 
-window.closeCardViewer=function(event){
-    if(event)event.stopPropagation();
+
+window.closeCardViewer = function(event) {
+
+    if (event) {
+        event.stopPropagation();
+    }
 
     document
         .getElementById("cardViewer")
         .classList.add("hidden");
+
 };
 
 
-/* LOGIN */
+/* GOOGLE LOGIN */
 
-window.loginGoogle=async function(){
+window.loginGoogle = async function() {
 
-    try{
+    try {
 
-        const provider=new GoogleAuthProvider();
+        const provider =
+            new GoogleAuthProvider();
 
         await signInWithPopup(
             auth,
             provider
         );
 
-    }catch(error){
+    } catch (error) {
 
         console.error(error);
+
         showMessage(error.message);
 
     }
 
 };
 
-window.logout=async function(){
 
-    try{
+window.logout = async function() {
+
+    try {
+
         await savePlayerData();
+
         await signOut(auth);
-    }catch(error){
+
+    } catch (error) {
+
         console.error(error);
+
     }
 
 };
@@ -843,67 +1161,95 @@ window.logout=async function(){
 
 /* USERNAME */
 
-async function askForUsername(){
+async function askForUsername() {
 
-    while(!username){
+    while (!username) {
 
-        let chosen=prompt(
+        let chosen = prompt(
             "Choose your unique username:"
         );
 
-        if(chosen===null)chosen="";
+        if (chosen === null) {
+            chosen = "";
+        }
 
-        chosen=chosen.trim();
+        chosen = chosen.trim();
 
-        if(chosen.length<3){
-            alert("Username must be at least 3 characters.");
+        if (chosen.length < 3) {
+
+            alert(
+                "Username must be at least 3 characters."
+            );
+
             continue;
         }
 
-        if(chosen.length>20){
-            alert("Username must be 20 characters or less.");
+        if (chosen.length > 20) {
+
+            alert(
+                "Username must be 20 characters or less."
+            );
+
             continue;
         }
 
-        if(!/^[a-zA-Z0-9_]+$/.test(chosen)){
-            alert("Only letters, numbers and _ are allowed.");
+        if (!/^[a-zA-Z0-9_]+$/.test(chosen)) {
+
+            alert(
+                "Only letters, numbers and _ are allowed."
+            );
+
             continue;
         }
 
-        const normalized=chosen.toLowerCase();
+        const normalized =
+            chosen.toLowerCase();
 
-        const usernameRef=doc(
-            db,
-            "usernames",
-            normalized
-        );
+        const usernameRef =
+            doc(
+                db,
+                "usernames",
+                normalized
+            );
 
-        const usernameSnap=await getDoc(usernameRef);
+        const usernameSnap =
+            await getDoc(usernameRef);
 
-        if(
+        if (
             usernameSnap.exists() &&
-            usernameSnap.data().uid!==currentUser.uid
-        ){
-            alert("That username is already taken.");
+            usernameSnap.data().uid !== currentUser.uid
+        ) {
+
+            alert(
+                "That username is already taken."
+            );
+
             continue;
         }
 
         await setDoc(
             usernameRef,
             {
-                uid:currentUser.uid,
-                username:chosen
+                uid: currentUser.uid,
+                username: chosen
             },
-            {merge:true}
+            {
+                merge: true
+            }
         );
 
-        username=chosen;
+        username = chosen;
+
     }
+
 }
 
-async function ensureUsernameDocument(){
 
-    if(!currentUser||!username)return;
+async function ensureUsernameDocument() {
+
+    if (!currentUser || !username) {
+        return;
+    }
 
     await setDoc(
         doc(
@@ -912,101 +1258,135 @@ async function ensureUsernameDocument(){
             username.toLowerCase()
         ),
         {
-            uid:currentUser.uid,
-            username:username
+            uid: currentUser.uid,
+            username: username
         },
-        {merge:true}
+        {
+            merge: true
+        }
     );
+
 }
 
 
 /* PLAYER DATA */
 
-function normalizeCollection(data){
+function normalizeCollection(data) {
 
-    if(!Array.isArray(data))return[];
+    if (!Array.isArray(data)) {
+        return [];
+    }
 
-    return data.map(item=>{
+    return data
+        .map(item => {
 
-        if(typeof item==="string"){
-            return createCardCopy(item);
-        }
+            if (typeof item === "string") {
 
-        return{
-            id:item.id||createCardId(),
-            name:item.name,
-            traded:item.traded===true
-        };
+                return createCardCopy(item);
 
-    }).filter(item=>getCard(item.name));
+            }
+
+            return {
+                id: item.id || createCardId(),
+                name: item.name,
+                traded: item.traded === true
+            };
+
+        })
+        .filter(
+            item => getCard(item.name)
+        );
+
 }
 
-async function loadPlayerData(){
 
-    const ref=doc(
-        db,
-        "players",
-        currentUser.uid
-    );
+async function loadPlayerData() {
 
-    const snap=await getDoc(ref);
+    const ref =
+        doc(
+            db,
+            "players",
+            currentUser.uid
+        );
 
-    if(!snap.exists()){
+    const snap =
+        await getDoc(ref);
 
-        money=STARTING_COINS;
-        collection=[];
-        favorites=[];
-        completedTradeIds=[];
-        username="";
+
+    if (!snap.exists()) {
+
+        money = STARTING_COINS;
+
+        collection = [];
+
+        favorites = [];
+
+        completedTradeIds = [];
+
+        username = "";
 
         await setDoc(
             ref,
             {
-                money:money,
-                collection:collection,
-                favorites:favorites,
-                completedTradeIds:completedTradeIds,
-                username:username
+                money: money,
+                collection: collection,
+                favorites: favorites,
+                completedTradeIds: completedTradeIds,
+                username: username
             }
         );
 
-    }else{
+    } else {
 
-        const data=snap.data();
+        const data = snap.data();
 
-        money=
-            typeof data.money==="number"
+        money =
+            typeof data.money === "number"
                 ? data.money
                 : STARTING_COINS;
 
-        collection=normalizeCollection(
-            data.collection
-        );
+        collection =
+            normalizeCollection(
+                data.collection
+            );
 
-        favorites=
+        favorites =
             Array.isArray(data.favorites)
                 ? data.favorites
                 : [];
 
-        completedTradeIds=
-            Array.isArray(data.completedTradeIds)
+        completedTradeIds =
+            Array.isArray(
+                data.completedTradeIds
+            )
                 ? data.completedTradeIds
                 : [];
 
-        username=data.username||"";
+        username =
+            data.username || "";
+
     }
 
-    if(!username){
+
+    if (!username) {
+
         await askForUsername();
+
     }
+
 
     await ensureUsernameDocument();
+
     await savePlayerData();
+
 }
 
-async function savePlayerData(){
 
-    if(!currentUser)return;
+async function savePlayerData() {
+
+    if (!currentUser) {
+        return;
+    }
 
     await setDoc(
         doc(
@@ -1015,14 +1395,17 @@ async function savePlayerData(){
             currentUser.uid
         ),
         {
-            money:money,
-            collection:collection,
-            favorites:favorites,
-            completedTradeIds:completedTradeIds,
-            username:username
+            money: money,
+            collection: collection,
+            favorites: favorites,
+            completedTradeIds: completedTradeIds,
+            username: username
         },
-        {merge:true}
+        {
+            merge: true
+        }
     );
+
 }
 
 
@@ -1030,16 +1413,17 @@ async function savePlayerData(){
 
 onAuthStateChanged(
     auth,
-    async user=>{
+    async user => {
 
-        if(!user){
+        if (!user) {
 
-            currentUser=null;
+            currentUser = null;
 
             stopTradeListener();
 
-            activeTrade=null;
-            tradeRequests=[];
+            activeTrade = null;
+
+            tradeRequests = [];
 
             document
                 .getElementById("loginScreen")
@@ -1050,11 +1434,14 @@ onAuthStateChanged(
                 .classList.add("hidden");
 
             return;
+
         }
 
-        currentUser=user;
 
-        try{
+        currentUser = user;
+
+
+        try {
 
             await loadPlayerData();
 
@@ -1068,329 +1455,496 @@ onAuthStateChanged(
 
             document
                 .getElementById("accountEmail")
-                .textContent=user.email||"";
+                .textContent =
+                user.email || "";
 
             updateUI();
+
             startTradeListener();
 
-        }catch(error){
+        } catch (error) {
 
             console.error(error);
 
             alert(
-                "Could not load your account:\n"+
+                "Could not load your account:\n" +
                 error.message
             );
+
         }
+
     }
 );
 
 
 /* UI */
 
-function updateUI(){
+function updateUI() {
 
-    document.getElementById("money").textContent=money;
+    document
+        .getElementById("money")
+        .textContent = money;
 
-    document.getElementById("usernameDisplay").textContent=username;
+    document
+        .getElementById("usernameDisplay")
+        .textContent = username;
 
-    document.getElementById("settingsUsername").textContent=username;
+    document
+        .getElementById("settingsUsername")
+        .textContent = username;
 
     renderCollection();
+
     renderDex();
+
 }
 
-window.showPage=function(page){
+
+window.showPage = function(page) {
 
     document
         .querySelectorAll(".page")
-        .forEach(el=>el.classList.add("hidden"));
+        .forEach(
+            el => el.classList.add("hidden")
+        );
 
-    const target=document.getElementById(page+"Page");
+    const target =
+        document.getElementById(
+            page + "Page"
+        );
 
-    if(target)target.classList.remove("hidden");
-
-    if(page==="collection")renderCollection();
-
-    if(page==="dex")renderDex();
-
-    if(page==="trade"){
-        renderIncomingTrades();
-        renderActiveTrade();
+    if (target) {
+        target.classList.remove("hidden");
     }
+
+    if (page === "collection") {
+        renderCollection();
+    }
+
+    if (page === "dex") {
+        renderDex();
+    }
+
+    if (page === "trade") {
+
+        renderIncomingTrades();
+
+        renderActiveTrade();
+
+    }
+
 };
 
 
 /* PACK */
 
-function weightedRandomCard(){
+function weightedRandomCard() {
 
-    const totalWeight=cards.reduce(
-        (sum,card)=>sum+card.weight,
-        0
-    );
+    const totalWeight =
+        cards.reduce(
+            (sum, card) =>
+                sum + card.weight,
+            0
+        );
 
-    let random=Math.random()*totalWeight;
+    let random =
+        Math.random() * totalWeight;
 
-    for(const card of cards){
+    for (const card of cards) {
 
-        random-=card.weight;
+        random -= card.weight;
 
-        if(random<=0)return card;
+        if (random <= 0) {
+            return card;
+        }
+
     }
 
-    return cards[cards.length-1];
+    return cards[cards.length - 1];
+
 }
 
-window.openPack=async function(){
 
-    if(money<PACK_PRICE){
+window.openPack = async function() {
 
-        showMessage("Not enough coins.");
+    if (money < PACK_PRICE) {
+
+        showMessage(
+            "Not enough coins."
+        );
+
         return;
+
     }
 
-    money-=PACK_PRICE;
 
-    const newCards=[];
+    money -= PACK_PRICE;
 
-    for(let i=0;i<3;i++){
 
-        const card=weightedRandomCard();
+    const newCards = [];
+
+
+    for (let i = 0; i < 3; i++) {
+
+        const card =
+            weightedRandomCard();
 
         collection.push(
             createCardCopy(card.name)
         );
 
         newCards.push(card);
+
     }
+
 
     await savePlayerData();
 
     updateUI();
 
     showPackResults(newCards);
+
 };
 
 
-function showPackResults(pulledCards){
+function showPackResults(pulledCards) {
 
-    const overlay=document.createElement("div");
+    const overlay =
+        document.createElement("div");
+
 
     Object.assign(
         overlay.style,
         {
-            position:"fixed",
-            inset:"0",
-            background:"rgba(0,0,0,.94)",
-            zIndex:"4000",
-            display:"flex",
-            flexDirection:"column",
-            alignItems:"center",
-            justifyContent:"center",
-            padding:"20px",
-            overflowY:"auto"
+            position: "fixed",
+            inset: "0",
+            background: "rgba(0,0,0,.94)",
+            zIndex: "4000",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+            overflowY: "auto"
         }
     );
 
-    const title=document.createElement("h2");
-    title.textContent="You got:";
+
+    const title =
+        document.createElement("h2");
+
+    title.textContent = "You got:";
+
     overlay.appendChild(title);
 
-    const grid=document.createElement("div");
+
+    const grid =
+        document.createElement("div");
+
 
     Object.assign(
         grid.style,
         {
-            display:"grid",
-            gridTemplateColumns:"repeat(3,minmax(0,1fr))",
-            gap:"15px",
-            width:"min(100%,900px)"
+            display: "grid",
+            gridTemplateColumns:
+                "repeat(3,minmax(0,1fr))",
+            gap: "15px",
+            width: "min(100%,900px)"
         }
     );
 
-    pulledCards.forEach(card=>{
 
-        const box=document.createElement("div");
+    pulledCards.forEach(card => {
+
+        const box =
+            document.createElement("div");
+
 
         Object.assign(
             box.style,
             {
-                background:"#10243d",
-                borderRadius:"15px",
-                padding:"10px",
-                textAlign:"center"
+                background: "#10243d",
+                borderRadius: "15px",
+                padding: "10px",
+                textAlign: "center"
             }
         );
 
-        const image=document.createElement("img");
 
-        image.src=card.image;
-        image.alt=card.name;
+        const image =
+            document.createElement("img");
+
+        image.src = card.image;
+
+        image.alt = card.name;
+
 
         Object.assign(
             image.style,
             {
-                width:"100%",
-                maxHeight:"55vh",
-                objectFit:"contain",
-                borderRadius:"10px",
-                cursor:"pointer"
+                width: "100%",
+                maxHeight: "55vh",
+                objectFit: "contain",
+                borderRadius: "10px",
+                cursor: "pointer"
             }
         );
 
-        image.onclick=event=>{
+
+        image.onclick = event => {
+
             event.stopPropagation();
-            openCardViewer(card.image,card.name);
+
+            openCardViewer(
+                card.image,
+                card.name
+            );
+
         };
 
+
         box.appendChild(image);
+
         grid.appendChild(box);
+
     });
+
 
     overlay.appendChild(grid);
 
-    const closeButton=document.createElement("button");
 
-    closeButton.textContent="CONTINUE";
+    const closeButton =
+        document.createElement("button");
+
+    closeButton.textContent =
+        "CONTINUE";
+
 
     Object.assign(
         closeButton.style,
         {
-            marginTop:"20px",
-            background:"#2674d9",
-            color:"white"
+            marginTop: "20px",
+            background: "#2674d9",
+            color: "white"
         }
     );
 
-    closeButton.onclick=()=>{
+
+    closeButton.onclick = () => {
+
         overlay.remove();
+
     };
+
 
     overlay.appendChild(closeButton);
 
-    overlay.onclick=event=>{
-        if(event.target===overlay)overlay.remove();
+
+    overlay.onclick = event => {
+
+        if (event.target === overlay) {
+            overlay.remove();
+        }
+
     };
 
+
     document.body.appendChild(overlay);
+
 }
 
 
 /* COLLECTION */
 
-window.setCollectionTab=function(tab){
+window.setCollectionTab = function(tab) {
 
-    collectionTab=tab;
-
-    document
-        .getElementById("collectionAllButton")
-        .classList.toggle("active",tab==="all");
+    collectionTab = tab;
 
     document
-        .getElementById("collectionFavoritesButton")
-        .classList.toggle("active",tab==="favorites");
+        .getElementById(
+            "collectionAllButton"
+        )
+        .classList.toggle(
+            "active",
+            tab === "all"
+        );
+
+    document
+        .getElementById(
+            "collectionFavoritesButton"
+        )
+        .classList.toggle(
+            "active",
+            tab === "favorites"
+        );
 
     renderCollection();
+
 };
 
-function getCollectionCounts(){
 
-    const counts={};
+function getCollectionCounts() {
 
-    for(const copy of collection){
-        counts[copy.name]=(counts[copy.name]||0)+1;
+    const counts = {};
+
+    for (const copy of collection) {
+
+        counts[copy.name] =
+            (counts[copy.name] || 0) + 1;
+
     }
 
     return counts;
+
 }
 
-function getFirstCopy(name){
-    return collection.find(copy=>copy.name===name);
+
+function getFirstCopy(name) {
+
+    return collection.find(
+        copy => copy.name === name
+    );
+
 }
 
-function renderCollection(){
 
-    const grid=document.getElementById("collectionGrid");
+function renderCollection() {
 
-    if(!grid)return;
-
-    const search=(
-        document.getElementById("collectionSearch")?.value||""
-    ).toLowerCase();
-
-    const counts=getCollectionCounts();
-
-    let names=cards
-        .filter(card=>counts[card.name])
-        .map(card=>card.name);
-
-    if(collectionTab==="favorites"){
-        names=names.filter(
-            name=>favorites.includes(name)
+    const grid =
+        document.getElementById(
+            "collectionGrid"
         );
-    }
 
-    if(search){
-        names=names.filter(
-            name=>name.toLowerCase().includes(search)
-        );
-    }
-
-    grid.innerHTML="";
-
-    if(!names.length){
-
-        grid.innerHTML=
-            "<p>You don't have any cards here.</p>";
-
+    if (!grid) {
         return;
     }
 
-    for(const name of names){
 
-        const card=getCard(name);
-        const copy=getFirstCopy(name);
+    const search =
+        (
+            document.getElementById(
+                "collectionSearch"
+            )?.value || ""
+        ).toLowerCase();
 
-        if(!card)continue;
 
-        const isFavorite=favorites.includes(name);
-        const traded=copy?.traded===true;
+    const counts =
+        getCollectionCounts();
 
-        let borderClass="";
 
-        if(isFavorite&&traded){
+    let names =
+        cards
+            .filter(
+                card => counts[card.name]
+            )
+            .map(
+                card => card.name
+            );
 
-            borderClass=
-                card.rarity==="rare"
-                    ?"rareTradedFavoriteCard"
-                    :"tradedFavoriteCard";
 
-        }else if(isFavorite){
+    if (collectionTab === "favorites") {
 
-            borderClass=
-                card.rarity==="rare"
-                    ?"rareFavoriteCard"
-                    :"favoriteCard";
+        names =
+            names.filter(
+                name =>
+                    favorites.includes(name)
+            );
+
+    }
+
+
+    if (search) {
+
+        names =
+            names.filter(
+                name =>
+                    name
+                        .toLowerCase()
+                        .includes(search)
+            );
+
+    }
+
+
+    grid.innerHTML = "";
+
+
+    if (!names.length) {
+
+        grid.innerHTML =
+            "<p>You don't have any cards here.</p>";
+
+        return;
+
+    }
+
+
+    for (const name of names) {
+
+        const card =
+            getCard(name);
+
+        const copy =
+            getFirstCopy(name);
+
+
+        if (!card) {
+            continue;
         }
 
-        const div=document.createElement("div");
 
-        div.className="card "+borderClass;
+        const isFavorite =
+            favorites.includes(name);
 
-        div.innerHTML=`
+        const traded =
+            copy?.traded === true;
+
+
+        let borderClass = "";
+
+
+        if (isFavorite && traded) {
+
+            borderClass =
+                card.rarity === "rare"
+                    ? "rareTradedFavoriteCard"
+                    : "tradedFavoriteCard";
+
+        } else if (isFavorite) {
+
+            borderClass =
+                card.rarity === "rare"
+                    ? "rareFavoriteCard"
+                    : "favoriteCard";
+
+        }
+
+
+        const div =
+            document.createElement("div");
+
+
+        div.className =
+            "card " + borderClass;
+
+
+        div.innerHTML = `
 
             <button
                 class="starButton ${
-                    isFavorite?"favorite":""
+                    isFavorite ? "favorite" : ""
                 }"
                 onclick="toggleFavorite('${escapeHtml(name)}')">
-                ${isFavorite?"★":"☆"}
+
+                ${isFavorite ? "★" : "☆"}
+
             </button>
+
 
             <div class="cardCount">
                 ${counts[name]}
             </div>
+
 
             <img
                 src="${escapeHtml(card.image)}"
@@ -1400,58 +1954,84 @@ function renderCollection(){
                     '${encoded(name)}'
                 )">
 
+
             <div class="cardName">
                 ${escapeHtml(name)}
             </div>
+
 
             <div>
                 Sell: ${card.price}
             </div>
 
+
             <button
                 class="sellButton ${
-                    isFavorite?"favoriteLocked":""
+                    isFavorite
+                        ? "favoriteLocked"
+                        : ""
                 }"
-                ${isFavorite?"disabled":""}
+                ${
+                    isFavorite
+                        ? "disabled"
+                        : ""
+                }
                 onclick="sellCard('${escapeHtml(name)}')">
 
-                ${isFavorite?"FAVORITED":"SELL"}
+                ${
+                    isFavorite
+                        ? "FAVORITED"
+                        : "SELL"
+                }
 
             </button>
+
         `;
 
+
         grid.appendChild(div);
+
     }
+
 }
 
-window.toggleFavorite=async function(name){
 
-    if(favorites.includes(name)){
+window.toggleFavorite = async function(name) {
 
-        favorites=favorites.filter(
-            item=>item!==name
-        );
+    if (favorites.includes(name)) {
+
+        favorites =
+            favorites.filter(
+                item => item !== name
+            );
 
         showMessage(
-            name+" is no longer a favorite."
+            name +
+            " is no longer a favorite."
         );
 
-    }else{
+    } else {
 
         favorites.push(name);
 
         showMessage(
-            name+" is now a favorite."
+            name +
+            " is now a favorite."
         );
+
     }
 
+
     await savePlayerData();
+
     updateUI();
+
 };
 
-window.sellCard=async function(name){
 
-    if(favorites.includes(name)){
+window.sellCard = async function(name) {
+
+    if (favorites.includes(name)) {
 
         showMessage(
             "Favorite cards cannot be sold."
@@ -1460,67 +2040,103 @@ window.sellCard=async function(name){
         return;
     }
 
-    const index=collection.findIndex(
-        copy=>copy.name===name
-    );
 
-    if(index===-1)return;
+    const index =
+        collection.findIndex(
+            copy => copy.name === name
+        );
 
-    const card=getCard(name);
 
-    if(!card)return;
+    if (index === -1) {
+        return;
+    }
 
-    collection.splice(index,1);
 
-    money+=card.price;
+    const card =
+        getCard(name);
+
+
+    if (!card) {
+        return;
+    }
+
+
+    collection.splice(index, 1);
+
+    money += card.price;
+
 
     await savePlayerData();
 
     updateUI();
 
+
     showMessage(
-        name+
-        " sold for "+
-        card.price+
+        name +
+        " sold for " +
+        card.price +
         " coins."
     );
+
 };
 
 
 /* DEX */
 
-window.setDexTab=function(tab){
+window.setDexTab = function(tab) {
 
-    dexTab=tab;
-
-    document
-        .getElementById("dexDollsButton")
-        .classList.toggle("active",tab==="dolls");
+    dexTab = tab;
 
     document
-        .getElementById("dexRaresButton")
-        .classList.toggle("active",tab==="rares");
+        .getElementById(
+            "dexDollsButton"
+        )
+        .classList.toggle(
+            "active",
+            tab === "dolls"
+        );
+
+    document
+        .getElementById(
+            "dexRaresButton"
+        )
+        .classList.toggle(
+            "active",
+            tab === "rares"
+        );
 
     renderDex();
+
 };
 
-function renderDex(){
 
-    const grid=document.getElementById("dexGrid");
+function renderDex() {
 
-    if(!grid)return;
+    const grid =
+        document.getElementById(
+            "dexGrid"
+        );
 
-    grid.innerHTML="";
+    if (!grid) {
+        return;
+    }
 
-    if(dexTab==="rares"){
 
-        for(let i=1;i<=6;i++){
+    grid.innerHTML = "";
 
-            const div=document.createElement("div");
 
-            div.className="dexCard comingSoon";
+    if (dexTab === "rares") {
 
-            div.innerHTML=`
+        for (let i = 1; i <= 6; i++) {
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "dexCard comingSoon";
+
+
+            div.innerHTML = `
 
                 <div style="
                     aspect-ratio:1/1.35;
@@ -1529,33 +2145,54 @@ function renderDex(){
                     justify-content:center;
                     font-size:25px;
                 ">
+
                     ?
+
                 </div>
 
-                <b>Rare ${i}</b>
 
-                <p>Coming Soon</p>
+                <b>
+                    Rare ${i}
+                </b>
+
+
+                <p>
+                    Coming Soon
+                </p>
+
             `;
 
+
             grid.appendChild(div);
+
         }
 
         return;
+
     }
 
-    for(const card of cards){
 
-        const owned=collection.some(
-            copy=>copy.name===card.name
-        );
+    for (const card of cards) {
 
-        const div=document.createElement("div");
+        const owned =
+            collection.some(
+                copy =>
+                    copy.name === card.name
+            );
 
-        div.className=
-            "dexCard "+
-            (!owned?"comingSoon":"");
 
-        div.innerHTML=`
+        const div =
+            document.createElement("div");
+
+
+        div.className =
+            "dexCard " +
+            (!owned
+                ? "comingSoon"
+                : "");
+
+
+        div.innerHTML = `
 
             <img
                 src="${escapeHtml(card.image)}"
@@ -1565,92 +2202,143 @@ function renderDex(){
                     '${encoded(card.name)}'
                 )">
 
-            <b>${escapeHtml(card.name)}</b>
+
+            <b>
+                ${escapeHtml(card.name)}
+            </b>
+
 
             <p>
-                ${owned?"Owned":"Not Owned"}
+                ${owned
+                    ? "Owned"
+                    : "Not Owned"}
             </p>
+
         `;
 
+
         grid.appendChild(div);
+
     }
+
 }
 
 
 /* PLAYER SEARCH */
 
-window.findPlayer=async function(){
+window.findPlayer = async function() {
 
-    const input=document.getElementById("tradePlayerInput");
-    const result=document.getElementById("tradePlayerResult");
+    const input =
+        document.getElementById(
+            "tradePlayerInput"
+        );
 
-    const name=input.value.trim();
+    const result =
+        document.getElementById(
+            "tradePlayerResult"
+        );
 
-    if(!name){
 
-        result.innerHTML="<p>Enter a username.</p>";
+    const name =
+        input.value.trim();
+
+
+    if (!name) {
+
+        result.innerHTML =
+            "<p>Enter a username.</p>";
+
         return;
+
     }
 
-    if(
-        username &&
-        name.toLowerCase()===username.toLowerCase()
-    ){
 
-        result.innerHTML=`
+    if (
+        username &&
+        name.toLowerCase() ===
+        username.toLowerCase()
+    ) {
+
+        result.innerHTML = `
+
             <div class="tradeNotice">
                 You cannot trade with yourself.
             </div>
+
         `;
 
         return;
+
     }
 
-    result.innerHTML="<p>Searching...</p>";
 
-    try{
+    result.innerHTML =
+        "<p>Searching...</p>";
 
-        const ref=doc(
-            db,
-            "usernames",
-            name.toLowerCase()
-        );
 
-        const snap=await getDoc(ref);
+    try {
 
-        if(!snap.exists()){
+        const ref =
+            doc(
+                db,
+                "usernames",
+                name.toLowerCase()
+            );
 
-            result.innerHTML=`
+
+        const snap =
+            await getDoc(ref);
+
+
+        if (!snap.exists()) {
+
+            result.innerHTML = `
+
                 <div class="tradeNotice">
                     Player not found.
                 </div>
+
             `;
 
             return;
+
         }
 
-        const data=snap.data();
 
-        if(data.uid===currentUser.uid){
+        const data =
+            snap.data();
 
-            result.innerHTML=`
+
+        if (data.uid === currentUser.uid) {
+
+            result.innerHTML = `
+
                 <div class="tradeNotice">
                     You cannot trade with yourself.
                 </div>
+
             `;
 
             return;
+
         }
 
-        result.innerHTML=`
+
+        result.innerHTML = `
 
             <div class="tradeNotice">
 
                 <b>
-                    ${escapeHtml(data.username||name)}
+                    ${escapeHtml(
+                        data.username || name
+                    )}
                 </b>
 
-                <p>Player found.</p>
+
+                <p>
+                    Player found.
+                </p>
+
 
                 <button
                     class="tradeSearchButton"
@@ -1661,64 +2349,90 @@ window.findPlayer=async function(){
                 </button>
 
             </div>
+
         `;
 
-    }catch(error){
+    } catch (error) {
 
         console.error(error);
 
-        result.innerHTML=`
+        result.innerHTML = `
+
             <div class="tradeNotice">
+
                 Search error:<br>
-                ${escapeHtml(error.message)}
+
+                ${escapeHtml(
+                    error.message
+                )}
+
             </div>
+
         `;
+
     }
+
 };
 
 
 /* SEND TRADE */
 
-window.sendTradeRequest=async function(receiverUid){
+window.sendTradeRequest =
+async function(receiverUid) {
 
-    if(!currentUser)return;
+    if (!currentUser) {
+        return;
+    }
 
-    if(receiverUid===currentUser.uid){
+
+    if (receiverUid === currentUser.uid) {
 
         showMessage(
             "You cannot trade with yourself."
         );
 
         return;
+
     }
 
-    try{
 
-        const alreadyPending=tradeRequests.some(
-            trade=>
-                trade.status==="pending" &&
-                (
+    try {
+
+        const alreadyPending =
+            tradeRequests.some(
+                trade =>
+                    trade.status === "pending" &&
                     (
-                        trade.senderUid===currentUser.uid &&
-                        trade.receiverUid===receiverUid
-                    )||
-                    (
-                        trade.receiverUid===currentUser.uid &&
-                        trade.senderUid===receiverUid
+                        (
+                            trade.senderUid ===
+                            currentUser.uid &&
+                            trade.receiverUid ===
+                            receiverUid
+                        ) ||
+                        (
+                            trade.receiverUid ===
+                            currentUser.uid &&
+                            trade.senderUid ===
+                            receiverUid
+                        )
                     )
-                )
-        );
+            );
 
-        if(alreadyPending){
+
+        if (alreadyPending) {
 
             showMessage(
                 "You already have a pending trade with this player."
             );
 
             return;
+
         }
 
-        const tradeId=createCardId();
+
+        const tradeId =
+            createCardId();
+
 
         await setDoc(
             doc(
@@ -1727,158 +2441,252 @@ window.sendTradeRequest=async function(receiverUid){
                 tradeId
             ),
             {
-                participants:[
+                participants: [
                     currentUser.uid,
                     receiverUid
                 ],
-                senderUid:currentUser.uid,
-                receiverUid:receiverUid,
-                senderUsername:username,
-                receiverUsername:"",
-                senderOffer:[],
-                receiverOffer:[],
-                senderConfirmed:false,
-                receiverConfirmed:false,
-                status:"pending",
-                createdAt:serverTimestamp()
+
+                senderUid:
+                    currentUser.uid,
+
+                receiverUid:
+                    receiverUid,
+
+                senderUsername:
+                    username,
+
+                receiverUsername:
+                    "",
+
+                senderOffer: [],
+
+                receiverOffer: [],
+
+                senderConfirmed:
+                    false,
+
+                receiverConfirmed:
+                    false,
+
+                status:
+                    "pending",
+
+                createdAt:
+                    serverTimestamp()
             }
         );
 
+
         showPage("trade");
 
-        showMessage("Trade request sent.");
 
-    }catch(error){
+        showMessage(
+            "Trade request sent."
+        );
+
+
+    } catch (error) {
 
         console.error(error);
 
         showMessage(
-            "Could not send trade request: "+
+            "Could not send trade request: " +
             error.message
         );
+
     }
+
 };
 
 
 /* TRADE LISTENER */
 
-function stopTradeListener(){
+function stopTradeListener() {
 
-    if(tradeListener){
+    if (tradeListener) {
 
         tradeListener();
-        tradeListener=null;
+
+        tradeListener = null;
+
     }
+
 }
 
-function startTradeListener(){
+
+function startTradeListener() {
 
     stopTradeListener();
 
-    if(!currentUser)return;
 
-    const tradeCollection=
+    if (!currentUser) {
+        return;
+    }
+
+
+    const tradeCollection =
         firestoreCollection(
             db,
             "tradeRequests"
         );
 
-    const tradeQuery=query(
-        tradeCollection,
-        where(
-            "participants",
-            "array-contains",
-            currentUser.uid
-        )
-    );
 
-    tradeListener=onSnapshot(
-        tradeQuery,
-        snapshot=>{
+    const tradeQuery =
+        query(
+            tradeCollection,
+            where(
+                "participants",
+                "array-contains",
+                currentUser.uid
+            )
+        );
 
-            tradeRequests=snapshot.docs.map(
-                snap=>({
-                    id:snap.id,
-                    ...snap.data()
-                })
-            );
 
-            for(const trade of tradeRequests){
+    tradeListener =
+        onSnapshot(
+            tradeQuery,
+            snapshot => {
 
-                if(
-                    trade.status==="pending" &&
-                    trade.senderConfirmed===true &&
-                    trade.receiverConfirmed===true
-                ){
-                    tryFinalizeTrade(trade);
+                tradeRequests =
+                    snapshot.docs.map(
+                        snap => ({
+                            id: snap.id,
+                            ...snap.data()
+                        })
+                    );
+
+
+                for (
+                    const trade
+                    of tradeRequests
+                ) {
+
+                    if (
+                        trade.status === "pending" &&
+                        trade.senderConfirmed === true &&
+                        trade.receiverConfirmed === true
+                    ) {
+
+                        tryFinalizeTrade(
+                            trade
+                        );
+
+                    }
+
+
+                    if (
+                        trade.status === "completed"
+                    ) {
+
+                        applyCompletedTrade(
+                            trade
+                        );
+
+                    }
+
                 }
 
-                if(trade.status==="completed"){
-                    applyCompletedTrade(trade);
+
+                if (activeTrade) {
+
+                    const fresh =
+                        tradeRequests.find(
+                            trade =>
+                                trade.id ===
+                                activeTrade.id
+                        );
+
+
+                    if (fresh) {
+                        activeTrade = fresh;
+                    }
+
                 }
-            }
 
-            if(activeTrade){
 
-                const fresh=tradeRequests.find(
-                    trade=>trade.id===activeTrade.id
+                renderIncomingTrades();
+
+                renderActiveTrade();
+
+            },
+
+            error => {
+
+                console.error(error);
+
+                showMessage(
+                    "Trade connection error: " +
+                    error.message
                 );
 
-                if(fresh)activeTrade=fresh;
             }
+        );
 
-            renderIncomingTrades();
-            renderActiveTrade();
-        },
-        error=>{
-            console.error(error);
-            showMessage(
-                "Trade connection error: "+
-                error.message
-            );
-        }
-    );
 }
 
 
 /* INCOMING TRADES */
 
-function renderIncomingTrades(){
+function renderIncomingTrades() {
 
-    const container=
-        document.getElementById("incomingTrades");
+    const container =
+        document.getElementById(
+            "incomingTrades"
+        );
 
-    if(!container)return;
 
-    container.innerHTML="";
+    if (!container) {
+        return;
+    }
 
-    const incoming=tradeRequests.filter(
-        trade=>
-            trade.receiverUid===currentUser?.uid &&
-            trade.status==="pending" &&
-            (
-                !activeTrade ||
-                trade.id!==activeTrade.id
-            )
-    );
 
-    for(const trade of incoming){
+    container.innerHTML = "";
 
-        const div=document.createElement("div");
 
-        div.className="tradeRequest";
+    const incoming =
+        tradeRequests.filter(
+            trade =>
+                trade.receiverUid ===
+                currentUser?.uid &&
+                trade.status ===
+                "pending" &&
+                (
+                    !activeTrade ||
+                    trade.id !==
+                    activeTrade.id
+                )
+        );
 
-        div.innerHTML=`
 
-            <b>Incoming Trade Request</b>
+    for (
+        const trade
+        of incoming
+    ) {
+
+        const div =
+            document.createElement("div");
+
+
+        div.className =
+            "tradeRequest";
+
+
+        div.innerHTML = `
+
+            <b>
+                Incoming Trade Request
+            </b>
+
 
             <p>
                 ${escapeHtml(
-                    trade.senderUsername||
+                    trade.senderUsername ||
                     "Another player"
                 )}
+
                 wants to trade with you.
             </p>
+
 
             <button
                 class="tradeSearchButton"
@@ -1887,331 +2695,526 @@ function renderIncomingTrades(){
                 ACCEPT TRADE
 
             </button>
+
         `;
 
+
         container.appendChild(div);
+
     }
+
 }
 
-window.acceptTrade=function(tradeId){
 
-    const trade=tradeRequests.find(
-        item=>item.id===tradeId
-    );
+window.acceptTrade = function(tradeId) {
 
-    if(!trade){
-
-        showMessage("Trade request not found.");
-        return;
-    }
-
-    if(trade.receiverUid!==currentUser.uid){
-
-        showMessage("You cannot accept this trade.");
-        return;
-    }
-
-    if(trade.status!=="pending"){
-
-        showMessage("This trade is no longer pending.");
-        return;
-    }
-
-    activeTrade=trade;
-
-    selectedTradeCards=
-        getMyOffer(trade).map(
-            card=>card.id
+    const trade =
+        tradeRequests.find(
+            item =>
+                item.id === tradeId
         );
+
+
+    if (!trade) {
+
+        showMessage(
+            "Trade request not found."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        trade.receiverUid !==
+        currentUser.uid
+    ) {
+
+        showMessage(
+            "You cannot accept this trade."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        trade.status !==
+        "pending"
+    ) {
+
+        showMessage(
+            "This trade is no longer pending."
+        );
+
+        return;
+
+    }
+
+
+    activeTrade = trade;
+
+
+    selectedTradeCards =
+        getMyOffer(trade).map(
+            card => card.id
+        );
+
 
     showPage("trade");
 
+
     renderIncomingTrades();
+
     renderActiveTrade();
+
 };
 
-function openOutgoingTradeIfNeeded(){
 
-    if(activeTrade)return;
+function openOutgoingTradeIfNeeded() {
 
-    const outgoing=tradeRequests.find(
-        trade=>
-            trade.senderUid===currentUser?.uid &&
-            trade.status==="pending"
-    );
+    if (activeTrade) {
+        return;
+    }
 
-    if(outgoing){
 
-        activeTrade=outgoing;
+    const outgoing =
+        tradeRequests.find(
+            trade =>
+                trade.senderUid ===
+                currentUser?.uid &&
+                trade.status ===
+                "pending"
+        );
 
-        selectedTradeCards=
+
+    if (outgoing) {
+
+        activeTrade = outgoing;
+
+        selectedTradeCards =
             getMyOffer(outgoing).map(
-                card=>card.id
+                card => card.id
             );
+
     }
+
 }
 
-function getMyOffer(trade){
 
-    if(trade.senderUid===currentUser.uid){
+function getMyOffer(trade) {
 
-        return Array.isArray(trade.senderOffer)
-            ?trade.senderOffer
-            :[];
+    if (
+        trade.senderUid ===
+        currentUser.uid
+    ) {
+
+        return Array.isArray(
+            trade.senderOffer
+        )
+            ? trade.senderOffer
+            : [];
+
     }
 
-    return Array.isArray(trade.receiverOffer)
-        ?trade.receiverOffer
-        :[];
+
+    return Array.isArray(
+        trade.receiverOffer
+    )
+        ? trade.receiverOffer
+        : [];
+
 }
 
-function getTheirOffer(trade){
 
-    if(trade.senderUid===currentUser.uid){
+function getTheirOffer(trade) {
 
-        return Array.isArray(trade.receiverOffer)
-            ?trade.receiverOffer
-            :[];
+    if (
+        trade.senderUid ===
+        currentUser.uid
+    ) {
+
+        return Array.isArray(
+            trade.receiverOffer
+        )
+            ? trade.receiverOffer
+            : [];
+
     }
 
-    return Array.isArray(trade.senderOffer)
-        ?trade.senderOffer
-        :[];
+
+    return Array.isArray(
+        trade.senderOffer
+    )
+        ? trade.senderOffer
+        : [];
+
 }
 
-function sameIds(a,b){
 
-    if(!Array.isArray(a)||!Array.isArray(b))return false;
+function sameIds(a, b) {
 
-    if(a.length!==b.length)return false;
-
-    for(let i=0;i<a.length;i++){
-
-        if(a[i]!==b[i])return false;
+    if (
+        !Array.isArray(a) ||
+        !Array.isArray(b)
+    ) {
+        return false;
     }
+
+
+    if (a.length !== b.length) {
+        return false;
+    }
+
+
+    for (
+        let i = 0;
+        i < a.length;
+        i++
+    ) {
+
+        if (a[i] !== b[i]) {
+            return false;
+        }
+
+    }
+
 
     return true;
+
 }
 
 
-/* TRADE CARD RENDERING */
+/* TRADE CARDS */
 
-function renderOfferCards(offer,selectable=false){
+function renderOfferCards(
+    offer,
+    selectable = false
+) {
 
-    if(!Array.isArray(offer)||!offer.length){
+    if (
+        !Array.isArray(offer) ||
+        !offer.length
+    ) {
 
-        return`
+        return `
             <p style="text-align:center">
                 No cards offered yet.
             </p>
         `;
+
     }
 
-    return`
+
+    return `
+
         <div class="tradeCardGrid">
 
             ${
-                offer.map(copy=>{
+                offer
+                    .map(copy => {
 
-                    const card=getCard(copy.name);
+                        const card =
+                            getCard(
+                                copy.name
+                            );
 
-                    if(!card)return"";
 
-                    const selected=
-                        selectable &&
-                        selectedTradeCards.includes(copy.id);
+                        if (!card) {
+                            return "";
+                        }
 
-                    return`
 
-                        <div
-                            class="tradeCard ${
-                                selected?"selected":""
-                            }"
-                            ${
-                                selectable
-                                    ?`onclick="toggleTradeCard('${escapeHtml(copy.id)}')"`
-                                    :""
-                            }>
+                        const selected =
+                            selectable &&
+                            selectedTradeCards
+                                .includes(
+                                    copy.id
+                                );
 
-                            <img
-                                src="${escapeHtml(card.image)}"
-                                alt="${escapeHtml(card.name)}"
-                                onclick="
-                                    event.stopPropagation();
-                                    openEncodedCardViewer(
-                                        '${encoded(card.image)}',
-                                        '${encoded(card.name)}'
-                                    )
-                                ">
 
-                            <div>
-                                ${escapeHtml(card.name)}
+                        return `
+
+                            <div
+                                class="tradeCard ${
+                                    selected
+                                        ? "selected"
+                                        : ""
+                                }"
+                                ${
+                                    selectable
+                                        ? `onclick="toggleTradeCard('${escapeHtml(copy.id)}')"`
+                                        : ""
+                                }>
+
+                                <img
+                                    src="${escapeHtml(card.image)}"
+                                    alt="${escapeHtml(card.name)}"
+                                    onclick="
+                                        event.stopPropagation();
+                                        openEncodedCardViewer(
+                                            '${encoded(card.image)}',
+                                            '${encoded(card.name)}'
+                                        )
+                                    ">
+
+                                <div>
+                                    ${escapeHtml(
+                                        card.name
+                                    )}
+                                </div>
+
+                                ${
+                                    copy.traded
+                                        ? "<small>Traded</small>"
+                                        : ""
+                                }
+
                             </div>
 
-                            ${
-                                copy.traded
-                                    ?"<small>Traded</small>"
-                                    :""
-                            }
+                        `;
 
-                        </div>
-                    `;
-                }).join("")
+                    })
+                    .join("")
             }
 
         </div>
+
     `;
+
 }
 
-function renderSelectableTradeCards(){
 
-    if(!collection.length){
+function renderSelectableTradeCards() {
 
-        return`
+    if (!collection.length) {
+
+        return `
             <p style="text-align:center">
                 You have no cards.
             </p>
         `;
+
     }
 
-    return`
+
+    return `
+
         <div class="tradeCardGrid">
 
             ${
-                collection.map(copy=>{
+                collection
+                    .map(copy => {
 
-                    const card=getCard(copy.name);
+                        const card =
+                            getCard(
+                                copy.name
+                            );
 
-                    if(!card)return"";
 
-                    const selected=
-                        selectedTradeCards.includes(copy.id);
+                        if (!card) {
+                            return "";
+                        }
 
-                    return`
 
-                        <div
-                            class="tradeCard ${
-                                selected?"selected":""
-                            }"
-                            onclick="toggleTradeCard('${escapeHtml(copy.id)}')">
+                        const selected =
+                            selectedTradeCards
+                                .includes(
+                                    copy.id
+                                );
 
-                            <img
-                                src="${escapeHtml(card.image)}"
-                                alt="${escapeHtml(card.name)}"
-                                onclick="
-                                    event.stopPropagation();
-                                    openEncodedCardViewer(
-                                        '${encoded(card.image)}',
-                                        '${encoded(card.name)}'
-                                    )
-                                ">
 
-                            <div>
-                                ${escapeHtml(card.name)}
+                        return `
+
+                            <div
+                                class="tradeCard ${
+                                    selected
+                                        ? "selected"
+                                        : ""
+                                }"
+                                onclick="toggleTradeCard('${escapeHtml(copy.id)}')">
+
+                                <img
+                                    src="${escapeHtml(card.image)}"
+                                    alt="${escapeHtml(card.name)}"
+                                    onclick="
+                                        event.stopPropagation();
+                                        openEncodedCardViewer(
+                                            '${encoded(card.image)}',
+                                            '${encoded(card.name)}'
+                                        )
+                                    ">
+
+                                <div>
+                                    ${escapeHtml(
+                                        card.name
+                                    )}
+                                </div>
+
                             </div>
 
-                        </div>
-                    `;
-                }).join("")
+                        `;
+
+                    })
+                    .join("")
             }
 
         </div>
+
     `;
+
 }
 
 
 /* ACTIVE TRADE */
 
-function renderActiveTrade(){
+function renderActiveTrade() {
 
-    const container=
-        document.getElementById("activeTrade");
+    const container =
+        document.getElementById(
+            "activeTrade"
+        );
 
-    if(!container)return;
 
-    openOutgoingTradeIfNeeded();
-
-    if(!activeTrade){
-
-        container.innerHTML="";
+    if (!container) {
         return;
     }
 
-    if(activeTrade.status!=="pending"){
 
-        if(activeTrade.status==="completed"){
+    openOutgoingTradeIfNeeded();
 
-            container.innerHTML=`
+
+    if (!activeTrade) {
+
+        container.innerHTML = "";
+
+        return;
+
+    }
+
+
+    if (
+        activeTrade.status !==
+        "pending"
+    ) {
+
+        if (
+            activeTrade.status ===
+            "completed"
+        ) {
+
+            container.innerHTML = `
 
                 <div class="tradeArea">
 
-                    <h2>Trade Completed</h2>
+                    <h2>
+                        Trade Completed
+                    </h2>
 
                     <p style="text-align:center">
                         The cards were successfully swapped.
                     </p>
 
                 </div>
+
             `;
 
-        }else{
+        } else {
 
-            container.innerHTML="";
+            container.innerHTML = "";
+
         }
 
         return;
+
     }
 
-    const isSender=
-        activeTrade.senderUid===currentUser.uid;
 
-    const myOffer=getMyOffer(activeTrade);
-    const theirOffer=getTheirOffer(activeTrade);
+    const isSender =
+        activeTrade.senderUid ===
+        currentUser.uid;
 
-    const myConfirmed=
+
+    const myOffer =
+        getMyOffer(activeTrade);
+
+
+    const theirOffer =
+        getTheirOffer(activeTrade);
+
+
+    const myConfirmed =
         isSender
-            ?activeTrade.senderConfirmed===true
-            :activeTrade.receiverConfirmed===true;
+            ? activeTrade.senderConfirmed === true
+            : activeTrade.receiverConfirmed === true;
 
-    const theirConfirmed=
+
+    const theirConfirmed =
         isSender
-            ?activeTrade.receiverConfirmed===true
-            :activeTrade.senderConfirmed===true;
+            ? activeTrade.receiverConfirmed === true
+            : activeTrade.senderConfirmed === true;
 
-    const offerMatches=sameIds(
-        myOffer.map(card=>card.id),
-        selectedTradeCards
-    );
 
-    container.innerHTML=`
+    const offerMatches =
+        sameIds(
+            myOffer.map(
+                card => card.id
+            ),
+            selectedTradeCards
+        );
+
+
+    container.innerHTML = `
 
         <div class="tradeArea">
 
-            <h2>Trading</h2>
+            <h2>
+                Trading
+            </h2>
+
 
             <div class="tradeColumns">
 
+
                 <div class="tradeSide">
 
-                    <h3>Your Offer</h3>
+                    <h3>
+                        Your Offer
+                    </h3>
 
-                    ${renderOfferCards(myOffer)}
+
+                    ${renderOfferCards(
+                        myOffer
+                    )}
+
 
                     <p style="text-align:center">
                         Current offer:
-                        ${myOffer.length} card(s)
+                        ${myOffer.length}
+                        card(s)
                     </p>
+
 
                     <hr>
 
-                    <h3>Choose Cards</h3>
+
+                    <h3>
+                        Choose Cards
+                    </h3>
+
 
                     ${renderSelectableTradeCards()}
 
+
                     <p style="text-align:center">
+
                         ${selectedTradeCards.length}
                         card(s) selected
+
                     </p>
+
 
                     <button
                         class="changeOfferButton"
@@ -2223,97 +3226,125 @@ function renderActiveTrade(){
 
                 </div>
 
+
                 <div class="tradeSide">
 
-                    <h3>Their Offer</h3>
+                    <h3>
+                        Their Offer
+                    </h3>
 
-                    ${renderOfferCards(theirOffer)}
+
+                    ${renderOfferCards(
+                        theirOffer
+                    )}
+
 
                     <p style="text-align:center">
+
                         Their offer:
-                        ${theirOffer.length} card(s)
+                        ${theirOffer.length}
+                        card(s)
+
                     </p>
 
                 </div>
 
             </div>
 
+
             <div class="tradeStatus">
 
                 ${
                     myConfirmed
-                        ?"You confirmed this trade."
-                        :"You have not confirmed."
+                        ? "You confirmed this trade."
+                        : "You have not confirmed."
                 }
 
                 <br>
 
                 ${
                     theirConfirmed
-                        ?"They confirmed this trade."
-                        :"They have not confirmed."
+                        ? "They confirmed this trade."
+                        : "They have not confirmed."
                 }
 
             </div>
 
+
             ${
                 !offerMatches
-                    ?`
+                    ? `
+
                         <p style="
                             text-align:center;
                             color:#36b9ff;
                         ">
+
                             Update your offer before confirming.
+
                         </p>
+
                     `
-                    :""
+                    : ""
             }
 
+
             ${
-                myOffer.length===0
-                    ?`
+                myOffer.length === 0
+                    ? `
+
                         <p style="
                             text-align:center;
                             color:#36b9ff;
                         ">
+
                             You must offer at least one card.
+
                         </p>
+
                     `
-                    :""
+                    : ""
             }
 
+
             ${
-                theirOffer.length===0
-                    ?`
+                theirOffer.length === 0
+                    ? `
+
                         <p style="
                             text-align:center;
                             color:#36b9ff;
                         ">
+
                             Waiting for them to offer a card.
+
                         </p>
+
                     `
-                    :""
+                    : ""
             }
+
 
             <button
                 class="confirmButton"
                 onclick="confirmTrade()"
                 ${
-                    myConfirmed||
-                    !offerMatches||
-                    myOffer.length===0||
-                    theirOffer.length===0
-                        ?"disabled"
-                        :""
+                    myConfirmed ||
+                    !offerMatches ||
+                    myOffer.length === 0 ||
+                    theirOffer.length === 0
+                        ? "disabled"
+                        : ""
                 }>
 
                 ${
                     myConfirmed
-                        ?"CONFIRMED"
-                        :"CONFIRM TRADE"
+                        ? "CONFIRMED"
+                        : "CONFIRM TRADE"
                 }
 
             </button>
+
 
             <button
                 class="cancelButton"
@@ -2324,85 +3355,131 @@ function renderActiveTrade(){
             </button>
 
         </div>
+
     `;
+
 }
 
 
 /* TRADE SELECTION */
 
-window.toggleTradeCard=function(cardId){
+window.toggleTradeCard =
+function(cardId) {
 
-    if(
-        !activeTrade||
-        activeTrade.status!=="pending"
-    )return;
-
-    const copy=collection.find(
-        card=>card.id===cardId
-    );
-
-    if(!copy)return;
-
-    if(selectedTradeCards.includes(cardId)){
-
-        selectedTradeCards=
-            selectedTradeCards.filter(
-                id=>id!==cardId
-            );
-
-    }else{
-
-        selectedTradeCards.push(cardId);
+    if (
+        !activeTrade ||
+        activeTrade.status !==
+        "pending"
+    ) {
+        return;
     }
 
+
+    const copy =
+        collection.find(
+            card =>
+                card.id === cardId
+        );
+
+
+    if (!copy) {
+        return;
+    }
+
+
+    if (
+        selectedTradeCards.includes(
+            cardId
+        )
+    ) {
+
+        selectedTradeCards =
+            selectedTradeCards.filter(
+                id =>
+                    id !== cardId
+            );
+
+    } else {
+
+        selectedTradeCards.push(
+            cardId
+        );
+
+    }
+
+
     renderActiveTrade();
+
 };
 
 
-/* UPDATE TRADE OFFER */
+/* UPDATE OFFER */
 
-window.submitTradeOffer=async function(){
+window.submitTradeOffer =
+async function() {
 
-    if(
-        !activeTrade||
-        activeTrade.status!=="pending"
-    )return;
+    if (
+        !activeTrade ||
+        activeTrade.status !==
+        "pending"
+    ) {
+        return;
+    }
 
-    selectedTradeCards=
+
+    selectedTradeCards =
         selectedTradeCards.filter(
-            id=>
+            id =>
                 collection.some(
-                    copy=>copy.id===id
+                    copy =>
+                        copy.id === id
                 )
         );
 
-    const offer=
-        selectedTradeCards.map(id=>{
 
-            const copy=collection.find(
-                item=>item.id===id
-            );
+    const offer =
+        selectedTradeCards
+            .map(id => {
 
-            if(!copy)return null;
+                const copy =
+                    collection.find(
+                        item =>
+                            item.id === id
+                    );
 
-            return{
-                id:copy.id,
-                name:copy.name,
-                traded:copy.traded===true,
-                favorite:favorites.includes(copy.name)
-            };
 
-        }).filter(Boolean);
+                if (!copy) {
+                    return null;
+                }
 
-    const isSender=
-        activeTrade.senderUid===currentUser.uid;
 
-    const field=
+                return {
+                    id: copy.id,
+                    name: copy.name,
+                    traded:
+                        copy.traded === true,
+                    favorite:
+                        favorites.includes(
+                            copy.name
+                        )
+                };
+
+            })
+            .filter(Boolean);
+
+
+    const isSender =
+        activeTrade.senderUid ===
+        currentUser.uid;
+
+
+    const field =
         isSender
-            ?"senderOffer"
-            :"receiverOffer";
+            ? "senderOffer"
+            : "receiverOffer";
 
-    try{
+
+    try {
 
         await updateDoc(
             doc(
@@ -2411,395 +3488,592 @@ window.submitTradeOffer=async function(){
                 activeTrade.id
             ),
             {
-                [field]:offer,
-                senderConfirmed:false,
-                receiverConfirmed:false
+                [field]: offer,
+                senderConfirmed: false,
+                receiverConfirmed: false
             }
         );
+
 
         showMessage(
             "Offer updated. Both players must confirm again."
         );
 
-    }catch(error){
+
+    } catch (error) {
 
         console.error(error);
 
         showMessage(
-            "Could not update offer: "+
+            "Could not update offer: " +
             error.message
         );
+
     }
+
 };
 
 
 /* CONFIRM TRADE */
 
-window.confirmTrade=async function(){
+window.confirmTrade =
+async function() {
 
-    if(
-        !activeTrade||
-        activeTrade.status!=="pending"
-    )return;
+    if (
+        !activeTrade ||
+        activeTrade.status !==
+        "pending"
+    ) {
+        return;
+    }
 
-    try{
 
-        const tradeRef=doc(
-            db,
-            "tradeRequests",
-            activeTrade.id
-        );
+    try {
 
-        const snap=await getDoc(tradeRef);
+        const tradeRef =
+            doc(
+                db,
+                "tradeRequests",
+                activeTrade.id
+            );
 
-        if(!snap.exists()){
 
-            showMessage("Trade no longer exists.");
+        const snap =
+            await getDoc(tradeRef);
+
+
+        if (!snap.exists()) {
+
+            showMessage(
+                "Trade no longer exists."
+            );
+
             return;
+
         }
 
-        const trade={
-            id:snap.id,
+
+        const trade = {
+            id: snap.id,
             ...snap.data()
         };
 
-        const myOffer=getMyOffer(trade);
-        const theirOffer=getTheirOffer(trade);
 
-        if(!myOffer.length){
+        const myOffer =
+            getMyOffer(trade);
+
+
+        const theirOffer =
+            getTheirOffer(trade);
+
+
+        if (!myOffer.length) {
 
             showMessage(
                 "You must offer at least one card."
             );
 
             return;
+
         }
 
-        if(!theirOffer.length){
+
+        if (!theirOffer.length) {
 
             showMessage(
                 "Wait for the other player to offer a card."
             );
 
             return;
+
         }
 
-        if(
+
+        if (
             !sameIds(
-                myOffer.map(card=>card.id),
+                myOffer.map(
+                    card => card.id
+                ),
                 selectedTradeCards
             )
-        ){
+        ) {
 
             showMessage(
                 "Update your offer before confirming."
             );
 
             return;
+
         }
 
-        const stillOwns=myOffer.every(
-            offered=>
-                collection.some(
-                    copy=>copy.id===offered.id
-                )
-        );
 
-        if(!stillOwns){
+        const stillOwns =
+            myOffer.every(
+                offered =>
+                    collection.some(
+                        copy =>
+                            copy.id ===
+                            offered.id
+                    )
+            );
+
+
+        if (!stillOwns) {
 
             showMessage(
                 "One of your offered cards is no longer in your collection."
             );
 
             return;
+
         }
 
-        const isSender=
-            trade.senderUid===currentUser.uid;
 
-        const field=
+        const isSender =
+            trade.senderUid ===
+            currentUser.uid;
+
+
+        const field =
             isSender
-                ?"senderConfirmed"
-                :"receiverConfirmed";
+                ? "senderConfirmed"
+                : "receiverConfirmed";
+
 
         await updateDoc(
             tradeRef,
-            {[field]:true}
+            {
+                [field]: true
+            }
         );
 
-        activeTrade={
+
+        activeTrade = {
             ...trade,
-            [field]:true
+            [field]: true
         };
 
+
         renderActiveTrade();
+
 
         showMessage(
             "Confirmed. Waiting for the other player."
         );
 
+
         await tryFinalizeTrade({
             ...trade,
-            [field]:true
+            [field]: true
         });
 
-    }catch(error){
+
+    } catch (error) {
 
         console.error(error);
 
         showMessage(
-            "Could not confirm trade: "+
+            "Could not confirm trade: " +
             error.message
         );
+
     }
+
 };
 
 
-/* FINALIZE */
+/* FINALIZE TRADE */
 
-async function tryFinalizeTrade(trade){
+async function tryFinalizeTrade(trade) {
 
-    if(
-        !trade||
-        trade.status!=="pending"||
-        trade.senderConfirmed!==true||
-        trade.receiverConfirmed!==true
-    )return;
+    if (
+        !trade ||
+        trade.status !== "pending" ||
+        trade.senderConfirmed !== true ||
+        trade.receiverConfirmed !== true
+    ) {
+        return;
+    }
 
-    const senderOffer=
-        Array.isArray(trade.senderOffer)
-            ?trade.senderOffer
-            :[];
 
-    const receiverOffer=
-        Array.isArray(trade.receiverOffer)
-            ?trade.receiverOffer
-            :[];
+    const senderOffer =
+        Array.isArray(
+            trade.senderOffer
+        )
+            ? trade.senderOffer
+            : [];
 
-    if(
-        !senderOffer.length||
+
+    const receiverOffer =
+        Array.isArray(
+            trade.receiverOffer
+        )
+            ? trade.receiverOffer
+            : [];
+
+
+    if (
+        !senderOffer.length ||
         !receiverOffer.length
-    )return;
+    ) {
+        return;
+    }
 
-    try{
 
-        const tradeRef=doc(
-            db,
-            "tradeRequests",
-            trade.id
-        );
+    try {
 
-        const snap=await getDoc(tradeRef);
+        const tradeRef =
+            doc(
+                db,
+                "tradeRequests",
+                trade.id
+            );
 
-        if(!snap.exists())return;
 
-        const fresh={
-            id:snap.id,
+        const snap =
+            await getDoc(tradeRef);
+
+
+        if (!snap.exists()) {
+            return;
+        }
+
+
+        const fresh = {
+            id: snap.id,
             ...snap.data()
         };
 
-        if(
-            fresh.status!=="pending"||
-            fresh.senderConfirmed!==true||
-            fresh.receiverConfirmed!==true
-        )return;
+
+        if (
+            fresh.status !== "pending" ||
+            fresh.senderConfirmed !== true ||
+            fresh.receiverConfirmed !== true
+        ) {
+            return;
+        }
+
 
         await updateDoc(
             tradeRef,
             {
-                status:"completed",
-                completedAt:serverTimestamp()
+                status: "completed",
+                completedAt:
+                    serverTimestamp()
             }
         );
 
+
         await applyCompletedTrade({
             ...fresh,
-            status:"completed"
+            status: "completed"
         });
 
-    }catch(error){
+
+    } catch (error) {
 
         console.error(
             "FINALIZE TRADE ERROR:",
             error
         );
+
     }
+
 }
 
 
 /* APPLY TRADE */
 
-async function applyCompletedTrade(trade){
+async function applyCompletedTrade(trade) {
 
-    if(
-        !currentUser||
-        trade.status!=="completed"
-    )return;
+    if (
+        !currentUser ||
+        trade.status !== "completed"
+    ) {
+        return;
+    }
 
-    if(
-        completedTradeIds.includes(trade.id)||
-        applyingTradeIds.has(trade.id)
-    )return;
 
-    applyingTradeIds.add(trade.id);
+    if (
+        completedTradeIds.includes(
+            trade.id
+        ) ||
+        applyingTradeIds.has(
+            trade.id
+        )
+    ) {
+        return;
+    }
 
-    try{
 
-        const isSender=
-            trade.senderUid===currentUser.uid;
+    applyingTradeIds.add(
+        trade.id
+    );
 
-        const myOffer=
+
+    try {
+
+        const isSender =
+            trade.senderUid ===
+            currentUser.uid;
+
+
+        const myOffer =
             isSender
-                ?trade.senderOffer||[]
-                :trade.receiverOffer||[];
+                ? trade.senderOffer || []
+                : trade.receiverOffer || [];
 
-        const incomingOffer=
+
+        const incomingOffer =
             isSender
-                ?trade.receiverOffer||[]
-                :trade.senderOffer||[];
+                ? trade.receiverOffer || []
+                : trade.senderOffer || [];
 
-        if(!myOffer.length||!incomingOffer.length)return;
 
-        const playerRef=doc(
-            db,
-            "players",
-            currentUser.uid
-        );
-
-        const playerSnap=await getDoc(playerRef);
-
-        if(!playerSnap.exists())return;
-
-        const data=playerSnap.data();
-
-        let currentCollection=
-            normalizeCollection(data.collection);
-
-        let currentFavorites=
-            Array.isArray(data.favorites)
-                ?[...data.favorites]
-                :[];
-
-        let currentCompleted=
-            Array.isArray(data.completedTradeIds)
-                ?[...data.completedTradeIds]
-                :[];
-
-        if(currentCompleted.includes(trade.id)){
-
-            completedTradeIds=currentCompleted;
+        if (
+            !myOffer.length ||
+            !incomingOffer.length
+        ) {
             return;
         }
 
-        const outgoingIds=new Set(
-            myOffer.map(card=>card.id)
-        );
 
-        const ownsAll=myOffer.every(
-            offered=>
-                currentCollection.some(
-                    copy=>copy.id===offered.id
+        const playerRef =
+            doc(
+                db,
+                "players",
+                currentUser.uid
+            );
+
+
+        const playerSnap =
+            await getDoc(
+                playerRef
+            );
+
+
+        if (!playerSnap.exists()) {
+            return;
+        }
+
+
+        const data =
+            playerSnap.data();
+
+
+        let currentCollection =
+            normalizeCollection(
+                data.collection
+            );
+
+
+        let currentFavorites =
+            Array.isArray(
+                data.favorites
+            )
+                ? [...data.favorites]
+                : [];
+
+
+        let currentCompleted =
+            Array.isArray(
+                data.completedTradeIds
+            )
+                ? [...data.completedTradeIds]
+                : [];
+
+
+        if (
+            currentCompleted.includes(
+                trade.id
+            )
+        ) {
+
+            completedTradeIds =
+                currentCompleted;
+
+            return;
+
+        }
+
+
+        const outgoingIds =
+            new Set(
+                myOffer.map(
+                    card => card.id
                 )
-        );
+            );
 
-        if(!ownsAll){
 
-            const incomingAlreadyThere=
+        const ownsAll =
+            myOffer.every(
+                offered =>
+                    currentCollection.some(
+                        copy =>
+                            copy.id ===
+                            offered.id
+                    )
+            );
+
+
+        if (!ownsAll) {
+
+            const incomingAlreadyThere =
                 incomingOffer.every(
-                    offered=>
+                    offered =>
                         currentCollection.some(
-                            copy=>copy.id===offered.id
+                            copy =>
+                                copy.id ===
+                                offered.id
                         )
                 );
 
-            if(incomingAlreadyThere){
 
-                currentCompleted.push(trade.id);
+            if (incomingAlreadyThere) {
+
+                currentCompleted.push(
+                    trade.id
+                );
+
 
                 await setDoc(
                     playerRef,
                     {
-                        completedTradeIds:currentCompleted
+                        completedTradeIds:
+                            currentCompleted
                     },
-                    {merge:true}
+                    {
+                        merge: true
+                    }
                 );
 
-                completedTradeIds=currentCompleted;
+
+                completedTradeIds =
+                    currentCompleted;
+
             }
+
 
             return;
+
         }
 
-        currentCollection=
+
+        currentCollection =
             currentCollection.filter(
-                copy=>!outgoingIds.has(copy.id)
+                copy =>
+                    !outgoingIds.has(
+                        copy.id
+                    )
             );
 
-        for(const offered of incomingOffer){
 
-            if(
+        for (
+            const offered
+            of incomingOffer
+        ) {
+
+            if (
                 currentCollection.some(
-                    copy=>copy.id===offered.id
+                    copy =>
+                        copy.id ===
+                        offered.id
                 )
-            )continue;
+            ) {
+                continue;
+            }
+
 
             currentCollection.push({
-                id:offered.id,
-                name:offered.name,
-                traded:true
+                id: offered.id,
+                name: offered.name,
+                traded: true
             });
 
-            if(
-                offered.favorite===true &&
-                !currentFavorites.includes(offered.name)
-            ){
-                currentFavorites.push(offered.name);
+
+            if (
+                offered.favorite === true &&
+                !currentFavorites.includes(
+                    offered.name
+                )
+            ) {
+
+                currentFavorites.push(
+                    offered.name
+                );
+
             }
+
         }
 
-        currentCompleted.push(trade.id);
+
+        currentCompleted.push(
+            trade.id
+        );
+
 
         await setDoc(
             playerRef,
             {
-                collection:currentCollection,
-                favorites:currentFavorites,
-                completedTradeIds:currentCompleted
+                collection:
+                    currentCollection,
+
+                favorites:
+                    currentFavorites,
+
+                completedTradeIds:
+                    currentCompleted
             },
-            {merge:true}
+            {
+                merge: true
+            }
         );
 
-        collection=currentCollection;
-        favorites=currentFavorites;
-        completedTradeIds=currentCompleted;
+
+        collection =
+            currentCollection;
+
+        favorites =
+            currentFavorites;
+
+        completedTradeIds =
+            currentCompleted;
+
 
         updateUI();
+
 
         showMessage(
             "Trade completed! Cards swapped."
         );
 
-    }catch(error){
+
+    } catch (error) {
 
         console.error(error);
 
         showMessage(
-            "Could not finish the trade: "+
+            "Could not finish the trade: " +
             error.message
         );
 
-    }finally{
+    } finally {
 
-        applyingTradeIds.delete(trade.id);
+        applyingTradeIds.delete(
+            trade.id
+        );
+
     }
+
 }
 
 
 /* CANCEL TRADE */
 
-window.cancelTrade=async function(tradeId){
+window.cancelTrade =
+async function(tradeId) {
 
-    try{
+    try {
 
         await updateDoc(
             doc(
@@ -2808,76 +4082,109 @@ window.cancelTrade=async function(tradeId){
                 tradeId
             ),
             {
-                status:"cancelled"
+                status: "cancelled"
             }
         );
 
-        if(
-            activeTrade&&
-            activeTrade.id===tradeId
-        ){
-            activeTrade=null;
+
+        if (
+            activeTrade &&
+            activeTrade.id === tradeId
+        ) {
+
+            activeTrade = null;
+
         }
 
-        selectedTradeCards=[];
+
+        selectedTradeCards = [];
+
 
         renderActiveTrade();
+
         renderIncomingTrades();
 
-        showMessage("Trade cancelled.");
 
-    }catch(error){
+        showMessage(
+            "Trade cancelled."
+        );
+
+
+    } catch (error) {
 
         console.error(error);
 
         showMessage(
-            "Could not cancel trade: "+
+            "Could not cancel trade: " +
             error.message
         );
+
     }
+
 };
 
 
 /* SETTINGS */
 
-window.openSettings=function(){
+window.openSettings = function() {
 
     document
-        .getElementById("settingsOverlay")
+        .getElementById(
+            "settingsOverlay"
+        )
         .classList.remove("hidden");
+
 };
 
-window.closeSettings=function(){
+
+window.closeSettings = function() {
 
     document
-        .getElementById("settingsOverlay")
+        .getElementById(
+            "settingsOverlay"
+        )
         .classList.add("hidden");
+
 };
 
 
 /* RESET ACCOUNT */
 
-window.resetAccount=async function(){
+window.resetAccount =
+async function() {
 
-    const yes=confirm(
-        "Are you sure you want to reset your account? This deletes your coins and collection."
-    );
+    const yes =
+        confirm(
+            "Are you sure you want to reset your account? This deletes your coins and collection."
+        );
 
-    if(!yes)return;
 
-    money=STARTING_COINS;
-    collection=[];
-    favorites=[];
-    completedTradeIds=[];
+    if (!yes) {
+        return;
+    }
+
+
+    money = STARTING_COINS;
+
+    collection = [];
+
+    favorites = [];
+
+    completedTradeIds = [];
+
 
     await savePlayerData();
 
+
     updateUI();
+
     closeSettings();
 
+
     showMessage(
-        "Account reset. You now have 250 coins."
+        "Account reset. You now have 125 coins."
     );
+
 };
 
 </script>
