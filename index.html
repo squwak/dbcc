@@ -7,6 +7,7 @@
     <title>Doll Ball Collector Cards</title>
 
     <style>
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -62,6 +63,8 @@
             border-radius: 15px;
             padding: 12px;
             box-shadow: 0 2px 7px #aaa;
+            position: relative;
+            box-sizing: border-box;
         }
 
         .card img {
@@ -115,6 +118,7 @@
             border-radius: 15px;
             padding: 15px;
             box-shadow: 0 2px 7px #aaa;
+            position: relative;
         }
 
         .comingSoon {
@@ -133,22 +137,176 @@
             margin: 10px;
             font-size: 14px;
         }
+
+        /* CARD COUNT */
+
+        .countBadge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 100;
+
+            background: black;
+            color: white;
+
+            width: 30px;
+            height: 30px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* FAVORITE STAR */
+
+        .favoriteButton {
+            position: absolute;
+
+            top: 8px;
+            left: 8px;
+
+            z-index: 101;
+
+            width: 36px;
+            height: 36px;
+
+            padding: 0;
+            margin: 0;
+
+            border-radius: 50%;
+
+            background: white;
+            color: #999;
+
+            border: 2px solid #ccc;
+
+            font-size: 21px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .favoriteButton.isFavorite {
+            color: #ffd21f;
+            border-color: #ffd21f;
+        }
+
+        /* NORMAL FAVORITE */
+
+        .favoriteCard {
+            border: 4px solid #36b9ff;
+
+            box-shadow:
+                0 0 0 2px #8ee0ff,
+                0 0 12px #36b9ff;
+        }
+
+        /* RARE FAVORITE */
+
+        .rareFavoriteCard {
+            border: 4px solid gold;
+
+            box-shadow:
+                0 0 0 2px #fff0a3,
+                0 0 10px gold,
+                0 0 22px #ffd700;
+        }
+
+        .rareFavoriteCard::before {
+            content: "✦ ✧ ✦";
+            position: absolute;
+
+            top: -13px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            color: gold;
+
+            font-size: 15px;
+
+            white-space: nowrap;
+
+            z-index: 102;
+        }
+
+        /* SETTINGS */
+
+        #settingsMenu {
+            display: none;
+
+            position: fixed;
+
+            top: 70px;
+            right: 15px;
+
+            background: white;
+
+            width: 260px;
+
+            padding: 20px;
+
+            border-radius: 15px;
+
+            box-shadow: 0 4px 20px #888;
+
+            z-index: 1000;
+        }
+
+        #settingsMenu h2 {
+            margin-top: 0;
+        }
+
+        .resetButton {
+            background: #b3261e;
+            width: 90%;
+        }
+
+        .closeSettings {
+            background: #555;
+            width: 90%;
+        }
+
     </style>
 </head>
 
 <body>
 
+
+    <!-- LOGIN -->
+
     <div id="loginScreen">
+
         <h1>Doll Ball Collector Cards</h1>
-        <p>Sign in to save your collection and coins.</p>
-        <button onclick="login()">Sign in with Google</button>
+
+        <p>
+            Sign in to save your collection and coins.
+        </p>
+
+        <button onclick="login()">
+            Sign in with Google
+        </button>
+
         <p id="loginMessage"></p>
+
     </div>
 
 
+    <!-- GAME -->
+
     <div id="gameScreen">
 
+
+        <!-- TOP BAR -->
+
         <div id="topBar">
+
             <h1>Doll Ball Collector Cards</h1>
 
             <div id="coins">
@@ -157,29 +315,87 @@
 
             <div id="userInfo"></div>
 
-            <button onclick="showHome()">Home</button>
-            <button onclick="showCollection()">Collection</button>
-            <button onclick="showDex()">DEX</button>
-            <button onclick="logout()">Log Out</button>
+
+            <button onclick="showHome()">
+                Home
+            </button>
+
+            <button onclick="showCollection()">
+                Collection
+            </button>
+
+            <button onclick="showDex()">
+                DEX
+            </button>
+
+            <button onclick="toggleSettings()">
+                Settings
+            </button>
+
+            <button onclick="logout()">
+                Log Out
+            </button>
+
+        </div>
+
+
+        <!-- SETTINGS MENU -->
+
+        <div id="settingsMenu">
+
+            <h2>Settings</h2>
+
+            <p>
+                Account Settings
+            </p>
+
+            <button
+                class="resetButton"
+                onclick="resetAccount()"
+            >
+                Reset Account
+            </button>
+
+            <button
+                class="closeSettings"
+                onclick="toggleSettings()"
+            >
+                Close
+            </button>
+
         </div>
 
 
         <div id="message"></div>
 
 
+        <!-- HOME -->
+
         <div id="homePage" class="page">
 
             <h2>Open Pack</h2>
 
-            <p>3 cards per pack</p>
-            <p>Cost: 10 coins</p>
+            <p>
+                3 cards per pack
+            </p>
 
-            <button onclick="openPack()">Open Pack</button>
+            <p>
+                Cost: 10 coins
+            </p>
 
-            <div id="packResults" class="cardGrid"></div>
+            <button onclick="openPack()">
+                Open Pack
+            </button>
+
+            <div
+                id="packResults"
+                class="cardGrid"
+            ></div>
 
         </div>
 
+
+        <!-- COLLECTION -->
 
         <div id="collectionPage" class="page">
 
@@ -192,31 +408,56 @@
                 oninput="searchCollection()"
             >
 
-            <div id="collectionGrid" class="cardGrid"></div>
+            <div
+                id="collectionGrid"
+                class="cardGrid"
+            ></div>
 
         </div>
 
+
+        <!-- DEX -->
 
         <div id="dexPage" class="page">
 
             <h2>DEX</h2>
 
             <div class="dexButtons">
-                <button onclick="showDexDolls()">DOLLS</button>
-                <button onclick="showDexRares()">RARES</button>
+
+                <button onclick="showDexDolls()">
+                    DOLLS
+                </button>
+
+                <button onclick="showDexRares()">
+                    RARES
+                </button>
+
+                <button onclick="showDexFavorites()">
+                    FAVORITES
+                </button>
+
             </div>
 
-            <div id="dexGrid" class="cardGrid"></div>
+            <div
+                id="dexGrid"
+                class="cardGrid"
+            ></div>
 
         </div>
+
 
     </div>
 
 
     <script type="module">
 
-        import { initializeApp }
-        from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+        import {
+            initializeApp
+        }
+        from
+        "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
 
         import {
             getAuth,
@@ -225,215 +466,311 @@
             signOut,
             onAuthStateChanged
         }
-        from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+        from
+        "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
 
         import {
             getFirestore,
             doc,
             getDoc,
-            setDoc
+            setDoc,
+            deleteDoc
         }
-        from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+        from
+        "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
         const firebaseConfig = {
-            apiKey: "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
-            authDomain: "dbcc-login.firebaseapp.com",
-            databaseURL: "https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "dbcc-login",
-            storageBucket: "dbcc-login.firebasestorage.app",
-            messagingSenderId: "878902780767",
-            appId: "1:878902780767:web:4020d11730e5d9c0ee0cea",
-            measurementId: "G-PT9S1K4E2K"
+
+            apiKey:
+                "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
+
+            authDomain:
+                "dbcc-login.firebaseapp.com",
+
+            databaseURL:
+                "https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+            projectId:
+                "dbcc-login",
+
+            storageBucket:
+                "dbcc-login.firebasestorage.app",
+
+            messagingSenderId:
+                "878902780767",
+
+            appId:
+                "1:878902780767:web:4020d11730e5d9c0ee0cea",
+
+            measurementId:
+                "G-PT9S1K4E2K"
         };
 
 
-        const app = initializeApp(firebaseConfig);
+        const app =
+            initializeApp(firebaseConfig);
 
-        const auth = getAuth(app);
 
-        const db = getFirestore(app);
+        const auth =
+            getAuth(app);
 
-        const provider = new GoogleAuthProvider();
+
+        const db =
+            getFirestore(app);
+
+
+        const provider =
+            new GoogleAuthProvider();
 
 
         let money = 50;
 
         let collection = [];
 
+        let favorites = [];
+
         let currentUser = null;
 
 
         /*
-        CARD LIST
-
-        The order here is the official collection order.
-        Sell prices are exactly the prices provided.
+        ============================
+        CARDS
+        ============================
         */
 
+
         const cards = [
+
 
             {
                 name: "Baby Pickels",
                 image: "baby pikels.png",
                 weight: 14,
-                sellPrice: 5
+                sellPrice: 5,
+                rarity: "doll"
             },
+
 
             {
                 name: "Mr. Pickels",
                 image: "mr. pickels.png",
                 weight: 9,
-                sellPrice: 7
+                sellPrice: 7,
+                rarity: "doll"
             },
+
 
             {
                 name: "Wily",
                 image: "wily.png",
                 weight: 14,
-                sellPrice: 5
+                sellPrice: 5,
+                rarity: "doll"
             },
+
 
             {
                 name: "Will",
                 image: "will.png",
                 weight: 9,
-                sellPrice: 7
+                sellPrice: 7,
+                rarity: "doll"
             },
+
 
             {
                 name: "Waffle",
                 image: "waffle.png",
                 weight: 14,
-                sellPrice: 5
+                sellPrice: 5,
+                rarity: "doll"
             },
+
 
             {
                 name: "Cute Cake",
                 image: "cute cake.png",
                 weight: 9,
-                sellPrice: 7
+                sellPrice: 7,
+                rarity: "doll"
             },
+
 
             {
                 name: "Buttyr",
                 image: "buttyr.png",
                 weight: 20,
-                sellPrice: 7
+                sellPrice: 7,
+                rarity: "doll"
             },
+
 
             {
                 name: "Blossem",
                 image: "blossem.png",
                 weight: 20,
-                sellPrice: 7
+                sellPrice: 7,
+                rarity: "doll"
             },
+
 
             {
                 name: "Buzzy",
                 image: "buzzy.png",
                 weight: 5,
-                sellPrice: 12
+                sellPrice: 12,
+                rarity: "doll"
             },
+
 
             {
                 name: "Nico",
                 image: "nico.png",
                 weight: 20,
-                sellPrice: 3
+                sellPrice: 3,
+                rarity: "doll"
             },
+
 
             {
                 name: "Choper",
                 image: "choper.png",
                 weight: 10,
-                sellPrice: 5
+                sellPrice: 5,
+                rarity: "doll"
             },
+
 
             {
                 name: "Bullet",
                 image: "bullet.png",
                 weight: 10,
-                sellPrice: 5
+                sellPrice: 5,
+                rarity: "doll"
             }
 
         ];
 
 
         /*
+        ============================
         DEX
+        ============================
         */
 
-        const dexDolls = [...cards];
 
-        for (let i = 13; i <= 123; i++) {
+        const dexDolls =
+            [...cards];
+
+
+        for (
+            let i = 13;
+            i <= 123;
+            i++
+        ) {
 
             dexDolls.push({
+
                 name: "Coming Soon",
+
                 image: null,
-                comingSoon: true
+
+                comingSoon: true,
+
+                rarity: "doll"
+
             });
 
         }
 
 
+        /*
+        These are future rare slots.
+        When you add real rare cards,
+        give them rarity: "rare".
+        */
+
+
         const dexRares = [
 
-            {
-                name: "Coming Soon",
-                image: null,
-                comingSoon: true
-            },
 
             {
                 name: "Coming Soon",
                 image: null,
-                comingSoon: true
+                comingSoon: true,
+                rarity: "rare"
             },
+
 
             {
                 name: "Coming Soon",
                 image: null,
-                comingSoon: true
+                comingSoon: true,
+                rarity: "rare"
             },
+
 
             {
                 name: "Coming Soon",
                 image: null,
-                comingSoon: true
+                comingSoon: true,
+                rarity: "rare"
             },
+
 
             {
                 name: "Coming Soon",
                 image: null,
-                comingSoon: true
+                comingSoon: true,
+                rarity: "rare"
             },
+
 
             {
                 name: "Coming Soon",
                 image: null,
-                comingSoon: true
+                comingSoon: true,
+                rarity: "rare"
+            },
+
+
+            {
+                name: "Coming Soon",
+                image: null,
+                comingSoon: true,
+                rarity: "rare"
             }
 
         ];
 
 
         /*
+        ============================
         LOGIN
+        ============================
         */
+
 
         async function login() {
 
             try {
 
-                await signInWithPopup(auth, provider);
+                await signInWithPopup(
+                    auth,
+                    provider
+                );
 
             } catch (error) {
 
                 console.error(error);
 
-                document.getElementById("loginMessage").textContent =
-                    "Login error: " + error.message;
+                document.getElementById(
+                    "loginMessage"
+                ).textContent =
+                    "Login error: " +
+                    error.message;
 
             }
 
@@ -441,8 +778,11 @@
 
 
         /*
+        ============================
         LOGOUT
+        ============================
         */
+
 
         async function logout() {
 
@@ -460,24 +800,39 @@
 
 
         /*
-        LOAD PLAYER DATA
+        ============================
+        LOAD PLAYER
+        ============================
         */
+
 
         async function loadPlayerData(user) {
 
-            const playerRef = doc(db, "players", user.uid);
+            const playerRef =
+                doc(
+                    db,
+                    "players",
+                    user.uid
+                );
 
-            const playerSnap = await getDoc(playerRef);
+
+            const playerSnap =
+                await getDoc(playerRef);
 
 
             if (playerSnap.exists()) {
 
-                const data = playerSnap.data();
+                const data =
+                    playerSnap.data();
 
 
-                if (typeof data.money === "number") {
+                if (
+                    typeof data.money ===
+                    "number"
+                ) {
 
-                    money = data.money;
+                    money =
+                        data.money;
 
                 } else {
 
@@ -489,21 +844,56 @@
                 collection = [];
 
 
-                if (Array.isArray(data.collection)) {
+                if (
+                    Array.isArray(
+                        data.collection
+                    )
+                ) {
 
-                    for (const cardName of data.collection) {
+                    for (
+                        const cardName
+                        of data.collection
+                    ) {
 
-                        const card = cards.find(
-                            c => c.name === cardName
-                        );
+                        const card =
+                            cards.find(
+                                c =>
+                                c.name ===
+                                cardName
+                            );
+
 
                         if (card) {
 
-                            collection.push(card);
+                            collection.push(
+                                card
+                            );
 
                         }
 
                     }
+
+                }
+
+
+                favorites = [];
+
+
+                if (
+                    Array.isArray(
+                        data.favorites
+                    )
+                ) {
+
+                    favorites =
+                        data.favorites.filter(
+                            name =>
+                            cards.some(
+                                c =>
+                                c.name ===
+                                name
+                            )
+                        );
 
                 }
 
@@ -512,6 +902,8 @@
                 money = 50;
 
                 collection = [];
+
+                favorites = [];
 
 
                 await savePlayerData(user);
@@ -525,72 +917,108 @@
 
 
         /*
-        SAVE PLAYER DATA
+        ============================
+        SAVE PLAYER
+        ============================
         */
+
 
         async function savePlayerData(user) {
 
             if (!user) return;
 
 
-            const playerRef = doc(db, "players", user.uid);
+            const playerRef =
+                doc(
+                    db,
+                    "players",
+                    user.uid
+                );
 
 
             await setDoc(
+
                 playerRef,
+
                 {
+
                     money: money,
 
-                    collection: collection.map(
-                        card => card.name
-                    )
+                    collection:
+                        collection.map(
+                            card =>
+                            card.name
+                        ),
+
+                    favorites:
+                        favorites
+
                 },
+
                 {
                     merge: true
                 }
+
             );
 
         }
 
 
         /*
+        ============================
         COINS
+        ============================
         */
+
 
         function updateCoins() {
 
-            document.getElementById("coins").textContent =
+            document.getElementById(
+                "coins"
+            ).textContent =
                 "Coins: " + money;
 
         }
 
 
         /*
+        ============================
         RANDOM CARD
+        ============================
         */
+
 
         function getRandomCard() {
 
             let totalWeight = 0;
 
 
-            for (const card of cards) {
+            for (
+                const card of cards
+            ) {
 
-                totalWeight += card.weight;
+                totalWeight +=
+                    card.weight;
 
             }
 
 
             let random =
-                Math.random() * totalWeight;
+                Math.random() *
+                totalWeight;
 
 
-            for (const card of cards) {
+            for (
+                const card of cards
+            ) {
 
-                random -= card.weight;
+                random -=
+                    card.weight;
 
 
-                if (random <= 0) {
+                if (
+                    random <= 0
+                ) {
 
                     return card;
 
@@ -599,140 +1027,473 @@
             }
 
 
-            return cards[cards.length - 1];
+            return cards[
+                cards.length - 1
+            ];
 
         }
 
 
         /*
-        DISPLAY CARD
+        ============================
+        FAVORITE CHECK
+        ============================
         */
 
-        function displayCard(card, container) {
 
-            const div = document.createElement("div");
+        function isFavorite(card) {
 
-            div.className = "card";
-
-
-            const img = document.createElement("img");
-
-            img.src = card.image;
-
-            img.alt = card.name;
-
-
-            const name = document.createElement("div");
-
-            name.className = "cardName";
-
-            name.textContent = card.name;
-
-
-            div.appendChild(img);
-
-            div.appendChild(name);
-
-            container.appendChild(div);
+            return favorites.includes(
+                card.name
+            );
 
         }
 
 
         /*
+        ============================
+        TOGGLE FAVORITE
+        ============================
+        */
+
+
+        async function toggleFavorite(card) {
+
+            if (!currentUser) return;
+
+
+            const index =
+                favorites.indexOf(
+                    card.name
+                );
+
+
+            if (index === -1) {
+
+                favorites.push(
+                    card.name
+                );
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    card.name +
+                    " added to favorites!";
+
+            } else {
+
+                favorites.splice(
+                    index,
+                    1
+                );
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    card.name +
+                    " removed from favorites.";
+
+            }
+
+
+            try {
+
+                await savePlayerData(
+                    currentUser
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "FAVORITE SAVE ERROR:",
+                    error
+                );
+
+            }
+
+
+            const search =
+                document.getElementById(
+                    "search"
+                ).value;
+
+
+            renderCollection(
+                search
+            );
+
+        }
+
+
+        /*
+        ============================
+        DISPLAY NORMAL CARD
+        ============================
+        */
+
+
+        function displayCard(
+            card,
+            container
+        ) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "card";
+
+
+            const img =
+                document.createElement(
+                    "img"
+                );
+
+
+            img.src =
+                card.image;
+
+
+            img.alt =
+                card.name;
+
+
+            const name =
+                document.createElement(
+                    "div"
+                );
+
+
+            name.className =
+                "cardName";
+
+
+            name.textContent =
+                card.name;
+
+
+            div.appendChild(
+                img
+            );
+
+
+            div.appendChild(
+                name
+            );
+
+
+            container.appendChild(
+                div
+            );
+
+        }
+
+
+        /*
+        ============================
         DISPLAY SELLABLE CARD
+        ============================
         */
 
-function displaySellableCard(card, container) {
 
-    const div = document.createElement("div");
-
-    div.className = "card";
-
-    div.style.position = "relative";
+        function displaySellableCard(
+            card,
+            container
+        ) {
 
 
-    // Count copies of this card
-    const count = collection.filter(
-        c => c.name === card.name
-    ).length;
+            const div =
+                document.createElement(
+                    "div"
+                );
 
 
-    // Number in top-right corner
-    const countBadge = document.createElement("div");
-
-    countBadge.textContent = count;
-
-    countBadge.style.position = "absolute";
-    countBadge.style.top = "8px";
-    countBadge.style.right = "8px";
-    countBadge.style.zIndex = "100";
-    countBadge.style.background = "black";
-    countBadge.style.color = "white";
-    countBadge.style.width = "30px";
-    countBadge.style.height = "30px";
-    countBadge.style.borderRadius = "50%";
-    countBadge.style.display = "flex";
-    countBadge.style.alignItems = "center";
-    countBadge.style.justifyContent = "center";
-    countBadge.style.fontWeight = "bold";
-    countBadge.style.fontSize = "16px";
-    countBadge.style.boxSizing = "border-box";
+            div.className =
+                "card";
 
 
-    const img = document.createElement("img");
-
-    img.src = card.image;
-    img.alt = card.name;
+            div.style.position =
+                "relative";
 
 
-    const name = document.createElement("div");
-
-    name.className = "cardName";
-    name.textContent = card.name;
-
-
-    const price = document.createElement("div");
-
-    price.className = "sellPrice";
-    price.textContent =
-        "Sell for " + card.sellPrice + " coins";
+            /*
+            FAVORITE BORDER
+            */
 
 
-    const sellButton = document.createElement("button");
+            if (
+                isFavorite(card)
+            ) {
 
-    sellButton.className = "sellButton";
-    sellButton.textContent = "SELL";
+                if (
+                    card.rarity ===
+                    "rare"
+                ) {
 
-    sellButton.onclick = function() {
-        sellCard(card);
-    };
+                    div.classList.add(
+                        "rareFavoriteCard"
+                    );
+
+                } else {
+
+                    div.classList.add(
+                        "favoriteCard"
+                    );
+
+                }
+
+            }
 
 
-    div.appendChild(countBadge);
-    div.appendChild(img);
-    div.appendChild(name);
-    div.appendChild(price);
-    div.appendChild(sellButton);
+            /*
+            COUNT
+            */
 
-    container.appendChild(div);
-}
+
+            const count =
+                collection.filter(
+                    c =>
+                    c.name ===
+                    card.name
+                ).length;
+
+
+            const countBadge =
+                document.createElement(
+                    "div"
+                );
+
+
+            countBadge.className =
+                "countBadge";
+
+
+            countBadge.textContent =
+                count;
+
+
+            /*
+            STAR
+            */
+
+
+            const favoriteButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            favoriteButton.className =
+                "favoriteButton";
+
+
+            if (
+                isFavorite(card)
+            ) {
+
+                favoriteButton.classList.add(
+                    "isFavorite"
+                );
+
+                favoriteButton.textContent =
+                    "★";
+
+            } else {
+
+                favoriteButton.textContent =
+                    "☆";
+
+            }
+
+
+            favoriteButton.onclick =
+                function(event) {
+
+                    event.stopPropagation();
+
+                    toggleFavorite(
+                        card
+                    );
+
+                };
+
+
+            /*
+            IMAGE
+            */
+
+
+            const img =
+                document.createElement(
+                    "img"
+                );
+
+
+            img.src =
+                card.image;
+
+
+            img.alt =
+                card.name;
+
+
+            /*
+            NAME
+            */
+
+
+            const name =
+                document.createElement(
+                    "div"
+                );
+
+
+            name.className =
+                "cardName";
+
+
+            name.textContent =
+                card.name;
+
+
+            /*
+            PRICE
+            */
+
+
+            const price =
+                document.createElement(
+                    "div"
+                );
+
+
+            price.className =
+                "sellPrice";
+
+
+            price.textContent =
+                "Sell for " +
+                card.sellPrice +
+                " coins";
+
+
+            /*
+            SELL BUTTON
+            */
+
+
+            const sellButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            sellButton.className =
+                "sellButton";
+
+
+            sellButton.textContent =
+                "SELL";
+
+
+            /*
+            FAVORITES CANNOT BE SOLD
+            */
+
+
+            if (
+                isFavorite(card)
+            ) {
+
+                sellButton.disabled =
+                    true;
+
+
+                sellButton.textContent =
+                    "FAVORITED";
+
+
+                sellButton.style.background =
+                    "#777";
+
+                sellButton.style.cursor =
+                    "not-allowed";
+
+            } else {
+
+                sellButton.onclick =
+                    function() {
+
+                        sellCard(card);
+
+                    };
+
+            }
+
+
+            div.appendChild(
+                countBadge
+            );
+
+
+            div.appendChild(
+                favoriteButton
+            );
+
+
+            div.appendChild(
+                img
+            );
+
+
+            div.appendChild(
+                name
+            );
+
+
+            div.appendChild(
+                price
+            );
+
+
+            div.appendChild(
+                sellButton
+            );
+
+
+            container.appendChild(
+                div
+            );
+
+        }
 
 
         /*
+        ============================
         OPEN PACK
+        ============================
         */
+
 
         async function openPack() {
 
             if (!currentUser) return;
 
 
-            const packCost = 10;
+            const packCost =
+                10;
 
 
-            if (money < packCost) {
+            if (
+                money < packCost
+            ) {
 
-                document.getElementById("message").textContent =
+                document.getElementById(
+                    "message"
+                ).textContent =
                     "Not enough coins.";
 
                 return;
@@ -740,23 +1501,39 @@ function displaySellableCard(card, container) {
             }
 
 
-            money -= packCost;
+            money -=
+                packCost;
 
 
             const results =
-                document.getElementById("packResults");
+                document.getElementById(
+                    "packResults"
+                );
 
 
-            results.innerHTML = "";
+            results.innerHTML =
+                "";
 
 
-            for (let i = 0; i < 3; i++) {
+            for (
+                let i = 0;
+                i < 3;
+                i++
+            ) {
 
-                const card = getRandomCard();
+                const card =
+                    getRandomCard();
 
-                collection.push(card);
 
-                displayCard(card, results);
+                collection.push(
+                    card
+                );
+
+
+                displayCard(
+                    card,
+                    results
+                );
 
             }
 
@@ -764,13 +1541,17 @@ function displaySellableCard(card, container) {
             updateCoins();
 
 
-            document.getElementById("message").textContent =
+            document.getElementById(
+                "message"
+            ).textContent =
                 "You opened a pack!";
 
 
             try {
 
-                await savePlayerData(currentUser);
+                await savePlayerData(
+                    currentUser
+                );
 
             } catch (error) {
 
@@ -779,7 +1560,10 @@ function displaySellableCard(card, container) {
                     error
                 );
 
-                document.getElementById("message").textContent =
+
+                document.getElementById(
+                    "message"
+                ).textContent =
                     "Pack opened, but saving failed.";
 
             }
@@ -788,31 +1572,65 @@ function displaySellableCard(card, container) {
 
 
         /*
-        SELL ONE COPY
+        ============================
+        SELL CARD
+        ============================
         */
+
 
         async function sellCard(card) {
 
-            if (!currentUser) return;
+            if (!currentUser)
+                return;
+
+
+            /*
+            Favorite cards cannot be sold.
+            */
+
+
+            if (
+                isFavorite(card)
+            ) {
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    "Favorite cards cannot be sold.";
+
+                return;
+
+            }
 
 
             const cardIndex =
-                collection.indexOf(card);
+                collection.indexOf(
+                    card
+                );
 
 
-            if (cardIndex === -1) return;
+            if (
+                cardIndex === -1
+            )
+                return;
 
 
-            collection.splice(cardIndex, 1);
+            collection.splice(
+                cardIndex,
+                1
+            );
 
 
-            money += card.sellPrice;
+            money +=
+                card.sellPrice;
 
 
             updateCoins();
 
 
-            document.getElementById("message").textContent =
+            document.getElementById(
+                "message"
+            ).textContent =
                 "Sold " +
                 card.name +
                 " for " +
@@ -822,7 +1640,9 @@ function displaySellableCard(card, container) {
 
             try {
 
-                await savePlayerData(currentUser);
+                await savePlayerData(
+                    currentUser
+                );
 
             } catch (error) {
 
@@ -835,25 +1655,37 @@ function displaySellableCard(card, container) {
 
 
             const search =
-                document.getElementById("search").value;
+                document.getElementById(
+                    "search"
+                ).value;
 
 
-            renderCollection(search);
+            renderCollection(
+                search
+            );
 
         }
 
 
         /*
+        ============================
         COLLECTION
+        ============================
         */
 
-        function renderCollection(searchText = "") {
+
+        function renderCollection(
+            searchText = ""
+        ) {
 
             const grid =
-                document.getElementById("collectionGrid");
+                document.getElementById(
+                    "collectionGrid"
+                );
 
 
-            grid.innerHTML = "";
+            grid.innerHTML =
+                "";
 
 
             const search =
@@ -861,12 +1693,20 @@ function displaySellableCard(card, container) {
 
 
             /*
-            Official card order.
+            Official card order
             */
 
-            for (const card of cards) {
 
-                if (!collection.includes(card)) {
+            for (
+                const card of cards
+            ) {
+
+
+                if (
+                    !collection.includes(
+                        card
+                    )
+                ) {
 
                     continue;
 
@@ -885,7 +1725,10 @@ function displaySellableCard(card, container) {
                 }
 
 
-                displaySellableCard(card, grid);
+                displaySellableCard(
+                    card,
+                    grid
+                );
 
             }
 
@@ -896,14 +1739,17 @@ function displaySellableCard(card, container) {
 
             hideAllPages();
 
+
             document.getElementById(
                 "collectionPage"
-            ).style.display = "block";
+            ).style.display =
+                "block";
 
 
             document.getElementById(
                 "search"
-            ).value = "";
+            ).value =
+                "";
 
 
             renderCollection();
@@ -914,40 +1760,63 @@ function displaySellableCard(card, container) {
         function searchCollection() {
 
             const search =
-                document.getElementById("search").value;
+                document.getElementById(
+                    "search"
+                ).value;
 
 
-            renderCollection(search);
+            renderCollection(
+                search
+            );
 
         }
 
 
         /*
+        ============================
         DEX
+        ============================
         */
 
-        function renderDex(list) {
+
+        function renderDex(
+            list
+        ) {
 
             const grid =
-                document.getElementById("dexGrid");
+                document.getElementById(
+                    "dexGrid"
+                );
 
 
-            grid.innerHTML = "";
+            grid.innerHTML =
+                "";
 
 
-            for (const card of list) {
+            for (
+                const card of list
+            ) {
+
 
                 const div =
-                    document.createElement("div");
+                    document.createElement(
+                        "div"
+                    );
 
 
-                div.className = "dexCard";
+                div.className =
+                    "dexCard";
 
 
-                if (card.comingSoon) {
+                if (
+                    card.comingSoon
+                ) {
+
 
                     const text =
-                        document.createElement("div");
+                        document.createElement(
+                            "div"
+                        );
 
 
                     text.className =
@@ -958,27 +1827,73 @@ function displaySellableCard(card, container) {
                         "Coming Soon";
 
 
-                    div.appendChild(text);
+                    div.appendChild(
+                        text
+                    );
+
 
                 } else {
 
+
+                    /*
+                    Favorite border in DEX
+                    */
+
+
+                    if (
+                        isFavorite(card)
+                    ) {
+
+                        if (
+                            card.rarity ===
+                            "rare"
+                        ) {
+
+                            div.classList.add(
+                                "rareFavoriteCard"
+                            );
+
+                        } else {
+
+                            div.classList.add(
+                                "favoriteCard"
+                            );
+
+                        }
+
+                    }
+
+
                     const img =
-                        document.createElement("img");
+                        document.createElement(
+                            "img"
+                        );
 
 
-                    img.src = card.image;
+                    img.src =
+                        card.image;
 
-                    img.alt = card.name;
 
-                    img.style.width = "100%";
+                    img.alt =
+                        card.name;
 
-                    img.style.maxHeight = "180px";
 
-                    img.style.objectFit = "contain";
+                    img.style.width =
+                        "100%";
+
+
+                    img.style.maxHeight =
+                        "180px";
+
+
+                    img.style.objectFit =
+                        "contain";
 
 
                     const name =
-                        document.createElement("div");
+                        document.createElement(
+                            "div"
+                        );
 
 
                     name.className =
@@ -989,14 +1904,21 @@ function displaySellableCard(card, container) {
                         card.name;
 
 
-                    div.appendChild(img);
+                    div.appendChild(
+                        img
+                    );
 
-                    div.appendChild(name);
+
+                    div.appendChild(
+                        name
+                    );
 
                 }
 
 
-                grid.appendChild(div);
+                grid.appendChild(
+                    div
+                );
 
             }
 
@@ -1007,9 +1929,11 @@ function displaySellableCard(card, container) {
 
             hideAllPages();
 
+
             document.getElementById(
                 "dexPage"
-            ).style.display = "block";
+            ).style.display =
+                "block";
 
 
             showDexDolls();
@@ -1019,66 +1943,249 @@ function displaySellableCard(card, container) {
 
         function showDexDolls() {
 
-            renderDex(dexDolls);
+            renderDex(
+                dexDolls
+            );
 
         }
 
 
         function showDexRares() {
 
-            renderDex(dexRares);
+            renderDex(
+                dexRares
+            );
 
         }
 
 
         /*
-        HOME
+        FAVORITES DEX TAB
         */
+
+
+        function showDexFavorites() {
+
+            const favoriteCards =
+                cards.filter(
+                    card =>
+                    favorites.includes(
+                        card.name
+                    )
+                    &&
+                    collection.includes(
+                        card
+                    )
+                );
+
+
+            renderDex(
+                favoriteCards
+            );
+
+        }
+
+
+        /*
+        ============================
+        HOME
+        ============================
+        */
+
 
         function showHome() {
 
             hideAllPages();
 
+
             document.getElementById(
                 "homePage"
-            ).style.display = "block";
+            ).style.display =
+                "block";
 
         }
 
 
         function hideAllPages() {
 
-            document.querySelectorAll(".page")
-                .forEach(page => {
+            document
+                .querySelectorAll(
+                    ".page"
+                )
+                .forEach(
+                    page => {
 
-                    page.style.display = "none";
+                        page.style.display =
+                            "none";
 
-                });
+                    }
+                );
 
         }
 
 
         /*
-        FIREBASE AUTH STATE
+        ============================
+        SETTINGS
+        ============================
         */
 
+
+        function toggleSettings() {
+
+            const menu =
+                document.getElementById(
+                    "settingsMenu"
+                );
+
+
+            if (
+                menu.style.display ===
+                "block"
+            ) {
+
+                menu.style.display =
+                    "none";
+
+            } else {
+
+                menu.style.display =
+                    "block";
+
+            }
+
+        }
+
+
+        /*
+        ============================
+        RESET ACCOUNT
+        ============================
+        */
+
+
+        async function resetAccount() {
+
+            if (!currentUser)
+                return;
+
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to reset your account?\n\nThis will permanently delete your coins, collection, and favorites."
+                );
+
+
+            if (!confirmed)
+                return;
+
+
+            const doubleConfirmed =
+                confirm(
+                    "This cannot be undone. Reset your account?"
+                );
+
+
+            if (!doubleConfirmed)
+                return;
+
+
+            try {
+
+
+                const playerRef =
+                    doc(
+                        db,
+                        "players",
+                        currentUser.uid
+                    );
+
+
+                await deleteDoc(
+                    playerRef
+                );
+
+
+                money = 50;
+
+                collection = [];
+
+                favorites = [];
+
+
+                updateCoins();
+
+
+                document.getElementById(
+                    "settingsMenu"
+                ).style.display =
+                    "none";
+
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    "Account reset successfully.";
+
+
+                showHome();
+
+
+                document.getElementById(
+                    "packResults"
+                ).innerHTML =
+                    "";
+
+
+            } catch (error) {
+
+                console.error(
+                    "RESET ERROR:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "message"
+                ).textContent =
+                    "Could not reset account.";
+
+            }
+
+        }
+
+
+        /*
+        ============================
+        FIREBASE AUTH STATE
+        ============================
+        */
+
+
         onAuthStateChanged(
+
             auth,
+
             async (user) => {
+
 
                 if (user) {
 
-                    currentUser = user;
+
+                    currentUser =
+                        user;
 
 
                     document.getElementById(
                         "loginScreen"
-                    ).style.display = "none";
+                    ).style.display =
+                        "none";
 
 
                     document.getElementById(
                         "gameScreen"
-                    ).style.display = "block";
+                    ).style.display =
+                        "block";
 
 
                     document.getElementById(
@@ -1090,7 +2197,9 @@ function displaySellableCard(card, container) {
 
                     try {
 
-                        await loadPlayerData(user);
+                        await loadPlayerData(
+                            user
+                        );
 
                     } catch (error) {
 
@@ -1098,6 +2207,7 @@ function displaySellableCard(card, container) {
                             "LOAD ERROR:",
                             error
                         );
+
 
                         document.getElementById(
                             "message"
@@ -1109,47 +2219,90 @@ function displaySellableCard(card, container) {
 
                     showHome();
 
+
                 } else {
 
-                    currentUser = null;
+
+                    currentUser =
+                        null;
 
 
                     document.getElementById(
                         "loginScreen"
-                    ).style.display = "block";
+                    ).style.display =
+                        "block";
 
 
                     document.getElementById(
                         "gameScreen"
-                    ).style.display = "none";
+                    ).style.display =
+                        "none";
 
                 }
 
             }
+
         );
 
 
         /*
-        INLINE BUTTON FUNCTIONS
+        ============================
+        INLINE FUNCTIONS
+        ============================
         */
 
-        window.login = login;
 
-        window.logout = logout;
+        window.login =
+            login;
 
-        window.openPack = openPack;
 
-        window.showHome = showHome;
+        window.logout =
+            logout;
 
-        window.showCollection = showCollection;
 
-        window.showDex = showDex;
+        window.openPack =
+            openPack;
 
-        window.showDexDolls = showDexDolls;
 
-        window.showDexRares = showDexRares;
+        window.showHome =
+            showHome;
 
-        window.searchCollection = searchCollection;
+
+        window.showCollection =
+            showCollection;
+
+
+        window.showDex =
+            showDex;
+
+
+        window.showDexDolls =
+            showDexDolls;
+
+
+        window.showDexRares =
+            showDexRares;
+
+
+        window.showDexFavorites =
+            showDexFavorites;
+
+
+        window.searchCollection =
+            searchCollection;
+
+
+        window.toggleSettings =
+            toggleSettings;
+
+
+        window.resetAccount =
+            resetAccount;
+
+
+        window.toggleFavorite =
+            toggleFavorite;
+
 
     </script>
 
