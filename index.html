@@ -30,6 +30,9 @@
             opacity: 0.85;
         }
 
+
+        /* LOGIN */
+
         #loginScreen {
             padding-top: 80px;
         }
@@ -37,6 +40,9 @@
         #gameScreen {
             display: none;
         }
+
+
+        /* TOP BAR */
 
         #topBar {
             background: white;
@@ -49,57 +55,24 @@
             font-weight: bold;
         }
 
-        .cardGrid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            padding: 20px;
-            max-width: 1000px;
-            margin: auto;
-        }
-
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 12px;
-            box-shadow: 0 2px 7px #aaa;
-            position: relative;
-            box-sizing: border-box;
-        }
-
-        .card img {
-            width: 100%;
-            max-height: 180px;
-            object-fit: contain;
-            border-radius: 10px;
-        }
-
-        .cardName {
-            font-weight: bold;
-            font-size: 18px;
-            margin-top: 8px;
-        }
-
-        .sellButton {
-            background: #b3261e;
-            width: 100%;
-            margin-top: 8px;
-        }
-
-        .sellPrice {
+        #userInfo {
+            margin: 10px;
             font-size: 14px;
-            margin-top: 5px;
         }
 
-        #search {
-            width: 80%;
-            max-width: 500px;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #aaa;
-            font-size: 16px;
-            margin: 15px;
+
+        /* SPECIAL TOP BUTTONS */
+
+        .settingsTopButton {
+            background: #102a56;
         }
+
+        .logoutTopButton {
+            background: #c62828;
+        }
+
+
+        /* PAGES */
 
         .page {
             display: none;
@@ -109,44 +82,68 @@
             display: block;
         }
 
-        .dexButtons {
-            margin-top: 15px;
+
+        /* CARDS */
+
+        .cardGrid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fill, minmax(150px, 1fr));
+
+            gap: 15px;
+
+            padding: 20px;
+
+            max-width: 1000px;
+
+            margin: auto;
         }
 
-        .dexCard {
+        .card {
             background: white;
+
             border-radius: 15px;
-            padding: 15px;
+
+            padding: 12px;
+
             box-shadow: 0 2px 7px #aaa;
+
             position: relative;
+
+            box-sizing: border-box;
         }
 
-        .comingSoon {
-            color: #888;
+        .card img {
+            width: 100%;
+
+            max-height: 180px;
+
+            object-fit: contain;
+
+            border-radius: 10px;
+        }
+
+        .cardName {
             font-weight: bold;
-            padding: 30px 5px;
+
+            font-size: 18px;
+
+            margin-top: 8px;
         }
 
-        #message {
-            min-height: 25px;
-            font-weight: bold;
-            padding: 10px;
-        }
 
-        #userInfo {
-            margin: 10px;
-            font-size: 14px;
-        }
-
-        /* CARD COUNT */
+        /* COUNT */
 
         .countBadge {
             position: absolute;
+
             top: 8px;
             right: 8px;
+
             z-index: 100;
 
             background: black;
+
             color: white;
 
             width: 30px;
@@ -155,12 +152,15 @@
             border-radius: 50%;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
             font-weight: bold;
+
             font-size: 16px;
         }
+
 
         /* FAVORITE STAR */
 
@@ -181,6 +181,7 @@
             border-radius: 50%;
 
             background: white;
+
             color: #999;
 
             border: 2px solid #ccc;
@@ -188,16 +189,19 @@
             font-size: 21px;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
         }
 
         .favoriteButton.isFavorite {
             color: #ffd21f;
+
             border-color: #ffd21f;
         }
 
-        /* NORMAL FAVORITE */
+
+        /* FAVORITE NORMAL CARD */
 
         .favoriteCard {
             border: 4px solid #36b9ff;
@@ -206,6 +210,7 @@
                 0 0 0 2px #8ee0ff,
                 0 0 12px #36b9ff;
         }
+
 
         /* RARE FAVORITE */
 
@@ -220,9 +225,11 @@
 
         .rareFavoriteCard::before {
             content: "✦ ✧ ✦";
+
             position: absolute;
 
             top: -13px;
+
             left: 50%;
 
             transform: translateX(-50%);
@@ -236,41 +243,143 @@
             z-index: 102;
         }
 
-        /* SETTINGS */
 
-        #settingsMenu {
+        /* SELL */
+
+        .sellButton {
+            background: #b3261e;
+
+            width: 100%;
+
+            margin-top: 8px;
+        }
+
+        .sellPrice {
+            font-size: 14px;
+
+            margin-top: 5px;
+        }
+
+
+        /* SEARCH */
+
+        #search {
+            width: 80%;
+
+            max-width: 500px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            border: 1px solid #aaa;
+
+            font-size: 16px;
+
+            margin: 15px;
+        }
+
+
+        /* DEX */
+
+        .dexButtons {
+            margin-top: 15px;
+        }
+
+        .dexCard {
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 15px;
+
+            box-shadow: 0 2px 7px #aaa;
+
+            position: relative;
+        }
+
+        .comingSoon {
+            color: #888;
+
+            font-weight: bold;
+
+            padding: 30px 5px;
+        }
+
+
+        /* MESSAGE */
+
+        #message {
+            min-height: 25px;
+
+            font-weight: bold;
+
+            padding: 10px;
+        }
+
+
+        /* SETTINGS FULL SCREEN */
+
+        #settingsScreen {
             display: none;
 
             position: fixed;
 
-            top: 70px;
-            right: 15px;
+            top: 0;
+            left: 0;
 
+            width: 100vw;
+            height: 100vh;
+
+            background: #102a56;
+
+            color: white;
+
+            z-index: 9999;
+
+            overflow-y: auto;
+        }
+
+        #settingsContent {
+            max-width: 700px;
+
+            margin: auto;
+
+            padding: 30px 20px;
+        }
+
+        #settingsScreen h1 {
+            font-size: 32px;
+
+            margin-top: 20px;
+        }
+
+        .settingsSection {
             background: white;
 
-            width: 260px;
-
-            padding: 20px;
+            color: #222;
 
             border-radius: 15px;
 
-            box-shadow: 0 4px 20px #888;
+            padding: 20px;
 
-            z-index: 1000;
-        }
-
-        #settingsMenu h2 {
-            margin-top: 0;
+            margin-top: 20px;
         }
 
         .resetButton {
-            background: #b3261e;
+            background: #c62828;
+
             width: 90%;
+
+            max-width: 400px;
         }
 
         .closeSettings {
-            background: #555;
+            background: #333;
+
             width: 90%;
+
+            max-width: 400px;
         }
 
     </style>
@@ -279,7 +388,7 @@
 <body>
 
 
-    <!-- LOGIN -->
+    <!-- LOGIN SCREEN -->
 
     <div id="loginScreen">
 
@@ -298,7 +407,7 @@
     </div>
 
 
-    <!-- GAME -->
+    <!-- GAME SCREEN -->
 
     <div id="gameScreen">
 
@@ -320,47 +429,30 @@
                 Home
             </button>
 
+
             <button onclick="showCollection()">
                 Collection
             </button>
+
 
             <button onclick="showDex()">
                 DEX
             </button>
 
-            <button onclick="toggleSettings()">
+
+            <button
+                class="settingsTopButton"
+                onclick="openSettings()"
+            >
                 Settings
             </button>
 
-            <button onclick="logout()">
+
+            <button
+                class="logoutTopButton"
+                onclick="logout()"
+            >
                 Log Out
-            </button>
-
-        </div>
-
-
-        <!-- SETTINGS MENU -->
-
-        <div id="settingsMenu">
-
-            <h2>Settings</h2>
-
-            <p>
-                Account Settings
-            </p>
-
-            <button
-                class="resetButton"
-                onclick="resetAccount()"
-            >
-                Reset Account
-            </button>
-
-            <button
-                class="closeSettings"
-                onclick="toggleSettings()"
-            >
-                Close
             </button>
 
         </div>
@@ -401,12 +493,27 @@
 
             <h2>Collection</h2>
 
+
+            <button onclick="showCollectionAll()">
+                ALL
+            </button>
+
+
+            <button onclick="showCollectionFavorites()">
+                FAVORITES
+            </button>
+
+
+            <br>
+
+
             <input
                 id="search"
                 type="text"
                 placeholder="Search cards..."
                 oninput="searchCollection()"
             >
+
 
             <div
                 id="collectionGrid"
@@ -422,21 +529,20 @@
 
             <h2>DEX</h2>
 
+
             <div class="dexButtons">
 
                 <button onclick="showDexDolls()">
                     DOLLS
                 </button>
 
+
                 <button onclick="showDexRares()">
                     RARES
                 </button>
 
-                <button onclick="showDexFavorites()">
-                    FAVORITES
-                </button>
-
             </div>
+
 
             <div
                 id="dexGrid"
@@ -445,6 +551,53 @@
 
         </div>
 
+
+    </div>
+
+
+    <!-- FULL SCREEN SETTINGS -->
+
+    <div id="settingsScreen">
+
+        <div id="settingsContent">
+
+            <h1>Settings</h1>
+
+            <p>
+                Account Settings
+            </p>
+
+
+            <div class="settingsSection">
+
+                <h2>Reset Account</h2>
+
+                <p>
+                    This permanently deletes your
+                    coins, collection, and favorites.
+                </p>
+
+                <button
+                    class="resetButton"
+                    onclick="resetAccount()"
+                >
+                    Reset Account
+                </button>
+
+            </div>
+
+
+            <br>
+
+
+            <button
+                class="closeSettings"
+                onclick="closeSettings()"
+            >
+                Back to Game
+            </button>
+
+        </div>
 
     </div>
 
@@ -481,6 +634,8 @@
         "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
+        /* FIREBASE */
+
         const firebaseConfig = {
 
             apiKey:
@@ -506,6 +661,7 @@
 
             measurementId:
                 "G-PT9S1K4E2K"
+
         };
 
 
@@ -525,6 +681,8 @@
             new GoogleAuthProvider();
 
 
+        /* PLAYER DATA */
+
         let money = 50;
 
         let collection = [];
@@ -534,12 +692,7 @@
         let currentUser = null;
 
 
-        /*
-        ============================
-        CARDS
-        ============================
-        */
-
+        /* CARDS */
 
         const cards = [
 
@@ -654,12 +807,7 @@
         ];
 
 
-        /*
-        ============================
-        DEX
-        ============================
-        */
-
+        /* DEX DOLLS */
 
         const dexDolls =
             [...cards];
@@ -686,12 +834,7 @@
         }
 
 
-        /*
-        These are future rare slots.
-        When you add real rare cards,
-        give them rarity: "rare".
-        */
-
+        /* DEX RARES */
 
         const dexRares = [
 
@@ -746,12 +889,7 @@
         ];
 
 
-        /*
-        ============================
-        LOGIN
-        ============================
-        */
-
+        /* LOGIN */
 
         async function login() {
 
@@ -777,12 +915,7 @@
         }
 
 
-        /*
-        ============================
-        LOGOUT
-        ============================
-        */
-
+        /* LOGOUT */
 
         async function logout() {
 
@@ -799,12 +932,7 @@
         }
 
 
-        /*
-        ============================
-        LOAD PLAYER
-        ============================
-        */
-
+        /* LOAD DATA */
 
         async function loadPlayerData(user) {
 
@@ -905,7 +1033,6 @@
 
                 favorites = [];
 
-
                 await savePlayerData(user);
 
             }
@@ -916,12 +1043,7 @@
         }
 
 
-        /*
-        ============================
-        SAVE PLAYER
-        ============================
-        */
-
+        /* SAVE DATA */
 
         async function savePlayerData(user) {
 
@@ -964,12 +1086,7 @@
         }
 
 
-        /*
-        ============================
-        COINS
-        ============================
-        */
-
+        /* COINS */
 
         function updateCoins() {
 
@@ -981,12 +1098,7 @@
         }
 
 
-        /*
-        ============================
-        RANDOM CARD
-        ============================
-        */
-
+        /* RANDOM CARD */
 
         function getRandomCard() {
 
@@ -1034,12 +1146,7 @@
         }
 
 
-        /*
-        ============================
-        FAVORITE CHECK
-        ============================
-        */
-
+        /* FAVORITE CHECK */
 
         function isFavorite(card) {
 
@@ -1050,12 +1157,7 @@
         }
 
 
-        /*
-        ============================
-        TOGGLE FAVORITE
-        ============================
-        */
-
+        /* TOGGLE FAVORITE */
 
         async function toggleFavorite(card) {
 
@@ -1074,11 +1176,12 @@
                     card.name
                 );
 
+
                 document.getElementById(
                     "message"
                 ).textContent =
                     card.name +
-                    " added to favorites!";
+                    " is now a favorite!";
 
             } else {
 
@@ -1087,11 +1190,12 @@
                     1
                 );
 
+
                 document.getElementById(
                     "message"
                 ).textContent =
                     card.name +
-                    " removed from favorites.";
+                    " is no longer a favorite.";
 
             }
 
@@ -1118,19 +1222,22 @@
                 ).value;
 
 
+            const favoritesOnly =
+                document.getElementById(
+                    "collectionGrid"
+                ).dataset.favorites ===
+                "true";
+
+
             renderCollection(
-                search
+                search,
+                favoritesOnly
             );
 
         }
 
 
-        /*
-        ============================
-        DISPLAY NORMAL CARD
-        ============================
-        */
-
+        /* NORMAL PACK CARD */
 
         function displayCard(
             card,
@@ -1175,29 +1282,16 @@
                 card.name;
 
 
-            div.appendChild(
-                img
-            );
+            div.appendChild(img);
 
+            div.appendChild(name);
 
-            div.appendChild(
-                name
-            );
-
-
-            container.appendChild(
-                div
-            );
+            container.appendChild(div);
 
         }
 
 
-        /*
-        ============================
-        DISPLAY SELLABLE CARD
-        ============================
-        */
-
+        /* COLLECTION CARD */
 
         function displaySellableCard(
             card,
@@ -1219,10 +1313,7 @@
                 "relative";
 
 
-            /*
-            FAVORITE BORDER
-            */
-
+            /* FAVORITE EDGE */
 
             if (
                 isFavorite(card)
@@ -1248,10 +1339,7 @@
             }
 
 
-            /*
-            COUNT
-            */
-
+            /* COUNT */
 
             const count =
                 collection.filter(
@@ -1275,10 +1363,7 @@
                 count;
 
 
-            /*
-            STAR
-            */
-
+            /* STAR */
 
             const favoriteButton =
                 document.createElement(
@@ -1321,10 +1406,7 @@
                 };
 
 
-            /*
-            IMAGE
-            */
-
+            /* IMAGE */
 
             const img =
                 document.createElement(
@@ -1340,10 +1422,7 @@
                 card.name;
 
 
-            /*
-            NAME
-            */
-
+            /* NAME */
 
             const name =
                 document.createElement(
@@ -1359,10 +1438,7 @@
                 card.name;
 
 
-            /*
-            PRICE
-            */
-
+            /* PRICE */
 
             const price =
                 document.createElement(
@@ -1380,10 +1456,7 @@
                 " coins";
 
 
-            /*
-            SELL BUTTON
-            */
-
+            /* SELL */
 
             const sellButton =
                 document.createElement(
@@ -1397,11 +1470,6 @@
 
             sellButton.textContent =
                 "SELL";
-
-
-            /*
-            FAVORITES CANNOT BE SOLD
-            */
 
 
             if (
@@ -1418,6 +1486,7 @@
 
                 sellButton.style.background =
                     "#777";
+
 
                 sellButton.style.cursor =
                     "not-allowed";
@@ -1471,16 +1540,12 @@
         }
 
 
-        /*
-        ============================
-        OPEN PACK
-        ============================
-        */
-
+        /* OPEN PACK */
 
         async function openPack() {
 
-            if (!currentUser) return;
+            if (!currentUser)
+                return;
 
 
             const packCost =
@@ -1571,22 +1636,12 @@
         }
 
 
-        /*
-        ============================
-        SELL CARD
-        ============================
-        */
-
+        /* SELL */
 
         async function sellCard(card) {
 
             if (!currentUser)
                 return;
-
-
-            /*
-            Favorite cards cannot be sold.
-            */
 
 
             if (
@@ -1660,22 +1715,26 @@
                 ).value;
 
 
+            const favoritesOnly =
+                document.getElementById(
+                    "collectionGrid"
+                ).dataset.favorites ===
+                "true";
+
+
             renderCollection(
-                search
+                search,
+                favoritesOnly
             );
 
         }
 
 
-        /*
-        ============================
-        COLLECTION
-        ============================
-        */
-
+        /* COLLECTION RENDER */
 
         function renderCollection(
-            searchText = ""
+            searchText = "",
+            favoritesOnly = false
         ) {
 
             const grid =
@@ -1688,13 +1747,14 @@
                 "";
 
 
+            grid.dataset.favorites =
+                favoritesOnly
+                    ? "true"
+                    : "false";
+
+
             const search =
                 searchText.toLowerCase();
-
-
-            /*
-            Official card order
-            */
 
 
             for (
@@ -1705,6 +1765,18 @@
                 if (
                     !collection.includes(
                         card
+                    )
+                ) {
+
+                    continue;
+
+                }
+
+
+                if (
+                    favoritesOnly &&
+                    !favorites.includes(
+                        card.name
                     )
                 ) {
 
@@ -1735,7 +1807,16 @@
         }
 
 
+        /* COLLECTION */
+
         function showCollection() {
+
+            showCollectionAll();
+
+        }
+
+
+        function showCollectionAll() {
 
             hideAllPages();
 
@@ -1752,10 +1833,52 @@
                 "";
 
 
-            renderCollection();
+            document.getElementById(
+                "collectionGrid"
+            ).dataset.favorites =
+                "false";
+
+
+            renderCollection(
+                "",
+                false
+            );
 
         }
 
+
+        function showCollectionFavorites() {
+
+            hideAllPages();
+
+
+            document.getElementById(
+                "collectionPage"
+            ).style.display =
+                "block";
+
+
+            document.getElementById(
+                "search"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "collectionGrid"
+            ).dataset.favorites =
+                "true";
+
+
+            renderCollection(
+                "",
+                true
+            );
+
+        }
+
+
+        /* SEARCH */
 
         function searchCollection() {
 
@@ -1765,23 +1888,24 @@
                 ).value;
 
 
+            const favoritesOnly =
+                document.getElementById(
+                    "collectionGrid"
+                ).dataset.favorites ===
+                "true";
+
+
             renderCollection(
-                search
+                search,
+                favoritesOnly
             );
 
         }
 
 
-        /*
-        ============================
-        DEX
-        ============================
-        */
+        /* DEX */
 
-
-        function renderDex(
-            list
-        ) {
+        function renderDex(list) {
 
             const grid =
                 document.getElementById(
@@ -1833,11 +1957,6 @@
 
 
                 } else {
-
-
-                    /*
-                    Favorite border in DEX
-                    */
 
 
                     if (
@@ -1959,39 +2078,7 @@
         }
 
 
-        /*
-        FAVORITES DEX TAB
-        */
-
-
-        function showDexFavorites() {
-
-            const favoriteCards =
-                cards.filter(
-                    card =>
-                    favorites.includes(
-                        card.name
-                    )
-                    &&
-                    collection.includes(
-                        card
-                    )
-                );
-
-
-            renderDex(
-                favoriteCards
-            );
-
-        }
-
-
-        /*
-        ============================
-        HOME
-        ============================
-        */
-
+        /* HOME */
 
         function showHome() {
 
@@ -2024,45 +2111,29 @@
         }
 
 
-        /*
-        ============================
-        SETTINGS
-        ============================
-        */
+        /* SETTINGS */
 
+        function openSettings() {
 
-        function toggleSettings() {
-
-            const menu =
-                document.getElementById(
-                    "settingsMenu"
-                );
-
-
-            if (
-                menu.style.display ===
-                "block"
-            ) {
-
-                menu.style.display =
-                    "none";
-
-            } else {
-
-                menu.style.display =
-                    "block";
-
-            }
+            document.getElementById(
+                "settingsScreen"
+            ).style.display =
+                "block";
 
         }
 
 
-        /*
-        ============================
-        RESET ACCOUNT
-        ============================
-        */
+        function closeSettings() {
 
+            document.getElementById(
+                "settingsScreen"
+            ).style.display =
+                "none";
+
+        }
+
+
+        /* RESET ACCOUNT */
 
         async function resetAccount() {
 
@@ -2117,9 +2188,9 @@
 
 
                 document.getElementById(
-                    "settingsMenu"
-                ).style.display =
-                    "none";
+                    "packResults"
+                ).innerHTML =
+                    "";
 
 
                 document.getElementById(
@@ -2128,13 +2199,10 @@
                     "Account reset successfully.";
 
 
+                closeSettings();
+
+
                 showHome();
-
-
-                document.getElementById(
-                    "packResults"
-                ).innerHTML =
-                    "";
 
 
             } catch (error) {
@@ -2155,12 +2223,7 @@
         }
 
 
-        /*
-        ============================
-        FIREBASE AUTH STATE
-        ============================
-        */
-
+        /* FIREBASE AUTH */
 
         onAuthStateChanged(
 
@@ -2238,6 +2301,9 @@
                     ).style.display =
                         "none";
 
+
+                    closeSettings();
+
                 }
 
             }
@@ -2245,64 +2311,52 @@
         );
 
 
-        /*
-        ============================
-        INLINE FUNCTIONS
-        ============================
-        */
-
+        /* WINDOW FUNCTIONS */
 
         window.login =
             login;
 
-
         window.logout =
             logout;
-
 
         window.openPack =
             openPack;
 
-
         window.showHome =
             showHome;
-
 
         window.showCollection =
             showCollection;
 
+        window.showCollectionAll =
+            showCollectionAll;
+
+        window.showCollectionFavorites =
+            showCollectionFavorites;
 
         window.showDex =
             showDex;
 
-
         window.showDexDolls =
             showDexDolls;
-
 
         window.showDexRares =
             showDexRares;
 
-
-        window.showDexFavorites =
-            showDexFavorites;
-
-
         window.searchCollection =
             searchCollection;
-
-
-        window.toggleSettings =
-            toggleSettings;
-
-
-        window.resetAccount =
-            resetAccount;
-
 
         window.toggleFavorite =
             toggleFavorite;
 
+        window.openSettings =
+            openSettings;
+
+        window.closeSettings =
+            closeSettings;
+
+        window.resetAccount =
+            resetAccount;
 
     </script>
 
