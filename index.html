@@ -509,6 +509,7 @@ h3 {
 }
 
 @media (max-width: 650px) {
+
     .tradeColumns {
         grid-template-columns: 1fr;
     }
@@ -520,13 +521,12 @@ h3 {
     .moneyBox {
         margin-left: 0;
     }
+
 }
 </style>
 </head>
 
 <body>
-
-<!-- LOGIN -->
 
 <div id="loginScreen">
 
@@ -548,8 +548,6 @@ h3 {
 
 </div>
 
-
-<!-- GAME -->
 
 <div id="gameScreen" class="hidden">
 
@@ -589,8 +587,6 @@ h3 {
 
     </div>
 
-
-    <!-- HOME -->
 
     <div id="homePage" class="page">
 
@@ -633,8 +629,6 @@ h3 {
     </div>
 
 
-    <!-- COLLECTION -->
-
     <div
         id="collectionPage"
         class="page hidden">
@@ -676,8 +670,6 @@ h3 {
     </div>
 
 
-    <!-- DEX -->
-
     <div
         id="dexPage"
         class="page hidden">
@@ -712,8 +704,6 @@ h3 {
 
     </div>
 
-
-    <!-- TRADE -->
 
     <div
         id="tradePage"
@@ -758,8 +748,6 @@ h3 {
 </div>
 
 
-<!-- SETTINGS -->
-
 <div
     id="settingsOverlay"
     class="settingsOverlay hidden">
@@ -793,8 +781,6 @@ h3 {
 
 </div>
 
-
-<!-- CARD VIEWER -->
 
 <div
     id="cardViewer"
@@ -850,8 +836,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-/* FIREBASE */
-
 const firebaseConfig = {
     apiKey: "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
     authDomain: "dbcc-login.firebaseapp.com",
@@ -873,7 +857,7 @@ const db = getFirestore(app);
 /* ECONOMY */
 
 const PACK_PRICE = 25;
-const STARTING_COINS = 125;
+const STARTING_COINS = 300;
 
 
 /* CARDS */
@@ -979,8 +963,6 @@ const cards = [
 ];
 
 
-/* STATE */
-
 let currentUser = null;
 
 let money = STARTING_COINS;
@@ -1007,8 +989,6 @@ let tradeListener = null;
 
 let applyingTradeIds = new Set();
 
-
-/* HELPERS */
 
 function createCardId() {
 
@@ -1085,8 +1065,6 @@ function showMessage(text) {
 }
 
 
-/* CARD VIEWER */
-
 window.openCardViewer = function(image, name) {
 
     const viewer =
@@ -1116,8 +1094,6 @@ window.closeCardViewer = function(event) {
 
 };
 
-
-/* GOOGLE LOGIN */
 
 window.loginGoogle = async function() {
 
@@ -1158,8 +1134,6 @@ window.logout = async function() {
 
 };
 
-
-/* USERNAME */
 
 async function askForUsername() {
 
@@ -1225,6 +1199,7 @@ async function askForUsername() {
             );
 
             continue;
+
         }
 
         await setDoc(
@@ -1268,8 +1243,6 @@ async function ensureUsernameDocument() {
 
 }
 
-
-/* PLAYER DATA */
 
 function normalizeCollection(data) {
 
@@ -1409,8 +1382,6 @@ async function savePlayerData() {
 }
 
 
-/* AUTH STATE */
-
 onAuthStateChanged(
     auth,
     async user => {
@@ -1477,8 +1448,6 @@ onAuthStateChanged(
 );
 
 
-/* UI */
-
 function updateUI() {
 
     document
@@ -1535,8 +1504,6 @@ window.showPage = function(page) {
 
 };
 
-
-/* PACK */
 
 function weightedRandomCard() {
 
@@ -1753,8 +1720,6 @@ function showPackResults(pulledCards) {
 
 }
 
-
-/* COLLECTION */
 
 window.setCollectionTab = function(tab) {
 
@@ -2081,8 +2046,6 @@ window.sellCard = async function(name) {
 };
 
 
-/* DEX */
-
 window.setDexTab = function(tab) {
 
     dexTab = tab;
@@ -2223,8 +2186,6 @@ function renderDex() {
 
 }
 
-
-/* PLAYER SEARCH */
 
 window.findPlayer = async function() {
 
@@ -2375,8 +2336,6 @@ window.findPlayer = async function() {
 };
 
 
-/* SEND TRADE */
-
 window.sendTradeRequest =
 async function(receiverUid) {
 
@@ -2498,8 +2457,6 @@ async function(receiverUid) {
 
 };
 
-
-/* TRADE LISTENER */
 
 function stopTradeListener() {
 
@@ -2624,8 +2581,6 @@ function startTradeListener() {
 
 }
 
-
-/* INCOMING TRADES */
 
 function renderIncomingTrades() {
 
@@ -2887,8 +2842,6 @@ function sameIds(a, b) {
 }
 
 
-/* TRADE CARDS */
-
 function renderOfferCards(
     offer,
     selectable = false
@@ -3067,8 +3020,6 @@ function renderSelectableTradeCards() {
 
 }
 
-
-/* ACTIVE TRADE */
 
 function renderActiveTrade() {
 
@@ -3361,8 +3312,6 @@ function renderActiveTrade() {
 }
 
 
-/* TRADE SELECTION */
-
 window.toggleTradeCard =
 function(cardId) {
 
@@ -3412,8 +3361,6 @@ function(cardId) {
 
 };
 
-
-/* UPDATE OFFER */
 
 window.submitTradeOffer =
 async function() {
@@ -3513,8 +3460,6 @@ async function() {
 
 };
 
-
-/* CONFIRM TRADE */
 
 window.confirmTrade =
 async function() {
@@ -3682,8 +3627,6 @@ async function() {
 };
 
 
-/* FINALIZE TRADE */
-
 async function tryFinalizeTrade(trade) {
 
     if (
@@ -3781,8 +3724,6 @@ async function tryFinalizeTrade(trade) {
 
 }
 
-
-/* APPLY TRADE */
 
 async function applyCompletedTrade(trade) {
 
@@ -4068,8 +4009,6 @@ async function applyCompletedTrade(trade) {
 }
 
 
-/* CANCEL TRADE */
-
 window.cancelTrade =
 async function(tradeId) {
 
@@ -4124,8 +4063,6 @@ async function(tradeId) {
 };
 
 
-/* SETTINGS */
-
 window.openSettings = function() {
 
     document
@@ -4147,8 +4084,6 @@ window.closeSettings = function() {
 
 };
 
-
-/* RESET ACCOUNT */
 
 window.resetAccount =
 async function() {
@@ -4182,7 +4117,7 @@ async function() {
 
 
     showMessage(
-        "Account reset. You now have 125 coins."
+        "Account reset. You now have 300 coins."
     );
 
 };
