@@ -62,6 +62,17 @@
             font-weight: bold;
         }
 
+        .sellButton {
+            font-size: 16px;
+            padding: 10px 15px;
+            margin-top: 5px;
+        }
+
+        .sellPrice {
+            font-size: 16px;
+            margin: 8px;
+        }
+
         #collection,
         #dex {
             display: none;
@@ -125,10 +136,6 @@
 
 <body>
 
-    <!-- ========================= -->
-    <!-- LOGIN SCREEN -->
-    <!-- ========================= -->
-
     <div id="loginScreen">
 
         <h1>Doll Ball Collector Cards</h1>
@@ -144,26 +151,22 @@
     </div>
 
 
-    <!-- ========================= -->
-    <!-- GAME SCREEN -->
-    <!-- ========================= -->
-
     <div id="gameScreen">
 
         <h1>Doll Ball Collector Cards</h1>
 
         <div id="userInfo">
+
             <span id="userName"></span>
+
             <br>
+
             <button id="logoutButton">
                 LOG OUT
             </button>
+
         </div>
 
-
-        <!-- ========================= -->
-        <!-- PACK SCREEN -->
-        <!-- ========================= -->
 
         <div id="packScreen">
 
@@ -190,10 +193,6 @@
         </div>
 
 
-        <!-- ========================= -->
-        <!-- COLLECTION -->
-        <!-- ========================= -->
-
         <div id="collection">
 
             <h2>My DBCC Collection</h2>
@@ -215,10 +214,6 @@
 
         </div>
 
-
-        <!-- ========================= -->
-        <!-- DEX -->
-        <!-- ========================= -->
 
         <div id="dex">
 
@@ -245,14 +240,10 @@
     </div>
 
 
-    <!-- ========================= -->
-    <!-- FIREBASE -->
-    <!-- ========================= -->
-
     <script type="module">
 
         import { initializeApp }
-            from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+        from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
         import {
             getAuth,
@@ -277,19 +268,19 @@
         // =====================================
 
         const firebaseConfig = {
-  apiKey: "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
-  authDomain: "dbcc-login.firebaseapp.com",
-  databaseURL: "https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "dbcc-login",
-  storageBucket: "dbcc-login.firebasestorage.app",
-  messagingSenderId: "878902780767",
-  appId: "1:878902780767:web:4020d11730e5d9c0ee0cea",
-  measurementId: "G-PT9S1K4E2K"
-};
+            apiKey: "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
+            authDomain: "dbcc-login.firebaseapp.com",
+            databaseURL: "https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "dbcc-login",
+            storageBucket: "dbcc-login.firebasestorage.app",
+            messagingSenderId: "878902780767",
+            appId: "1:878902780767:web:4020d11730e5d9c0ee0cea",
+            measurementId: "G-PT9S1K4E2K"
+        };
 
 
         // =====================================
-        // START FIREBASE
+        // FIREBASE
         // =====================================
 
         const app = initializeApp(firebaseConfig);
@@ -313,7 +304,7 @@
 
 
         // =====================================
-        // DBCC CARDS
+        // CARDS
         // =====================================
 
         const cards = [
@@ -321,73 +312,85 @@
             {
                 name: "Baby Pickels",
                 image: "baby pikels.png",
-                chance: 14
+                chance: 14,
+                sellPrice: 20
             },
 
             {
                 name: "Mr Pickels",
                 image: "mr. pickels.png",
-                chance: 9
+                chance: 9,
+                sellPrice: 30
             },
 
             {
                 name: "Wily",
                 image: "wily.png",
-                chance: 14
+                chance: 14,
+                sellPrice: 20
             },
 
             {
                 name: "Will",
                 image: "will.png",
-                chance: 9
+                chance: 9,
+                sellPrice: 30
             },
 
             {
                 name: "Waffle",
                 image: "waffle.png",
-                chance: 14
+                chance: 14,
+                sellPrice: 20
             },
 
             {
                 name: "Cute Cake",
                 image: "cute cake.png",
-                chance: 9
+                chance: 9,
+                sellPrice: 30
             },
 
             {
                 name: "Buttyr",
                 image: "buttyr.png",
-                chance: 20
+                chance: 20,
+                sellPrice: 15
             },
 
             {
                 name: "Blossem",
                 image: "blossem.png",
-                chance: 20
+                chance: 20,
+                sellPrice: 15
             },
 
             {
                 name: "Buzzy",
                 image: "buzzy.png",
-                chance: 5
+                chance: 5,
+                sellPrice: 50
             },
 
             {
                 name: "Nico",
                 image: "nico.png",
-                chance: 20
+                chance: 20,
+                sellPrice: 15
             },
 
             {
                 name: "Choper",
                 image: "choper.png",
-                chance: 10
+                chance: 10,
+                sellPrice: 25
             },
 
             {
                 name: "Bullet",
                 image: "bullet.png",
-                chance: 10
+                chance: 10,
+                sellPrice: 25
             }
 
         ];
@@ -399,17 +402,12 @@
 
         const dexDolls = [...cards];
 
-
         for (let i = 13; i <= 123; i++) {
 
             dexDolls.push({
-
                 name: "Coming Soon",
-
                 image: "",
-
                 chance: 0
-
             });
 
         }
@@ -421,35 +419,12 @@
 
         const dexRares = [
 
-            {
-                name: "Coming Soon",
-                image: ""
-            },
-
-            {
-                name: "Coming Soon",
-                image: ""
-            },
-
-            {
-                name: "Coming Soon",
-                image: ""
-            },
-
-            {
-                name: "Coming Soon",
-                image: ""
-            },
-
-            {
-                name: "Coming Soon",
-                image: ""
-            },
-
-            {
-                name: "Coming Soon",
-                image: ""
-            }
+            { name: "Coming Soon", image: "" },
+            { name: "Coming Soon", image: "" },
+            { name: "Coming Soon", image: "" },
+            { name: "Coming Soon", image: "" },
+            { name: "Coming Soon", image: "" },
+            { name: "Coming Soon", image: "" }
 
         ];
 
@@ -463,23 +438,17 @@
             let total = 0;
 
             for (let card of cards) {
-
                 total += card.chance;
-
             }
 
-
             let random = Math.random() * total;
-
 
             for (let card of cards) {
 
                 random -= card.chance;
 
                 if (random <= 0) {
-
                     return card;
-
                 }
 
             }
@@ -501,7 +470,6 @@
                         .getElementById("loginMessage")
                         .textContent = "Logging in...";
 
-
                     await signInWithPopup(
                         auth,
                         provider
@@ -516,7 +484,8 @@
                     document
                         .getElementById("loginMessage")
                         .textContent =
-                        "Login failed: " + error.message;
+                        "Login failed: " +
+                        error.message;
 
                 }
 
@@ -548,23 +517,19 @@
 
                     currentUser = user;
 
-
                     document
                         .getElementById("loginScreen")
                         .style.display = "none";
 
-
                     document
                         .getElementById("gameScreen")
                         .style.display = "block";
-
 
                     document
                         .getElementById("userName")
                         .textContent =
                         "Logged in as: " +
                         (user.displayName || user.email);
-
 
                     await loadPlayerData(user);
 
@@ -574,11 +539,9 @@
 
                     currentUser = null;
 
-
                     document
                         .getElementById("loginScreen")
                         .style.display = "block";
-
 
                     document
                         .getElementById("gameScreen")
@@ -605,27 +568,21 @@
                         user.uid
                     );
 
-
                 const playerSnap =
                     await getDoc(playerRef);
-
 
                 if (playerSnap.exists()) {
 
                     const data =
                         playerSnap.data();
 
-
                     money =
                         Number(data.money ?? 50);
 
-
                     collection = [];
-
 
                     const savedCollection =
                         data.collection ?? [];
-
 
                     for (
                         let cardName
@@ -638,11 +595,8 @@
                                 c.name === cardName
                             );
 
-
                         if (card) {
-
                             collection.push(card);
-
                         }
 
                     }
@@ -655,11 +609,9 @@
 
                     collection = [];
 
-
                     await savePlayerData(user);
 
                 }
-
 
                 updateCoins();
 
@@ -692,7 +644,6 @@
 
             if (!user) return;
 
-
             const playerRef =
                 doc(
                     db,
@@ -700,18 +651,15 @@
                     user.uid
                 );
 
-
             await setDoc(
                 playerRef,
                 {
-
                     money: money,
 
                     collection:
                         collection.map(
                             card => card.name
                         )
-
                 }
             );
 
@@ -738,11 +686,8 @@
         window.openPack = async function () {
 
             if (!currentUser) {
-
                 return;
-
             }
-
 
             if (money < 10) {
 
@@ -755,40 +700,31 @@
 
             }
 
-
             money -= 10;
 
-
             updateCoins();
-
 
             document
                 .getElementById("cards")
                 .innerHTML = "";
 
-
             let pack = [];
-
 
             for (let i = 0; i < 3; i++) {
 
                 const card =
                     getRandomCard();
 
-
                 pack.push(card);
-
 
                 collection.push(card);
 
             }
 
-
             document
                 .getElementById("message")
                 .textContent =
                 "You got 3 cards!";
-
 
             for (let card of pack) {
 
@@ -799,8 +735,6 @@
 
             }
 
-
-            // SAVE AFTER PACK OPEN
             try {
 
                 await savePlayerData(
@@ -838,39 +772,25 @@
             const cardDiv =
                 document.createElement("div");
 
-
-            cardDiv.className =
-                "card";
-
+            cardDiv.className = "card";
 
             const image =
                 document.createElement("img");
 
+            image.src = card.image;
 
-            image.src =
-                card.image;
-
-
-            image.alt =
-                card.name;
-
+            image.alt = card.name;
 
             const name =
                 document.createElement("p");
 
-
-            name.textContent =
-                card.name;
-
+            name.textContent = card.name;
 
             cardDiv.appendChild(image);
 
             cardDiv.appendChild(name);
 
-
-            container.appendChild(
-                cardDiv
-            );
+            container.appendChild(cardDiv);
 
         }
 
@@ -886,21 +806,17 @@
                     .getElementById("packScreen")
                     .style.display = "none";
 
-
                 document
                     .getElementById("dex")
                     .style.display = "none";
-
 
                 document
                     .getElementById("collection")
                     .style.display = "block";
 
-
                 document
                     .getElementById("search")
                     .value = "";
-
 
                 renderCollection("");
 
@@ -909,48 +825,34 @@
 
         // =====================================
         // RENDER COLLECTION
-        // OFFICIAL CARD ORDER
         // =====================================
 
-        function renderCollection(
-            searchText
-        ) {
+        function renderCollection(searchText) {
 
             const container =
                 document.getElementById(
                     "collectionCards"
                 );
 
-
             container.innerHTML = "";
-
 
             const search =
                 searchText
                     .toLowerCase()
                     .trim();
 
-
             let found = false;
 
 
-            // Uses official card order
-            for (
-                let card of cards
-            ) {
+            // Official card order
+            for (let card of cards) {
 
                 const owned =
-                    collection.includes(
-                        card
-                    );
-
+                    collection.includes(card);
 
                 if (!owned) {
-
                     continue;
-
                 }
-
 
                 if (
                     search &&
@@ -958,16 +860,12 @@
                         .toLowerCase()
                         .includes(search)
                 ) {
-
                     continue;
-
                 }
-
 
                 found = true;
 
-
-                displayCard(
+                displaySellableCard(
                     card,
                     container
                 );
@@ -978,10 +876,7 @@
             if (!found) {
 
                 const message =
-                    document.createElement(
-                        "p"
-                    );
-
+                    document.createElement("p");
 
                 if (search) {
 
@@ -997,12 +892,155 @@
 
                 }
 
+                container.appendChild(message);
 
-                container.appendChild(
-                    message
+            }
+
+        }
+
+
+        // =====================================
+        // DISPLAY CARD WITH SELL BUTTON
+        // =====================================
+
+        function displaySellableCard(
+            card,
+            container
+        ) {
+
+            const cardDiv =
+                document.createElement("div");
+
+            cardDiv.className = "card";
+
+
+            const image =
+                document.createElement("img");
+
+            image.src = card.image;
+
+            image.alt = card.name;
+
+
+            const name =
+                document.createElement("p");
+
+            name.textContent = card.name;
+
+
+            const price =
+                document.createElement("div");
+
+            price.className = "sellPrice";
+
+            price.textContent =
+                "Sell for " +
+                card.sellPrice +
+                " coins";
+
+
+            const sellButton =
+                document.createElement("button");
+
+            sellButton.className =
+                "sellButton";
+
+            sellButton.textContent =
+                "SELL";
+
+
+            sellButton.onclick =
+                function () {
+
+                    sellCard(card);
+
+                };
+
+
+            cardDiv.appendChild(image);
+
+            cardDiv.appendChild(name);
+
+            cardDiv.appendChild(price);
+
+            cardDiv.appendChild(sellButton);
+
+            container.appendChild(cardDiv);
+
+        }
+
+
+        // =====================================
+        // SELL CARD
+        // =====================================
+
+        async function sellCard(card) {
+
+            if (!currentUser) {
+                return;
+            }
+
+
+            // Find ONE copy of the card
+            const cardIndex =
+                collection.indexOf(card);
+
+
+            if (cardIndex === -1) {
+                return;
+            }
+
+
+            // Remove one copy
+            collection.splice(
+                cardIndex,
+                1
+            );
+
+
+            // Give the player coins
+            money += card.sellPrice;
+
+
+            updateCoins();
+
+
+            document
+                .getElementById("message")
+                .textContent =
+                "Sold " +
+                card.name +
+                " for " +
+                card.sellPrice +
+                " coins!";
+
+
+            // Save coins and collection
+            try {
+
+                await savePlayerData(
+                    currentUser
                 );
 
             }
+
+            catch (error) {
+
+                console.error(
+                    "SELL SAVE ERROR:",
+                    error
+                );
+
+            }
+
+
+            // Refresh collection
+            const search =
+                document.getElementById(
+                    "search"
+                ).value;
+
+            renderCollection(search);
 
         }
 
@@ -1019,10 +1057,7 @@
                         "search"
                     ).value;
 
-
-                renderCollection(
-                    search
-                );
+                renderCollection(search);
 
             };
 
@@ -1038,16 +1073,13 @@
                     .getElementById("packScreen")
                     .style.display = "none";
 
-
                 document
                     .getElementById("collection")
                     .style.display = "none";
 
-
                 document
                     .getElementById("dex")
                     .style.display = "block";
-
 
                 showDollsDex();
 
@@ -1066,9 +1098,7 @@
                         "dexCards"
                     );
 
-
                 container.innerHTML = "";
-
 
                 for (
                     let i = 0;
@@ -1079,12 +1109,10 @@
                     const card =
                         dexDolls[i];
 
-
                     const div =
                         document.createElement(
                             "div"
                         );
-
 
                     div.className =
                         "dexCard";
@@ -1100,14 +1128,11 @@
                                 "div"
                             );
 
-
                         coming.className =
                             "comingSoon";
 
-
                         coming.textContent =
                             "Coming Soon";
-
 
                         div.appendChild(
                             coming
@@ -1122,10 +1147,8 @@
                                 "img"
                             );
 
-
                         image.src =
                             card.image;
-
 
                         image.alt =
                             card.name;
@@ -1136,7 +1159,6 @@
                                 "p"
                             );
 
-
                         name.textContent =
                             card.name;
 
@@ -1144,7 +1166,6 @@
                         div.appendChild(
                             image
                         );
-
 
                         div.appendChild(
                             name
@@ -1174,9 +1195,7 @@
                         "dexCards"
                     );
 
-
                 container.innerHTML = "";
-
 
                 for (
                     let card of dexRares
@@ -1187,7 +1206,6 @@
                             "div"
                         );
 
-
                     div.className =
                         "dexCard";
 
@@ -1197,10 +1215,8 @@
                             "div"
                         );
 
-
                     coming.className =
                         "comingSoon";
-
 
                     coming.textContent =
                         "Coming Soon";
@@ -1209,7 +1225,6 @@
                     div.appendChild(
                         coming
                     );
-
 
                     container.appendChild(
                         div
@@ -1242,16 +1257,13 @@
                 .getElementById("collection")
                 .style.display = "none";
 
-
             document
                 .getElementById("dex")
                 .style.display = "none";
 
-
             document
                 .getElementById("packScreen")
                 .style.display = "block";
-
 
             updateCoins();
 
