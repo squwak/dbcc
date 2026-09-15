@@ -1670,7 +1670,7 @@ async function() {
         );
 
         newCards.push(
-            card.name
+            card
         );
 
     }
@@ -1679,13 +1679,201 @@ async function() {
 
     updateUI();
 
-    alert(
-        "You got:\n\n" +
-        newCards.join("\n")
+    showPackResults(
+        newCards
     );
 
 };
 
+
+function showPackResults(
+    pulledCards
+) {
+
+    const overlay =
+        document.createElement(
+            "div"
+        );
+
+    overlay.style.position =
+        "fixed";
+
+    overlay.style.inset =
+        "0";
+
+    overlay.style.background =
+        "rgba(0,0,0,0.94)";
+
+    overlay.style.zIndex =
+        "4000";
+
+    overlay.style.display =
+        "flex";
+
+    overlay.style.flexDirection =
+        "column";
+
+    overlay.style.alignItems =
+        "center";
+
+    overlay.style.justifyContent =
+        "center";
+
+    overlay.style.padding =
+        "20px";
+
+    overlay.style.overflowY =
+        "auto";
+
+    const title =
+        document.createElement(
+            "h2"
+        );
+
+    title.textContent =
+        "You got:";
+
+    overlay.appendChild(
+        title
+    );
+
+    const grid =
+        document.createElement(
+            "div"
+        );
+
+    grid.style.display =
+        "grid";
+
+    grid.style.gridTemplateColumns =
+        "repeat(3, minmax(0, 1fr))";
+
+    grid.style.gap =
+        "15px";
+
+    grid.style.width =
+        "min(100%, 900px)";
+
+    pulledCards.forEach(
+        card => {
+
+            const cardBox =
+                document.createElement(
+                    "div"
+                );
+
+            cardBox.style.background =
+                "#10243d";
+
+            cardBox.style.borderRadius =
+                "15px";
+
+            cardBox.style.padding =
+                "10px";
+
+            cardBox.style.textAlign =
+                "center";
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+            image.src =
+                card.image;
+
+            image.alt =
+                card.name;
+
+            image.style.width =
+                "100%";
+
+            image.style.maxHeight =
+                "55vh";
+
+            image.style.objectFit =
+                "contain";
+
+            image.style.borderRadius =
+                "10px";
+
+            image.style.cursor =
+                "pointer";
+
+            image.onclick =
+                function(event) {
+
+                    event.stopPropagation();
+
+                    openCardViewer(
+                        card.image,
+                        card.name
+                    );
+
+                };
+
+            cardBox.appendChild(
+                image
+            );
+
+            grid.appendChild(
+                cardBox
+            );
+
+        }
+    );
+
+    overlay.appendChild(
+        grid
+    );
+
+    const closeButton =
+        document.createElement(
+            "button"
+        );
+
+    closeButton.textContent =
+        "CONTINUE";
+
+    closeButton.style.marginTop =
+        "20px";
+
+    closeButton.style.background =
+        "#2674d9";
+
+    closeButton.style.color =
+        "white";
+
+    closeButton.onclick =
+        function() {
+
+            overlay.remove();
+
+        };
+
+    overlay.appendChild(
+        closeButton
+    );
+
+    overlay.onclick =
+        function(event) {
+
+            if (
+                event.target ===
+                overlay
+            ) {
+
+                overlay.remove();
+
+            }
+
+        };
+
+    document.body.appendChild(
+        overlay
+    );
+
+}
 
 /* COLLECTION */
 
