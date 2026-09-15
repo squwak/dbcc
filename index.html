@@ -2531,8 +2531,36 @@ function startTradeListener() {
                         );
 
                     /*
-                       Automatically process completed
-                       trades when they appear.
+                     Automatically try to finish
+                     trades where both players
+                     have confirmed.
+                    */
+
+                    for (
+                        const trade
+                        of tradeRequests
+                    ) {
+
+                        if (
+                            trade.status ===
+                            "pending" &&
+                            trade.senderConfirmed ===
+                            true &&
+                            trade.receiverConfirmed ===
+                            true
+                        ) {
+
+                            tryFinalizeTrade(
+                                trade
+                            );
+
+                        }
+
+                    }
+
+                    /*
+                     Apply trades that have
+                     already been completed.
                     */
 
                     for (
@@ -2554,8 +2582,7 @@ function startTradeListener() {
                     }
 
                     /*
-                       Keep the currently opened
-                       trade live.
+                     Keep active trade updated.
                     */
 
                     if (activeTrade) {
@@ -2571,6 +2598,30 @@ function startTradeListener() {
 
                             activeTrade =
                                 fresh;
+
+                            /*
+                             Keep local selection
+                             synchronized with the
+                             saved offer.
+                            */
+
+                            const savedOffer =
+                                getMyOffer(
+                                    fresh
+                                );
+
+                            if (
+                                savedOffer.length > 0 &&
+                                selectedTradeCards.length === 0
+                            ) {
+
+                                selectedTradeCards =
+                                    savedOffer.map(
+                                        card =>
+                                            card.id
+                                    );
+
+                            }
 
                         }
 
@@ -3090,11 +3141,6 @@ function renderActiveTrade() {
         return;
     }
 
-    /*
-       Automatically open the first outgoing
-       trade when there isn't another trade open.
-    */
-
     openOutgoingTradeIfNeeded();
 
     if (
@@ -3471,10 +3517,6 @@ async function() {
             }
         ).filter(Boolean);
 
-    /*
-       Prevent duplicate physical IDs.
-    */
-
     const ids =
         offer.map(
             card =>
@@ -3525,6 +3567,11 @@ async function() {
             }
         );
 
+        /*
+         Keep the selected cards.
+         Do not clear them.
+        */
+
         showMessage(
             "Offer updated. Both players must confirm again."
         );
@@ -3561,103 +3608,140 @@ async function() {
 
     }
 
-    const myOffer =
-        getMyOffer(
-            activeTrade
-        );
-
-    const theirOffer =
-        getTheirOffer(
-            activeTrade
-        );
-
-    const currentIds =
-        myOffer.map(
-            card =>
-                card.id
-        );
-
-    if (
-        myOffer.length === 0
-    ) {
-
-        showMessage(
-            "You must offer at least one card."
-        );
-
-        return;
-
-    }
-
-    if (
-        theirOffer.length === 0
-    ) {
-
-        showMessage(
-            "Wait for the other player to offer a card."
-        );
-
-        return;
-
-    }
-
-    if (
-        !sameIds(
-            currentIds,
-            selectedTradeCards
-        )
-    ) {
-
-        showMessage(
-            "Update your offer before confirming."
-        );
-
-        return;
-
-    }
-
     /*
-       Make sure every offered card still
-       belongs to the player.
-    */
-
-    const stillOwns =
-        myOffer.every(
-            offered =>
-                collection.some(
-                    copy =>
-                        copy.id ===
-                        offered.id
-                )
-        );
-
-    if (!stillOwns) {
-
-        showMessage(
-            "One of your offered cards is no longer in your collection."
-        );
-
-        return;
-
-    }
-
-    const isSender =
-        activeTrade.senderUid ===
-        currentUser.uid;
-
-    const field =
-        isSender
-            ? "senderConfirmed"
-            : "receiverConfirmed";
+     Get the newest trade document.
+     */
 
     try {
 
-        await updateDoc(
+        const tradeRef =
             doc(
                 db,
                 "tradeRequests",
                 activeTrade.id
-            ),
+            );
+
+        const tradeSnap =
+            await getDoc(
+                tradeRef
+            );
+
+        if (!tradeSnap.exists()) {
+
+            showMessage(
+                "Trade no longer exists."
+            );
+
+            return;
+
+        }
+
+        const trade = {
+
+            id:
+                tradeSnap.id,
+
+            ...tradeSnap.data()
+
+        };
+
+        if (
+            trade.status !==
+            "pending"
+        ) {
+
+            return;
+
+        }
+
+        const myOffer =
+            getMyOffer(
+                trade
+            );
+
+        const theirOffer =
+            getTheirOffer(
+                trade
+            );
+
+        const currentIds =
+            myOffer.map(
+                card =>
+                    card.id
+            );
+
+        if (
+            myOffer.length ===
+            0
+        ) {
+
+            showMessage(
+                "You must offer at least one card."
+            );
+
+            return;
+
+        }
+
+        if (
+            theirOffer.length ===
+            0
+        ) {
+
+            showMessage(
+                "Wait for the other player to offer a card."
+            );
+
+            return;
+
+        }
+
+        if (
+            !sameIds(
+                currentIds,
+                selectedTradeCards
+            )
+        ) {
+
+            showMessage(
+                "Update your offer before confirming."
+            );
+
+            return;
+
+        }
+
+        const stillOwns =
+            myOffer.every(
+                offered =>
+                    collection.some(
+                        copy =>
+                            copy.id ===
+                            offered.id
+                    )
+            );
+
+        if (!stillOwns) {
+
+            showMessage(
+                "One of your offered cards is no longer in your collection."
+            );
+
+            return;
+
+        }
+
+        const isSender =
+            trade.senderUid ===
+            currentUser.uid;
+
+        const field =
+            isSender
+                ? "senderConfirmed"
+                : "receiverConfirmed";
+
+        await updateDoc(
+            tradeRef,
             {
 
                 [field]:
@@ -3666,9 +3750,38 @@ async function() {
             }
         );
 
+        /*
+         Update local state immediately.
+        */
+
+        activeTrade = {
+
+            ...trade,
+
+            [field]:
+                true
+
+        };
+
+        renderActiveTrade();
+
         showMessage(
             "Confirmed. Waiting for the other player."
         );
+
+        /*
+         Immediately check whether the
+         other player had already confirmed.
+        */
+
+        await tryFinalizeTrade({
+
+            ...trade,
+
+            [field]:
+                true
+
+        });
 
     } catch (error) {
 
@@ -3694,6 +3807,7 @@ async function tryFinalizeTrade(
 ) {
 
     if (
+        !trade ||
         trade.status !==
         "pending"
     ) {
@@ -3740,12 +3854,92 @@ async function tryFinalizeTrade(
 
     try {
 
-        await updateDoc(
+        const tradeRef =
             doc(
                 db,
                 "tradeRequests",
                 trade.id
-            ),
+            );
+
+        /*
+         Read the newest version again so
+         neither player can finalize using
+         stale confirmation data.
+        */
+
+        const snap =
+            await getDoc(
+                tradeRef
+            );
+
+        if (!snap.exists()) {
+            return;
+        }
+
+        const freshTrade = {
+
+            id:
+                snap.id,
+
+            ...snap.data()
+
+        };
+
+        if (
+            freshTrade.status !==
+            "pending"
+        ) {
+
+            /*
+             Someone else already finalized it.
+             */
+
+            return;
+
+        }
+
+        if (
+            freshTrade.senderConfirmed !==
+            true ||
+            freshTrade.receiverConfirmed !==
+            true
+        ) {
+
+            return;
+
+        }
+
+        const freshSenderOffer =
+            Array.isArray(
+                freshTrade.senderOffer
+            )
+                ? freshTrade.senderOffer
+                : [];
+
+        const freshReceiverOffer =
+            Array.isArray(
+                freshTrade.receiverOffer
+            )
+                ? freshTrade.receiverOffer
+                : [];
+
+        if (
+            freshSenderOffer.length ===
+            0 ||
+            freshReceiverOffer.length ===
+            0
+        ) {
+
+            return;
+
+        }
+
+        /*
+         Mark the trade completed.
+        */
+
+        await updateDoc(
+            tradeRef,
             {
 
                 status:
@@ -3757,15 +3951,25 @@ async function tryFinalizeTrade(
             }
         );
 
-    } catch (error) {
-
         /*
-           Another client may have completed
-           it first. That is okay.
+         Apply it immediately for this player.
+         The other player will receive the same
+         completed trade through their listener.
         */
 
+        await applyCompletedTrade({
+
+            ...freshTrade,
+
+            status:
+                "completed"
+
+        });
+
+    } catch (error) {
+
         console.error(
-            "FINALIZE TRADE:",
+            "FINALIZE TRADE ERROR:",
             error
         );
 
@@ -3878,7 +4082,9 @@ async function applyCompletedTrade(
             );
 
         if (!playerSnap.exists()) {
+
             return;
+
         }
 
         const data =
@@ -3917,7 +4123,8 @@ async function applyCompletedTrade(
         }
 
         /*
-           Verify exact physical cards still exist.
+         Make sure every outgoing physical
+         card still exists.
         */
 
         const ownsAll =
@@ -3932,20 +4139,52 @@ async function applyCompletedTrade(
 
         if (!ownsAll) {
 
-            console.error(
-                "Trade could not be applied because an offered card is missing."
-            );
+            /*
+             If the cards are already gone and
+             incoming cards are already present,
+             treat the trade as already applied.
+            */
 
-            applyingTradeIds.delete(
-                trade.id
-            );
+            const incomingAlreadyThere =
+                incomingOffer.every(
+                    offered =>
+                        currentCollection.some(
+                            copy =>
+                                copy.id ===
+                                offered.id
+                        )
+                );
+
+            if (
+                incomingAlreadyThere
+            ) {
+
+                currentCompleted.push(
+                    trade.id
+                );
+
+                await setDoc(
+                    playerRef,
+                    {
+                        completedTradeIds:
+                            currentCompleted
+                    },
+                    {
+                        merge: true
+                    }
+                );
+
+                completedTradeIds =
+                    currentCompleted;
+
+            }
 
             return;
 
         }
 
         /*
-           Remove exact physical copies.
+         Remove the exact physical cards.
         */
 
         const outgoingIds =
@@ -3965,10 +4204,7 @@ async function applyCompletedTrade(
             );
 
         /*
-           Add incoming physical copies.
-           The same ID is kept.
-           traded becomes true because
-           this card has now been traded.
+         Add the exact incoming physical cards.
         */
 
         for (
@@ -4005,9 +4241,8 @@ async function applyCompletedTrade(
             });
 
             /*
-               Preserve favorite status.
-               Favorites are currently stored
-               by card name.
+             Favorite status travels with
+             the physical card.
             */
 
             if (
@@ -4025,6 +4260,12 @@ async function applyCompletedTrade(
             }
 
         }
+
+        /*
+         Record completion only after the
+         collection has been successfully
+         prepared.
+        */
 
         currentCompleted.push(
             trade.id
@@ -4049,6 +4290,10 @@ async function applyCompletedTrade(
             }
         );
 
+        /*
+         Update local game state.
+        */
+
         collection =
             currentCollection;
 
@@ -4057,6 +4302,11 @@ async function applyCompletedTrade(
 
         completedTradeIds =
             currentCompleted;
+
+        /*
+         Only now is the trade considered
+         applied locally.
+        */
 
         updateUI();
 
@@ -4077,6 +4327,11 @@ async function applyCompletedTrade(
         );
 
     } finally {
+
+        /*
+         If anything failed, this is removed
+         so the listener can retry later.
+        */
 
         applyingTradeIds.delete(
             trade.id
@@ -4198,6 +4453,8 @@ async function() {
     collection = [];
 
     favorites = [];
+
+    completedTradeIds = [];
 
     await savePlayerData();
 
