@@ -644,60 +644,66 @@
 
         function displaySellableCard(card, container) {
 
-            const div = document.createElement("div");
+    const div = document.createElement("div");
 
-            div.className = "card";
+    div.className = "card";
 
+    // Count how many copies you own
+    const count = collection.filter(
+        c => c.name === card.name
+    ).length;
 
-            const img = document.createElement("img");
+    // Number in top corner
+    const countBadge = document.createElement("div");
 
-            img.src = card.image;
+    countBadge.textContent = "x" + count;
 
-            img.alt = card.name;
+    countBadge.style.position = "absolute";
+    countBadge.style.top = "8px";
+    countBadge.style.right = "8px";
+    countBadge.style.background = "#333";
+    countBadge.style.color = "white";
+    countBadge.style.padding = "4px 8px";
+    countBadge.style.borderRadius = "10px";
+    countBadge.style.fontWeight = "bold";
+    countBadge.style.fontSize = "14px";
 
+    div.style.position = "relative";
 
-            const name = document.createElement("div");
+    const img = document.createElement("img");
 
-            name.className = "cardName";
+    img.src = card.image;
+    img.alt = card.name;
 
-            name.textContent = card.name;
+    const name = document.createElement("div");
 
+    name.className = "cardName";
+    name.textContent = card.name;
 
-            const price = document.createElement("div");
+    const price = document.createElement("div");
 
-            price.className = "sellPrice";
+    price.className = "sellPrice";
+    price.textContent =
+        "Sell for " + card.sellPrice + " coins";
 
-            price.textContent =
-                "Sell for " + card.sellPrice + " coins";
+    const sellButton =
+        document.createElement("button");
 
+    sellButton.className = "sellButton";
+    sellButton.textContent = "SELL";
 
-            const sellButton =
-                document.createElement("button");
+    sellButton.onclick = function() {
+        sellCard(card);
+    };
 
-            sellButton.className = "sellButton";
+    div.appendChild(countBadge);
+    div.appendChild(img);
+    div.appendChild(name);
+    div.appendChild(price);
+    div.appendChild(sellButton);
 
-            sellButton.textContent = "SELL";
-
-
-            sellButton.onclick = function() {
-
-                sellCard(card);
-
-            };
-
-
-            div.appendChild(img);
-
-            div.appendChild(name);
-
-            div.appendChild(price);
-
-            div.appendChild(sellButton);
-
-
-            container.appendChild(div);
-
-        }
+    container.appendChild(div);
+}
 
 
         /*
