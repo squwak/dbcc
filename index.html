@@ -22,7 +22,7 @@ button {
     cursor: pointer;
 }
 
-#usernameScreen {
+#loginScreen {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -31,7 +31,7 @@ button {
     background: linear-gradient(135deg, #dff2ff, #ffffff);
 }
 
-.usernameBox {
+.loginBox {
     width: 100%;
     max-width: 430px;
     background: white;
@@ -41,38 +41,24 @@ button {
     box-shadow: 0 10px 40px rgba(0,0,0,0.12);
 }
 
-.usernameBox h1 {
+.loginBox h1 {
     margin-top: 0;
-    font-size: 30px;
 }
 
-.usernameBox p {
-    color: #667085;
-}
-
-.usernameInput {
+.loginButton {
     width: 100%;
-    padding: 15px;
-    border: 2px solid #ccd6e6;
-    border-radius: 12px;
-    font-size: 18px;
-    outline: none;
-}
-
-.usernameInput:focus {
-    border-color: #398cff;
-}
-
-.startButton {
-    width: 100%;
-    margin-top: 15px;
     padding: 15px;
     border: 0;
     border-radius: 12px;
-    background: #398cff;
+    background: #4285f4;
     color: white;
     font-size: 18px;
     font-weight: bold;
+}
+
+.loginStatus {
+    margin-top: 15px;
+    color: #667085;
 }
 
 #gameScreen {
@@ -105,6 +91,10 @@ button {
     background: #102a56;
 }
 
+.logoutButton {
+    background: #e53935;
+}
+
 .tradeTopButton {
     background: #7b45d6;
 }
@@ -135,6 +125,13 @@ button {
     padding: 30px;
     text-align: center;
     box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+}
+
+.profileBox {
+    background: #f3f7ff;
+    border-radius: 14px;
+    padding: 15px;
+    margin-bottom: 15px;
 }
 
 .packButton {
@@ -452,27 +449,8 @@ button {
     font-weight: bold;
 }
 
-.tradeOffer {
-    min-height: 100px;
-    padding: 15px;
-    background: #f4f6fa;
-    border-radius: 14px;
-    margin-top: 15px;
-}
-
-.tradeDisabled {
-    opacity: 0.55;
-    pointer-events: none;
-}
-
-.profileBox {
-    background: #f3f7ff;
-    border-radius: 14px;
-    padding: 15px;
-    margin-bottom: 15px;
-}
-
 @media (max-width: 600px) {
+
     #topBar {
         overflow-x: auto;
     }
@@ -499,67 +477,134 @@ button {
 
 <body>
 
-<div id="usernameScreen">
-    <div class="usernameBox">
+<!-- LOGIN -->
+
+<div id="loginScreen">
+
+    <div class="loginBox">
+
         <h1>Doll Ball Collector Cards</h1>
-        <p>Create your DBCC username.</p>
 
-        <input
-            id="usernameInput"
-            class="usernameInput"
-            maxlength="16"
-            placeholder="Username"
-        >
+        <p>
+            Sign in with Google to save your collection.
+        </p>
 
-        <button class="startButton" onclick="createUsername()">
-            START GAME
+        <button
+            class="loginButton"
+            onclick="loginWithGoogle()">
+            SIGN IN WITH GOOGLE
         </button>
 
-        <p style="font-size:13px;">
-            This offline version stores your username on this device.
-        </p>
+        <div
+            id="loginStatus"
+            class="loginStatus">
+        </div>
+
     </div>
+
 </div>
+
+
+<!-- GAME -->
 
 <div id="gameScreen">
 
     <div id="topBar">
-        <button class="topButton" onclick="showPage('homePage')">HOME</button>
-        <button class="topButton" onclick="showPage('collectionPage')">COLLECTION</button>
-        <button class="topButton" onclick="showPage('dexPage')">DEX</button>
-        <button class="topButton tradeTopButton" onclick="showPage('tradePage')">TRADE</button>
-        <button class="topButton settingsButton" onclick="openSettings()">SETTINGS</button>
+
+        <button
+            class="topButton"
+            onclick="showPage('homePage')">
+            HOME
+        </button>
+
+        <button
+            class="topButton"
+            onclick="showPage('collectionPage')">
+            COLLECTION
+        </button>
+
+        <button
+            class="topButton"
+            onclick="showPage('dexPage')">
+            DEX
+        </button>
+
+        <button
+            class="topButton tradeTopButton"
+            onclick="showPage('tradePage')">
+            TRADE
+        </button>
+
+        <button
+            class="topButton settingsButton"
+            onclick="openSettings()">
+            SETTINGS
+        </button>
+
+        <button
+            class="topButton logoutButton"
+            onclick="logout()">
+            LOG OUT
+        </button>
 
         <div class="moneyBox">
-            <span id="moneyDisplay">50</span> coins
+            <span id="moneyDisplay">50</span>
+            coins
         </div>
+
     </div>
 
+
     <div id="message" class="message"></div>
+
 
     <!-- HOME -->
 
     <div id="homePage" class="page active">
+
         <div class="homeBox">
+
             <h1>Doll Ball Collector Cards</h1>
 
             <div class="profileBox">
+
+                <b>Google account</b>
+
+                <div id="userEmail"></div>
+
+                <br>
+
                 <b>Username</b>
+
                 <div id="homeUsername"></div>
+
             </div>
 
-            <p>Open packs and collect the cards.</p>
+            <p>
+                Open packs and collect cards.
+            </p>
 
             <h2>Pack: 10 coins</h2>
-            <p>Each pack contains 3 cards.</p>
 
-            <button class="packButton" onclick="openPack()">
+            <p>
+                Each pack contains 3 cards.
+            </p>
+
+            <button
+                class="packButton"
+                onclick="openPack()">
                 OPEN PACK
             </button>
 
-            <div id="packResults" style="margin-top:25px;"></div>
+            <div
+                id="packResults"
+                style="margin-top:25px;">
+            </div>
+
         </div>
+
     </div>
+
 
     <!-- COLLECTION -->
 
@@ -568,17 +613,21 @@ button {
         <h1>Collection</h1>
 
         <div class="tabs">
-            <button id="allCollectionTab"
-                    class="tabButton active"
-                    onclick="setCollectionTab('all')">
+
+            <button
+                id="allCollectionTab"
+                class="tabButton active"
+                onclick="setCollectionTab('all')">
                 ALL
             </button>
 
-            <button id="favoriteCollectionTab"
-                    class="tabButton"
-                    onclick="setCollectionTab('favorites')">
+            <button
+                id="favoriteCollectionTab"
+                class="tabButton"
+                onclick="setCollectionTab('favorites')">
                 FAVORITES
             </button>
+
         </div>
 
         <input
@@ -588,8 +637,13 @@ button {
             oninput="renderCollection()"
         >
 
-        <div id="collectionGrid" class="cardGrid"></div>
+        <div
+            id="collectionGrid"
+            class="cardGrid">
+        </div>
+
     </div>
+
 
     <!-- DEX -->
 
@@ -615,8 +669,13 @@ button {
 
         </div>
 
-        <div id="dexGrid" class="cardGrid"></div>
+        <div
+            id="dexGrid"
+            class="cardGrid">
+        </div>
+
     </div>
+
 
     <!-- TRADE -->
 
@@ -627,11 +686,21 @@ button {
         <div class="tradeBox">
 
             <div class="tradeNotice">
-                <b>Online trading is not connected yet.</b>
+
+                <b>Trading is not connected yet.</b>
+
                 <br><br>
-                This version contains the card-copy and trade system,
-                but another player's account requires Firebase.
+
+                Your Google account and normal game
+                saving work through Firebase.
+
+                <br><br>
+
+                The actual player-to-player trading
+                system will be added separately.
+
             </div>
+
 
             <h2>Your username</h2>
 
@@ -639,9 +708,11 @@ button {
                 <b id="tradeUsername"></b>
             </div>
 
+
             <h2>Find a player</h2>
 
             <div class="tradeSearch">
+
                 <input
                     id="tradePlayerInput"
                     placeholder="Player username"
@@ -650,54 +721,81 @@ button {
                 <button onclick="findPlayer()">
                     FIND
                 </button>
+
             </div>
 
             <div id="tradePlayerResult"></div>
 
+
             <h2>Your trade cards</h2>
 
             <p>
-                Select cards below to prepare an offer.
+                Select cards to prepare an offer.
             </p>
 
-            <div id="tradeCollectionGrid" class="cardGrid"></div>
-
-            <div class="tradeOffer">
-                <b>Your selected cards:</b>
-                <div id="selectedTradeCards">None</div>
+            <div
+                id="tradeCollectionGrid"
+                class="cardGrid">
             </div>
 
-            <button
-                class="packButton tradeDisabled"
-                style="width:100%;"
-                id="confirmTradeButton"
-                onclick="confirmLocalTrade()">
-                CONFIRM TRADE
-            </button>
+
+            <div
+                style="
+                margin-top:20px;
+                padding:15px;
+                background:#f4f6fa;
+                border-radius:14px;">
+
+                <b>Selected cards:</b>
+
+                <div id="selectedTradeCards">
+                    None
+                </div>
+
+            </div>
 
         </div>
+
     </div>
 
 </div>
 
+
 <!-- SETTINGS -->
 
-<div id="settingsScreen" class="settingsScreen">
+<div
+    id="settingsScreen"
+    class="settingsScreen">
 
     <div class="settingsBox">
 
         <h1>Settings</h1>
 
         <div class="profileBox">
+
             <b>Username</b>
+
             <div id="settingsUsername"></div>
+
+            <br>
+
+            <b>Google account</b>
+
+            <div id="settingsEmail"></div>
+
         </div>
 
-        <button class="resetButton" onclick="resetAccount()">
+
+        <button
+            class="resetButton"
+            onclick="resetAccount()">
             RESET ACCOUNT
         </button>
 
-        <button class="backButton" onclick="closeSettings()">
+
+        <button
+            class="backButton"
+            onclick="closeSettings()">
             BACK TO GAME
         </button>
 
@@ -706,11 +804,80 @@ button {
 </div>
 
 
-<script>
+<script type="module">
 
-/* =========================
+/* ==================================================
+   FIREBASE
+================================================== */
+
+import {
+    initializeApp
+} from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+} from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    deleteDoc
+} from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
+
+    authDomain:
+        "dbcc-login.firebaseapp.com",
+
+    databaseURL:
+        "https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+    projectId:
+        "dbcc-login",
+
+    storageBucket:
+        "dbcc-login.firebasestorage.app",
+
+    messagingSenderId:
+        "878902780767",
+
+    appId:
+        "1:878902780767:web:4020d11730e5d9c0ee0cea",
+
+    measurementId:
+        "G-PT9S1K4E2K"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+const auth =
+    getAuth(app);
+
+const db =
+    getFirestore(app);
+
+const provider =
+    new GoogleAuthProvider();
+
+
+/* ==================================================
    CARD DATA
-========================= */
+================================================== */
 
 const cards = [
 
@@ -813,9 +980,11 @@ const cards = [
 ];
 
 
-/* =========================
+/* ==================================================
    GAME STATE
-========================= */
+================================================== */
+
+let currentUser = null;
 
 let money = 50;
 
@@ -832,29 +1001,31 @@ let dexTab = "dolls";
 let selectedTradeCards = [];
 
 
-/* =========================
+/* ==================================================
    CARD ID
-========================= */
+================================================== */
 
 function createCardId() {
 
     return Date.now().toString(36)
-        + Math.random().toString(36).slice(2);
+        + Math.random()
+        .toString(36)
+        .slice(2);
 
 }
 
 
-/* =========================
-   CREATE CARD COPY
-========================= */
+/* ==================================================
+   CARD COPY
+================================================== */
 
-function createCardCopy(cardName) {
+function createCardCopy(name) {
 
     return {
 
         id: createCardId(),
 
-        name: cardName,
+        name: name,
 
         traded: false
 
@@ -863,42 +1034,28 @@ function createCardCopy(cardName) {
 }
 
 
-/* =========================
-   SAVE
-========================= */
+/* ==================================================
+   FIRESTORE PLAYER REF
+================================================== */
 
-function saveGame() {
+function getPlayerRef() {
 
-    const data = {
-
-        money: money,
-
-        username: username,
-
-        collection: collection,
-
-        favorites: favorites
-
-    };
-
-    localStorage.setItem(
-        "dbccGame",
-        JSON.stringify(data)
+    return doc(
+        db,
+        "players",
+        currentUser.uid
     );
 
 }
 
 
-/* =========================
-   LOAD
-========================= */
+/* ==================================================
+   SAVE PLAYER
+================================================== */
 
-function loadGame() {
+async function savePlayerData() {
 
-    const saved =
-        localStorage.getItem("dbccGame");
-
-    if (!saved) {
+    if (!currentUser) {
 
         return;
 
@@ -906,29 +1063,105 @@ function loadGame() {
 
     try {
 
-        const data = JSON.parse(saved);
+        await setDoc(
+            getPlayerRef(),
+            {
+                money: money,
+                username: username,
+                collection: collection,
+                favorites: favorites
+            },
+            {
+                merge: true
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Save error:",
+            error
+        );
+
+        showMessage(
+            "Could not save game."
+        );
+
+    }
+
+}
+
+
+/* ==================================================
+   LOAD PLAYER
+================================================== */
+
+async function loadPlayerData() {
+
+    if (!currentUser) {
+
+        return;
+
+    }
+
+    try {
+
+        const snapshot =
+            await getDoc(
+                getPlayerRef()
+            );
+
+        if (!snapshot.exists()) {
+
+            money = 50;
+
+            username = "";
+
+            collection = [];
+
+            favorites = [];
+
+            await savePlayerData();
+
+            return;
+
+        }
+
+        const data =
+            snapshot.data();
+
 
         money =
             typeof data.money === "number"
                 ? data.money
                 : 50;
 
+
         username =
             typeof data.username === "string"
                 ? data.username
                 : "";
+
 
         favorites =
             Array.isArray(data.favorites)
                 ? data.favorites
                 : [];
 
+
         if (Array.isArray(data.collection)) {
 
             collection =
                 data.collection.map(item => {
 
-                    if (typeof item === "string") {
+                    /*
+                        OLD FORMAT:
+                        "Baby Pickels"
+                    */
+
+                    if (
+                        typeof item === "string"
+                    ) {
 
                         return {
 
@@ -942,21 +1175,44 @@ function loadGame() {
 
                     }
 
+
+                    /*
+                        NEW FORMAT:
+                        {
+                            id,
+                            name,
+                            traded
+                        }
+                    */
+
                     return {
 
-                        id: item.id || createCardId(),
+                        id:
+                            item.id ||
+                            createCardId(),
 
-                        name: item.name,
+                        name:
+                            item.name,
 
-                        traded: item.traded === true
+                        traded:
+                            item.traded === true
 
                     };
 
                 });
 
+        } else {
+
+            collection = [];
+
         }
 
-    } catch {
+    } catch (error) {
+
+        console.error(
+            "Load error:",
+            error
+        );
 
         money = 50;
         username = "";
@@ -968,97 +1224,178 @@ function loadGame() {
 }
 
 
-/* =========================
-   START
-========================= */
+/* ==================================================
+   GOOGLE LOGIN
+================================================== */
 
-function startGame() {
+window.loginWithGoogle =
+    async function() {
 
-    loadGame();
-
-    if (!username) {
-
+    const status =
         document.getElementById(
-            "usernameScreen"
-        ).style.display = "flex";
+            "loginStatus"
+        );
 
-        document.getElementById(
-            "gameScreen"
-        ).style.display = "none";
+    status.textContent =
+        "Signing in...";
 
-        return;
+    try {
+
+        await signInWithPopup(
+            auth,
+            provider
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "Login failed: " +
+            error.message;
 
     }
 
-    showGame();
-
-}
+};
 
 
-function showGame() {
+/* ==================================================
+   AUTH STATE
+================================================== */
 
-    document.getElementById(
-        "usernameScreen"
-    ).style.display = "none";
+onAuthStateChanged(
+    auth,
+    async user => {
 
-    document.getElementById(
-        "gameScreen"
-    ).style.display = "block";
+        if (!user) {
+
+            currentUser = null;
+
+            document.getElementById(
+                "loginScreen"
+            ).style.display = "flex";
+
+            document.getElementById(
+                "gameScreen"
+            ).style.display = "none";
+
+            return;
+
+        }
+
+
+        currentUser = user;
+
+
+        document.getElementById(
+            "loginScreen"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "gameScreen"
+        ).style.display = "block";
+
+
+        await loadPlayerData();
+
+
+        updateUI();
+
+
+        /*
+            If this is a new account,
+            ask for a username.
+        */
+
+        if (!username) {
+
+            setTimeout(
+                askForUsername,
+                300
+            );
+
+        }
+
+    }
+);
+
+
+/* ==================================================
+   USERNAME
+================================================== */
+
+async function askForUsername() {
+
+    let name = null;
+
+    while (!name) {
+
+        name =
+            prompt(
+                "Create your DBCC username:"
+            );
+
+        if (name === null) {
+
+            name = "Player";
+
+        }
+
+        name =
+            name
+            .trim()
+            .replace(
+                /[^a-zA-Z0-9_]/g,
+                ""
+            );
+
+        if (name.length < 3) {
+
+            alert(
+                "Username must be at least 3 characters."
+            );
+
+            name = null;
+
+        }
+
+    }
+
+    username = name;
+
+    await savePlayerData();
 
     updateUI();
 
 }
 
 
-/* =========================
-   USERNAME
-========================= */
+/* ==================================================
+   LOGOUT
+================================================== */
 
-function createUsername() {
+window.logout =
+    async function() {
 
-    const input =
-        document.getElementById(
-            "usernameInput"
-        );
+    try {
 
-    let name =
-        input.value.trim();
+        await savePlayerData();
 
-    name =
-        name.replace(/[^a-zA-Z0-9_]/g, "");
+        await signOut(auth);
 
-    if (name.length < 3) {
+    } catch (error) {
 
-        alert(
-            "Username must be at least 3 characters."
-        );
-
-        return;
+        console.error(error);
 
     }
 
-    if (name.length > 16) {
-
-        alert(
-            "Username must be 16 characters or less."
-        );
-
-        return;
-
-    }
-
-    username = name;
-
-    saveGame();
-
-    showGame();
-
-}
+};
 
 
-/* =========================
+/* ==================================================
    UPDATE UI
-========================= */
+================================================== */
 
 function updateUI() {
 
@@ -1066,17 +1403,40 @@ function updateUI() {
         "moneyDisplay"
     ).textContent = money;
 
+
     document.getElementById(
         "homeUsername"
-    ).textContent = username;
+    ).textContent =
+        username || "Not set";
+
 
     document.getElementById(
         "tradeUsername"
-    ).textContent = username;
+    ).textContent =
+        username || "Not set";
+
 
     document.getElementById(
         "settingsUsername"
-    ).textContent = username;
+    ).textContent =
+        username || "Not set";
+
+
+    if (currentUser) {
+
+        document.getElementById(
+            "userEmail"
+        ).textContent =
+            currentUser.email || "";
+
+
+        document.getElementById(
+            "settingsEmail"
+        ).textContent =
+            currentUser.email || "";
+
+    }
+
 
     renderCollection();
 
@@ -1087,87 +1447,116 @@ function updateUI() {
 }
 
 
-/* =========================
+/* ==================================================
    MESSAGE
-========================= */
+================================================== */
 
 function showMessage(text) {
 
     const box =
-        document.getElementById("message");
+        document.getElementById(
+            "message"
+        );
 
     box.textContent = text;
 
     box.style.display = "block";
 
-    setTimeout(() => {
 
-        box.style.display = "none";
+    setTimeout(
+        () => {
 
-    }, 2200);
+            box.style.display = "none";
+
+        },
+        2200
+    );
 
 }
 
 
-/* =========================
+/* ==================================================
    NAVIGATION
-========================= */
+================================================== */
 
-function showPage(pageId) {
+window.showPage =
+    function(pageId) {
 
     document
         .querySelectorAll(".page")
         .forEach(page => {
 
-            page.classList.remove("active");
+            page.classList.remove(
+                "active"
+            );
 
         });
+
 
     document
         .getElementById(pageId)
         .classList.add("active");
 
-    if (pageId === "collectionPage") {
+
+    if (
+        pageId ===
+        "collectionPage"
+    ) {
 
         renderCollection();
 
     }
 
-    if (pageId === "dexPage") {
+
+    if (
+        pageId ===
+        "dexPage"
+    ) {
 
         renderDex();
 
     }
 
-    if (pageId === "tradePage") {
+
+    if (
+        pageId ===
+        "tradePage"
+    ) {
 
         renderTradeCollection();
 
     }
 
-}
+};
 
 
-/* =========================
-   PACK RANDOMIZER
-========================= */
+/* ==================================================
+   RANDOM CARD
+================================================== */
 
 function getRandomCard() {
 
     let totalWeight = 0;
 
+
     for (const card of cards) {
 
-        totalWeight += card.weight;
+        totalWeight +=
+            card.weight;
 
     }
 
+
     let random =
-        Math.random() * totalWeight;
+        Math.random() *
+        totalWeight;
+
 
     for (const card of cards) {
 
-        random -= card.weight;
+        random -=
+            card.weight;
+
 
         if (random <= 0) {
 
@@ -1177,134 +1566,173 @@ function getRandomCard() {
 
     }
 
+
     return cards[0];
 
 }
 
 
-/* =========================
+/* ==================================================
    OPEN PACK
-========================= */
+================================================== */
 
-function openPack() {
+window.openPack =
+    async function() {
 
     if (money < 10) {
 
-        showMessage("Not enough coins.");
+        showMessage(
+            "Not enough coins."
+        );
 
         return;
 
     }
 
+
     money -= 10;
+
 
     const results = [];
 
+
     for (let i = 0; i < 3; i++) {
 
-        const card = getRandomCard();
+        const card =
+            getRandomCard();
+
 
         collection.push(
-            createCardCopy(card.name)
+            createCardCopy(
+                card.name
+            )
         );
+
 
         results.push(card);
 
     }
 
-    saveGame();
+
+    await savePlayerData();
 
     updateUI();
+
 
     let html =
         "<h2>You got:</h2>" +
         '<div class="cardGrid">';
 
+
     for (const card of results) {
 
         html += `
+
             <div class="card">
+
                 <img src="${card.image}">
+
                 <div class="cardName">
                     ${card.name}
                 </div>
+
             </div>
+
         `;
 
     }
 
+
     html += "</div>";
+
 
     document.getElementById(
         "packResults"
     ).innerHTML = html;
 
-    showMessage("Pack opened!");
 
-}
+    showMessage(
+        "Pack opened!"
+    );
+
+};
 
 
-/* =========================
-   COLLECTION TAB
-========================= */
+/* ==================================================
+   COLLECTION TABS
+================================================== */
 
-function setCollectionTab(tab) {
+window.setCollectionTab =
+    function(tab) {
 
     collectionTab = tab;
 
+
     document
-        .getElementById("allCollectionTab")
+        .getElementById(
+            "allCollectionTab"
+        )
         .classList.toggle(
             "active",
             tab === "all"
         );
 
+
     document
-        .getElementById("favoriteCollectionTab")
+        .getElementById(
+            "favoriteCollectionTab"
+        )
         .classList.toggle(
             "active",
             tab === "favorites"
         );
 
+
     renderCollection();
 
-}
+};
 
 
-/* =========================
-   GET CARD DATA
-========================= */
+/* ==================================================
+   GET CARD
+================================================== */
 
 function getCardData(name) {
 
     return cards.find(
-        card => card.name === name
+        card =>
+            card.name === name
     );
 
 }
 
 
-/* =========================
+/* ==================================================
    COUNT
-========================= */
+================================================== */
 
 function getCardCount(name) {
 
     return collection.filter(
-        copy => copy.name === name
+        copy =>
+            copy.name === name
     ).length;
 
 }
 
 
-/* =========================
+/* ==================================================
    FAVORITE
-========================= */
+================================================== */
 
-function toggleFavorite(cardName) {
+window.toggleFavorite =
+    async function(cardName) {
 
     const index =
-        favorites.indexOf(cardName);
+        favorites.indexOf(
+            cardName
+        );
+
 
     if (index === -1) {
 
@@ -1317,7 +1745,10 @@ function toggleFavorite(cardName) {
 
     } else {
 
-        favorites.splice(index, 1);
+        favorites.splice(
+            index,
+            1
+        );
 
         showMessage(
             cardName +
@@ -1326,29 +1757,37 @@ function toggleFavorite(cardName) {
 
     }
 
-    saveGame();
+
+    await savePlayerData();
 
     renderCollection();
 
     renderTradeCollection();
 
-}
+};
 
 
-/* =========================
-   CARD BORDER
-========================= */
+/* ==================================================
+   FAVORITE BORDER
+================================================== */
 
-function getFavoriteClass(card, copy) {
+function getFavoriteClass(
+    card,
+    copy
+) {
 
     const isFavorite =
-        favorites.includes(card.name);
+        favorites.includes(
+            card.name
+        );
+
 
     if (!isFavorite) {
 
         return "";
 
     }
+
 
     if (
         card.rarity === "rare" &&
@@ -1359,11 +1798,15 @@ function getFavoriteClass(card, copy) {
 
     }
 
-    if (card.rarity === "rare") {
+
+    if (
+        card.rarity === "rare"
+    ) {
 
         return "rareFavoriteCard";
 
     }
+
 
     if (copy.traded) {
 
@@ -1371,14 +1814,15 @@ function getFavoriteClass(card, copy) {
 
     }
 
+
     return "favoriteCard";
 
 }
 
 
-/* =========================
+/* ==================================================
    RENDER COLLECTION
-========================= */
+================================================== */
 
 function renderCollection() {
 
@@ -1387,6 +1831,7 @@ function renderCollection() {
             "collectionGrid"
         );
 
+
     const search =
         document.getElementById(
             "collectionSearch"
@@ -1394,12 +1839,17 @@ function renderCollection() {
         .trim()
         .toLowerCase();
 
+
     grid.innerHTML = "";
+
 
     for (const card of cards) {
 
         const count =
-            getCardCount(card.name);
+            getCardCount(
+                card.name
+            );
+
 
         if (count === 0) {
 
@@ -1407,96 +1857,152 @@ function renderCollection() {
 
         }
 
+
         if (
-            collectionTab === "favorites" &&
-            !favorites.includes(card.name)
+            collectionTab ===
+                "favorites" &&
+            !favorites.includes(
+                card.name
+            )
         ) {
 
             continue;
 
         }
+
 
         if (
             search &&
-            !card.name.toLowerCase().includes(search)
+            !card.name
+                .toLowerCase()
+                .includes(search)
         ) {
 
             continue;
 
         }
 
-        const copy =
-            collection.find(
-                item => item.name === card.name
+
+        const copies =
+            collection.filter(
+                copy =>
+                    copy.name ===
+                    card.name
             );
 
-        if (!copy) {
 
-            continue;
+        /*
+            The collection display is
+            one card per card name,
+            like your previous version.
 
-        }
+            The border uses the first copy
+            to show traded status.
+        */
+
+        const copy =
+            copies[0];
+
 
         const isFavorite =
-            favorites.includes(card.name);
+            favorites.includes(
+                card.name
+            );
+
 
         const div =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         div.className =
             "card " +
-            getFavoriteClass(card, copy);
+            getFavoriteClass(
+                card,
+                copy
+            );
+
 
         div.innerHTML = `
 
             <button
                 class="favoriteButton
-                ${isFavorite ? "isFavorite" : ""}"
+                ${isFavorite
+                    ? "isFavorite"
+                    : ""}"
                 onclick="toggleFavorite('${escapeQuotes(card.name)}')">
-                ${isFavorite ? "★" : "☆"}
+                ${isFavorite
+                    ? "★"
+                    : "☆"}
             </button>
+
 
             <div class="cardCount">
                 ${count}
             </div>
 
-            <img src="${card.image}">
+
+            <img
+                src="${card.image}">
+
 
             <div class="cardName">
                 ${card.name}
             </div>
 
+
             <div style="margin-top:5px;">
                 Sell: ${card.sellPrice}
             </div>
 
+
             ${
                 copy.traded
                 ?
-                `<div style="
+                `
+                <div style="
                     margin-top:5px;
                     font-size:12px;
                     font-weight:bold;
                     color:#7b45d6;">
                     TRADED COPY
-                </div>`
+                </div>
+                `
                 :
                 ""
             }
 
+
             <button
                 class="sellButton"
-                ${isFavorite ? "disabled" : ""}
+                ${
+                    isFavorite
+                    ? "disabled"
+                    : ""
+                }
                 onclick="sellCard('${copy.id}')">
-                ${isFavorite ? "FAVORITED" : "SELL " + card.sellPrice}
+
+                ${
+                    isFavorite
+                    ? "FAVORITED"
+                    : "SELL " +
+                      card.sellPrice
+                }
+
             </button>
 
         `;
+
 
         grid.appendChild(div);
 
     }
 
-    if (grid.children.length === 0) {
+
+    if (
+        grid.children.length === 0
+    ) {
 
         grid.innerHTML =
             "<p>No cards found.</p>";
@@ -1506,16 +2012,19 @@ function renderCollection() {
 }
 
 
-/* =========================
-   SELL CARD
-========================= */
+/* ==================================================
+   SELL
+================================================== */
 
-function sellCard(copyId) {
+window.sellCard =
+    async function(copyId) {
 
     const index =
         collection.findIndex(
-            copy => copy.id === copyId
+            copy =>
+                copy.id === copyId
         );
+
 
     if (index === -1) {
 
@@ -1523,10 +2032,16 @@ function sellCard(copyId) {
 
     }
 
+
     const copy =
         collection[index];
 
-    if (favorites.includes(copy.name)) {
+
+    if (
+        favorites.includes(
+            copy.name
+        )
+    ) {
 
         showMessage(
             "Favorite cards cannot be sold."
@@ -1536,8 +2051,12 @@ function sellCard(copyId) {
 
     }
 
+
     const card =
-        getCardData(copy.name);
+        getCardData(
+            copy.name
+        );
+
 
     if (!card) {
 
@@ -1545,13 +2064,21 @@ function sellCard(copyId) {
 
     }
 
-    money += card.sellPrice;
 
-    collection.splice(index, 1);
+    money +=
+        card.sellPrice;
 
-    saveGame();
+
+    collection.splice(
+        index,
+        1
+    );
+
+
+    await savePlayerData();
 
     updateUI();
+
 
     showMessage(
         "Sold " +
@@ -1561,34 +2088,42 @@ function sellCard(copyId) {
         " coins."
     );
 
-}
+};
 
 
-/* =========================
+/* ==================================================
    DEX
-========================= */
+================================================== */
 
-function setDexTab(tab) {
+window.setDexTab =
+    function(tab) {
 
     dexTab = tab;
 
+
     document
-        .getElementById("dollsDexTab")
+        .getElementById(
+            "dollsDexTab"
+        )
         .classList.toggle(
             "active",
             tab === "dolls"
         );
 
+
     document
-        .getElementById("raresDexTab")
+        .getElementById(
+            "raresDexTab"
+        )
         .classList.toggle(
             "active",
             tab === "rares"
         );
 
+
     renderDex();
 
-}
+};
 
 
 function renderDex() {
@@ -1598,72 +2133,94 @@ function renderDex() {
             "dexGrid"
         );
 
+
     grid.innerHTML = "";
 
-    let dexCards =
-        cards.filter(
-            card => card.rarity === dexTab.slice(0, -1)
-        );
-
-    if (dexTab === "rares") {
-
-        dexCards = [];
-
-    }
 
     if (dexTab === "dolls") {
 
-        for (const card of dexCards) {
+        for (const card of cards) {
 
             const owned =
-                getCardCount(card.name) > 0;
+                getCardCount(
+                    card.name
+                ) > 0;
+
 
             const div =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
-            div.className = "dexCard";
+
+            div.className =
+                "dexCard";
+
 
             if (owned) {
 
                 div.innerHTML = `
-                    <img src="${card.image}">
+
+                    <img
+                        src="${card.image}">
+
                     <div class="cardName">
                         ${card.name}
                     </div>
+
                 `;
 
             } else {
 
                 div.innerHTML = `
-                    <div class="dexUnknown">?</div>
+
+                    <div class="dexUnknown">
+                        ?
+                    </div>
+
                     <div class="cardName">
                         Unknown
                     </div>
+
                 `;
 
             }
+
 
             grid.appendChild(div);
 
         }
 
+
         return;
 
     }
 
+
     for (let i = 0; i < 6; i++) {
 
         const div =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        div.className = "dexCard";
+
+        div.className =
+            "dexCard";
+
 
         div.innerHTML = `
-            <div class="dexUnknown">?</div>
+
+            <div class="dexUnknown">
+                ?
+            </div>
+
             <div class="cardName">
                 Rare Coming Soon
             </div>
+
         `;
+
 
         grid.appendChild(div);
 
@@ -1672,9 +2229,9 @@ function renderDex() {
 }
 
 
-/* =========================
-   TRADE COLLECTION
-========================= */
+/* ==================================================
+   TRADE CARDS
+================================================== */
 
 function renderTradeCollection() {
 
@@ -1683,59 +2240,76 @@ function renderTradeCollection() {
             "tradeCollectionGrid"
         );
 
+
     if (!grid) {
 
         return;
 
     }
 
+
     grid.innerHTML = "";
+
 
     for (const card of cards) {
 
         const copies =
             collection.filter(
-                copy => copy.name === card.name
+                copy =>
+                    copy.name ===
+                    card.name
             );
+
 
         for (const copy of copies) {
 
             const selected =
-                selectedTradeCards.includes(
-                    copy.id
-                );
+                selectedTradeCards
+                    .includes(
+                        copy.id
+                    );
+
 
             const div =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             div.className =
                 "card " +
-                getFavoriteClass(card, copy);
+                getFavoriteClass(
+                    card,
+                    copy
+                );
+
 
             const isFavorite =
-                favorites.includes(card.name);
+                favorites.includes(
+                    card.name
+                );
+
 
             div.innerHTML = `
 
-                <img src="${card.image}">
+                <img
+                    src="${card.image}">
 
                 <div class="cardName">
                     ${card.name}
                 </div>
 
-                <div style="font-size:12px;margin-top:4px;">
-                    Copy ID: ${copy.id.slice(-6)}
-                </div>
-
                 ${
                     isFavorite
                     ?
-                    `<div style="
+                    `
+                    <div style="
                         color:#36b9ff;
                         font-weight:bold;
                         margin-top:5px;">
                         FAVORITE
-                    </div>`
+                    </div>
+                    `
                     :
                     ""
                 }
@@ -1743,23 +2317,41 @@ function renderTradeCollection() {
                 ${
                     copy.traded
                     ?
-                    `<div style="
+                    `
+                    <div style="
                         color:#7b45d6;
                         font-weight:bold;
                         margin-top:5px;">
                         TRADED
-                    </div>`
+                    </div>
+                    `
                     :
                     ""
                 }
 
                 <button
-                    class="tradeCardButton
-                    ${selected ? "selected" : ""}"
-                    onclick="toggleTradeCard('${copy.id}')">
-                    ${selected ? "SELECTED" : "SELECT"}
+                    class="
+                    tradeCardButton
+                    ${
+                        selected
+                        ? "selected"
+                        : ""
+                    }"
+                    onclick="
+                    toggleTradeCard(
+                        '${copy.id}'
+                    )">
+
+                    ${
+                        selected
+                        ? "SELECTED"
+                        : "SELECT"
+                    }
+
                 </button>
+
             `;
+
 
             grid.appendChild(div);
 
@@ -1767,45 +2359,58 @@ function renderTradeCollection() {
 
     }
 
-    if (grid.children.length === 0) {
+
+    if (
+        grid.children.length === 0
+    ) {
 
         grid.innerHTML =
             "<p>You have no cards to trade.</p>";
 
     }
 
+
     renderSelectedTradeCards();
 
 }
 
 
-/* =========================
+/* ==================================================
    SELECT TRADE CARD
-========================= */
+================================================== */
 
-function toggleTradeCard(copyId) {
+window.toggleTradeCard =
+    function(copyId) {
 
     const index =
-        selectedTradeCards.indexOf(copyId);
+        selectedTradeCards
+            .indexOf(copyId);
+
 
     if (index === -1) {
 
-        selectedTradeCards.push(copyId);
+        selectedTradeCards.push(
+            copyId
+        );
 
     } else {
 
-        selectedTradeCards.splice(index, 1);
+        selectedTradeCards.splice(
+            index,
+            1
+        );
 
     }
 
+
     renderTradeCollection();
 
-}
+};
 
 
-/* =========================
-   SELECTED TRADE CARDS
-========================= */
+/* ==================================================
+   SELECTED TRADE
+================================================== */
 
 function renderSelectedTradeCards() {
 
@@ -1814,33 +2419,46 @@ function renderSelectedTradeCards() {
             "selectedTradeCards"
         );
 
+
     if (!box) {
 
         return;
 
     }
 
-    if (selectedTradeCards.length === 0) {
 
-        box.textContent = "None";
+    if (
+        selectedTradeCards.length ===
+        0
+    ) {
+
+        box.textContent =
+            "None";
 
         return;
 
     }
 
+
     const names =
-        selectedTradeCards.map(id => {
+        selectedTradeCards.map(
+            id => {
 
-            const copy =
-                collection.find(
-                    item => item.id === id
-                );
+                const copy =
+                    collection.find(
+                        item =>
+                            item.id ===
+                            id
+                    );
 
-            return copy
-                ? copy.name
-                : "Unknown";
 
-        });
+                return copy
+                    ? copy.name
+                    : "Unknown";
+
+            }
+        );
+
 
     box.textContent =
         names.join(", ");
@@ -1848,24 +2466,28 @@ function renderSelectedTradeCards() {
 }
 
 
-/* =========================
+/* ==================================================
    FIND PLAYER
-========================= */
+================================================== */
 
-function findPlayer() {
+window.findPlayer =
+    function() {
 
     const input =
         document.getElementById(
             "tradePlayerInput"
         );
 
+
     const name =
         input.value.trim();
+
 
     const result =
         document.getElementById(
             "tradePlayerResult"
         );
+
 
     if (!name) {
 
@@ -1876,98 +2498,82 @@ function findPlayer() {
 
     }
 
+
     if (
         name.toLowerCase() ===
         username.toLowerCase()
     ) {
 
         result.innerHTML = `
+
             <div class="tradeNotice">
                 You cannot trade with yourself.
             </div>
+
         `;
 
         return;
 
     }
 
-    /*
-        Firebase will be added later.
-
-        For now we cannot actually search
-        other players online.
-    */
 
     result.innerHTML = `
+
         <div class="tradeNotice">
+
             <b>${escapeHtml(name)}</b>
-            was not searched online because
-            Firebase trading is not connected yet.
+
             <br><br>
-            Your username system and trade
-            card system are ready for the
-            Firebase upgrade.
+
+            Player searching will be
+            connected when the Firebase
+            trading system is added.
+
         </div>
+
     `;
 
-}
+};
 
 
-/* =========================
-   TRADE CONFIRM
-========================= */
-
-function confirmLocalTrade() {
-
-    if (selectedTradeCards.length === 0) {
-
-        showMessage(
-            "Select at least one card."
-        );
-
-        return;
-
-    }
-
-    showMessage(
-        "Online trading will be enabled with Firebase."
-    );
-
-}
-
-
-/* =========================
+/* ==================================================
    SETTINGS
-========================= */
+================================================== */
 
-function openSettings() {
-
-    document.getElementById(
-        "settingsScreen"
-    ).style.display = "block";
-
-}
-
-
-function closeSettings() {
+window.openSettings =
+    function() {
 
     document.getElementById(
         "settingsScreen"
-    ).style.display = "none";
+    ).style.display =
+        "block";
 
-}
+};
 
 
-/* =========================
-   RESET
-========================= */
+window.closeSettings =
+    function() {
 
-function resetAccount() {
+    document.getElementById(
+        "settingsScreen"
+    ).style.display =
+        "none";
+
+};
+
+
+/* ==================================================
+   RESET ACCOUNT
+================================================== */
+
+window.resetAccount =
+    async function() {
 
     const first =
         confirm(
             "Are you sure you want to reset your account?"
         );
+
 
     if (!first) {
 
@@ -1975,10 +2581,12 @@ function resetAccount() {
 
     }
 
+
     const second =
         confirm(
             "This will delete your coins, cards, favorites and username. Continue?"
         );
+
 
     if (!second) {
 
@@ -1986,49 +2594,80 @@ function resetAccount() {
 
     }
 
-    localStorage.removeItem("dbccGame");
 
-    money = 50;
+    try {
 
-    username = "";
-
-    collection = [];
-
-    favorites = [];
-
-    selectedTradeCards = [];
-
-    document.getElementById(
-        "settingsScreen"
-    ).style.display = "none";
-
-    document.getElementById(
-        "gameScreen"
-    ).style.display = "none";
-
-    document.getElementById(
-        "usernameScreen"
-    ).style.display = "flex";
-
-    document.getElementById(
-        "usernameInput"
-    ).value = "";
-
-}
+        await deleteDoc(
+            getPlayerRef()
+        );
 
 
-/* =========================
-   SECURITY HELPERS
-========================= */
+        money = 50;
+
+        username = "";
+
+        collection = [];
+
+        favorites = [];
+
+        selectedTradeCards = [];
+
+
+        document.getElementById(
+            "settingsScreen"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "gameScreen"
+        ).style.display =
+            "block";
+
+
+        askForUsername();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            "Could not reset account."
+        );
+
+    }
+
+};
+
+
+/* ==================================================
+   HELPERS
+================================================== */
 
 function escapeHtml(text) {
 
     return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -2036,17 +2675,16 @@ function escapeHtml(text) {
 function escapeQuotes(text) {
 
     return text
-        .replace(/\\/g, "\\\\")
-        .replace(/'/g, "\\'");
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        );
 
 }
-
-
-/* =========================
-   START GAME
-========================= */
-
-startGame();
 
 </script>
 
