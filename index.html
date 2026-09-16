@@ -161,7 +161,8 @@ font-weight:bold
 .tabs{
 display:flex;
 gap:8px;
-margin-bottom:18px
+margin-bottom:18px;
+flex-wrap:wrap
 }
 
 .tabs button{
@@ -173,13 +174,46 @@ color:white
 background:#2674d9
 }
 
-.searchBox{
+/* SEARCH BARS */
+
+.searchBox,
+.tradeSearchArea input,
+.friendSearchArea input{
 width:100%;
 padding:13px;
 border-radius:10px;
 border:none;
-margin-bottom:20px;
-font-size:16px
+font-size:16px;
+background:white;
+color:#111
+}
+
+.searchBox{
+margin-bottom:20px
+}
+
+.searchBox:focus,
+.tradeSearchArea input:focus,
+.friendSearchArea input:focus{
+outline:3px solid #2674d9
+}
+
+.tradeSearchArea,
+.friendSearchArea{
+display:flex;
+gap:8px
+}
+
+.tradeSearchArea input,
+.friendSearchArea input{
+flex:1;
+min-width:0
+}
+
+.tradeSearchButton,
+.friendSearchButton{
+background:#2674d9;
+color:white
 }
 
 .cardGrid{
@@ -418,33 +452,13 @@ text-align:center;
 opacity:.7
 }
 
+/* TRADE */
+
 .tradeNotice{
 background:#10243d;
 border-radius:15px;
 padding:18px;
 margin-bottom:18px
-}
-
-.tradeSearchArea,
-.friendSearchArea{
-display:flex;
-gap:8px
-}
-
-.tradeSearchArea input,
-.friendSearchArea input{
-flex:1;
-min-width:0;
-padding:13px;
-border:none;
-border-radius:10px;
-font-size:16px
-}
-
-.tradeSearchButton,
-.friendSearchButton{
-background:#2674d9;
-color:white
 }
 
 .playerResultBox,
@@ -546,6 +560,8 @@ width:100%;
 margin-top:8px
 }
 
+/* FRIENDS */
+
 .friendSearchBox{
 background:#10243d;
 border-radius:15px;
@@ -575,7 +591,14 @@ color:white
 
 .friendDeclineButton{
 background:#9b2929;
-color:white
+color:white;
+margin-left:8px
+}
+
+.friendBattleButton{
+background:#6b4bc3;
+color:white;
+margin-left:8px
 }
 
 .friendBox{
@@ -599,6 +622,237 @@ text-align:center
 margin-top:20px;
 margin-bottom:10px
 }
+
+/* BATTLE */
+
+.battleHome{
+background:#10243d;
+border-radius:18px;
+padding:20px;
+margin-bottom:20px
+}
+
+.battleModes{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px
+}
+
+.battleMode{
+background:#183653;
+border-radius:15px;
+padding:20px;
+text-align:center
+}
+
+.battleMode button{
+width:100%;
+margin-top:10px;
+background:#2674d9;
+color:white
+}
+
+.battleMode.hard button{
+background:#9b2929
+}
+
+.battleMode.friend button{
+background:#6b4bc3
+}
+
+.battleArena{
+background:#10243d;
+border-radius:20px;
+padding:20px;
+margin-top:20px
+}
+
+.battleHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:20px;
+flex-wrap:wrap
+}
+
+.battlePlayer{
+background:#091a2d;
+border-radius:15px;
+padding:15px;
+flex:1;
+min-width:220px
+}
+
+.battlePlayerTop{
+display:flex;
+align-items:center;
+gap:12px
+}
+
+.battleCardImage{
+width:130px;
+height:175px;
+object-fit:contain;
+background:#071525;
+border-radius:12px
+}
+
+.hpBar{
+height:22px;
+background:#071525;
+border-radius:20px;
+overflow:hidden;
+margin-top:10px
+}
+
+.hpFill{
+height:100%;
+background:#25b864;
+transition:width .3s
+}
+
+.hpText{
+text-align:center;
+font-weight:bold;
+margin-top:5px
+}
+
+.battleVs{
+font-size:30px;
+font-weight:bold;
+text-align:center
+}
+
+.battleMove{
+background:#183653;
+border-radius:15px;
+padding:15px;
+margin-top:20px;
+text-align:center
+}
+
+.moveName{
+font-size:22px;
+font-weight:bold
+}
+
+.moveType{
+font-size:14px;
+opacity:.8;
+margin-top:5px
+}
+
+.battleLog{
+background:#091a2d;
+border-radius:12px;
+padding:15px;
+margin-top:15px;
+min-height:70px
+}
+
+.battleResult{
+text-align:center;
+background:#183653;
+border-radius:18px;
+padding:25px;
+margin-top:20px
+}
+
+.winText{
+font-size:32px;
+font-weight:bold
+}
+
+.rewardText{
+font-size:22px;
+font-weight:bold;
+margin:15px
+}
+
+.battleChoiceGrid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+gap:15px
+}
+
+.battleChoiceCard{
+background:#10243d;
+border:3px solid transparent;
+border-radius:15px;
+padding:10px;
+cursor:pointer;
+text-align:center
+}
+
+.battleChoiceCard:hover{
+border-color:#2674d9
+}
+
+.battleChoiceCard.selected{
+border-color:#36b9ff;
+box-shadow:0 0 14px #36b9ff
+}
+
+.battleChoiceCard img{
+width:100%;
+aspect-ratio:1/1.35;
+object-fit:contain;
+background:#091a2d;
+border-radius:10px
+}
+
+.typeBadge{
+display:inline-block;
+padding:5px 9px;
+border-radius:8px;
+background:#183653;
+font-size:12px;
+font-weight:bold;
+margin-top:5px
+}
+
+.signatureMove{
+font-size:13px;
+opacity:.85;
+margin-top:5px
+}
+
+.battleStartButton{
+background:#198754;
+color:white;
+width:100%;
+margin-top:15px;
+font-size:17px
+}
+
+.battleCancelButton{
+background:#9b2929;
+color:white;
+width:100%;
+margin-top:8px
+}
+
+.battleRequestBox{
+background:#183653;
+border-radius:15px;
+padding:15px;
+margin-bottom:12px
+}
+
+.battleRequestButtons{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:10px
+}
+
+.battleRequestButtons button{
+flex:1;
+min-width:120px
+}
+
+/* SETTINGS */
 
 .settingsOverlay{
 position:fixed;
@@ -640,9 +894,10 @@ transform:translateX(-50%);
 background:#183653;
 padding:13px 18px;
 border-radius:12px;
-z-index:2000;
+z-index:7000;
 display:none;
-text-align:center
+text-align:center;
+max-width:90%
 }
 
 .cardViewer{
@@ -679,19 +934,50 @@ z-index:5001
 }
 
 @media(max-width:650px){
-.tradeColumns{grid-template-columns:1fr}
-.topBar{flex-wrap:nowrap}
-.moneyBox{margin-left:0}
+
+.tradeColumns{
+grid-template-columns:1fr
+}
+
+.topBar{
+flex-wrap:nowrap
+}
+
+.moneyBox{
+margin-left:0
+}
+
 .playerResultBox,
 .friendResultBox{
 align-items:flex-start
 }
-.friendSearchArea{
+
+.friendSearchArea,
+.tradeSearchArea{
 flex-direction:column
 }
+
 .dealGrid{
 grid-template-columns:1fr
 }
+
+.battleHeader{
+flex-direction:column
+}
+
+.battlePlayer{
+width:100%
+}
+
+.battleVs{
+margin:5px
+}
+
+.battleCardImage{
+width:100px;
+height:140px
+}
+
 }
 </style>
 </head>
@@ -718,6 +1004,7 @@ Coins: <span id="money">0</span>
 Dolb: <span id="dolb">0</span>
 </div>
 
+<button onclick="showPage('battle')">BATTLE</button>
 <button onclick="showPage('home')">HOME</button>
 <button onclick="showPage('shop')">SHOP</button>
 <button onclick="showPage('collection')">COLLECTION</button>
@@ -773,6 +1060,107 @@ OPEN PACK - 10 COINS
 </button>
 
 </div>
+
+</div>
+
+
+<!-- ================= BATTLE PAGE ================= -->
+
+<div id="battlePage" class="page hidden">
+
+<h1>Battle</h1>
+
+<div id="battleMain">
+
+<div class="battleHome">
+
+<h2>Choose a Battle</h2>
+
+<p>
+Pick one card from your collection and battle!
+</p>
+
+<div class="battleModes">
+
+<div class="battleMode">
+
+<h3>Easy Bot</h3>
+
+<p>
+A simple bot with random choices.
+</p>
+
+<button onclick="startBotBattle('easy')">
+BATTLE EASY BOT
+</button>
+
+</div>
+
+<div class="battleMode hard">
+
+<h3>Hard Bot</h3>
+
+<p>
+The hard bot chooses cards that counter your type.
+</p>
+
+<button onclick="startBotBattle('hard')">
+BATTLE HARD BOT
+</button>
+
+</div>
+
+<div class="battleMode friend">
+
+<h3>Friend Battle</h3>
+
+<p>
+Challenge one of your friends.
+</p>
+
+<button onclick="showPage('friends')">
+CHOOSE FRIEND
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="battleRequests"></div>
+
+<div id="battleFriendsList"></div>
+
+</div>
+
+<div id="battleChoice" class="battleHome hidden">
+
+<h2 id="battleChoiceTitle">Choose Your Card</h2>
+
+<p id="battleChoiceDescription">
+Choose one card to use in battle.
+</p>
+
+<div id="battleChoiceGrid" class="battleChoiceGrid"></div>
+
+<button
+id="battleStartButton"
+class="battleStartButton"
+onclick="confirmBattleCard()"
+disabled>
+BATTLE!
+</button>
+
+<button
+class="battleCancelButton"
+onclick="cancelBattleSetup()">
+CANCEL
+</button>
+
+</div>
+
+<div id="battleArena" class="battleArena hidden"></div>
 
 </div>
 
@@ -838,6 +1226,8 @@ FAVORITES
 <input
 id="collectionSearch"
 class="searchBox"
+type="search"
+autocomplete="off"
 placeholder="Search cards..."
 oninput="renderCollection()">
 
@@ -888,6 +1278,8 @@ Search using their username.
 
 <input
 id="tradePlayerInput"
+type="search"
+autocomplete="off"
 placeholder="Username">
 
 <button
@@ -925,6 +1317,8 @@ Search for another player using their username.
 
 <input
 id="friendPlayerInput"
+type="search"
+autocomplete="off"
 placeholder="Username">
 
 <button
@@ -946,8 +1340,6 @@ Your Friends
 </h2>
 
 <div id="friendsList"></div>
-
-</div>
 
 </div>
 
@@ -1055,21 +1447,23 @@ measurementId:"G-PT9S1K4E2K"
 };
 
 const app=initializeApp(firebaseConfig);
-
 const auth=getAuth(app);
-
 const db=getFirestore(app);
-
 
 const DEFAULT_PROFILE_PIC="basic_p.png";
 const BUZZY_PROFILE_PIC="buzzy_p.png";
 
 const PACK_PRICE=10;
-
 const STARTING_COINS=50;
-
 const STARTING_DOLB=0;
 
+const BATTLE_WIN_REWARD=30;
+const BATTLE_HP=100;
+
+
+/* =========================
+   CARDS
+========================= */
 
 const cards=[
 
@@ -1078,7 +1472,11 @@ name:"Baby Pickels",
 image:"baby pikels.png",
 weight:14,
 price:5,
-rarity:"doll"
+rarity:"doll",
+type:["Grass"],
+move:"Baby Food",
+moveType:"Grass",
+power:50
 },
 
 {
@@ -1086,7 +1484,11 @@ name:"Mr. Pickels",
 image:"mr. pickels.png",
 weight:9,
 price:7,
-rarity:"doll"
+rarity:"doll",
+type:["Grass"],
+move:"Fancy Food",
+moveType:"Grass",
+power:58
 },
 
 {
@@ -1094,7 +1496,11 @@ name:"Wily",
 image:"wily.png",
 weight:14,
 price:5,
-rarity:"doll"
+rarity:"doll",
+type:["Water"],
+move:"Small Splash",
+moveType:"Water",
+power:50
 },
 
 {
@@ -1102,7 +1508,11 @@ name:"Will",
 image:"will.png",
 weight:9,
 price:7,
-rarity:"doll"
+rarity:"doll",
+type:["Water"],
+move:"Big Splash",
+moveType:"Water",
+power:62
 },
 
 {
@@ -1110,7 +1520,11 @@ name:"Waffle",
 image:"waffle.png",
 weight:14,
 price:5,
-rarity:"doll"
+rarity:"doll",
+type:["Fire"],
+move:"Tasty Fire",
+moveType:"Fire",
+power:50
 },
 
 {
@@ -1118,7 +1532,11 @@ name:"Cute Cake",
 image:"cute cake.png",
 weight:9,
 price:7,
-rarity:"doll"
+rarity:"doll",
+type:["Fire"],
+move:"Delicuse",
+moveType:"Fire",
+power:60
 },
 
 {
@@ -1126,7 +1544,11 @@ name:"Buttyr",
 image:"buttyr.png",
 weight:20,
 price:7,
-rarity:"doll"
+rarity:"doll",
+type:["Flying","Rock"],
+move:"Hard Wing",
+moveType:"Flying",
+power:55
 },
 
 {
@@ -1134,7 +1556,11 @@ name:"Blossem",
 image:"blossem.png",
 weight:20,
 price:7,
-rarity:"doll"
+rarity:"doll",
+type:["Flying","Fairy"],
+move:"Flying Cuteness",
+moveType:"Flying",
+power:55
 },
 
 {
@@ -1142,7 +1568,11 @@ name:"Buzzy",
 image:"buzzy.png",
 weight:5,
 price:12,
-rarity:"doll"
+rarity:"doll",
+type:["Flying","Fairy"],
+move:"Flying Hat",
+moveType:"Flying",
+power:65
 },
 
 {
@@ -1150,7 +1580,11 @@ name:"Nico",
 image:"nico.png",
 weight:20,
 price:3,
-rarity:"doll"
+rarity:"doll",
+type:["Flying"],
+move:"Beak Attack",
+moveType:"Flying",
+power:52
 },
 
 {
@@ -1158,7 +1592,11 @@ name:"Choper",
 image:"choper.png",
 weight:10,
 price:5,
-rarity:"doll"
+rarity:"doll",
+type:["Normal","Fighting"],
+move:"Hand Combat",
+moveType:"Fighting",
+power:57
 },
 
 {
@@ -1166,179 +1604,95 @@ name:"Bullet",
 image:"bullet.png",
 weight:10,
 price:5,
-rarity:"doll"
+rarity:"doll",
+type:["Normal","Fighting"],
+move:"Tail Combat",
+moveType:"Fighting",
+power:62
 }
 
 ];
 
+
+/* =========================
+   DAILY SHOP
+========================= */
 
 const dailyShopData=[
 
-{
-name:"Baby Pickels",
-weight:20,
-normalPrice:3,
-cheapPrice:1
-},
-
-{
-name:"Mr. Pickels",
-weight:10,
-normalPrice:5,
-cheapPrice:1
-},
-
-{
-name:"Wily",
-weight:20,
-normalPrice:3,
-cheapPrice:1
-},
-
-{
-name:"Will",
-weight:10,
-normalPrice:5,
-cheapPrice:1
-},
-
-{
-name:"Waffle",
-weight:20,
-normalPrice:5,
-cheapPrice:1
-},
-
-{
-name:"Cute Cake",
-weight:10,
-normalPrice:3,
-cheapPrice:1
-},
-
-{
-name:"Buttyr",
-weight:7,
-normalPrice:4,
-cheapPrice:2
-},
-
-{
-name:"Blossem",
-weight:9,
-normalPrice:4,
-cheapPrice:2
-},
-
-{
-name:"Buzzy",
-weight:4,
-normalPrice:7,
-cheapPrice:4
-},
-
-{
-name:"Nico",
-weight:15,
-normalPrice:1,
-cheapPrice:1
-},
-
-{
-name:"Choper",
-weight:25,
-normalPrice:1,
-cheapPrice:1
-},
-
-{
-name:"Bullet",
-weight:20,
-normalPrice:2,
-cheapPrice:1
-}
+{name:"Baby Pickels",weight:20,normalPrice:3,cheapPrice:1},
+{name:"Mr. Pickels",weight:10,normalPrice:5,cheapPrice:1},
+{name:"Wily",weight:20,normalPrice:3,cheapPrice:1},
+{name:"Will",weight:10,normalPrice:5,cheapPrice:1},
+{name:"Waffle",weight:20,normalPrice:5,cheapPrice:1},
+{name:"Cute Cake",weight:10,normalPrice:3,cheapPrice:1},
+{name:"Buttyr",weight:7,normalPrice:4,cheapPrice:2},
+{name:"Blossem",weight:9,normalPrice:4,cheapPrice:2},
+{name:"Buzzy",weight:4,normalPrice:7,cheapPrice:4},
+{name:"Nico",weight:15,normalPrice:1,cheapPrice:1},
+{name:"Choper",weight:25,normalPrice:1,cheapPrice:1},
+{name:"Bullet",weight:20,normalPrice:2,cheapPrice:1}
 
 ];
-
-
-/*
-COINS -> DOLB
-
-30 Coins -> 10 Dolb
-50 Coins -> 25 Dolb
-100 Coins -> 75 Dolb
-150 Coins -> 150 Dolb
-*/
 
 const dolbDeals=[
-
-{
-coins:30,
-dolb:10
-},
-
-{
-coins:50,
-dolb:25
-},
-
-{
-coins:100,
-dolb:75
-},
-
-{
-coins:150,
-dolb:150
-}
-
+{coins:30,dolb:10},
+{coins:50,dolb:25},
+{coins:100,dolb:75},
+{coins:150,dolb:150}
 ];
 
 
+/* =========================
+   STATE
+========================= */
+
 let currentUser=null;
-
 let money=STARTING_COINS;
-
 let dolb=STARTING_DOLB;
-
 let username="";
-
 let profilePic=DEFAULT_PROFILE_PIC;
-
 let collection=[];
-
 let favorites=[];
-
 let completedTradeIds=[];
-
 let friends=[];
-
 let ownedProfilePics=[DEFAULT_PROFILE_PIC];
 
 let dailyShopOffer=null;
-
 let dailyShopBought=false;
-
 let dailyShopDate="";
 
 let collectionTab="all";
-
 let dexTab="dolls";
 
 let activeTrade=null;
-
 let selectedTradeCards=[];
-
 let tradeRequests=[];
-
 let tradeListener=null;
 
 let friendRequests=[];
-
 let friendListener=null;
 
 let applyingTradeIds=new Set();
 
+
+/* BATTLE STATE */
+
+let battleMode=null;
+let battleDifficulty="easy";
+let battleOpponentUid=null;
+let battleOpponentUsername="";
+let battleOpponentPic=DEFAULT_PROFILE_PIC;
+let battleSelectedCardId=null;
+let battleRoomId=null;
+let battleListener=null;
+let battleChoiceSubmitted=false;
+let battleRewardGiven=false;
+
+
+/* =========================
+   GENERAL
+========================= */
 
 function createCardId(){
 
@@ -1390,15 +1744,20 @@ function showMessage(text){
 const e=document.getElementById("message");
 
 e.textContent=text;
-
 e.style.display="block";
 
-setTimeout(()=>{
+clearTimeout(showMessage.timer);
+
+showMessage.timer=setTimeout(()=>{
 e.style.display="none";
-},2500);
+},2800);
 
 }
 
+
+/* =========================
+   CARD VIEWER
+========================= */
 
 window.openEncodedCardViewer=(image,name)=>{
 
@@ -1413,10 +1772,11 @@ decodeURIComponent(name)
 window.openCardViewer=(image,name)=>{
 
 document.getElementById("cardViewerImage").src=image;
-
 document.getElementById("cardViewerImage").alt=name;
 
-document.getElementById("cardViewer").classList.remove("hidden");
+document
+.getElementById("cardViewer")
+.classList.remove("hidden");
 
 };
 
@@ -1425,10 +1785,16 @@ window.closeCardViewer=e=>{
 
 if(e)e.stopPropagation();
 
-document.getElementById("cardViewer").classList.add("hidden");
+document
+.getElementById("cardViewer")
+.classList.add("hidden");
 
 };
 
+
+/* =========================
+   LOGIN
+========================= */
 
 window.loginGoogle=async()=>{
 
@@ -1442,7 +1808,6 @@ new GoogleAuthProvider()
 }catch(e){
 
 console.error(e);
-
 showMessage(e.message);
 
 }
@@ -1456,16 +1821,25 @@ try{
 
 await savePlayerData();
 
+stopTradeListener();
+stopFriendListener();
+stopBattleListener();
+
 await signOut(auth);
 
 }catch(e){
 
 console.error(e);
+showMessage(e.message);
 
 }
 
 };
 
+
+/* =========================
+   USERNAME
+========================= */
 
 async function askForUsername(){
 
@@ -1480,7 +1854,6 @@ chosen=chosen.trim();
 if(chosen.length<3){
 
 alert("Username must be at least 3 characters.");
-
 continue;
 
 }
@@ -1488,7 +1861,6 @@ continue;
 if(chosen.length>20){
 
 alert("Username must be 20 characters or less.");
-
 continue;
 
 }
@@ -1519,7 +1891,6 @@ snap.data().uid!==currentUser.uid
 ){
 
 alert("That username is already taken.");
-
 continue;
 
 }
@@ -1556,6 +1927,10 @@ username
 }
 
 
+/* =========================
+   COLLECTION SAVE
+========================= */
+
 function normalizeCollection(data){
 
 if(!Array.isArray(data))return[];
@@ -1571,9 +1946,7 @@ return createCardCopy(item);
 return{
 
 id:item.id||createCardId(),
-
 name:item.name,
-
 traded:item.traded===true
 
 };
@@ -1582,6 +1955,10 @@ traded:item.traded===true
 
 }
 
+
+/* =========================
+   PLAYER DATA
+========================= */
 
 async function loadPlayerData(){
 
@@ -1593,25 +1970,16 @@ currentUser.uid
 
 const snap=await getDoc(ref);
 
-
 if(!snap.exists()){
 
 money=STARTING_COINS;
-
 dolb=STARTING_DOLB;
-
 collection=[];
-
 favorites=[];
-
 completedTradeIds=[];
-
 friends=[];
-
 ownedProfilePics=[DEFAULT_PROFILE_PIC];
-
 username="";
-
 profilePic=DEFAULT_PROFILE_PIC;
 
 await setDoc(
@@ -1723,6 +2091,10 @@ profilePic
 }
 
 
+/* =========================
+   AUTH
+========================= */
+
 onAuthStateChanged(auth,async user=>{
 
 if(!user){
@@ -1730,14 +2102,13 @@ if(!user){
 currentUser=null;
 
 stopTradeListener();
-
 stopFriendListener();
+stopBattleListener();
 
 activeTrade=null;
-
 tradeRequests=[];
-
 friendRequests=[];
+friends=[];
 
 document
 .getElementById("loginScreen")
@@ -1765,6 +2136,8 @@ document
 .getElementById("gameScreen")
 .classList.remove("hidden");
 
+showPage("home");
+
 document
 .getElementById("accountEmail")
 .textContent=user.email||"";
@@ -1772,7 +2145,6 @@ document
 updateUI();
 
 startTradeListener();
-
 startFriendListener();
 
 }catch(e){
@@ -1791,30 +2163,32 @@ e.message
 
 function updateUI(){
 
-document.getElementById("money").textContent=money;
+const moneyEl=document.getElementById("money");
+const dolbEl=document.getElementById("dolb");
 
-document.getElementById("dolb").textContent=dolb;
+if(moneyEl)moneyEl.textContent=money;
+if(dolbEl)dolbEl.textContent=dolb;
 
 document.getElementById("usernameDisplay").textContent=username;
-
 document.getElementById("settingsUsername").textContent=username;
-
 document.getElementById("homeUsername").textContent=username;
 
 document.getElementById("homeProfilePic").src=profilePic;
-
 document.getElementById("settingsProfilePic").src=profilePic;
 
 renderCollection();
-
 renderDex();
-
 renderFriends();
-
+renderFriendRequests();
 renderShop();
+renderBattleHome();
 
 }
 
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
 
 window.showPage=page=>{
 
@@ -1840,7 +2214,6 @@ if(page==="dex")renderDex();
 if(page==="trade"){
 
 renderIncomingTrades();
-
 renderActiveTrade();
 
 }
@@ -1848,8 +2221,14 @@ renderActiveTrade();
 if(page==="friends"){
 
 renderFriendRequests();
-
 renderFriends();
+
+}
+
+if(page==="battle"){
+
+renderBattleHome();
+renderBattleRequests();
 
 }
 
@@ -1859,7 +2238,6 @@ renderFriends();
 /* =========================
    DAILY SHOP
 ========================= */
-
 
 function getTodayString(){
 
@@ -1874,32 +2252,13 @@ String(d.getDate()).padStart(2,"0");
 }
 
 
-/*
-IMPORTANT FIX:
-
-The old code used only the date:
-
-DBCC_DAILY_SHOP_2026-09-16
-
-That meant EVERY player got the same doll.
-
-Now we also use the player's UID:
-
-DBCC_DAILY_SHOP_UID_2026-09-16
-
-So different players can receive different daily dolls.
-*/
-
-
 function seededRandom(seed){
 
 let hash=0;
 
 for(let i=0;i<seed.length;i++){
 
-hash=((hash<<5)-hash)+
-seed.charCodeAt(i);
-
+hash=((hash<<5)-hash)+seed.charCodeAt(i);
 hash|=0;
 
 }
@@ -1991,18 +2350,15 @@ if(!snap.exists())return;
 
 const data=snap.data();
 
-
 if(data.dailyShopDate===today){
 
 dailyShopDate=today;
-
 dailyShopBought=
 data.dailyShopBought===true;
 
 }else{
 
 dailyShopDate=today;
-
 dailyShopBought=false;
 
 await setDoc(
@@ -2016,13 +2372,7 @@ dailyShopBought:false
 
 }
 
-
 const item=chooseDailyDoll(today);
-
-
-/*
-Buzzy profile picture chance
-*/
 
 if(
 item.name==="Buzzy" &&
@@ -2032,15 +2382,10 @@ getDailyBuzzyProfileChance(today)
 dailyShopOffer={
 
 type:"profilePic",
-
 name:"Buzzy",
-
 image:BUZZY_PROFILE_PIC,
-
 normalPrice:30,
-
 cheapPrice:15,
-
 price:getDailyCheapPrice(
 {
 normalPrice:30,
@@ -2055,33 +2400,14 @@ return;
 
 }
 
-
-/*
-IMPORTANT BUG FIX:
-
-Old:
-type:"doll'
-
-New:
-type:"doll"
-*/
-
 dailyShopOffer={
 
 type:"doll",
-
 name:item.name,
-
 image:getCard(item.name).image,
-
 normalPrice:item.normalPrice,
-
 cheapPrice:item.cheapPrice,
-
-price:getDailyCheapPrice(
-item,
-today
-)
+price:getDailyCheapPrice(item,today)
 
 };
 
@@ -2092,29 +2418,19 @@ today
    SHOP
 ========================= */
 
-
 function renderShop(){
 
-const daily=
-document.getElementById("dailyShop");
-
-const deals=
-document.getElementById("dolbDeals");
-
-const date=
-document.getElementById("shopDate");
+const daily=document.getElementById("dailyShop");
+const deals=document.getElementById("dolbDeals");
+const date=document.getElementById("shopDate");
 
 if(!daily||!deals)return;
 
-
 if(date){
 
-date.textContent=
-" Today: "+
-getTodayString();
+date.textContent=" Today: "+getTodayString();
 
 }
-
 
 if(!dailyShopOffer){
 
@@ -2123,9 +2439,7 @@ daily.innerHTML=
 
 }else{
 
-
 let imageHtml;
-
 
 if(
 dailyShopOffer.type==="profilePic"
@@ -2157,9 +2471,7 @@ onclick="openEncodedCardViewer('${encoded(dailyShopOffer.image)}','${encoded(dai
 
 }
 
-
 let button;
-
 
 if(dailyShopBought){
 
@@ -2168,17 +2480,13 @@ button=
 
 }else if(
 dailyShopOffer.type==="profilePic" &&
-ownedProfilePics.includes(
-BUZZY_PROFILE_PIC
-)
+ownedProfilePics.includes(BUZZY_PROFILE_PIC)
 ){
 
 button=
 '<button class="shopOwned" disabled>ALREADY OWNED</button>';
 
-}else if(
-dolb<dailyShopOffer.price
-){
+}else if(dolb<dailyShopOffer.price){
 
 button=
 '<button class="shopBuyButton" disabled>NOT ENOUGH DOLB</button>';
@@ -2198,7 +2506,6 @@ BUY FOR ${dailyShopOffer.price} DOLB
 `;
 
 }
-
 
 daily.innerHTML=`
 
@@ -2257,13 +2564,7 @@ ${button}
 
 }
 
-
-/*
-COINS -> DOLB DEALS
-*/
-
 deals.innerHTML="";
-
 
 dolbDeals.forEach(deal=>{
 
@@ -2274,28 +2575,18 @@ div.className="dealBox";
 div.innerHTML=`
 
 <div class="dealTitle">
-
 ${deal.coins} Coins
-
 </div>
 
-<div class="dealArrow">
-
-↓
-
-</div>
+<div class="dealArrow">↓</div>
 
 <div style="font-size:20px;font-weight:bold;color:#d0b5ff">
-
 ${deal.dolb} Dolb
-
 </div>
 
 <p>
-
 Spend ${deal.coins} Coins
 to receive ${deal.dolb} Dolb.
-
 </p>
 
 <button
@@ -2319,7 +2610,6 @@ window.buyDailyShopOffer=async()=>{
 
 if(!currentUser||!dailyShopOffer)return;
 
-
 if(dailyShopBought){
 
 showMessage(
@@ -2330,6 +2620,14 @@ return;
 
 }
 
+const price=dailyShopOffer.price;
+
+if(dolb<price){
+
+showMessage("Not enough Dolb.");
+return;
+
+}
 
 const today=getTodayString();
 
@@ -2339,49 +2637,11 @@ db,
 currentUser.uid
 );
 
-const snap=await getDoc(ref);
-
-
-if(
-snap.exists() &&
-snap.data().dailyShopDate===today &&
-snap.data().dailyShopBought===true
-){
-
-dailyShopBought=true;
-
-renderShop();
-
-showMessage(
-"You already bought today's offer."
-);
-
-return;
-
-}
-
-
-const price=dailyShopOffer.price;
-
-
-if(dolb<price){
-
-showMessage("Not enough Dolb.");
-
-return;
-
-}
-
-
 if(
 dailyShopOffer.type==="profilePic"
 ){
 
-if(
-ownedProfilePics.includes(
-BUZZY_PROFILE_PIC
-)
-){
+if(ownedProfilePics.includes(BUZZY_PROFILE_PIC)){
 
 showMessage(
 "You already own this profile picture."
@@ -2393,10 +2653,7 @@ return;
 
 dolb-=price;
 
-ownedProfilePics.push(
-BUZZY_PROFILE_PIC
-);
-
+ownedProfilePics.push(BUZZY_PROFILE_PIC);
 dailyShopBought=true;
 
 await savePlayerData();
@@ -2420,22 +2677,10 @@ return;
 
 }
 
-
-if(!getCard(dailyShopOffer.name)){
-
-showMessage("Doll not found.");
-
-return;
-
-}
-
-
 dolb-=price;
 
 collection.push(
-createCardCopy(
-dailyShopOffer.name
-)
+createCardCopy(dailyShopOffer.name)
 );
 
 dailyShopBought=true;
@@ -2455,42 +2700,22 @@ updateUI();
 
 showMessage(
 dailyShopOffer.name+
-" purchased! You now have "+
-collection.filter(
-c=>c.name===dailyShopOffer.name
-).length+
-" copies."
+" purchased!"
 );
 
 };
 
 
-/*
-FIXED:
-
-Before:
-dolb -= price
-money += coins
-
-Now:
-money -= coins
-dolb += dolb
-*/
-
 window.buyDolbDeal=async(coins,amountDolb)=>{
 
 if(money<coins){
 
-showMessage(
-"Not enough coins."
-);
-
+showMessage("Not enough coins.");
 return;
 
 }
 
 money-=coins;
-
 dolb+=amountDolb;
 
 await savePlayerData();
@@ -2507,9 +2732,8 @@ amountDolb+
 
 
 /* =========================
-   PACK
+   PACKS
 ========================= */
-
 
 function weightedRandomCard(){
 
@@ -2538,10 +2762,7 @@ window.openPack=async()=>{
 
 if(money<PACK_PRICE){
 
-showMessage(
-"Not enough coins."
-);
-
+showMessage("Not enough coins.");
 return;
 
 }
@@ -2591,13 +2812,11 @@ overflowY:"auto"
 }
 );
 
-
 const title=document.createElement("h2");
 
 title.textContent="You got:";
 
 overlay.appendChild(title);
-
 
 const grid=document.createElement("div");
 
@@ -2611,7 +2830,6 @@ gap:"15px",
 width:"min(100%,900px)"
 }
 );
-
 
 pulled.forEach(card=>{
 
@@ -2627,11 +2845,9 @@ textAlign:"center"
 }
 );
 
-
 const img=document.createElement("img");
 
 img.src=card.image;
-
 img.alt=card.name;
 
 Object.assign(
@@ -2645,7 +2861,6 @@ cursor:"pointer"
 }
 );
 
-
 img.onclick=e=>{
 
 e.stopPropagation();
@@ -2657,16 +2872,12 @@ card.name
 
 };
 
-
 box.appendChild(img);
-
 grid.appendChild(box);
 
 });
 
-
 overlay.appendChild(grid);
-
 
 const close=document.createElement("button");
 
@@ -2681,7 +2892,6 @@ color:"white"
 }
 );
 
-
 close.onclick=()=>overlay.remove();
 
 overlay.appendChild(close);
@@ -2694,7 +2904,6 @@ document.body.appendChild(overlay);
 /* =========================
    COLLECTION
 ========================= */
-
 
 window.setCollectionTab=tab=>{
 
@@ -2747,27 +2956,21 @@ c=>c.name===name
 function renderCollection(){
 
 const grid=
-document.getElementById(
-"collectionGrid"
-);
+document.getElementById("collectionGrid");
 
 if(!grid)return;
 
 const search=
 (
-document.getElementById(
-"collectionSearch"
-)?.value||""
-).toLowerCase();
+document.getElementById("collectionSearch")?.value||""
+).trim().toLowerCase();
 
-const counts=
-getCollectionCounts();
+const counts=getCollectionCounts();
 
 let names=
 cards
 .filter(c=>counts[c.name])
 .map(c=>c.name);
-
 
 if(collectionTab==="favorites"){
 
@@ -2777,7 +2980,6 @@ n=>favorites.includes(n)
 
 }
 
-
 if(search){
 
 names=names.filter(
@@ -2786,33 +2988,29 @@ n=>n.toLowerCase().includes(search)
 
 }
 
-
 grid.innerHTML="";
-
 
 if(!names.length){
 
 grid.innerHTML=
+search
+?
+"<p>No cards match your search.</p>"
+:
 "<p>You don't have any cards here.</p>";
 
 return;
 
 }
 
-
 for(const name of names){
 
 const card=getCard(name);
-
 const copy=getFirstCopy(name);
-
 const fav=favorites.includes(name);
-
-const traded=
-copy?.traded===true;
+const traded=copy?.traded===true;
 
 let border="";
-
 
 if(fav&&traded){
 
@@ -2834,15 +3032,11 @@ card.rarity==="rare"
 
 }
 
-
 const div=document.createElement("div");
 
-div.className=
-"card "+border;
-
+div.className="card "+border;
 
 const count=counts[name];
-
 
 div.innerHTML=`
 
@@ -2854,9 +3048,7 @@ ${fav?"★":"☆"}
 
 </button>
 
-<div class="cardCount">
-${count}
-</div>
+<div class="cardCount">${count}</div>
 
 <img
 src="${escapeHtml(card.image)}"
@@ -2894,14 +3086,10 @@ window.toggleFavorite=async name=>{
 
 if(favorites.includes(name)){
 
-favorites=
-favorites.filter(
-x=>x!==name
-);
+favorites=favorites.filter(x=>x!==name);
 
 showMessage(
-name+
-" is no longer a favorite."
+name+" is no longer a favorite."
 );
 
 }else{
@@ -2909,14 +3097,12 @@ name+
 favorites.push(name);
 
 showMessage(
-name+
-" is now a favorite."
+name+" is now a favorite."
 );
 
 }
 
 await savePlayerData();
-
 updateUI();
 
 };
@@ -2926,18 +3112,13 @@ window.sellCard=async name=>{
 
 if(favorites.includes(name)){
 
-showMessage(
-"Favorite cards cannot be sold."
-);
-
+showMessage("Favorite cards cannot be sold.");
 return;
 
 }
 
 const index=
-collection.findIndex(
-c=>c.name===name
-);
+collection.findIndex(c=>c.name===name);
 
 if(index===-1)return;
 
@@ -2967,24 +3148,17 @@ card.price+
    DEX
 ========================= */
 
-
 window.setDexTab=tab=>{
 
 dexTab=tab;
 
 document
 .getElementById("dexDollsButton")
-.classList.toggle(
-"active",
-tab==="dolls"
-);
+.classList.toggle("active",tab==="dolls");
 
 document
 .getElementById("dexRaresButton")
-.classList.toggle(
-"active",
-tab==="rares"
-);
+.classList.toggle("active",tab==="rares");
 
 renderDex();
 
@@ -2993,23 +3167,19 @@ renderDex();
 
 function renderDex(){
 
-const grid=
-document.getElementById("dexGrid");
+const grid=document.getElementById("dexGrid");
 
 if(!grid)return;
 
 grid.innerHTML="";
 
-
 if(dexTab==="rares"){
 
 for(let i=1;i<=6;i++){
 
-const div=
-document.createElement("div");
+const div=document.createElement("div");
 
-div.className=
-"dexCard comingSoon";
+div.className="dexCard comingSoon";
 
 div.innerHTML=`
 
@@ -3019,15 +3189,13 @@ aspect-ratio:1/1.35;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:25px
-">
+font-size:25px">
 
 ?
 
 </div>
 
 <b>Rare ${i}</b>
-
 <p>Coming Soon</p>
 
 `;
@@ -3040,7 +3208,6 @@ return;
 
 }
 
-
 for(const card of cards){
 
 const count=
@@ -3048,8 +3215,7 @@ collection.filter(
 c=>c.name===card.name
 ).length;
 
-const div=
-document.createElement("div");
+const div=document.createElement("div");
 
 div.className=
 "dexCard "+
@@ -3061,18 +3227,10 @@ div.innerHTML=`
 src="${escapeHtml(card.image)}"
 onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
 
-<b>
-${escapeHtml(card.name)}
-</b>
+<b>${escapeHtml(card.name)}</b>
 
 <p>
-${
-count
-?
-`Owned: ${count}`
-:
-"Not Owned"
-}
+${count?`Owned: ${count}`:"Not Owned"}
 </p>
 
 `;
@@ -3088,37 +3246,23 @@ grid.appendChild(div);
    TRADE
 ========================= */
 
-
 window.findPlayer=async()=>{
 
-const input=
-document.getElementById(
-"tradePlayerInput"
-);
+const input=document.getElementById("tradePlayerInput");
+const result=document.getElementById("tradePlayerResult");
 
-const result=
-document.getElementById(
-"tradePlayerResult"
-);
-
-const name=
-input.value.trim();
-
+const name=input.value.trim();
 
 if(!name){
 
-result.innerHTML=
-"<p>Enter a username.</p>";
-
+result.innerHTML="<p>Enter a username.</p>";
 return;
 
 }
 
-
 if(
 username &&
-name.toLowerCase()===
-username.toLowerCase()
+name.toLowerCase()===username.toLowerCase()
 ){
 
 result.innerHTML=
@@ -3128,10 +3272,7 @@ return;
 
 }
 
-
-result.innerHTML=
-"<p>Searching...</p>";
-
+result.innerHTML="<p>Searching...</p>";
 
 try{
 
@@ -3144,7 +3285,6 @@ name.toLowerCase()
 )
 );
 
-
 if(!snap.exists()){
 
 result.innerHTML=
@@ -3154,9 +3294,7 @@ return;
 
 }
 
-
 const d=snap.data();
-
 
 if(d.uid===currentUser.uid){
 
@@ -3167,31 +3305,18 @@ return;
 
 }
 
-
 const ps=
 await getDoc(
-doc(
-db,
-"players",
-d.uid
-)
+doc(db,"players",d.uid)
 );
 
-const pd=
-ps.exists()
-?ps.data()
-:{};
-
+const pd=ps.exists()?ps.data():{};
 
 const pic=
-pd.profilePic||
-DEFAULT_PROFILE_PIC;
+pd.profilePic||DEFAULT_PROFILE_PIC;
 
 const n=
-pd.username||
-d.username||
-name;
-
+pd.username||d.username||name;
 
 result.innerHTML=`
 
@@ -3206,14 +3331,10 @@ src="${escapeHtml(pic)}">
 <div class="playerResultInfo">
 
 <div class="profileUsername">
-
 ${escapeHtml(n)}
-
 </div>
 
-<p>
-Player found.
-</p>
+<p>Player found.</p>
 
 </div>
 
@@ -3232,7 +3353,6 @@ SEND TRADE REQUEST
 
 `;
 
-
 }catch(e){
 
 console.error(e);
@@ -3240,11 +3360,8 @@ console.error(e);
 result.innerHTML=`
 
 <div class="tradeNotice">
-
 Search error:<br>
-
 ${escapeHtml(e.message)}
-
 </div>
 
 `;
@@ -3256,11 +3373,7 @@ ${escapeHtml(e.message)}
 
 window.sendTradeRequest=async receiverUid=>{
 
-if(
-!currentUser||
-receiverUid===currentUser.uid
-)return;
-
+if(!currentUser||receiverUid===currentUser.uid)return;
 
 try{
 
@@ -3281,7 +3394,6 @@ t.senderUid===receiverUid
 )
 );
 
-
 if(pending){
 
 showMessage(
@@ -3292,13 +3404,8 @@ return;
 
 }
 
-
 await setDoc(
-doc(
-db,
-"tradeRequests",
-createCardId()
-),
+doc(db,"tradeRequests",createCardId()),
 {
 
 participants:[
@@ -3306,45 +3413,33 @@ currentUser.uid,
 receiverUid
 ],
 
-senderUid:
-currentUser.uid,
-
+senderUid:currentUser.uid,
 receiverUid,
 
-senderUsername:
-username,
-
+senderUsername:username,
 receiverUsername:"",
 
 senderOffer:[],
-
 receiverOffer:[],
 
 senderConfirmed:false,
-
 receiverConfirmed:false,
 
 status:"pending",
 
-createdAt:
-serverTimestamp()
+createdAt:serverTimestamp()
 
 }
 );
 
-
-showMessage(
-"Trade request sent!"
-);
-
+showMessage("Trade request sent!");
 
 }catch(e){
 
 console.error(e);
 
 showMessage(
-"Could not send trade request: "+
-e.message
+"Could not send trade request: "+e.message
 );
 
 }
@@ -3357,7 +3452,6 @@ function stopTradeListener(){
 if(tradeListener){
 
 tradeListener();
-
 tradeListener=null;
 
 }
@@ -3371,20 +3465,15 @@ stopTradeListener();
 
 if(!currentUser)return;
 
-
 const q=
 query(
-firestoreCollection(
-db,
-"tradeRequests"
-),
+firestoreCollection(db,"tradeRequests"),
 where(
 "participants",
 "array-contains",
 currentUser.uid
 )
 );
-
 
 tradeListener=
 onSnapshot(
@@ -3398,7 +3487,6 @@ id:x.id,
 ...x.data()
 })
 );
-
 
 for(const t of tradeRequests){
 
@@ -3420,7 +3508,6 @@ applyCompletedTrade(t);
 
 }
 
-
 if(activeTrade){
 
 const fresh=
@@ -3428,17 +3515,11 @@ tradeRequests.find(
 t=>t.id===activeTrade.id
 );
 
-if(fresh){
-
-activeTrade=fresh;
+if(fresh)activeTrade=fresh;
 
 }
-
-}
-
 
 renderIncomingTrades();
-
 renderActiveTrade();
 
 },
@@ -3447,8 +3528,7 @@ e=>{
 console.error(e);
 
 showMessage(
-"Trade connection error: "+
-e.message
+"Trade connection error: "+e.message
 );
 
 }
@@ -3459,45 +3539,33 @@ e.message
 
 function renderIncomingTrades(){
 
-const c=
-document.getElementById(
-"incomingTrades"
-);
+const c=document.getElementById("incomingTrades");
 
 if(!c)return;
 
 c.innerHTML="";
 
-
 const incoming=
 tradeRequests.filter(
 t=>
-t.receiverUid===
-currentUser?.uid &&
+t.receiverUid===currentUser?.uid &&
 t.status==="pending" &&
-(!activeTrade||
-t.id!==activeTrade.id)
+(!activeTrade||t.id!==activeTrade.id)
 );
-
 
 incoming.forEach(t=>{
 
-const d=
-document.createElement("div");
+const d=document.createElement("div");
 
 d.className="tradeRequest";
 
-
 d.innerHTML=`
 
-<b>
-Incoming Trade Request
-</b>
+<b>Incoming Trade Request</b>
 
 <p>
 ${escapeHtml(
-t.senderUsername||
-"Another player"
+t.senderUsername||"Another player"
 )}
 wants to trade with you.
 </p>
@@ -3521,11 +3589,7 @@ c.appendChild(d);
 
 window.acceptTrade=id=>{
 
-const t=
-tradeRequests.find(
-x=>x.id===id
-);
-
+const t=tradeRequests.find(x=>x.id===id);
 
 if(
 !t||
@@ -3533,24 +3597,17 @@ t.receiverUid!==currentUser.uid||
 t.status!=="pending"
 ){
 
-showMessage(
-"This trade cannot be accepted."
-);
-
+showMessage("This trade cannot be accepted.");
 return;
 
 }
 
-
 activeTrade=t;
 
 selectedTradeCards=
-getMyOffer(t).map(
-c=>c.id
-);
+getMyOffer(t).map(c=>c.id);
 
 showPage("trade");
-
 renderActiveTrade();
 
 };
@@ -3560,7 +3617,6 @@ function openOutgoingTradeIfNeeded(){
 
 if(activeTrade)return;
 
-
 const t=
 tradeRequests.find(
 x=>
@@ -3568,15 +3624,12 @@ x.senderUid===currentUser?.uid &&
 x.status==="pending"
 );
 
-
 if(t){
 
 activeTrade=t;
 
 selectedTradeCards=
-getMyOffer(t).map(
-c=>c.id
-);
+getMyOffer(t).map(c=>c.id);
 
 }
 
@@ -3585,8 +3638,7 @@ c=>c.id
 
 function getMyOffer(t){
 
-return t.senderUid===
-currentUser.uid
+return t.senderUid===currentUser.uid
 ?
 (t.senderOffer||[])
 :
@@ -3597,8 +3649,7 @@ currentUser.uid
 
 function getTheirOffer(t){
 
-return t.senderUid===
-currentUser.uid
+return t.senderUid===currentUser.uid
 ?
 (t.receiverOffer||[])
 :
@@ -3612,17 +3663,12 @@ function sameIds(a,b){
 return Array.isArray(a) &&
 Array.isArray(b) &&
 a.length===b.length &&
-a.every(
-x=>b.includes(x)
-);
+a.every(x=>b.includes(x));
 
 }
 
 
-function renderOfferCards(
-offer,
-selectable=false
-){
+function renderOfferCards(offer,selectable=false){
 
 if(!offer.length){
 
@@ -3634,25 +3680,19 @@ No cards offered yet.
 
 }
 
-
 return`
 
 <div class="tradeCardGrid">
 
 ${offer.map(copy=>{
 
-const card=
-getCard(copy.name);
+const card=getCard(copy.name);
 
 if(!card)return"";
 
-
 const selected=
-selectable &&
-selectedTradeCards.includes(
-copy.id
-);
-
+selectable&&
+selectedTradeCards.includes(copy.id);
 
 return`
 
@@ -3662,17 +3702,14 @@ ${
 selectable
 ?
 `onclick="toggleTradeCard('${escapeHtml(copy.id)}')"`
-:
-""
+:""
 }>
 
 <img
 src="${escapeHtml(card.image)}"
 onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
 
-<div>
-${escapeHtml(card.name)}
-</div>
+<div>${escapeHtml(card.name)}</div>
 
 </div>
 
@@ -3699,26 +3736,21 @@ You have no cards.
 
 }
 
-
 return`
 
 <div class="tradeCardGrid">
 
 ${collection.map(copy=>{
 
-const card=
-getCard(copy.name);
+const card=getCard(copy.name);
 
 if(!card)return"";
-
 
 return`
 
 <div
 class="tradeCard ${
-selectedTradeCards.includes(copy.id)
-?"selected"
-:""
+selectedTradeCards.includes(copy.id)?"selected":""
 }"
 onclick="toggleTradeCard('${escapeHtml(copy.id)}')">
 
@@ -3726,9 +3758,7 @@ onclick="toggleTradeCard('${escapeHtml(copy.id)}')">
 src="${escapeHtml(card.image)}"
 onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
 
-<div>
-${escapeHtml(card.name)}
-</div>
+<div>${escapeHtml(card.name)}</div>
 
 </div>
 
@@ -3745,24 +3775,18 @@ ${escapeHtml(card.name)}
 
 function renderActiveTrade(){
 
-const c=
-document.getElementById(
-"activeTrade"
-);
+const c=document.getElementById("activeTrade");
 
 if(!c)return;
 
 openOutgoingTradeIfNeeded();
 
-
 if(!activeTrade){
 
 c.innerHTML="";
-
 return;
 
 }
-
 
 if(activeTrade.status!=="pending"){
 
@@ -3770,24 +3794,17 @@ c.innerHTML=
 activeTrade.status==="completed"
 ?
 '<div class="tradeArea"><h2>Trade Completed</h2><p>The cards were successfully swapped.</p></div>'
-:
-"";
+:"";
 
 return;
 
 }
 
-
 const sender=
-activeTrade.senderUid===
-currentUser.uid;
+activeTrade.senderUid===currentUser.uid;
 
-const my=
-getMyOffer(activeTrade);
-
-const their=
-getTheirOffer(activeTrade);
-
+const my=getMyOffer(activeTrade);
+const their=getTheirOffer(activeTrade);
 
 const myConfirmed=
 sender
@@ -3796,7 +3813,6 @@ activeTrade.senderConfirmed===true
 :
 activeTrade.receiverConfirmed===true;
 
-
 const theirConfirmed=
 sender
 ?
@@ -3804,13 +3820,11 @@ activeTrade.receiverConfirmed===true
 :
 activeTrade.senderConfirmed===true;
 
-
 const matches=
 sameIds(
 my.map(c=>c.id),
 selectedTradeCards
 );
-
 
 c.innerHTML=`
 
@@ -3852,7 +3866,6 @@ UPDATE MY OFFER
 
 </div>
 
-
 <div class="tradeSide">
 
 <h3>Their Offer</h3>
@@ -3867,7 +3880,6 @@ ${their.length} card(s)
 </div>
 
 </div>
-
 
 <div class="tradeStatus">
 
@@ -3891,33 +3903,26 @@ theirConfirmed
 
 </div>
 
-
 ${
 !matches
 ?
 '<p style="text-align:center;color:#36b9ff">Update your offer before confirming.</p>'
-:
-""
+:""
 }
-
 
 ${
 !my.length
 ?
 '<p style="text-align:center;color:#36b9ff">You must offer at least one card.</p>'
-:
-""
+:""
 }
-
 
 ${
 !their.length
 ?
 '<p style="text-align:center;color:#36b9ff">Waiting for them to offer a card.</p>'
-:
-""
+:""
 }
-
 
 <button
 class="confirmButton"
@@ -3929,20 +3934,12 @@ myConfirmed||
 !their.length
 ?
 "disabled"
-:
-""
+:""
 }>
 
-${
-myConfirmed
-?
-"CONFIRMED"
-:
-"CONFIRM TRADE"
-}
+${myConfirmed?"CONFIRMED":"CONFIRM TRADE"}
 
 </button>
-
 
 <button
 class="cancelButton"
@@ -3966,21 +3963,12 @@ if(
 activeTrade.status!=="pending"
 )return;
 
-if(
-!collection.some(
-c=>c.id===id
-)
-)return;
+if(!collection.some(c=>c.id===id))return;
 
-
-if(
-selectedTradeCards.includes(id)
-){
+if(selectedTradeCards.includes(id)){
 
 selectedTradeCards=
-selectedTradeCards.filter(
-x=>x!==id
-);
+selectedTradeCards.filter(x=>x!==id);
 
 }else{
 
@@ -3995,28 +3983,18 @@ renderActiveTrade();
 
 window.submitTradeOffer=async()=>{
 
-if(
-!activeTrade||
-activeTrade.status!=="pending"
-)return;
-
+if(!activeTrade||activeTrade.status!=="pending")return;
 
 selectedTradeCards=
 selectedTradeCards.filter(
-id=>collection.some(
-c=>c.id===id
-)
+id=>collection.some(c=>c.id===id)
 );
-
 
 const offer=
 selectedTradeCards
 .map(id=>{
 
-const c=
-collection.find(
-x=>x.id===id
-);
+const c=collection.find(x=>x.id===id);
 
 return c
 ?
@@ -4026,52 +4004,39 @@ name:c.name,
 traded:c.traded===true,
 favorite:favorites.includes(c.name)
 }
-:
-null;
+:null;
 
 })
 .filter(Boolean);
 
-
 const sender=
-activeTrade.senderUid===
-currentUser.uid;
-
+activeTrade.senderUid===currentUser.uid;
 
 try{
 
 await updateDoc(
-doc(
-db,
-"tradeRequests",
-activeTrade.id
-),
+doc(db,"tradeRequests",activeTrade.id),
 {
 
 [sender
 ?"senderOffer"
-:"receiverOffer"
-]:
+:"receiverOffer"]:
 offer,
 
 senderConfirmed:false,
-
 receiverConfirmed:false
 
 }
 );
 
-
 showMessage(
 "Offer updated. Both players must confirm again."
 );
 
-
 }catch(e){
 
 showMessage(
-"Could not update offer: "+
-e.message
+"Could not update offer: "+e.message
 );
 
 }
@@ -4081,70 +4046,48 @@ e.message
 
 window.confirmTrade=async()=>{
 
-if(
-!activeTrade||
-activeTrade.status!=="pending"
-)return;
-
+if(!activeTrade||activeTrade.status!=="pending")return;
 
 try{
 
-const ref=
-doc(
+const ref=doc(
 db,
 "tradeRequests",
 activeTrade.id
 );
 
-const snap=
-await getDoc(ref);
-
+const snap=await getDoc(ref);
 
 if(!snap.exists()){
 
-showMessage(
-"Trade no longer exists."
-);
-
+showMessage("Trade no longer exists.");
 return;
 
 }
-
 
 const t={
 id:snap.id,
 ...snap.data()
 };
 
-
-const my=
-getMyOffer(t);
-
-const their=
-getTheirOffer(t);
-
+const my=getMyOffer(t);
+const their=getTheirOffer(t);
 
 if(!my.length){
 
-showMessage(
-"You must offer at least one card."
-);
-
+showMessage("You must offer at least one card.");
 return;
 
 }
-
 
 if(!their.length){
 
 showMessage(
 "Wait for the other player to offer a card."
 );
-
 return;
 
 }
-
 
 if(
 !sameIds(
@@ -4153,20 +4096,14 @@ selectedTradeCards
 )
 ){
 
-showMessage(
-"Update your offer before confirming."
-);
-
+showMessage("Update your offer before confirming.");
 return;
 
 }
 
-
 if(
 !my.every(
-o=>collection.some(
-c=>c.id===o.id
-)
+o=>collection.some(c=>c.id===o.id)
 )
 ){
 
@@ -4178,10 +4115,8 @@ return;
 
 }
 
-
 const sender=
-t.senderUid===
-currentUser.uid;
+t.senderUid===currentUser.uid;
 
 const field=
 sender
@@ -4190,20 +4125,15 @@ sender
 :
 "receiverConfirmed";
 
-
 await updateDoc(
 ref,
-{
-[field]:true
-}
+{[field]:true}
 );
-
 
 activeTrade={
 ...t,
 [field]:true
 };
-
 
 renderActiveTrade();
 
@@ -4211,22 +4141,17 @@ showMessage(
 "Confirmed. Waiting for the other player."
 );
 
-
-await tryFinalizeTrade(
-{
+await tryFinalizeTrade({
 ...t,
 [field]:true
-}
-);
-
+});
 
 }catch(e){
 
 console.error(e);
 
 showMessage(
-"Could not confirm trade: "+
-e.message
+"Could not confirm trade: "+e.message
 );
 
 }
@@ -4243,44 +4168,33 @@ t.senderConfirmed!==true||
 t.receiverConfirmed!==true
 )return;
 
-
-const sender=
-t.senderOffer||[];
-
-const receiver=
-t.receiverOffer||[];
-
+const sender=t.senderOffer||[];
+const receiver=t.receiverOffer||[];
 
 if(!sender.length||!receiver.length)return;
 
-
 try{
 
-const ref=
-doc(
+const ref=doc(
 db,
 "tradeRequests",
 t.id
 );
 
-const snap=
-await getDoc(ref);
+const snap=await getDoc(ref);
 
 if(!snap.exists())return;
-
 
 const fresh={
 id:snap.id,
 ...snap.data()
 };
 
-
 if(
 fresh.status!=="pending"||
 fresh.senderConfirmed!==true||
 fresh.receiverConfirmed!==true
 )return;
-
 
 await updateDoc(
 ref,
@@ -4290,14 +4204,10 @@ completedAt:serverTimestamp()
 }
 );
 
-
-await applyCompletedTrade(
-{
+await applyCompletedTrade({
 ...fresh,
 status:"completed"
-}
-);
-
+});
 
 }catch(e){
 
@@ -4315,133 +4225,88 @@ if(
 t.status!=="completed"
 )return;
 
-
 if(
 completedTradeIds.includes(t.id)||
 applyingTradeIds.has(t.id)
 )return;
 
-
 applyingTradeIds.add(t.id);
-
 
 try{
 
-const sender=
-t.senderUid===
-currentUser.uid;
+const sender=t.senderUid===currentUser.uid;
 
-
-const my=
-sender
+const my=sender
 ?
 (t.senderOffer||[])
 :
 (t.receiverOffer||[]);
 
-
-const incoming=
-sender
+const incoming=sender
 ?
 (t.receiverOffer||[])
 :
 (t.senderOffer||[]);
 
-
 if(!my.length||!incoming.length)return;
 
-
-const ref=
-doc(
+const ref=doc(
 db,
 "players",
 currentUser.uid
 );
 
-const snap=
-await getDoc(ref);
+const snap=await getDoc(ref);
 
 if(!snap.exists())return;
 
-
-let col=
-normalizeCollection(
+let col=normalizeCollection(
 snap.data().collection
 );
 
-
 let favs=
-Array.isArray(
-snap.data().favorites
-)
+Array.isArray(snap.data().favorites)
 ?
 [...snap.data().favorites]
 :
 [];
 
-
 let done=
-Array.isArray(
-snap.data().completedTradeIds
-)
+Array.isArray(snap.data().completedTradeIds)
 ?
-[...snap.data().completedTradeIds]
+snap.data().completedTradeIds
 :
 [];
-
 
 if(done.includes(t.id)){
 
 completedTradeIds=done;
-
 return;
 
 }
 
-
-const ids=
-new Set(
-my.map(c=>c.id)
-);
-
+const ids=new Set(my.map(c=>c.id));
 
 if(
 !my.every(
-o=>col.some(
-c=>c.id===o.id
-)
+o=>col.some(c=>c.id===o.id)
 )
 )return;
 
-
-col=
-col.filter(
-c=>!ids.has(c.id)
-);
-
+col=col.filter(c=>!ids.has(c.id));
 
 for(const o of incoming){
 
-if(
-!col.some(
-c=>c.id===o.id
-)
-){
+if(!col.some(c=>c.id===o.id)){
 
 col.push({
-
 id:o.id,
-
 name:o.name,
-
 traded:true
-
 });
 
-
 if(
-o.favorite &&
-!favs.includes(o.name)
+o.favorite&&!favs.includes(o.name)
 ){
 
 favs.push(o.name);
@@ -4452,9 +4317,7 @@ favs.push(o.name);
 
 }
 
-
 done.push(t.id);
-
 
 await setDoc(
 ref,
@@ -4466,19 +4329,13 @@ completedTradeIds:done
 {merge:true}
 );
 
-
 collection=col;
-
 favorites=favs;
-
 completedTradeIds=done;
 
 updateUI();
 
-showMessage(
-"Trade completed! Cards swapped."
-);
-
+showMessage("Trade completed! Cards swapped.");
 
 }catch(e){
 
@@ -4498,16 +4355,9 @@ window.cancelTrade=async id=>{
 try{
 
 await updateDoc(
-doc(
-db,
-"tradeRequests",
-id
-),
-{
-status:"cancelled"
-}
+doc(db,"tradeRequests",id),
+{status:"cancelled"}
 );
-
 
 if(activeTrade?.id===id){
 
@@ -4515,23 +4365,17 @@ activeTrade=null;
 
 }
 
-
 selectedTradeCards=[];
 
 renderActiveTrade();
-
 renderIncomingTrades();
 
-showMessage(
-"Trade cancelled."
-);
-
+showMessage("Trade cancelled.");
 
 }catch(e){
 
 showMessage(
-"Could not cancel trade: "+
-e.message
+"Could not cancel trade: "+e.message
 );
 
 }
@@ -4543,37 +4387,26 @@ e.message
    FRIENDS
 ========================= */
 
-
 window.findFriend=async()=>{
 
 const input=
-document.getElementById(
-"friendPlayerInput"
-);
+document.getElementById("friendPlayerInput");
 
 const result=
-document.getElementById(
-"friendSearchResult"
-);
+document.getElementById("friendSearchResult");
 
-const name=
-input.value.trim();
-
+const name=input.value.trim();
 
 if(!name){
 
-result.innerHTML=
-"<p>Enter a username.</p>";
-
+result.innerHTML="<p>Enter a username.</p>";
 return;
 
 }
 
-
 if(
 username &&
-name.toLowerCase()===
-username.toLowerCase()
+name.toLowerCase()===username.toLowerCase()
 ){
 
 result.innerHTML=
@@ -4583,10 +4416,7 @@ return;
 
 }
 
-
-result.innerHTML=
-"<p>Searching...</p>";
-
+result.innerHTML="<p>Searching...</p>";
 
 try{
 
@@ -4599,7 +4429,6 @@ name.toLowerCase()
 )
 );
 
-
 if(!snap.exists()){
 
 result.innerHTML=
@@ -4609,41 +4438,20 @@ return;
 
 }
 
-
 const d=snap.data();
-
 const uid=d.uid;
-
 
 const ps=
 await getDoc(
-doc(
-db,
-"players",
-uid
-)
+doc(db,"players",uid)
 );
 
-const pd=
-ps.exists()
-?ps.data()
-:{};
+const pd=ps.exists()?ps.data():{};
 
+const n=pd.username||d.username||name;
+const pic=pd.profilePic||DEFAULT_PROFILE_PIC;
 
-const n=
-pd.username||
-d.username||
-name;
-
-
-const pic=
-pd.profilePic||
-DEFAULT_PROFILE_PIC;
-
-
-const already=
-friends.includes(uid);
-
+const already=friends.includes(uid);
 
 const sent=
 friendRequests.some(
@@ -4653,7 +4461,6 @@ r.senderUid===currentUser.uid &&
 r.receiverUid===uid
 );
 
-
 const received=
 friendRequests.some(
 r=>
@@ -4662,9 +4469,7 @@ r.senderUid===uid &&
 r.receiverUid===currentUser.uid
 );
 
-
 let action;
-
 
 if(already){
 
@@ -4706,7 +4511,6 @@ ADD FRIEND
 
 }
 
-
 result.innerHTML=`
 
 <div class="friendResultBox">
@@ -4718,14 +4522,10 @@ src="${escapeHtml(pic)}">
 <div class="friendResultInfo">
 
 <div class="friendName">
-
 ${escapeHtml(n)}
-
 </div>
 
-<div>
-Player found.
-</div>
+<div>Player found.</div>
 
 ${action}
 
@@ -4735,7 +4535,6 @@ ${action}
 
 `;
 
-
 }catch(e){
 
 console.error(e);
@@ -4743,11 +4542,8 @@ console.error(e);
 result.innerHTML=`
 
 <div class="friendEmpty">
-
 Search error:<br>
-
 ${escapeHtml(e.message)}
-
 </div>
 
 `;
@@ -4764,21 +4560,14 @@ if(
 receiverUid===currentUser.uid
 )return;
 
-
 try{
 
-if(
-friends.includes(receiverUid)
-){
+if(friends.includes(receiverUid)){
 
-showMessage(
-"You are already friends."
-);
-
+showMessage("You are already friends.");
 return;
 
 }
-
 
 const existing=
 friendRequests.some(
@@ -4797,39 +4586,22 @@ r.senderUid===receiverUid
 )
 );
 
-
 if(existing){
 
-showMessage(
-"A friend request already exists."
-);
-
+showMessage("A friend request already exists.");
 return;
 
 }
 
-
 const snap=
 await getDoc(
-doc(
-db,
-"players",
-receiverUid
-)
+doc(db,"players",receiverUid)
 );
 
-const data=
-snap.exists()
-?snap.data()
-:{};
-
+const data=snap.exists()?snap.data():{};
 
 await setDoc(
-doc(
-db,
-"friendRequests",
-createCardId()
-),
+doc(db,"friendRequests",createCardId()),
 {
 
 participants:[
@@ -4837,44 +4609,32 @@ currentUser.uid,
 receiverUid
 ],
 
-senderUid:
-currentUser.uid,
-
+senderUid:currentUser.uid,
 receiverUid,
 
-senderUsername:
-username,
-
-receiverUsername:
-data.username||"",
+senderUsername:username,
+receiverUsername:data.username||"",
 
 status:"pending",
 
-createdAt:
-serverTimestamp()
+createdAt:serverTimestamp()
 
 }
 );
 
-
-showMessage(
-"Friend request sent!"
-);
-
+showMessage("Friend request sent!");
 
 document.getElementById(
 "friendSearchResult"
 ).innerHTML=
 '<div class="friendEmpty">Friend request sent!</div>';
 
-
 }catch(e){
 
 console.error(e);
 
 showMessage(
-"Could not send friend request: "+
-e.message
+"Could not send friend request: "+e.message
 );
 
 }
@@ -4887,7 +4647,6 @@ function stopFriendListener(){
 if(friendListener){
 
 friendListener();
-
 friendListener=null;
 
 }
@@ -4901,20 +4660,15 @@ stopFriendListener();
 
 if(!currentUser)return;
 
-
 const q=
 query(
-firestoreCollection(
-db,
-"friendRequests"
-),
+firestoreCollection(db,"friendRequests"),
 where(
 "participants",
 "array-contains",
 currentUser.uid
 )
 );
-
 
 friendListener=
 onSnapshot(
@@ -4929,10 +4683,9 @@ id:x.id,
 })
 );
 
-
 renderFriendRequests();
-
 renderFriends();
+renderBattleRequests();
 
 },
 e=>{
@@ -4940,8 +4693,7 @@ e=>{
 console.error(e);
 
 showMessage(
-"Friend connection error: "+
-e.message
+"Friend connection error: "+e.message
 );
 
 }
@@ -4953,43 +4705,32 @@ e.message
 function renderFriendRequests(){
 
 const c=
-document.getElementById(
-"friendRequestsArea"
-);
+document.getElementById("friendRequestsArea");
 
 if(!c)return;
-
 
 const incoming=
 friendRequests.filter(
 r=>
-r.receiverUid===
-currentUser?.uid &&
+r.receiverUid===currentUser?.uid &&
 r.status==="pending"
 );
-
 
 if(!incoming.length){
 
 c.innerHTML="";
-
 return;
 
 }
 
-
 c.innerHTML=
 "<h2 class='friendSection'>Friend Requests</h2>";
 
-
 incoming.forEach(r=>{
 
-const d=
-document.createElement("div");
+const d=document.createElement("div");
 
-d.className=
-"tradeRequest";
-
+d.className="tradeRequest";
 
 d.innerHTML=`
 
@@ -5003,17 +4744,12 @@ src="${DEFAULT_PROFILE_PIC}">
 <div class="playerResultInfo">
 
 <div class="friendName">
-
 ${escapeHtml(
-r.senderUsername||
-"Another player"
+r.senderUsername||"Another player"
 )}
-
 </div>
 
-<p>
-Wants to be your friend.
-</p>
+<p>Wants to be your friend.</p>
 
 <button
 class="friendAcceptButton"
@@ -5049,30 +4785,19 @@ r.senderUid
 }
 
 
-async function loadFriendRequestPicture(
-id,
-uid
-){
+async function loadFriendRequestPicture(id,uid){
 
 try{
 
 const s=
 await getDoc(
-doc(
-db,
-"players",
-uid
-)
+doc(db,"players",uid)
 );
 
 if(!s.exists())return;
 
-
 const img=
-document.getElementById(
-"fr_"+id
-);
-
+document.getElementById("fr_"+id);
 
 if(img){
 
@@ -5094,10 +4819,7 @@ console.error(e);
 window.acceptFriendRequest=async id=>{
 
 const r=
-friendRequests.find(
-x=>x.id===id
-);
-
+friendRequests.find(x=>x.id===id);
 
 if(
 !r||
@@ -5105,72 +4827,43 @@ r.receiverUid!==currentUser.uid||
 r.status!=="pending"
 ){
 
-showMessage(
-"This request cannot be accepted."
-);
-
+showMessage("This request cannot be accepted.");
 return;
 
 }
 
-
 try{
 
 await setDoc(
-doc(
-db,
-"players",
-currentUser.uid
-),
+doc(db,"players",currentUser.uid),
 {
-friends:
-arrayUnion(r.senderUid)
+friends:arrayUnion(r.senderUid)
 },
 {merge:true}
 );
-
 
 await setDoc(
-doc(
-db,
-"players",
-r.senderUid
-),
+doc(db,"players",r.senderUid),
 {
-friends:
-arrayUnion(currentUser.uid)
+friends:arrayUnion(currentUser.uid)
 },
 {merge:true}
 );
 
-
 await updateDoc(
-doc(
-db,
-"friendRequests",
-id
-),
+doc(db,"friendRequests",id),
 {
 status:"accepted"
 }
 );
 
+if(!friends.includes(r.senderUid)){
 
-if(
-!friends.includes(
-r.senderUid
-)
-){
-
-friends.push(
-r.senderUid
-);
+friends.push(r.senderUid);
 
 }
 
-
 await savePlayerData();
-
 
 showMessage(
 "You are now friends with "+
@@ -5178,17 +4871,14 @@ r.senderUsername+
 "!"
 );
 
-
 renderFriends();
-
 
 }catch(e){
 
 console.error(e);
 
 showMessage(
-"Could not accept friend request: "+
-e.message
+"Could not accept friend request: "+e.message
 );
 
 }
@@ -5206,16 +4896,13 @@ x.receiverUid===currentUser.uid &&
 x.status==="pending"
 );
 
-
 if(r){
 
 await acceptFriendRequest(r.id);
 
 }else{
 
-showMessage(
-"Friend request not found."
-);
+showMessage("Friend request not found.");
 
 }
 
@@ -5225,38 +4912,25 @@ showMessage(
 window.declineFriendRequest=async id=>{
 
 const r=
-friendRequests.find(
-x=>x.id===id
-);
-
+friendRequests.find(x=>x.id===id);
 
 if(!r)return;
-
 
 try{
 
 await updateDoc(
-doc(
-db,
-"friendRequests",
-id
-),
+doc(db,"friendRequests",id),
 {
 status:"declined"
 }
 );
 
-
-showMessage(
-"Friend request declined."
-);
-
+showMessage("Friend request declined.");
 
 }catch(e){
 
 showMessage(
-"Could not decline request: "+
-e.message
+"Could not decline request: "+e.message
 );
 
 }
@@ -5266,13 +4940,9 @@ e.message
 
 async function renderFriends(){
 
-const c=
-document.getElementById(
-"friendsList"
-);
+const c=document.getElementById("friendsList");
 
 if(!c||!currentUser)return;
-
 
 if(!friends.length){
 
@@ -5294,27 +4964,18 @@ return;
 
 }
 
-
-c.innerHTML=
-"<p>Loading friends...</p>";
-
+c.innerHTML="<p>Loading friends...</p>";
 
 try{
 
 const profiles=[];
 
-
 for(const id of friends){
 
 const s=
 await getDoc(
-doc(
-db,
-"players",
-id
-)
+doc(db,"players",id)
 );
-
 
 if(s.exists()){
 
@@ -5338,7 +4999,6 @@ DEFAULT_PROFILE_PIC
 
 }
 
-
 if(!profiles.length){
 
 c.innerHTML=
@@ -5348,18 +5008,13 @@ return;
 
 }
 
-
 c.innerHTML="";
-
 
 profiles.forEach(f=>{
 
-const d=
-document.createElement("div");
+const d=document.createElement("div");
 
-d.className=
-"friendBox";
-
+d.className="friendBox";
 
 d.innerHTML=`
 
@@ -5370,14 +5025,10 @@ src="${escapeHtml(f.profilePic)}">
 <div class="friendInfo">
 
 <div class="friendName">
-
 ${escapeHtml(f.username)}
-
 </div>
 
-<div>
-Friend
-</div>
+<div>Friend</div>
 
 </div>
 
@@ -5389,12 +5040,19 @@ TRADE
 
 </button>
 
+<button
+class="friendBattleButton"
+onclick="challengeFriend('${escapeHtml(f.uid)}','${escapeHtml(f.username)}','${escapeHtml(f.profilePic)}')">
+
+BATTLE
+
+</button>
+
 `;
 
 c.appendChild(d);
 
 });
-
 
 }catch(e){
 
@@ -5412,11 +5070,1925 @@ window.openTradeWithFriend=name=>{
 
 showPage("trade");
 
-document.getElementById(
-"tradePlayerInput"
-).value=name;
+const input=document.getElementById("tradePlayerInput");
+
+input.value=name;
 
 findPlayer();
+
+};
+
+
+/* =========================================================
+   BATTLE SYSTEM
+========================================================= */
+
+
+/*
+=========================================================
+TYPE EFFECTIVENESS
+=========================================================
+
+SUPER EFFECTIVE:
+
+Fire   -> Grass
+Grass  -> Water
+Water  -> Fire
+
+Flying -> Fighting
+Fighting -> Normal
+Rock   -> Flying
+Fairy  -> Fighting
+
+NOT VERY EFFECTIVE:
+
+The reverse of each matchup.
+
+Examples:
+
+Waffle (Fire)
+    -> Baby Pickels (Grass)
+    = 1.5x damage
+
+Baby Pickels (Grass)
+    -> Wily (Water)
+    = 1.5x damage
+
+Wily (Water)
+    -> Waffle (Fire)
+    = 1.5x damage
+
+Baby Pickels (Grass)
+    -> Waffle (Fire)
+    = 0.75x damage
+
+Neutral = 1x
+
+Dual types multiply together.
+
+=========================================================
+*/
+
+const typeAdvantages={
+
+Grass:["Water"],
+
+Water:["Fire"],
+
+Fire:["Grass"],
+
+Flying:["Fighting"],
+
+Fighting:["Normal"],
+
+Rock:["Flying"],
+
+Fairy:["Fighting"]
+
+};
+
+
+/*
+Gets the damage multiplier for a move.
+
+For every defender type:
+
+1.5x if the move type beats it.
+0.75x if the defender type beats the move type.
+1x if neutral.
+
+Because defender types are looped individually,
+dual-type cards can have combined effects.
+*/
+
+function getTypeMultiplier(moveType,defenderTypes){
+
+if(!Array.isArray(defenderTypes)){
+
+defenderTypes=[defenderTypes];
+
+}
+
+let multiplier=1;
+
+for(const defenderType of defenderTypes){
+
+/* MOVE IS SUPER EFFECTIVE */
+
+if(
+typeAdvantages[moveType]?.includes(defenderType)
+){
+
+multiplier*=1.5;
+
+}
+
+/* MOVE IS WEAK AGAINST THIS TYPE */
+
+if(
+typeAdvantages[defenderType]?.includes(moveType)
+){
+
+multiplier*=0.75;
+
+}
+
+}
+
+return multiplier;
+
+}
+
+
+function getBattleCardById(id){
+
+return collection.find(c=>c.id===id);
+
+}
+
+
+function getUniqueCollectionCards(){
+
+const seen=new Set();
+const result=[];
+
+for(const copy of collection){
+
+if(seen.has(copy.name))continue;
+
+const card=getCard(copy.name);
+
+if(!card)continue;
+
+seen.add(copy.name);
+result.push(copy);
+
+}
+
+return result;
+
+}
+
+
+function renderBattleHome(){
+
+const main=document.getElementById("battleMain");
+
+if(!main)return;
+
+if(battleRoomId)return;
+
+main.classList.remove("hidden");
+
+const requestArea=
+document.getElementById("battleRequests");
+
+if(requestArea){
+
+renderBattleRequests();
+
+}
+
+}
+
+
+function renderBattleRequests(){
+
+const c=document.getElementById("battleRequests");
+
+if(!c||!currentUser)return;
+
+const incoming=
+friendRequests.filter(
+r=>
+r.type==="battle" &&
+r.receiverUid===currentUser.uid &&
+r.status==="pending"
+);
+
+if(!incoming.length){
+
+c.innerHTML="";
+return;
+
+}
+
+c.innerHTML="<h2>Battle Requests</h2>";
+
+incoming.forEach(r=>{
+
+const d=document.createElement("div");
+
+d.className="battleRequestBox";
+
+d.innerHTML=`
+
+<div class="playerResultBox">
+
+<img
+class="profilePicSmall"
+id="battleReqPic_${escapeHtml(r.id)}"
+src="${DEFAULT_PROFILE_PIC}">
+
+<div class="playerResultInfo">
+
+<div class="friendName">
+${escapeHtml(r.senderUsername||"Player")}
+</div>
+
+<p>wants to battle you!</p>
+
+<div class="battleRequestButtons">
+
+<button
+class="friendAcceptButton"
+onclick="acceptBattleRequest('${escapeHtml(r.id)}')">
+
+ACCEPT
+
+</button>
+
+<button
+class="friendDeclineButton"
+onclick="declineBattleRequest('${escapeHtml(r.id)}')">
+
+DECLINE
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+c.appendChild(d);
+
+loadBattleRequestPicture(
+r.id,
+r.senderUid
+);
+
+});
+
+}
+
+
+async function loadBattleRequestPicture(id,uid){
+
+try{
+
+const s=
+await getDoc(
+doc(db,"players",uid)
+);
+
+if(!s.exists())return;
+
+const img=
+document.getElementById(
+"battleReqPic_"+id
+);
+
+if(img){
+
+img.src=
+s.data().profilePic||
+DEFAULT_PROFILE_PIC;
+
+}
+
+}catch(e){
+
+console.error(e);
+
+}
+
+}
+
+
+function renderBattleChoice(){
+
+const box=document.getElementById("battleChoice");
+const grid=document.getElementById("battleChoiceGrid");
+const title=document.getElementById("battleChoiceTitle");
+const description=document.getElementById("battleChoiceDescription");
+const start=document.getElementById("battleStartButton");
+
+if(!box||!grid)return;
+
+box.classList.remove("hidden");
+
+if(battleMode==="bot"){
+
+title.textContent=
+"Choose Your Card";
+
+description.textContent=
+"Pick one card. The bot will choose its card after you choose.";
+
+}else{
+
+title.textContent=
+"Choose Your Card";
+
+description.textContent=
+"Pick one card to use against "+battleOpponentUsername+".";
+
+}
+
+const available=getUniqueCollectionCards();
+
+grid.innerHTML="";
+
+if(!available.length){
+
+grid.innerHTML=`
+
+<div class="friendEmpty">
+
+<h3>You need a card!</h3>
+
+<p>
+Open a pack first to get a battle card.
+</p>
+
+</div>
+
+`;
+
+start.disabled=true;
+return;
+
+}
+
+available.forEach(copy=>{
+
+const card=getCard(copy.name);
+
+const div=document.createElement("div");
+
+div.className=
+"battleChoiceCard"+
+(
+battleSelectedCardId===copy.id
+?
+" selected"
+:
+""
+);
+
+div.onclick=()=>{
+
+battleSelectedCardId=copy.id;
+
+renderBattleChoice();
+
+};
+
+div.innerHTML=`
+
+<img
+src="${escapeHtml(card.image)}"
+onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
+
+<div class="cardName">
+${escapeHtml(card.name)}
+</div>
+
+<div class="typeBadge">
+${card.type.join(" / ")}
+</div>
+
+<div class="signatureMove">
+${escapeHtml(card.move)}
+</div>
+
+`;
+
+grid.appendChild(div);
+
+});
+
+start.disabled=!battleSelectedCardId;
+
+}
+
+
+function hideBattleChoice(){
+
+document
+.getElementById("battleChoice")
+.classList.add("hidden");
+
+}
+
+
+window.startBotBattle=difficulty=>{
+
+if(!collection.length){
+
+showMessage(
+"You need at least one card to battle."
+);
+
+showPage("collection");
+return;
+
+}
+
+battleMode="bot";
+battleDifficulty=difficulty;
+battleOpponentUid=null;
+battleOpponentUsername=
+difficulty==="hard"
+?
+"Hard Bot"
+:
+"Easy Bot";
+
+battleOpponentPic=DEFAULT_PROFILE_PIC;
+battleSelectedCardId=null;
+battleChoiceSubmitted=false;
+battleRewardGiven=false;
+
+showPage("battle");
+
+document
+.getElementById("battleMain")
+.classList.add("hidden");
+
+renderBattleChoice();
+
+};
+
+
+/* =========================
+   EASY BOT
+========================= */
+
+function chooseEasyBotCard(){
+
+const pool=cards;
+
+return pool[
+Math.floor(
+Math.random()*pool.length
+)
+];
+
+}
+
+
+/* =========================
+   HARD BOT
+========================= */
+
+function chooseHardBotCard(playerCard){
+
+const candidates=[];
+
+for(const card of cards){
+
+const multiplier=
+getTypeMultiplier(
+card.moveType,
+playerCard.type
+);
+
+/*
+The hard bot prefers cards whose
+signature move is super effective.
+*/
+
+if(multiplier>1){
+
+candidates.push(card);
+
+}
+
+}
+
+if(candidates.length){
+
+return candidates[
+Math.floor(
+Math.random()*candidates.length
+)
+];
+
+}
+
+return chooseEasyBotCard();
+
+}
+
+
+/* =========================
+   DAMAGE
+========================= */
+
+function calculateBattleDamage(attacker,defender){
+
+const effectiveness=
+getTypeMultiplier(
+attacker.moveType,
+defender.type
+);
+
+/*
+STAB:
+
+If the attacker's move has the same
+type as one of its own types, it gets
+a 1.15x bonus.
+*/
+
+const stab=
+attacker.type.includes(attacker.moveType)
+?
+1.15
+:
+1;
+
+/*
+Small random variation.
+*/
+
+const random=
+0.9+
+Math.random()*0.15;
+
+/*
+Final damage:
+
+Power
+× Type Effectiveness
+× STAB
+× Random Variation
+*/
+
+const damage=Math.max(
+1,
+Math.round(
+attacker.power*
+effectiveness*
+stab*
+random
+)
+);
+
+return{
+damage,
+effectiveness
+};
+
+}
+
+
+/* =========================
+   EFFECTIVENESS MESSAGE
+========================= */
+
+function battleEffectivenessText(multiplier){
+
+if(multiplier>=1.5){
+
+return"<b>Super effective!</b>";
+
+}
+
+if(multiplier<1){
+
+return"<b>Not very effective...</b>";
+
+}
+
+return"";
+
+}
+
+
+/* =========================
+   BATTLE CARD HTML
+========================= */
+
+function battleCardHTML(card,hp,name,pic,flip=false){
+
+const hpPercent=
+Math.max(
+0,
+Math.min(
+100,
+(hp/BATTLE_HP)*100
+)
+);
+
+return`
+
+<div class="battlePlayer">
+
+<div class="battlePlayerTop">
+
+<img
+class="profilePicSmall"
+src="${escapeHtml(pic||DEFAULT_PROFILE_PIC)}">
+
+<div>
+
+<div class="friendName">
+${escapeHtml(name)}
+</div>
+
+<div class="typeBadge">
+${card.type.join(" / ")}
+</div>
+
+</div>
+
+</div>
+
+<div style="text-align:center;margin:12px">
+
+<img
+class="battleCardImage"
+src="${escapeHtml(card.image)}"
+alt="${escapeHtml(card.name)}">
+
+<div class="cardName">
+${escapeHtml(card.name)}
+</div>
+
+<div class="signatureMove">
+${escapeHtml(card.move)}
+</div>
+
+</div>
+
+<div class="hpBar">
+
+<div
+class="hpFill"
+style="width:${hpPercent}%">
+
+</div>
+
+</div>
+
+<div class="hpText">
+HP: ${Math.max(0,hp)} / ${BATTLE_HP}
+</div>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================
+   BOT BATTLE
+========================= */
+
+function showLocalBotBattle(playerCard,botCard){
+
+let playerHP=BATTLE_HP;
+let botHP=BATTLE_HP;
+
+const arena=document.getElementById("battleArena");
+
+arena.classList.remove("hidden");
+
+document
+.getElementById("battleMain")
+.classList.add("hidden");
+
+hideBattleChoice();
+
+let playerTurn=true;
+
+function render(){
+
+arena.innerHTML=`
+
+<h2 style="text-align:center">
+${
+battleDifficulty==="hard"
+?
+"Hard Bot Battle"
+:
+"Easy Bot Battle"
+}
+</h2>
+
+<div class="battleHeader">
+
+${battleCardHTML(
+botCard,
+botHP,
+battleOpponentUsername,
+DEFAULT_PROFILE_PIC
+)}
+
+<div class="battleVs">VS</div>
+
+${battleCardHTML(
+playerCard,
+playerHP,
+username,
+profilePic
+)}
+
+</div>
+
+<div class="battleMove">
+
+<div class="moveName">
+${escapeHtml(playerCard.move)}
+</div>
+
+<div class="moveType">
+${escapeHtml(playerCard.moveType)} Type Move
+</div>
+
+<button
+class="battleStartButton"
+id="useMoveButton">
+
+USE ${escapeHtml(playerCard.move).toUpperCase()}
+
+</button>
+
+</div>
+
+<div class="battleLog" id="battleLog">
+Your turn!
+</div>
+
+`;
+
+const btn=document.getElementById("useMoveButton");
+
+btn.onclick=()=>{
+
+if(!playerTurn)return;
+
+playerTurn=false;
+btn.disabled=true;
+
+const result=
+calculateBattleDamage(
+playerCard,
+botCard
+);
+
+botHP=Math.max(
+0,
+botHP-result.damage
+);
+
+const log=
+document.getElementById("battleLog");
+
+log.innerHTML=
+`You used <b>${escapeHtml(playerCard.move)}</b>!<br>
+You dealt <b>${result.damage}</b> damage.
+${battleEffectivenessText(result.effectiveness)}`;
+
+render();
+
+if(botHP<=0){
+
+finishBotBattle(true);
+
+return;
+
+}
+
+setTimeout(()=>{
+
+const result2=
+calculateBattleDamage(
+botCard,
+playerCard
+);
+
+playerHP=Math.max(
+0,
+playerHP-result2.damage
+);
+
+render();
+
+const log2=document.getElementById("battleLog");
+
+log2.innerHTML=
+`${escapeHtml(botCard.name)} used <b>${escapeHtml(botCard.move)}</b>!<br>
+It dealt <b>${result2.damage}</b> damage.
+${battleEffectivenessText(result2.effectiveness)}`;
+
+if(playerHP<=0){
+
+finishBotBattle(false);
+
+return;
+
+}
+
+setTimeout(()=>{
+
+playerTurn=true;
+
+render();
+
+const log3=document.getElementById("battleLog");
+
+log3.textContent="Your turn!";
+
+},650);
+
+},650);
+
+};
+
+}
+
+render();
+
+}
+
+
+async function finishBotBattle(won){
+
+const arena=document.getElementById("battleArena");
+
+if(won){
+
+money+=BATTLE_WIN_REWARD;
+
+await savePlayerData();
+
+updateUI();
+
+arena.innerHTML=`
+
+<div class="battleResult">
+
+<div class="winText">
+YOU WIN!
+</div>
+
+<div class="rewardText">
++${BATTLE_WIN_REWARD} COINS
+</div>
+
+<p>
+You defeated ${escapeHtml(battleOpponentUsername)}!
+</p>
+
+<button
+class="battleStartButton"
+onclick="exitBattle()">
+
+BACK TO BATTLE
+
+</button>
+
+</div>
+
+`;
+
+}else{
+
+arena.innerHTML=`
+
+<div class="battleResult">
+
+<div class="winText">
+YOU LOST
+</div>
+
+<p>
+${escapeHtml(battleOpponentUsername)}
+won this battle.
+</p>
+
+<button
+class="battleStartButton"
+onclick="exitBattle()">
+
+BACK TO BATTLE
+
+</button>
+
+</div>
+
+`;
+
+}
+
+}
+
+
+/* =========================
+   CONFIRM BATTLE CARD
+========================= */
+
+window.confirmBattleCard=async()=>{
+
+if(!battleSelectedCardId)return;
+
+const selected=getBattleCardById(
+battleSelectedCardId
+);
+
+if(!selected){
+
+showMessage(
+"That card is no longer in your collection."
+);
+
+return;
+
+}
+
+const playerCard=getCard(selected.name);
+
+if(!playerCard)return;
+
+if(battleMode==="bot"){
+
+const botCard=
+battleDifficulty==="hard"
+?
+chooseHardBotCard(playerCard)
+:
+chooseEasyBotCard();
+
+showLocalBotBattle(
+playerCard,
+botCard
+);
+
+return;
+
+}
+
+if(battleMode==="friend"){
+
+await submitFriendBattleCard();
+
+}
+
+};
+
+
+/* =========================
+   CANCEL BATTLE
+========================= */
+
+function cancelBattleSetup(){
+
+battleSelectedCardId=null;
+battleMode=null;
+battleRoomId=null;
+
+hideBattleChoice();
+
+document
+.getElementById("battleArena")
+.classList.add("hidden");
+
+document
+.getElementById("battleMain")
+.classList.remove("hidden");
+
+renderBattleHome();
+
+}
+
+
+window.exitBattle=()=>{
+
+stopBattleListener();
+
+battleMode=null;
+battleDifficulty="easy";
+battleOpponentUid=null;
+battleOpponentUsername="";
+battleOpponentPic=DEFAULT_PROFILE_PIC;
+battleSelectedCardId=null;
+battleRoomId=null;
+battleChoiceSubmitted=false;
+battleRewardGiven=false;
+
+document
+.getElementById("battleArena")
+.classList.add("hidden");
+
+document
+.getElementById("battleMain")
+.classList.remove("hidden");
+
+hideBattleChoice();
+
+renderBattleHome();
+
+showPage("battle");
+
+};
+
+
+/* =========================
+   FRIEND BATTLE REQUESTS
+========================= */
+
+window.challengeFriend=async(uid,name,pic)=>{
+
+if(!currentUser)return;
+
+if(!friends.includes(uid)){
+
+showMessage("You can only battle your friends.");
+return;
+
+}
+
+if(!collection.length){
+
+showMessage(
+"You need at least one card to battle."
+);
+
+return;
+
+}
+
+const already=
+friendRequests.some(
+r=>
+r.type==="battle" &&
+r.status==="pending" &&
+(
+(
+r.senderUid===currentUser.uid &&
+r.receiverUid===uid
+)
+||
+(
+r.receiverUid===currentUser.uid &&
+r.senderUid===uid
+)
+)
+);
+
+if(already){
+
+showMessage(
+"You already have a battle request with this friend."
+);
+
+return;
+
+}
+
+try{
+
+await setDoc(
+doc(db,"friendRequests",createCardId()),
+{
+
+type:"battle",
+
+participants:[
+currentUser.uid,
+uid
+],
+
+senderUid:currentUser.uid,
+receiverUid:uid,
+
+senderUsername:username,
+receiverUsername:name,
+
+senderProfilePic:profilePic,
+receiverProfilePic:pic||DEFAULT_PROFILE_PIC,
+
+status:"pending",
+
+createdAt:serverTimestamp()
+
+}
+);
+
+showMessage(
+"Battle request sent to "+name+"!"
+);
+
+}catch(e){
+
+console.error(e);
+
+showMessage(
+"Could not send battle request: "+e.message
+);
+
+}
+
+};
+
+
+window.acceptBattleRequest=async requestId=>{
+
+const r=
+friendRequests.find(
+x=>
+x.id===requestId &&
+x.type==="battle"
+);
+
+if(
+!r||
+r.receiverUid!==currentUser.uid||
+r.status!=="pending"
+){
+
+showMessage(
+"This battle request is no longer available."
+);
+
+return;
+
+}
+
+try{
+
+const roomId=createCardId();
+
+await setDoc(
+doc(db,"battleRooms",roomId),
+{
+
+participants:[
+r.senderUid,
+r.receiverUid
+],
+
+player1Uid:r.senderUid,
+player2Uid:r.receiverUid,
+
+player1Username:r.senderUsername,
+player2Username:username,
+
+player1ProfilePic:
+r.senderProfilePic||
+DEFAULT_PROFILE_PIC,
+
+player2ProfilePic:
+profilePic||
+DEFAULT_PROFILE_PIC,
+
+player1Card:null,
+player2Card:null,
+
+player1Ready:false,
+player2Ready:false,
+
+status:"choosing",
+
+winnerUid:"",
+rewardedUids:[],
+
+createdAt:serverTimestamp()
+
+}
+);
+
+await updateDoc(
+doc(db,"friendRequests",requestId),
+{
+status:"accepted",
+battleRoomId:roomId
+}
+);
+
+battleMode="friend";
+battleRoomId=roomId;
+battleOpponentUid=r.senderUid;
+battleOpponentUsername=r.senderUsername;
+battleOpponentPic=
+r.senderProfilePic||
+DEFAULT_PROFILE_PIC;
+
+battleSelectedCardId=null;
+battleChoiceSubmitted=false;
+
+showPage("battle");
+
+document
+.getElementById("battleMain")
+.classList.add("hidden");
+
+renderBattleChoice();
+
+startBattleListener();
+
+showMessage(
+"Battle accepted! Choose your card."
+);
+
+}catch(e){
+
+console.error(e);
+
+showMessage(
+"Could not start battle: "+e.message
+);
+
+}
+
+};
+
+
+window.declineBattleRequest=async requestId=>{
+
+try{
+
+await updateDoc(
+doc(db,"friendRequests",requestId),
+{
+status:"declined"
+}
+);
+
+showMessage("Battle request declined.");
+
+}catch(e){
+
+showMessage(
+"Could not decline request: "+e.message
+);
+
+}
+
+};
+
+
+async function submitFriendBattleCard(){
+
+if(!battleRoomId||!battleSelectedCardId)return;
+
+const selected=getBattleCardById(
+battleSelectedCardId
+);
+
+if(!selected)return;
+
+const roomRef=doc(
+db,
+"battleRooms",
+battleRoomId
+);
+
+const snap=await getDoc(roomRef);
+
+if(!snap.exists()){
+
+showMessage(
+"Battle room no longer exists."
+);
+
+return;
+
+}
+
+const room=snap.data();
+
+if(
+!room.participants?.includes(currentUser.uid)
+){
+
+showMessage(
+"You are not part of this battle."
+);
+
+return;
+
+}
+
+const playerField=
+room.player1Uid===currentUser.uid
+?
+"player1Card"
+:
+"player2Card";
+
+const readyField=
+room.player1Uid===currentUser.uid
+?
+"player1Ready"
+:
+"player2Ready";
+
+await updateDoc(
+roomRef,
+{
+
+[playerField]:{
+id:selected.id,
+name:selected.name
+},
+
+[readyField]:true
+
+}
+);
+
+battleChoiceSubmitted=true;
+
+showMessage(
+"Card locked in! Waiting for your friend."
+);
+
+renderWaitingForBattle();
+
+}
+
+
+function renderWaitingForBattle(){
+
+const box=document.getElementById("battleChoice");
+
+if(!box)return;
+
+box.classList.remove("hidden");
+
+box.innerHTML=`
+
+<div class="battleHome">
+
+<h2>
+Waiting for ${escapeHtml(battleOpponentUsername)}
+</h2>
+
+<p>
+Your card is locked in.
+</p>
+
+<div style="text-align:center">
+
+<img
+class="battleCardImage"
+src="${escapeHtml(
+getCard(
+getBattleCardById(
+battleSelectedCardId
+)?.name
+)?.image||""
+)}">
+
+<h3>
+${escapeHtml(
+getBattleCardById(
+battleSelectedCardId
+)?.name||""
+)}
+</h3>
+
+</div>
+
+<div class="battleLog">
+Waiting for your opponent to choose their card...
+</div>
+
+<button
+class="battleCancelButton"
+onclick="leaveFriendBattle()">
+
+LEAVE BATTLE
+
+</button>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================
+   FRIEND BATTLE LISTENER
+========================= */
+
+function stopBattleListener(){
+
+if(battleListener){
+
+battleListener();
+battleListener=null;
+
+}
+
+}
+
+
+function startBattleListener(){
+
+stopBattleListener();
+
+if(!battleRoomId)return;
+
+const ref=doc(
+db,
+"battleRooms",
+battleRoomId
+);
+
+battleListener=
+onSnapshot(
+ref,
+snapshot=>{
+
+if(!snapshot.exists()){
+
+showMessage(
+"Battle room closed."
+);
+
+exitBattle();
+return;
+
+}
+
+const room={
+id:snapshot.id,
+...snapshot.data()
+};
+
+if(room.status==="finished"){
+
+renderFinishedFriendBattle(room);
+return;
+
+}
+
+if(
+room.player1Card &&
+room.player2Card &&
+room.player1Ready &&
+room.player2Ready
+){
+
+runFriendBattle(room);
+
+}
+
+},
+error=>{
+
+console.error(error);
+
+showMessage(
+"Battle connection error: "+error.message
+);
+
+}
+);
+
+}
+
+
+let friendBattleRunning=false;
+
+
+/* =========================
+   FRIEND BATTLE CALCULATION
+========================= */
+
+async function runFriendBattle(room){
+
+if(friendBattleRunning)return;
+
+friendBattleRunning=true;
+
+const p1=getCard(room.player1Card.name);
+const p2=getCard(room.player2Card.name);
+
+if(!p1||!p2){
+
+friendBattleRunning=false;
+return;
+
+}
+
+/*
+Both players calculate the same battle.
+
+The random generator is seeded from
+the battle room so both clients get
+the exact same damage.
+*/
+
+const seedBase=
+room.id+
+p1.name+
+p2.name;
+
+let seed=0;
+
+for(let i=0;i<seedBase.length;i++){
+
+seed=
+(seed*31+
+seedBase.charCodeAt(i))>>>0;
+
+}
+
+function random(){
+
+seed=
+(seed*1664525+1013904223)>>>0;
+
+return seed/4294967296;
+
+}
+
+let hp1=BATTLE_HP;
+let hp2=BATTLE_HP;
+
+const logs=[];
+
+let turn=
+random()<.5
+?
+1
+:
+2;
+
+while(hp1>0&&hp2>0){
+
+if(turn===1){
+
+const result=
+calculateDeterministicDamage(
+p1,
+p2,
+random
+);
+
+hp2=Math.max(
+0,
+hp2-result.damage
+);
+
+logs.push(
+`${p1.name} used ${p1.move} and dealt ${result.damage} damage.${battleEffectivenessText(result.effectiveness)}`
+);
+
+turn=2;
+
+}else{
+
+const result=
+calculateDeterministicDamage(
+p2,
+p1,
+random
+);
+
+hp1=Math.max(
+0,
+hp1-result.damage
+);
+
+logs.push(
+`${p2.name} used ${p2.move} and dealt ${result.damage} damage.${battleEffectivenessText(result.effectiveness)}`
+);
+
+turn=1;
+
+}
+
+}
+
+const winnerUid=
+hp1>0
+?
+room.player1Uid
+:
+room.player2Uid;
+
+const winnerName=
+hp1>0
+?
+room.player1Username
+:
+room.player2Username;
+
+const resultData={
+
+status:"finished",
+
+winnerUid,
+
+winnerName,
+
+player1FinalHP:hp1,
+player2FinalHP:hp2,
+
+battleLogs:logs,
+
+finishedAt:serverTimestamp()
+
+};
+
+try{
+
+await updateDoc(
+doc(db,"battleRooms",room.id),
+resultData
+);
+
+}catch(e){
+
+console.error(e);
+
+}
+
+friendBattleRunning=false;
+
+}
+
+
+/* =========================
+   DETERMINISTIC DAMAGE
+========================= */
+
+function calculateDeterministicDamage(
+attacker,
+defender,
+random
+){
+
+const effectiveness=
+getTypeMultiplier(
+attacker.moveType,
+defender.type
+);
+
+const stab=
+attacker.type.includes(attacker.moveType)
+?
+1.15
+:
+1;
+
+const randomValue=
+0.9+
+random()*0.15;
+
+const damage=Math.max(
+1,
+Math.round(
+attacker.power*
+effectiveness*
+stab*
+randomValue
+)
+);
+
+return{
+damage,
+effectiveness
+};
+
+}
+
+
+/* =========================
+   FINISHED FRIEND BATTLE
+========================= */
+
+async function renderFinishedFriendBattle(room){
+
+const arena=
+document.getElementById("battleArena");
+
+arena.classList.remove("hidden");
+
+document
+.getElementById("battleMain")
+.classList.add("hidden");
+
+hideBattleChoice();
+
+const player1=getCard(
+room.player1Card.name
+);
+
+const player2=getCard(
+room.player2Card.name
+);
+
+const meWon=
+room.winnerUid===currentUser.uid;
+
+if(
+meWon &&
+!room.rewardedUids?.includes(currentUser.uid)
+){
+
+try{
+
+const rewardRef=
+doc(db,"battleRooms",room.id);
+
+const fresh=await getDoc(rewardRef);
+
+if(fresh.exists()){
+
+const freshData=fresh.data();
+
+const rewarded=
+Array.isArray(freshData.rewardedUids)
+?
+freshData.rewardedUids
+:
+[];
+
+if(!rewarded.includes(currentUser.uid)){
+
+money+=BATTLE_WIN_REWARD;
+
+await savePlayerData();
+
+await updateDoc(
+rewardRef,
+{
+rewardedUids:
+arrayUnion(currentUser.uid)
+}
+);
+
+updateUI();
+
+}
+
+}
+
+}catch(e){
+
+console.error(e);
+
+}
+
+}
+
+const myHP=
+room.player1Uid===currentUser.uid
+?
+room.player1FinalHP
+:
+room.player2FinalHP;
+
+const opponentHP=
+room.player1Uid===currentUser.uid
+?
+room.player2FinalHP
+:
+room.player1FinalHP;
+
+const myCard=
+room.player1Uid===currentUser.uid
+?
+player1
+:
+player2;
+
+const opponentCard=
+room.player1Uid===currentUser.uid
+?
+player2
+:
+player1;
+
+const logs=
+Array.isArray(room.battleLogs)
+?
+room.battleLogs
+:
+[];
+
+arena.innerHTML=`
+
+<h2 style="text-align:center">
+Friend Battle
+</h2>
+
+<div class="battleHeader">
+
+${battleCardHTML(
+opponentCard,
+opponentHP,
+battleOpponentUsername,
+battleOpponentPic
+)}
+
+<div class="battleVs">
+VS
+</div>
+
+${battleCardHTML(
+myCard,
+myHP,
+username,
+profilePic
+)}
+
+</div>
+
+<div class="battleLog">
+
+${logs
+.slice(-8)
+.map(x=>escapeHtml(x))
+.join("<br>")}
+
+</div>
+
+<div class="battleResult">
+
+<div class="winText">
+
+${
+meWon
+?
+"YOU WIN!"
+:
+"YOU LOST"
+}
+
+</div>
+
+${
+meWon
+?
+`<div class="rewardText">
++${BATTLE_WIN_REWARD} COINS
+</div>`
+:
+""
+}
+
+<p>
+Winner:
+<b>
+${escapeHtml(room.winnerName||"")}
+</b>
+</p>
+
+<button
+class="battleStartButton"
+onclick="exitBattle()">
+
+BACK TO BATTLE
+
+</button>
+
+</div>
+
+`;
+
+}
+
+
+window.leaveFriendBattle=async()=>{
+
+if(!battleRoomId){
+
+cancelBattleSetup();
+return;
+
+}
+
+try{
+
+await updateDoc(
+doc(db,"battleRooms",battleRoomId),
+{
+status:"cancelled"
+}
+);
+
+}catch(e){
+
+console.error(e);
+
+}
+
+exitBattle();
 
 };
 
@@ -5424,7 +6996,6 @@ findPlayer();
 /* =========================
    SETTINGS
 ========================= */
-
 
 window.openSettings=()=>{
 
@@ -5452,15 +7023,10 @@ if(
 )
 )return;
 
-
 money=STARTING_COINS;
-
 dolb=STARTING_DOLB;
-
 collection=[];
-
 favorites=[];
-
 completedTradeIds=[];
 
 await savePlayerData();
@@ -5474,6 +7040,41 @@ showMessage(
 );
 
 };
+
+
+/* =========================
+   SEARCH BAR FIXES
+========================= */
+
+/*
+ENTER now searches Trade and Friends.
+Collection searches live while typing.
+*/
+
+document.addEventListener(
+"keydown",
+event=>{
+
+if(event.key!=="Enter")return;
+
+const target=event.target;
+
+if(target?.id==="tradePlayerInput"){
+
+event.preventDefault();
+findPlayer();
+
+}
+
+if(target?.id==="friendPlayerInput"){
+
+event.preventDefault();
+findFriend();
+
+}
+
+}
+);
 
 </script>
 
