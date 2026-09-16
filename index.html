@@ -30,8 +30,6 @@ button:disabled{
 
 .hidden{display:none!important}
 
-/* LOGIN */
-
 #loginScreen{
     min-height:100vh;
     display:flex;
@@ -79,6 +77,14 @@ button:disabled{
 
 .moneyBox{
     background:#183653;
+    padding:10px 14px;
+    border-radius:10px;
+    white-space:nowrap;
+    order:-1;
+}
+
+.dolbBox{
+    background:#6b4bc3;
     padding:10px 14px;
     border-radius:10px;
     white-space:nowrap;
@@ -323,6 +329,122 @@ h1,h2,h3{margin-top:0}
 }
 
 .comingSoon{opacity:.5}
+
+/* SHOP */
+
+.shopHeader{
+    background:#10243d;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+.shopDate{
+    opacity:.8;
+    font-size:14px;
+}
+
+.shopSection{
+    margin-top:25px;
+    margin-bottom:12px;
+}
+
+.dailyShopCard{
+    background:#10243d;
+    border-radius:18px;
+    padding:18px;
+    text-align:center;
+    max-width:430px;
+    margin:0 auto;
+}
+
+.dailyShopImage{
+    width:100%;
+    max-width:320px;
+    aspect-ratio:1/1.35;
+    object-fit:contain;
+    background:#091a2d;
+    border-radius:14px;
+    cursor:pointer;
+}
+
+.dailyShopName{
+    font-size:25px;
+    font-weight:bold;
+    margin-top:15px;
+}
+
+.shopPrice{
+    font-size:21px;
+    font-weight:bold;
+    margin:10px 0;
+}
+
+.shopBuyButton{
+    width:100%;
+    background:#6b4bc3;
+    color:white;
+    font-size:17px;
+}
+
+.shopOwned{
+    background:#555;
+    color:white;
+    width:100%;
+}
+
+.shopProfile{
+    width:130px;
+    height:130px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #6b4bc3;
+    background:#091a2d;
+    cursor:pointer;
+}
+
+.profileShopLabel{
+    font-size:18px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.dealGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+.dealBox{
+    background:#10243d;
+    border-radius:15px;
+    padding:18px;
+    text-align:center;
+}
+
+.dealTitle{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.dealArrow{
+    font-size:24px;
+    margin:10px;
+}
+
+.dealButton{
+    background:#6b4bc3;
+    color:white;
+    width:100%;
+}
+
+.eventShopBox{
+    background:#10243d;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+    opacity:.7;
+}
 
 /* TRADE */
 
@@ -623,27 +745,22 @@ h1,h2,h3{margin-top:0}
     .playerResultBox{align-items:flex-start}
     .friendResultBox{align-items:flex-start}
     .friendSearchArea{flex-direction:column}
+    .dealGrid{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-
 <div id="loginScreen">
     <div class="loginBox">
         <h1>Doll Ball Collector Cards</h1>
         <p>Log in to play.</p>
-
         <button class="googleButton" onclick="loginGoogle()">
             Sign in with Google
         </button>
     </div>
 </div>
-
-
-<!-- GAME -->
 
 <div id="gameScreen" class="hidden">
 
@@ -653,7 +770,13 @@ h1,h2,h3{margin-top:0}
             Coins: <span id="money">0</span>
         </div>
 
+        <div class="dolbBox">
+            Dolb: <span id="dolb">0</span>
+        </div>
+
         <button onclick="showPage('home')">HOME</button>
+
+        <button onclick="showPage('shop')">SHOP</button>
 
         <button onclick="showPage('collection')">
             COLLECTION
@@ -740,6 +863,60 @@ h1,h2,h3{margin-top:0}
                 onclick="openPack()">
                 OPEN PACK - 10 COINS
             </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- SHOP -->
+
+    <div id="shopPage" class="page hidden">
+
+        <div class="shopHeader">
+
+            <h1>Shop</h1>
+
+            <p>
+                Buy special daily dolls with Dolb.
+            </p>
+
+            <div class="shopDate">
+                Daily shop changes every day.
+                <span id="shopDate"></span>
+            </div>
+
+        </div>
+
+
+        <h2 class="shopSection">
+            Daily Doll
+        </h2>
+
+        <div id="dailyShop"></div>
+
+
+        <h2 class="shopSection">
+            Dolb Deals
+        </h2>
+
+        <div
+            id="dolbDeals"
+            class="dealGrid">
+        </div>
+
+
+        <h2 class="shopSection">
+            Event Shop
+        </h2>
+
+        <div class="eventShopBox">
+
+            <h3>No Event Right Now</h3>
+
+            <p>
+                Event shops will appear here when an event is active.
+            </p>
 
         </div>
 
@@ -879,9 +1056,7 @@ h1,h2,h3{margin-top:0}
 
         </div>
 
-
         <div id="friendRequestsArea"></div>
-
 
         <h2 class="friendSection">
             Your Friends
@@ -960,7 +1135,6 @@ h1,h2,h3{margin-top:0}
 
 </div>
 
-
 <div id="message"></div>
 
 
@@ -989,40 +1163,22 @@ import {
     query,
     where,
     serverTimestamp,
-    arrayUnion,
-    arrayRemove
+    arrayUnion
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
 /* FIREBASE */
 
 const firebaseConfig = {
-
-    apiKey:
-        "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
-
-    authDomain:
-        "dbcc-login.firebaseapp.com",
-
-    databaseURL:
-        "https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
-
-    projectId:
-        "dbcc-login",
-
-    storageBucket:
-        "dbcc-login.firebasestorage.app",
-
-    messagingSenderId:
-        "878902780767",
-
-    appId:
-        "1:878902780767:web:4020d11730e5d9c0ee0cea",
-
-    measurementId:
-        "G-PT9S1K4E2K"
+    apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
+    authDomain:"dbcc-login.firebaseapp.com",
+    databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId:"dbcc-login",
+    storageBucket:"dbcc-login.firebasestorage.app",
+    messagingSenderId:"878902780767",
+    appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
+    measurementId:"G-PT9S1K4E2K"
 };
-
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -1032,12 +1188,14 @@ const db = getFirestore(app);
 /* PROFILE */
 
 const DEFAULT_PROFILE_PIC = "basic_p.png";
+const BUZZY_PROFILE_PIC = "buzzy_p.png";
 
 
 /* ECONOMY */
 
 const PACK_PRICE = 10;
 const STARTING_COINS = 50;
+const STARTING_DOLB = 0;
 
 
 /* CARDS */
@@ -1143,11 +1301,131 @@ const cards = [
 ];
 
 
+/* DAILY SHOP DATA */
+
+const dailyShopData = [
+
+    {
+        name:"Baby Pickels",
+        weight:20,
+        normalPrice:3,
+        cheapPrice:1
+    },
+
+    {
+        name:"Mr. Pickels",
+        weight:10,
+        normalPrice:5,
+        cheapPrice:1
+    },
+
+    {
+        name:"Wily",
+        weight:20,
+        normalPrice:3,
+        cheapPrice:1
+    },
+
+    {
+        name:"Will",
+        weight:10,
+        normalPrice:5,
+        cheapPrice:1
+    },
+
+    {
+        name:"Waffle",
+        weight:20,
+        normalPrice:5,
+        cheapPrice:1
+    },
+
+    {
+        name:"Cute Cake",
+        weight:10,
+        normalPrice:3,
+        cheapPrice:1
+    },
+
+    {
+        name:"Buttyr",
+        weight:7,
+        normalPrice:4,
+        cheapPrice:2
+    },
+
+    {
+        name:"Blossem",
+        weight:9,
+        normalPrice:4,
+        cheapPrice:2
+    },
+
+    {
+        name:"Buzzy",
+        weight:4,
+        normalPrice:7,
+        cheapPrice:4
+    },
+
+    {
+        name:"Nico",
+        weight:15,
+        normalPrice:1,
+        cheapPrice:1
+    },
+
+    {
+        name:"Choper",
+        weight:25,
+        normalPrice:1,
+        cheapPrice:1
+    },
+
+    {
+        name:"Bullet",
+        weight:20,
+        normalPrice:2,
+        cheapPrice:1
+    }
+
+];
+
+
+/* DOLB DEALS */
+
+const dolbDeals = [
+
+    {
+        coins:30,
+        dolb:10
+    },
+
+    {
+        coins:50,
+        dolb:25
+    },
+
+    {
+        coins:100,
+        dolb:75
+    },
+
+    {
+        coins:150,
+        dolb:150
+    }
+
+];
+
+
 /* PLAYER STATE */
 
 let currentUser = null;
 
 let money = STARTING_COINS;
+
+let dolb = STARTING_DOLB;
 
 let username = "";
 
@@ -1160,6 +1438,14 @@ let favorites = [];
 let completedTradeIds = [];
 
 let friends = [];
+
+let ownedProfilePics = [DEFAULT_PROFILE_PIC];
+
+let dailyShopOffer = null;
+
+let dailyShopBought = false;
+
+let dailyShopDate = "";
 
 let collectionTab = "all";
 
@@ -1469,21 +1755,35 @@ async function loadPlayerData(){
     if(!snap.exists()){
 
         money = STARTING_COINS;
+
+        dolb = STARTING_DOLB;
+
         collection = [];
+
         favorites = [];
+
         completedTradeIds = [];
+
         friends = [];
+
+        ownedProfilePics = [
+            DEFAULT_PROFILE_PIC
+        ];
+
         username = "";
+
         profilePic = DEFAULT_PROFILE_PIC;
 
         await setDoc(
             ref,
             {
                 money:money,
+                dolb:dolb,
                 collection:collection,
                 favorites:favorites,
                 completedTradeIds:completedTradeIds,
                 friends:friends,
+                ownedProfilePics:ownedProfilePics,
                 username:username,
                 profilePic:profilePic
             }
@@ -1497,6 +1797,11 @@ async function loadPlayerData(){
             typeof data.money === "number"
                 ? data.money
                 : STARTING_COINS;
+
+        dolb =
+            typeof data.dolb === "number"
+                ? data.dolb
+                : STARTING_DOLB;
 
         collection =
             normalizeCollection(data.collection);
@@ -1516,12 +1821,25 @@ async function loadPlayerData(){
                 ? data.friends
                 : [];
 
+        ownedProfilePics =
+            Array.isArray(data.ownedProfilePics)
+                ? data.ownedProfilePics
+                : [DEFAULT_PROFILE_PIC];
+
+        if(!ownedProfilePics.includes(DEFAULT_PROFILE_PIC)){
+            ownedProfilePics.push(DEFAULT_PROFILE_PIC);
+        }
+
         username =
             data.username || "";
 
         profilePic =
             data.profilePic ||
             DEFAULT_PROFILE_PIC;
+
+        if(!ownedProfilePics.includes(profilePic)){
+            ownedProfilePics.push(profilePic);
+        }
 
     }
 
@@ -1530,6 +1848,8 @@ async function loadPlayerData(){
     }
 
     await ensureUsernameDocument();
+
+    await loadDailyShopData();
 
     await savePlayerData();
 
@@ -1552,10 +1872,12 @@ async function savePlayerData(){
         ),
         {
             money:money,
+            dolb:dolb,
             collection:collection,
             favorites:favorites,
             completedTradeIds:completedTradeIds,
             friends:friends,
+            ownedProfilePics:ownedProfilePics,
             username:username,
             profilePic:profilePic
         },
@@ -1640,6 +1962,9 @@ function updateUI(){
     document.getElementById("money").textContent =
         money;
 
+    document.getElementById("dolb").textContent =
+        dolb;
+
     document.getElementById("usernameDisplay").textContent =
         username;
 
@@ -1658,6 +1983,7 @@ function updateUI(){
     renderCollection();
     renderDex();
     renderFriends();
+    renderShop();
 
 }
 
@@ -1678,6 +2004,10 @@ function(page){
 
     if(target){
         target.classList.remove("hidden");
+    }
+
+    if(page === "shop"){
+        renderShop();
     }
 
     if(page === "collection"){
@@ -1701,7 +2031,785 @@ function(page){
 };
 
 
-/* PACK */
+/* =========================================================
+   DAILY SHOP
+   ========================================================= */
+
+
+/*
+   The daily shop is the same for everyone on the same date.
+
+   The weights are:
+
+   Baby Pickels 20
+   Mr. Pickels 10
+   Wily 20
+   Will 10
+   Waffle 20
+   Cute Cake 10
+   Buttyr 7
+   Blossem 9
+   Buzzy 4
+   Nico 15
+   Choper 25
+   Bullet 20
+
+   "Sometimes" price = 50% chance.
+*/
+
+
+function getTodayString(){
+
+    const now = new Date();
+
+    return (
+        now.getFullYear() +
+        "-" +
+        String(now.getMonth()+1).padStart(2,"0") +
+        "-" +
+        String(now.getDate()).padStart(2,"0")
+    );
+
+}
+
+
+/* Seeded random number */
+
+function seededRandom(seed){
+
+    let hash = 0;
+
+    for(let i=0;i<seed.length;i++){
+
+        hash =
+            ((hash << 5) - hash) +
+            seed.charCodeAt(i);
+
+        hash |= 0;
+
+    }
+
+    let x =
+        Math.sin(hash) * 10000;
+
+    return x - Math.floor(x);
+
+}
+
+
+/* Weighted daily doll */
+
+function chooseDailyDoll(dateString){
+
+    const totalWeight =
+        dailyShopData.reduce(
+            (sum,item)=>sum + item.weight,
+            0
+        );
+
+    let random =
+        seededRandom(
+            "DBCC_DAILY_SHOP_" + dateString
+        ) * totalWeight;
+
+    for(const item of dailyShopData){
+
+        random -= item.weight;
+
+        if(random <= 0){
+            return item;
+        }
+
+    }
+
+    return dailyShopData[
+        dailyShopData.length - 1
+    ];
+
+}
+
+
+/* Buzzy profile picture chance */
+
+function getDailyBuzzyProfileChance(dateString){
+
+    const value =
+        seededRandom(
+            "DBCC_BUZZY_PROFILE_" + dateString
+        );
+
+    /*
+       0.0075 = 0.75%
+    */
+
+    return value < 0.0075;
+
+}
+
+
+/* Cheap-price chance */
+
+function getDailyCheapPrice(
+    item,
+    dateString
+){
+
+    if(
+        item.normalPrice ===
+        item.cheapPrice
+    ){
+        return item.normalPrice;
+    }
+
+    const value =
+        seededRandom(
+            "DBCC_CHEAP_PRICE_" +
+            dateString +
+            "_" +
+            item.name
+        );
+
+    if(value < 0.5){
+        return item.cheapPrice;
+    }
+
+    return item.normalPrice;
+
+}
+
+
+/* Load / generate daily shop */
+
+async function loadDailyShopData(){
+
+    const today =
+        getTodayString();
+
+    const playerRef =
+        doc(
+            db,
+            "players",
+            currentUser.uid
+        );
+
+    const snap =
+        await getDoc(playerRef);
+
+    if(!snap.exists()){
+        return;
+    }
+
+    const data = snap.data();
+
+    /*
+       Every player stores whether they bought
+       today's shop offer.
+
+       The actual offer is generated from today's
+       date, so everyone gets the same offer.
+    */
+
+    if(
+        data.dailyShopDate === today
+    ){
+
+        dailyShopDate = today;
+
+        dailyShopBought =
+            data.dailyShopBought === true;
+
+    }else{
+
+        dailyShopDate = today;
+
+        dailyShopBought = false;
+
+        await setDoc(
+            playerRef,
+            {
+                dailyShopDate:today,
+                dailyShopBought:false
+            },
+            {merge:true}
+        );
+
+    }
+
+    const item =
+        chooseDailyDoll(today);
+
+    /*
+       Buzzy has a 0.75% chance of being the
+       profile picture offer.
+    */
+
+    if(item.name === "Buzzy"){
+
+        const profileChance =
+            getDailyBuzzyProfileChance(today);
+
+        if(profileChance){
+
+            dailyShopOffer = {
+
+                type:"profilePic",
+
+                name:"Buzzy",
+
+                image:BUZZY_PROFILE_PIC,
+
+                normalPrice:30,
+
+                cheapPrice:15,
+
+                price:getDailyCheapPrice(
+                    {
+                        normalPrice:30,
+                        cheapPrice:15
+                    },
+                    today
+                )
+
+            };
+
+            return;
+
+        }
+
+    }
+
+    dailyShopOffer = {
+
+        type:"doll",
+
+        name:item.name,
+
+        image:getCard(item.name).image,
+
+        normalPrice:item.normalPrice,
+
+        cheapPrice:item.cheapPrice,
+
+        price:getDailyCheapPrice(
+            item,
+            today
+        )
+
+    };
+
+}
+
+
+/* RENDER SHOP */
+
+function renderShop(){
+
+    const daily =
+        document.getElementById("dailyShop");
+
+    const deals =
+        document.getElementById("dolbDeals");
+
+    const date =
+        document.getElementById("shopDate");
+
+    if(!daily || !deals){
+        return;
+    }
+
+    if(date){
+
+        date.textContent =
+            " Today: " + getTodayString();
+
+    }
+
+    /* DAILY OFFER */
+
+    if(!dailyShopOffer){
+
+        daily.innerHTML = `
+            <div class="dailyShopCard">
+                <p>Loading today's shop...</p>
+            </div>
+        `;
+
+    }else{
+
+        const owned =
+            dailyShopOffer.type === "doll"
+                ? collection.some(
+                    copy =>
+                        copy.name ===
+                        dailyShopOffer.name
+                )
+                : ownedProfilePics.includes(
+                    BUZZY_PROFILE_PIC
+                );
+
+        let imageHtml = "";
+
+        if(
+            dailyShopOffer.type ===
+            "profilePic"
+        ){
+
+            imageHtml = `
+
+                <img
+                    class="shopProfile"
+                    src="${escapeHtml(dailyShopOffer.image)}"
+                    alt="Buzzy Profile Picture"
+                    onclick="openEncodedCardViewer(
+                        '${encoded(dailyShopOffer.image)}',
+                        '${encoded("Buzzy Profile Picture")}'
+                    )">
+
+                <div class="profileShopLabel">
+                    Buzzy Profile Picture
+                </div>
+
+            `;
+
+        }else{
+
+            imageHtml = `
+
+                <img
+                    class="dailyShopImage"
+                    src="${escapeHtml(dailyShopOffer.image)}"
+                    alt="${escapeHtml(dailyShopOffer.name)}"
+                    onclick="openEncodedCardViewer(
+                        '${encoded(dailyShopOffer.image)}',
+                        '${encoded(dailyShopOffer.name)}'
+                    )">
+
+            `;
+
+        }
+
+        let button;
+
+        if(dailyShopBought){
+
+            button = `
+                <button
+                    class="shopOwned"
+                    disabled>
+                    PURCHASED TODAY
+                </button>
+            `;
+
+        }else if(owned){
+
+            button = `
+                <button
+                    class="shopOwned"
+                    disabled>
+                    ALREADY OWNED
+                </button>
+            `;
+
+        }else if(
+            dolb <
+            dailyShopOffer.price
+        ){
+
+            button = `
+                <button
+                    class="shopBuyButton"
+                    disabled>
+                    NOT ENOUGH DOLB
+                </button>
+            `;
+
+        }else{
+
+            button = `
+                <button
+                    class="shopBuyButton"
+                    onclick="buyDailyShopOffer()">
+
+                    BUY FOR
+                    ${dailyShopOffer.price}
+                    DOLB
+
+                </button>
+            `;
+
+        }
+
+        daily.innerHTML = `
+
+            <div class="dailyShopCard">
+
+                ${imageHtml}
+
+                ${
+                    dailyShopOffer.type === "doll"
+                        ? `
+                            <div class="dailyShopName">
+                                ${escapeHtml(
+                                    dailyShopOffer.name
+                                )}
+                            </div>
+                        `
+                        : ""
+                }
+
+                <div class="shopPrice">
+
+                    ${dailyShopOffer.price}
+                    Dolb
+
+                </div>
+
+                ${
+                    dailyShopOffer.price !==
+                    dailyShopOffer.normalPrice
+                        ? `
+                            <div style="
+                                text-decoration:line-through;
+                                opacity:.55;
+                                margin-bottom:8px;
+                            ">
+                                Normal price:
+                                ${dailyShopOffer.normalPrice}
+                                Dolb
+                            </div>
+
+                            <div style="
+                                color:#7ee7a7;
+                                font-weight:bold;
+                                margin-bottom:10px;
+                            ">
+                                TODAY'S DEAL!
+                            </div>
+                        `
+                        : ""
+                }
+
+                ${
+                    dailyShopOffer.type ===
+                    "profilePic"
+                        ? `
+                            <p>
+                                You can see this profile picture
+                                before buying it.
+                            </p>
+                        `
+                        : `
+                            <p>
+                                You can own only one copy
+                                of each doll.
+                            </p>
+                        `
+                }
+
+                ${button}
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* DOLB DEALS */
+
+    deals.innerHTML = "";
+
+    dolbDeals.forEach(deal=>{
+
+        const div =
+            document.createElement("div");
+
+        div.className = "dealBox";
+
+        const alreadyEnough =
+            money >= deal.coins;
+
+        div.innerHTML = `
+
+            <div class="dealTitle">
+                ${deal.coins} Coins
+            </div>
+
+            <div class="dealArrow">
+                ↓
+            </div>
+
+            <div style="
+                font-size:20px;
+                font-weight:bold;
+                color:#d0b5ff;
+            ">
+                ${deal.dolb} Dolb
+            </div>
+
+            <p>
+                Spend ${deal.dolb} Dolb
+                to receive ${deal.coins} coins.
+            </p>
+
+            <button
+                class="dealButton"
+                onclick="buyDolbDeal(${deal.coins},${deal.dolb})">
+
+                BUY FOR ${deal.dolb} DOLB
+
+            </button>
+
+        `;
+
+        deals.appendChild(div);
+
+    });
+
+}
+
+
+/* BUY DAILY OFFER */
+
+window.buyDailyShopOffer =
+async function(){
+
+    if(!currentUser){
+        return;
+    }
+
+    if(!dailyShopOffer){
+
+        showMessage(
+            "Today's shop is not loaded yet."
+        );
+
+        return;
+
+    }
+
+    if(dailyShopBought){
+
+        showMessage(
+            "You already bought today's shop offer."
+        );
+
+        return;
+
+    }
+
+    const today =
+        getTodayString();
+
+    /*
+       Reload from Firestore so the purchase
+       cannot accidentally be duplicated.
+    */
+
+    const playerRef =
+        doc(
+            db,
+            "players",
+            currentUser.uid
+        );
+
+    const snap =
+        await getDoc(playerRef);
+
+    if(snap.exists()){
+
+        const data =
+            snap.data();
+
+        if(
+            data.dailyShopDate === today &&
+            data.dailyShopBought === true
+        ){
+
+            dailyShopBought = true;
+
+            renderShop();
+
+            showMessage(
+                "You already bought today's offer."
+            );
+
+            return;
+
+        }
+
+    }
+
+    const price =
+        dailyShopOffer.price;
+
+    if(dolb < price){
+
+        showMessage(
+            "Not enough Dolb."
+        );
+
+        return;
+
+    }
+
+
+    /* PROFILE PICTURE */
+
+    if(
+        dailyShopOffer.type ===
+        "profilePic"
+    ){
+
+        if(
+            ownedProfilePics.includes(
+                BUZZY_PROFILE_PIC
+            )
+        ){
+
+            showMessage(
+                "You already own this profile picture."
+            );
+
+            return;
+
+        }
+
+        dolb -= price;
+
+        ownedProfilePics.push(
+            BUZZY_PROFILE_PIC
+        );
+
+        /*
+           Buying the profile picture does NOT
+           automatically equip it.
+        */
+
+        dailyShopBought = true;
+
+        await savePlayerData();
+
+        await setDoc(
+            playerRef,
+            {
+                dailyShopDate:today,
+                dailyShopBought:true
+            },
+            {merge:true}
+        );
+
+        updateUI();
+
+        showMessage(
+            "Buzzy profile picture purchased!"
+        );
+
+        return;
+
+    }
+
+
+    /* DOLL */
+
+    const alreadyOwned =
+        collection.some(
+            copy =>
+                copy.name ===
+                dailyShopOffer.name
+        );
+
+    if(alreadyOwned){
+
+        showMessage(
+            "You already own this doll."
+        );
+
+        return;
+
+    }
+
+    const card =
+        getCard(
+            dailyShopOffer.name
+        );
+
+    if(!card){
+
+        showMessage(
+            "Doll not found."
+        );
+
+        return;
+
+    }
+
+    dolb -= price;
+
+    collection.push(
+        createCardCopy(
+            dailyShopOffer.name
+        )
+    );
+
+    dailyShopBought = true;
+
+    await savePlayerData();
+
+    await setDoc(
+        playerRef,
+        {
+            dailyShopDate:today,
+            dailyShopBought:true
+        },
+        {merge:true}
+    );
+
+    updateUI();
+
+    showMessage(
+        dailyShopOffer.name +
+        " purchased from the Daily Shop!"
+    );
+
+};
+
+
+/* BUY DOLB DEAL */
+
+window.buyDolbDeal =
+async function(coins,dolbPrice){
+
+    if(dolb < dolbPrice){
+
+        showMessage(
+            "Not enough Dolb."
+        );
+
+        return;
+
+    }
+
+    dolb -= dolbPrice;
+
+    money += coins;
+
+    await savePlayerData();
+
+    updateUI();
+
+    showMessage(
+        "You received " +
+        coins +
+        " coins!"
+    );
+
+};
+
+
+/* =========================================================
+   PACK
+   ========================================================= */
 
 function weightedRandomCard(){
 
@@ -1890,7 +2998,9 @@ function showPackResults(pulledCards){
 }
 
 
-/* COLLECTION */
+/* =========================================================
+   COLLECTION
+   ========================================================= */
 
 window.setCollectionTab =
 function(tab){
@@ -2159,7 +3269,9 @@ async function(name){
 };
 
 
-/* DEX */
+/* =========================================================
+   DEX
+   ========================================================= */
 
 window.setDexTab =
 function(tab){
@@ -2274,7 +3386,7 @@ function renderDex(){
 
 
 /* =========================================================
-   TRADE PLAYER SEARCH
+   TRADE
    ========================================================= */
 
 window.findPlayer =
@@ -2432,8 +3544,6 @@ async function(){
 };
 
 
-/* SEND TRADE */
-
 window.sendTradeRequest =
 async function(receiverUid){
 
@@ -2524,8 +3634,6 @@ async function(receiverUid){
 
 };
 
-
-/* TRADE LISTENER */
 
 function stopTradeListener(){
 
@@ -2629,8 +3737,6 @@ function startTradeListener(){
 }
 
 
-/* INCOMING TRADES */
-
 function renderIncomingTrades(){
 
     const container =
@@ -2689,8 +3795,6 @@ function renderIncomingTrades(){
 }
 
 
-/* ACCEPT */
-
 window.acceptTrade =
 function(tradeId){
 
@@ -2744,8 +3848,6 @@ function(tradeId){
 };
 
 
-/* OUTGOING */
-
 function openOutgoingTradeIfNeeded(){
 
     if(activeTrade){
@@ -2772,8 +3874,6 @@ function openOutgoingTradeIfNeeded(){
 
 }
 
-
-/* OFFERS */
 
 function getMyOffer(trade){
 
@@ -2809,8 +3909,6 @@ function getTheirOffer(trade){
 }
 
 
-/* SAME IDS */
-
 function sameIds(a,b){
 
     if(!Array.isArray(a) || !Array.isArray(b)){
@@ -2833,8 +3931,6 @@ function sameIds(a,b){
 
 }
 
-
-/* RENDER OFFER */
 
 function renderOfferCards(offer,selectable=false){
 
@@ -2913,8 +4009,6 @@ function renderOfferCards(offer,selectable=false){
 }
 
 
-/* SELECTABLE TRADE CARDS */
-
 function renderSelectableTradeCards(){
 
     if(!collection.length){
@@ -2980,8 +4074,6 @@ function renderSelectableTradeCards(){
 
 }
 
-
-/* ACTIVE TRADE */
 
 function renderActiveTrade(){
 
@@ -3210,8 +4302,6 @@ function renderActiveTrade(){
 }
 
 
-/* SELECT TRADE CARD */
-
 window.toggleTradeCard =
 function(cardId){
 
@@ -3248,8 +4338,6 @@ function(cardId){
 
 };
 
-
-/* SUBMIT OFFER */
 
 window.submitTradeOffer =
 async function(){
@@ -3332,8 +4420,6 @@ async function(){
 
 };
 
-
-/* CONFIRM TRADE */
 
 window.confirmTrade =
 async function(){
@@ -3476,8 +4562,6 @@ async function(){
 };
 
 
-/* FINALIZE */
-
 async function tryFinalizeTrade(trade){
 
     if(
@@ -3556,8 +4640,6 @@ async function tryFinalizeTrade(trade){
 
 }
 
-
-/* COMPLETE TRADE */
 
 async function applyCompletedTrade(trade){
 
@@ -3754,8 +4836,6 @@ async function applyCompletedTrade(trade){
 }
 
 
-/* CANCEL */
-
 window.cancelTrade =
 async function(tradeId){
 
@@ -3803,24 +4883,6 @@ async function(tradeId){
 /* =========================================================
    FRIEND SYSTEM
    ========================================================= */
-
-/*
-    FRIEND REQUEST DOCUMENT:
-
-    friendRequests/{id}
-
-    {
-        senderUid,
-        receiverUid,
-        senderUsername,
-        receiverUsername,
-        status:"pending",
-        createdAt
-    }
-*/
-
-
-/* FRIEND SEARCH */
 
 window.findFriend =
 async function(){
@@ -4032,8 +5094,6 @@ async function(){
 };
 
 
-/* SEND FRIEND REQUEST */
-
 window.sendFriendRequest =
 async function(receiverUid){
 
@@ -4191,8 +5251,6 @@ async function(receiverUid){
 };
 
 
-/* FRIEND REQUEST LISTENER */
-
 function stopFriendListener(){
 
     if(friendListener){
@@ -4260,8 +5318,6 @@ function startFriendListener(){
 
 }
 
-
-/* FRIEND REQUESTS */
 
 function renderFriendRequests(){
 
@@ -4358,8 +5414,6 @@ function renderFriendRequests(){
 }
 
 
-/* REQUEST PROFILE PICTURE */
-
 async function loadFriendRequestPicture(
     requestId,
     senderUid
@@ -4403,8 +5457,6 @@ async function loadFriendRequestPicture(
 
 }
 
-
-/* ACCEPT FRIEND REQUEST */
 
 window.acceptFriendRequest =
 async function(requestId){
@@ -4453,20 +5505,22 @@ async function(requestId){
                 request.senderUid
             );
 
-        await updateDoc(
+        await setDoc(
             myRef,
             {
                 friends:
                     arrayUnion(request.senderUid)
-            }
+            },
+            {merge:true}
         );
 
-        await updateDoc(
+        await setDoc(
             otherRef,
             {
                 friends:
                     arrayUnion(currentUser.uid)
-            }
+            },
+            {merge:true}
         );
 
         await updateDoc(
@@ -4483,6 +5537,8 @@ async function(requestId){
         if(!friends.includes(request.senderUid)){
             friends.push(request.senderUid);
         }
+
+        await savePlayerData();
 
         showMessage(
             "You are now friends with " +
@@ -4504,8 +5560,6 @@ async function(requestId){
 
 };
 
-
-/* ACCEPT FROM SEARCH */
 
 window.acceptFriendRequestByUser =
 async function(userId){
@@ -4532,8 +5586,6 @@ async function(userId){
 
 };
 
-
-/* DECLINE */
 
 window.declineFriendRequest =
 async function(requestId){
@@ -4583,8 +5635,6 @@ async function(requestId){
 
 };
 
-
-/* FRIEND LIST */
 
 async function renderFriends(){
 
@@ -4728,8 +5778,6 @@ async function renderFriends(){
 }
 
 
-/* TRADE BUTTON FROM FRIEND LIST */
-
 window.openTradeWithFriend =
 function(friendUsername){
 
@@ -4785,6 +5833,8 @@ async function(){
 
     money = STARTING_COINS;
 
+    dolb = STARTING_DOLB;
+
     collection = [];
 
     favorites = [];
@@ -4798,7 +5848,7 @@ async function(){
     closeSettings();
 
     showMessage(
-        "Account reset. You now have 50 coins."
+        "Account reset. You now have 50 coins and 0 Dolb."
     );
 
 };
