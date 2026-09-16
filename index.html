@@ -509,7 +509,6 @@ h3 {
 }
 
 @media (max-width: 650px) {
-
     .tradeColumns {
         grid-template-columns: 1fr;
     }
@@ -521,7 +520,6 @@ h3 {
     .moneyBox {
         margin-left: 0;
     }
-
 }
 </style>
 </head>
@@ -612,7 +610,7 @@ h3 {
             <h2>Open a Pack</h2>
 
             <p>
-                Cost: 25 coins<br>
+                Cost: 10 coins<br>
                 Cards: 3
             </p>
 
@@ -620,7 +618,7 @@ h3 {
                 class="packButton"
                 onclick="openPack()">
 
-                OPEN PACK - 25 COINS
+                OPEN PACK - 10 COINS
 
             </button>
 
@@ -856,8 +854,8 @@ const db = getFirestore(app);
 
 /* ECONOMY */
 
-const PACK_PRICE = 25;
-const STARTING_COINS = 300;
+const PACK_PRICE = 10;
+const STARTING_COINS = 50;
 
 
 /* CARDS */
@@ -964,29 +962,17 @@ const cards = [
 
 
 let currentUser = null;
-
 let money = STARTING_COINS;
-
 let username = "";
-
 let collection = [];
-
 let favorites = [];
-
 let completedTradeIds = [];
-
 let collectionTab = "all";
-
 let dexTab = "dolls";
-
 let activeTrade = null;
-
 let selectedTradeCards = [];
-
 let tradeRequests = [];
-
 let tradeListener = null;
-
 let applyingTradeIds = new Set();
 
 
@@ -4117,7 +4103,7 @@ async function() {
 
 
     showMessage(
-        "Account reset. You now have 300 coins."
+        "Account reset. You now have 50 coins."
     );
 
 };
