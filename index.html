@@ -2,5858 +2,1069 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Doll Ball Collector Cards</title>
-
 <style>
 *{box-sizing:border-box}
-
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#071525;
-    color:white;
-}
-
-button{
-    border:none;
-    border-radius:10px;
-    padding:12px 16px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-button:disabled{
-    opacity:.45;
-    cursor:not-allowed;
-}
-
+body{margin:0;font-family:Arial,sans-serif;background:#071525;color:white}
+button{border:none;border-radius:10px;padding:12px 16px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
 .hidden{display:none!important}
-
-#loginScreen{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-}
-
-.loginBox{
-    background:#10243d;
-    padding:35px;
-    border-radius:20px;
-    width:min(90%,420px);
-}
-
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center}
+.loginBox{background:#10243d;padding:35px;border-radius:20px;width:min(90%,420px)}
 .loginBox h1{margin-top:0}
-
-.googleButton{
-    background:white;
-    color:#222;
-    width:100%;
-    font-size:16px;
-}
-
-/* TOP BAR */
-
+.googleButton{background:white;color:#222;width:100%;font-size:16px}
 #gameScreen{min-height:100vh}
-
-.topBar{
-    background:#10243d;
-    padding:10px;
-    display:flex;
-    gap:7px;
-    overflow-x:auto;
-    align-items:center;
-}
-
-.topBar button{
-    background:#183653;
-    color:white;
-    white-space:nowrap;
-}
-
+.topBar{background:#10243d;padding:10px;display:flex;gap:7px;overflow-x:auto;align-items:center}
+.topBar button{background:#183653;color:white;white-space:nowrap}
 .topBar button:hover{background:#234b70}
-
-.moneyBox{
-    background:#183653;
-    padding:10px 14px;
-    border-radius:10px;
-    white-space:nowrap;
-    order:-1;
-}
-
-.dolbBox{
-    background:#6b4bc3;
-    padding:10px 14px;
-    border-radius:10px;
-    white-space:nowrap;
-    order:-1;
-}
-
-/* PAGES */
-
-.page{
-    padding:20px;
-    max-width:1200px;
-    margin:auto;
-}
-
+.moneyBox,.dolbBox{padding:10px 14px;border-radius:10px;white-space:nowrap;order:-1}
+.moneyBox{background:#183653}.dolbBox{background:#6b4bc3}
+.page{padding:20px;max-width:1200px;margin:auto}
 h1,h2,h3{margin-top:0}
-
-/* HOME */
-
-.homeBox{
-    background:#10243d;
-    padding:25px;
-    border-radius:18px;
-}
-
-.username{
-    font-size:20px;
-    font-weight:bold;
-}
-
-.packButton{
-    background:#2674d9;
-    color:white;
-    font-size:18px;
-    margin-top:15px;
-}
-
-/* PROFILE */
-
-.profilePic{
-    width:75px;
-    height:75px;
-    border-radius:50%;
-    object-fit:cover;
-    background:#091a2d;
-    border:3px solid #2674d9;
-}
-
-.profilePicSmall{
-    width:55px;
-    height:55px;
-    border-radius:50%;
-    object-fit:cover;
-    background:#091a2d;
-    border:2px solid #2674d9;
-    flex-shrink:0;
-}
-
-.profilePicTiny{
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    object-fit:cover;
-    background:#091a2d;
-    border:2px solid #2674d9;
-    flex-shrink:0;
-}
-
-.profileBox{
-    display:flex;
-    align-items:center;
-    gap:15px;
-    margin-bottom:20px;
-}
-
-.profileInfo{
-    display:flex;
-    flex-direction:column;
-    gap:5px;
-}
-
-.profileUsername{
-    font-size:21px;
-    font-weight:bold;
-}
-
-/* TABS */
-
-.tabs{
-    display:flex;
-    gap:8px;
-    margin-bottom:18px;
-}
-
-.tabs button{
-    background:#183653;
-    color:white;
-}
-
-.tabs button.active{background:#2674d9}
-
-/* SEARCH */
-
-.searchBox{
-    width:100%;
-    padding:13px;
-    border-radius:10px;
-    border:none;
-    margin-bottom:20px;
-    font-size:16px;
-}
-
-/* CARDS */
-
-.cardGrid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
-    gap:18px;
-}
-
-.card{
-    background:#10243d;
-    border-radius:15px;
-    padding:10px;
-    position:relative;
-    text-align:center;
-    border:3px solid transparent;
-}
-
-.card img{
-    width:100%;
-    aspect-ratio:1/1.35;
-    object-fit:contain;
-    border-radius:10px;
-    background:#091a2d;
-    cursor:pointer;
-}
-
-.cardName{
-    font-weight:bold;
-    margin-top:8px;
-}
-
-.cardCount{
-    position:absolute;
-    top:7px;
-    right:7px;
-    background:#2674d9;
-    min-width:28px;
-    height:28px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
-}
-
-.starButton{
-    position:absolute;
-    top:7px;
-    left:7px;
-    width:31px;
-    height:31px;
-    padding:0;
-    border-radius:50%;
-    background:#172b43;
-    color:white;
-    font-size:17px;
-    z-index:10;
-}
-
+.homeBox{background:#10243d;padding:25px;border-radius:18px}
+.username{font-size:20px;font-weight:bold}
+.packButton{background:#2674d9;color:white;font-size:18px;margin-top:15px}
+.profilePic{width:75px;height:75px;border-radius:50%;object-fit:cover;background:#091a2d;border:3px solid #2674d9}
+.profilePicSmall{width:55px;height:55px;border-radius:50%;object-fit:cover;background:#091a2d;border:2px solid #2674d9;flex-shrink:0}
+.profilePicTiny{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#091a2d;border:2px solid #2674d9;flex-shrink:0}
+.profileBox{display:flex;align-items:center;gap:15px;margin-bottom:20px}
+.profileInfo{display:flex;flex-direction:column;gap:5px}
+.profileUsername{font-size:21px;font-weight:bold}
+.tabs{display:flex;gap:8px;margin-bottom:18px}
+.tabs button{background:#183653;color:white}.tabs button.active{background:#2674d9}
+.searchBox{width:100%;padding:13px;border-radius:10px;border:none;margin-bottom:20px;font-size:16px}
+.cardGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:18px}
+.card{background:#10243d;border-radius:15px;padding:10px;position:relative;text-align:center;border:3px solid transparent}
+.card img{width:100%;aspect-ratio:1/1.35;object-fit:contain;border-radius:10px;background:#091a2d;cursor:pointer}
+.cardName{font-weight:bold;margin-top:8px}
+.cardCount{position:absolute;top:7px;right:7px;background:#2674d9;min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.starButton{position:absolute;top:7px;left:7px;width:31px;height:31px;padding:0;border-radius:50%;background:#172b43;color:white;font-size:17px;z-index:10}
 .starButton.favorite{color:#36b9ff}
-
-.favoriteCard{
-    border:4px solid #36b9ff;
-    box-shadow:0 0 0 2px #8ee0ff,0 0 12px #36b9ff;
-}
-
-.tradedFavoriteCard{
-    border:4px solid #36b9ff;
-    box-shadow:0 0 0 2px #8ee0ff,0 0 8px #36b9ff,0 0 18px white;
-}
-
-.tradedFavoriteCard::before{
-    content:"✦ ✧ ✦";
-    position:absolute;
-    top:-15px;
-    left:50%;
-    transform:translateX(-50%);
-    color:#36b9ff;
-    font-size:17px;
-    white-space:nowrap;
-    z-index:102;
-}
-
-.rareFavoriteCard{
-    border:4px solid gold;
-    box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700;
-}
-
-.rareTradedFavoriteCard{
-    border:4px solid gold;
-    box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700,0 0 32px white;
-}
-
-.rareTradedFavoriteCard::before{
-    content:"✦ ◆ ✧ ◆ ✦";
-    position:absolute;
-    top:-16px;
-    left:50%;
-    transform:translateX(-50%);
-    color:gold;
-    font-size:17px;
-    white-space:nowrap;
-    z-index:102;
-}
-
-.sellButton{
-    width:100%;
-    margin-top:8px;
-    background:#176f46;
-    color:white;
-}
-
+.favoriteCard{border:4px solid #36b9ff;box-shadow:0 0 0 2px #8ee0ff,0 0 12px #36b9ff}
+.tradedFavoriteCard{border:4px solid #36b9ff;box-shadow:0 0 0 2px #8ee0ff,0 0 8px #36b9ff,0 0 18px white}
+.tradedFavoriteCard:before{content:"✦ ✧ ✦";position:absolute;top:-15px;left:50%;transform:translateX(-50%);color:#36b9ff;font-size:17px;white-space:nowrap;z-index:102}
+.rareFavoriteCard{border:4px solid gold;box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700}
+.rareTradedFavoriteCard{border:4px solid gold;box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700,0 0 32px white}
+.sellButton{width:100%;margin-top:8px;background:#176f46;color:white}
 .sellButton.favoriteLocked{background:#555}
-
-/* DEX */
-
-.dexCard{
-    background:#10243d;
-    border-radius:15px;
-    padding:10px;
-    text-align:center;
-}
-
-.dexCard img{
-    width:100%;
-    aspect-ratio:1/1.35;
-    object-fit:contain;
-    background:#091a2d;
-    border-radius:10px;
-    cursor:pointer;
-}
-
+.dexCard{background:#10243d;border-radius:15px;padding:10px;text-align:center}
+.dexCard img{width:100%;aspect-ratio:1/1.35;object-fit:contain;background:#091a2d;border-radius:10px;cursor:pointer}
 .comingSoon{opacity:.5}
-
-/* SHOP */
-
-.shopHeader{
-    background:#10243d;
-    border-radius:18px;
-    padding:20px;
-    margin-bottom:20px;
-}
-
-.shopDate{
-    opacity:.8;
-    font-size:14px;
-}
-
-.shopSection{
-    margin-top:25px;
-    margin-bottom:12px;
-}
-
-.dailyShopCard{
-    background:#10243d;
-    border-radius:18px;
-    padding:18px;
-    text-align:center;
-    max-width:430px;
-    margin:0 auto;
-}
-
-.dailyShopImage{
-    width:100%;
-    max-width:320px;
-    aspect-ratio:1/1.35;
-    object-fit:contain;
-    background:#091a2d;
-    border-radius:14px;
-    cursor:pointer;
-}
-
-.dailyShopName{
-    font-size:25px;
-    font-weight:bold;
-    margin-top:15px;
-}
-
-.shopPrice{
-    font-size:21px;
-    font-weight:bold;
-    margin:10px 0;
-}
-
-.shopBuyButton{
-    width:100%;
-    background:#6b4bc3;
-    color:white;
-    font-size:17px;
-}
-
-.shopOwned{
-    background:#555;
-    color:white;
-    width:100%;
-}
-
-.shopProfile{
-    width:130px;
-    height:130px;
-    border-radius:50%;
-    object-fit:cover;
-    border:4px solid #6b4bc3;
-    background:#091a2d;
-    cursor:pointer;
-}
-
-.profileShopLabel{
-    font-size:18px;
-    font-weight:bold;
-    margin-top:10px;
-}
-
-.dealGrid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
-}
-
-.dealBox{
-    background:#10243d;
-    border-radius:15px;
-    padding:18px;
-    text-align:center;
-}
-
-.dealTitle{
-    font-size:20px;
-    font-weight:bold;
-}
-
-.dealArrow{
-    font-size:24px;
-    margin:10px;
-}
-
-.dealButton{
-    background:#6b4bc3;
-    color:white;
-    width:100%;
-}
-
-.eventShopBox{
-    background:#10243d;
-    border-radius:15px;
-    padding:20px;
-    text-align:center;
-    opacity:.7;
-}
-
-/* TRADE */
-
-.tradeNotice{
-    background:#10243d;
-    border-radius:15px;
-    padding:18px;
-    margin-bottom:18px;
-}
-
-.tradeSearchArea{
-    display:flex;
-    gap:8px;
-}
-
-.tradeSearchArea input{
-    flex:1;
-    min-width:0;
-    padding:13px;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-}
-
-.tradeSearchButton{
-    background:#2674d9;
-    color:white;
-}
-
-.tradePlayerResult{margin-top:15px}
-
-.playerResultBox{
-    background:#183653;
-    padding:15px;
-    border-radius:15px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-}
-
-.playerResultInfo{flex:1}
-
-.tradeRequest{
-    background:#183653;
-    padding:15px;
-    border-radius:12px;
-    margin-top:10px;
-}
-
-.tradeArea{
-    background:#10243d;
-    padding:18px;
-    border-radius:18px;
-    margin-top:20px;
-}
-
-.tradeColumns{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-}
-
-.tradeSide{
-    background:#091a2d;
-    padding:15px;
-    border-radius:15px;
-}
-
+.shopHeader{background:#10243d;border-radius:18px;padding:20px;margin-bottom:20px}
+.shopDate{opacity:.8;font-size:14px}
+.shopSection{margin-top:25px;margin-bottom:12px}
+.dailyShopCard{background:#10243d;border-radius:18px;padding:18px;text-align:center;max-width:430px;margin:0 auto}
+.dailyShopImage{width:100%;max-width:320px;aspect-ratio:1/1.35;object-fit:contain;background:#091a2d;border-radius:14px;cursor:pointer}
+.dailyShopName{font-size:25px;font-weight:bold;margin-top:15px}
+.shopPrice{font-size:21px;font-weight:bold;margin:10px 0}
+.shopBuyButton{width:100%;background:#6b4bc3;color:white;font-size:17px}
+.shopOwned{background:#555;color:white;width:100%}
+.shopProfile{width:130px;height:130px;border-radius:50%;object-fit:cover;border:4px solid #6b4bc3;background:#091a2d;cursor:pointer}
+.profileShopLabel{font-size:18px;font-weight:bold;margin-top:10px}
+.dealGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.dealBox{background:#10243d;border-radius:15px;padding:18px;text-align:center}
+.dealTitle{font-size:20px;font-weight:bold}.dealArrow{font-size:24px;margin:10px}
+.dealButton{background:#6b4bc3;color:white;width:100%}
+.eventShopBox{background:#10243d;border-radius:15px;padding:20px;text-align:center;opacity:.7}
+.tradeNotice{background:#10243d;border-radius:15px;padding:18px;margin-bottom:18px}
+.tradeSearchArea,.friendSearchArea{display:flex;gap:8px}
+.tradeSearchArea input,.friendSearchArea input{flex:1;min-width:0;padding:13px;border:none;border-radius:10px;font-size:16px}
+.tradeSearchButton,.friendSearchButton{background:#2674d9;color:white}
+.playerResultBox,.friendResultBox{background:#183653;padding:15px;border-radius:15px;display:flex;align-items:center;gap:14px}
+.playerResultInfo,.friendResultInfo,.friendInfo{flex:1}
+.tradeRequest{background:#183653;padding:15px;border-radius:12px;margin-top:10px}
+.tradeArea{background:#10243d;padding:18px;border-radius:18px;margin-top:20px}
+.tradeColumns{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.tradeSide{background:#091a2d;padding:15px;border-radius:15px}
 .tradeSide h3{text-align:center}
-
-.tradeCardGrid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-}
-
-.tradeCard{
-    background:#10243d;
-    border-radius:10px;
-    padding:7px;
-    text-align:center;
-    border:2px solid transparent;
-    cursor:pointer;
-}
-
-.tradeCard.selected{
-    border-color:#36b9ff;
-    box-shadow:0 0 10px #36b9ff;
-}
-
-.tradeCard img{
-    width:100%;
-    aspect-ratio:1/1.25;
-    object-fit:contain;
-}
-
-.tradeStatus{
-    text-align:center;
-    margin:15px 0;
-    font-size:18px;
-    font-weight:bold;
-}
-
-.confirmButton{
-    background:#198754;
-    color:white;
-    width:100%;
-}
-
-.cancelButton{
-    background:#9b2929;
-    color:white;
-    width:100%;
-    margin-top:8px;
-}
-
-.changeOfferButton{
-    background:#2674d9;
-    color:white;
-    width:100%;
-    margin-top:8px;
-}
-
-/* FRIENDS */
-
-.friendSearchBox{
-    background:#10243d;
-    border-radius:15px;
-    padding:18px;
-    margin-bottom:20px;
-}
-
-.friendSearchArea{
-    display:flex;
-    gap:8px;
-}
-
-.friendSearchArea input{
-    flex:1;
-    min-width:0;
-    padding:13px;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-}
-
-.friendSearchButton{
-    background:#2674d9;
-    color:white;
-}
-
-.friendResult{
-    margin-top:15px;
-}
-
-.friendResultBox{
-    background:#183653;
-    border-radius:15px;
-    padding:15px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-}
-
-.friendResultInfo{
-    flex:1;
-}
-
-.friendName{
-    font-size:18px;
-    font-weight:bold;
-}
-
-.friendActionButton{
-    background:#2674d9;
-    color:white;
-    margin-top:8px;
-}
-
-.friendAcceptButton{
-    background:#198754;
-    color:white;
-}
-
-.friendDeclineButton{
-    background:#9b2929;
-    color:white;
-}
-
-.friendBox{
-    background:#10243d;
-    border-radius:15px;
-    padding:15px;
-    margin-bottom:12px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-}
-
-.friendInfo{flex:1}
-
-.friendEmpty{
-    background:#10243d;
-    border-radius:15px;
-    padding:25px;
-    text-align:center;
-}
-
-.friendSection{
-    margin-top:20px;
-    margin-bottom:10px;
-}
-
-/* SETTINGS */
-
-.settingsOverlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.8);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:999;
-}
-
-.settingsBox{
-    background:#10243d;
-    padding:25px;
-    width:min(90%,450px);
-    border-radius:20px;
-}
-
-.settingsButton{
-    width:100%;
-    background:#183653;
-    color:white;
-    margin-top:10px;
-}
-
-.resetButton{background:#8d2525}
-
-.logoutButton{background:#c62828!important}
-
-/* MESSAGE */
-
-#message{
-    position:fixed;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    background:#183653;
-    padding:13px 18px;
-    border-radius:12px;
-    z-index:2000;
-    display:none;
-    text-align:center;
-}
-
-/* CARD VIEWER */
-
-.cardViewer{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.94);
-    z-index:5000;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-}
-
-.cardViewerImage{
-    max-width:95vw;
-    max-height:90vh;
-    width:auto;
-    height:auto;
-    object-fit:contain;
-    border-radius:12px;
-}
-
-.cardViewerClose{
-    position:fixed;
-    top:15px;
-    right:15px;
-    background:#183653;
-    color:white;
-    font-size:24px;
-    width:48px;
-    height:48px;
-    padding:0;
-    z-index:5001;
-}
-
+.tradeCardGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tradeCard{background:#10243d;border-radius:10px;padding:7px;text-align:center;border:2px solid transparent;cursor:pointer}
+.tradeCard.selected{border-color:#36b9ff;box-shadow:0 0 10px #36b9ff}
+.tradeCard img{width:100%;aspect-ratio:1/1.25;object-fit:contain}
+.tradeStatus{text-align:center;margin:15px 0;font-size:18px;font-weight:bold}
+.confirmButton{background:#198754;color:white;width:100%}
+.cancelButton{background:#9b2929;color:white;width:100%;margin-top:8px}
+.changeOfferButton{background:#2674d9;color:white;width:100%;margin-top:8px}
+.friendSearchBox{background:#10243d;border-radius:15px;padding:18px;margin-bottom:20px}
+.friendResult{margin-top:15px}
+.friendName{font-size:18px;font-weight:bold}
+.friendActionButton{background:#2674d9;color:white;margin-top:8px}
+.friendAcceptButton{background:#198754;color:white}
+.friendDeclineButton{background:#9b2929;color:white}
+.friendBox{background:#10243d;border-radius:15px;padding:15px;margin-bottom:12px;display:flex;align-items:center;gap:14px}
+.friendEmpty{background:#10243d;border-radius:15px;padding:25px;text-align:center}
+.friendSection{margin-top:20px;margin-bottom:10px}
+.settingsOverlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:999}
+.settingsBox{background:#10243d;padding:25px;width:min(90%,450px);border-radius:20px}
+.settingsButton{width:100%;background:#183653;color:white;margin-top:10px}
+.resetButton{background:#8d2525}.logoutButton{background:#c62828!important}
+#message{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#183653;padding:13px 18px;border-radius:12px;z-index:2000;display:none;text-align:center}
+.cardViewer{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px}
+.cardViewerImage{max-width:95vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
+.cardViewerClose{position:fixed;top:15px;right:15px;background:#183653;color:white;font-size:24px;width:48px;height:48px;padding:0;z-index:5001}
 @media(max-width:650px){
-    .tradeColumns{grid-template-columns:1fr}
-    .topBar{flex-wrap:nowrap}
-    .moneyBox{margin-left:0}
-    .playerResultBox{align-items:flex-start}
-    .friendResultBox{align-items:flex-start}
-    .friendSearchArea{flex-direction:column}
-    .dealGrid{grid-template-columns:1fr}
+.tradeColumns{grid-template-columns:1fr}.topBar{flex-wrap:nowrap}.moneyBox{margin-left:0}
+.playerResultBox,.friendResultBox{align-items:flex-start}
+.friendSearchArea{flex-direction:column}.dealGrid{grid-template-columns:1fr}
 }
 </style>
 </head>
-
 <body>
 
 <div id="loginScreen">
-    <div class="loginBox">
-        <h1>Doll Ball Collector Cards</h1>
-        <p>Log in to play.</p>
-        <button class="googleButton" onclick="loginGoogle()">
-            Sign in with Google
-        </button>
-    </div>
+<div class="loginBox">
+<h1>Doll Ball Collector Cards</h1>
+<p>Log in to play.</p>
+<button class="googleButton" onclick="loginGoogle()">Sign in with Google</button>
+</div>
 </div>
 
 <div id="gameScreen" class="hidden">
 
-    <div class="topBar">
-
-        <div class="moneyBox">
-            Coins: <span id="money">0</span>
-        </div>
-
-        <div class="dolbBox">
-            Dolb: <span id="dolb">0</span>
-        </div>
-
-        <button onclick="showPage('home')">HOME</button>
-
-        <button onclick="showPage('shop')">SHOP</button>
-
-        <button onclick="showPage('collection')">
-            COLLECTION
-        </button>
-
-        <button onclick="showPage('dex')">
-            DEX
-        </button>
-
-        <button onclick="showPage('trade')">
-            TRADE
-        </button>
-
-        <button onclick="showPage('friends')">
-            FRIENDS
-        </button>
-
-        <button onclick="openSettings()">
-            SETTINGS
-        </button>
-
-        <button class="logoutButton" onclick="logout()">
-            LOG OUT
-        </button>
-
-    </div>
-
-
-    <!-- HOME -->
-
-    <div id="homePage" class="page">
-
-        <div class="homeBox">
-
-            <div class="profileBox">
-
-                <img
-                    id="homeProfilePic"
-                    class="profilePic"
-                    src="basic_p.png"
-                    alt="Profile Picture">
-
-                <div class="profileInfo">
-
-                    <div
-                        class="profileUsername"
-                        id="homeUsername">
-                    </div>
-
-                    <div>
-                        Doll Ball Collector Cards
-                    </div>
-
-                </div>
-
-            </div>
-
-            <h1>Welcome!</h1>
-
-            <p>
-                Google Account:
-                <span id="accountEmail"></span>
-            </p>
-
-            <p>
-                Username:
-                <span
-                    class="username"
-                    id="usernameDisplay">
-                </span>
-            </p>
-
-            <hr>
-
-            <h2>Open a Pack</h2>
-
-            <p>
-                Cost: 10 coins<br>
-                Cards: 3
-            </p>
-
-            <button
-                class="packButton"
-                onclick="openPack()">
-                OPEN PACK - 10 COINS
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- SHOP -->
-
-    <div id="shopPage" class="page hidden">
-
-        <div class="shopHeader">
-
-            <h1>Shop</h1>
-
-            <p>
-                Buy special daily dolls with Dolb.
-            </p>
-
-            <div class="shopDate">
-                Daily shop changes every day.
-                <span id="shopDate"></span>
-            </div>
-
-        </div>
-
-
-        <h2 class="shopSection">
-            Daily Doll
-        </h2>
-
-        <div id="dailyShop"></div>
-
-
-        <h2 class="shopSection">
-            Dolb Deals
-        </h2>
-
-        <div
-            id="dolbDeals"
-            class="dealGrid">
-        </div>
-
-
-        <h2 class="shopSection">
-            Event Shop
-        </h2>
-
-        <div class="eventShopBox">
-
-            <h3>No Event Right Now</h3>
-
-            <p>
-                Event shops will appear here when an event is active.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <!-- COLLECTION -->
-
-    <div id="collectionPage" class="page hidden">
-
-        <h1>Collection</h1>
-
-        <div class="tabs">
-
-            <button
-                id="collectionAllButton"
-                class="active"
-                onclick="setCollectionTab('all')">
-                ALL
-            </button>
-
-            <button
-                id="collectionFavoritesButton"
-                onclick="setCollectionTab('favorites')">
-                FAVORITES
-            </button>
-
-        </div>
-
-        <input
-            id="collectionSearch"
-            class="searchBox"
-            placeholder="Search cards..."
-            oninput="renderCollection()">
-
-        <div id="collectionGrid" class="cardGrid"></div>
-
-    </div>
-
-
-    <!-- DEX -->
-
-    <div id="dexPage" class="page hidden">
-
-        <h1>DEX</h1>
-
-        <div class="tabs">
-
-            <button
-                id="dexDollsButton"
-                class="active"
-                onclick="setDexTab('dolls')">
-                DOLLS
-            </button>
-
-            <button
-                id="dexRaresButton"
-                onclick="setDexTab('rares')">
-                RARES
-            </button>
-
-        </div>
-
-        <div id="dexGrid" class="cardGrid"></div>
-
-    </div>
-
-
-    <!-- TRADE -->
-
-    <div id="tradePage" class="page hidden">
-
-        <h1>Trading</h1>
-
-        <div class="tradeNotice">
-
-            <b>Find a player</b>
-
-            <p>
-                Search using their username.
-            </p>
-
-            <div class="tradeSearchArea">
-
-                <input
-                    id="tradePlayerInput"
-                    placeholder="Username">
-
-                <button
-                    class="tradeSearchButton"
-                    onclick="findPlayer()">
-                    SEARCH
-                </button>
-
-            </div>
-
-            <div id="tradePlayerResult"></div>
-
-        </div>
-
-        <div id="incomingTrades"></div>
-
-        <div id="activeTrade"></div>
-
-    </div>
-
-
-    <!-- FRIENDS -->
-
-    <div id="friendsPage" class="page hidden">
-
-        <h1>Friends</h1>
-
-        <div class="friendSearchBox">
-
-            <h2>Find a Friend</h2>
-
-            <p>
-                Search for another player using their username.
-            </p>
-
-            <div class="friendSearchArea">
-
-                <input
-                    id="friendPlayerInput"
-                    placeholder="Username">
-
-                <button
-                    class="friendSearchButton"
-                    onclick="findFriend()">
-                    SEARCH
-                </button>
-
-            </div>
-
-            <div id="friendSearchResult"></div>
-
-        </div>
-
-        <div id="friendRequestsArea"></div>
-
-        <h2 class="friendSection">
-            Your Friends
-        </h2>
-
-        <div id="friendsList"></div>
-
-    </div>
+<div class="topBar">
+<div class="moneyBox">Coins: <span id="money">0</span></div>
+<div class="dolbBox">Dolb: <span id="dolb">0</span></div>
+<button onclick="showPage('home')">HOME</button>
+<button onclick="showPage('shop')">SHOP</button>
+<button onclick="showPage('collection')">COLLECTION</button>
+<button onclick="showPage('dex')">DEX</button>
+<button onclick="showPage('trade')">TRADE</button>
+<button onclick="showPage('friends')">FRIENDS</button>
+<button onclick="openSettings()">SETTINGS</button>
+<button class="logoutButton" onclick="logout()">LOG OUT</button>
+</div>
+
+<div id="homePage" class="page">
+<div class="homeBox">
+<div class="profileBox">
+<img id="homeProfilePic" class="profilePic" src="basic_p.png">
+<div class="profileInfo">
+<div class="profileUsername" id="homeUsername"></div>
+<div>Doll Ball Collector Cards</div>
+</div>
+</div>
+<h1>Welcome!</h1>
+<p>Google Account: <span id="accountEmail"></span></p>
+<p>Username: <span class="username" id="usernameDisplay"></span></p>
+<hr>
+<h2>Open a Pack</h2>
+<p>Cost: 10 coins<br>Cards: 3</p>
+<button class="packButton" onclick="openPack()">OPEN PACK - 10 COINS</button>
+</div>
+</div>
+
+<div id="shopPage" class="page hidden">
+<div class="shopHeader">
+<h1>Shop</h1>
+<p>Buy special daily dolls with Dolb.</p>
+<div class="shopDate">Daily shop changes every day.<span id="shopDate"></span></div>
+</div>
+<h2 class="shopSection">Daily Doll</h2>
+<div id="dailyShop"></div>
+<h2 class="shopSection">Dolb Deals</h2>
+<div id="dolbDeals" class="dealGrid"></div>
+<h2 class="shopSection">Event Shop</h2>
+<div class="eventShopBox"><h3>No Event Right Now</h3><p>Event shops will appear here when an event is active.</p></div>
+</div>
+
+<div id="collectionPage" class="page hidden">
+<h1>Collection</h1>
+<div class="tabs">
+<button id="collectionAllButton" class="active" onclick="setCollectionTab('all')">ALL</button>
+<button id="collectionFavoritesButton" onclick="setCollectionTab('favorites')">FAVORITES</button>
+</div>
+<input id="collectionSearch" class="searchBox" placeholder="Search cards..." oninput="renderCollection()">
+<div id="collectionGrid" class="cardGrid"></div>
+</div>
+
+<div id="dexPage" class="page hidden">
+<h1>DEX</h1>
+<div class="tabs">
+<button id="dexDollsButton" class="active" onclick="setDexTab('dolls')">DOLLS</button>
+<button id="dexRaresButton" onclick="setDexTab('rares')">RARES</button>
+</div>
+<div id="dexGrid" class="cardGrid"></div>
+</div>
+
+<div id="tradePage" class="page hidden">
+<h1>Trading</h1>
+<div class="tradeNotice">
+<b>Find a player</b>
+<p>Search using their username.</p>
+<div class="tradeSearchArea">
+<input id="tradePlayerInput" placeholder="Username">
+<button class="tradeSearchButton" onclick="findPlayer()">SEARCH</button>
+</div>
+<div id="tradePlayerResult"></div>
+</div>
+<div id="incomingTrades"></div>
+<div id="activeTrade"></div>
+</div>
+
+<div id="friendsPage" class="page hidden">
+<h1>Friends</h1>
+<div class="friendSearchBox">
+<h2>Find a Friend</h2>
+<p>Search for another player using their username.</p>
+<div class="friendSearchArea">
+<input id="friendPlayerInput" placeholder="Username">
+<button class="friendSearchButton" onclick="findFriend()">SEARCH</button>
+</div>
+<div id="friendSearchResult"></div>
+</div>
+<div id="friendRequestsArea"></div>
+<h2 class="friendSection">Your Friends</h2>
+<div id="friendsList"></div>
+</div>
 
 </div>
 
-
-<!-- SETTINGS -->
-
-<div
-    id="settingsOverlay"
-    class="settingsOverlay hidden">
-
-    <div class="settingsBox">
-
-        <h2>Settings</h2>
-
-        <p>
-            Username:
-            <b id="settingsUsername"></b>
-        </p>
-
-        <div style="text-align:center;margin:20px 0;">
-
-            <img
-                id="settingsProfilePic"
-                class="profilePic"
-                src="basic_p.png"
-                alt="Profile Picture">
-
-            <p>Profile Picture</p>
-
-        </div>
-
-        <button
-            class="settingsButton resetButton"
-            onclick="resetAccount()">
-            RESET ACCOUNT
-        </button>
-
-        <button
-            class="settingsButton"
-            onclick="closeSettings()">
-            CLOSE
-        </button>
-
-    </div>
-
+<div id="settingsOverlay" class="settingsOverlay hidden">
+<div class="settingsBox">
+<h2>Settings</h2>
+<p>Username: <b id="settingsUsername"></b></p>
+<div style="text-align:center;margin:20px 0">
+<img id="settingsProfilePic" class="profilePic" src="basic_p.png">
+<p>Profile Picture</p>
+</div>
+<button class="settingsButton resetButton" onclick="resetAccount()">RESET ACCOUNT</button>
+<button class="settingsButton" onclick="closeSettings()">CLOSE</button>
+</div>
 </div>
 
-
-<!-- CARD VIEWER -->
-
-<div
-    id="cardViewer"
-    class="cardViewer hidden"
-    onclick="closeCardViewer()">
-
-    <button
-        class="cardViewerClose"
-        onclick="closeCardViewer(event)">
-        X
-    </button>
-
-    <img
-        id="cardViewerImage"
-        class="cardViewerImage"
-        src=""
-        alt=""
-        onclick="event.stopPropagation()">
-
+<div id="cardViewer" class="cardViewer hidden" onclick="closeCardViewer()">
+<button class="cardViewerClose" onclick="closeCardViewer(event)">X</button>
+<img id="cardViewerImage" class="cardViewerImage" src="" onclick="event.stopPropagation()">
 </div>
 
 <div id="message"></div>
 
-
 <script type="module">
 
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import{getFirestore,doc,getDoc,setDoc,updateDoc,onSnapshot,collection as firestoreCollection,query,where,serverTimestamp,arrayUnion}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-import {
-    getFirestore,
-    doc,
-    getDoc,
-    setDoc,
-    updateDoc,
-    onSnapshot,
-    collection as firestoreCollection,
-    query,
-    where,
-    serverTimestamp,
-    arrayUnion
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-
-/* FIREBASE */
-
-const firebaseConfig = {
-    apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
-    authDomain:"dbcc-login.firebaseapp.com",
-    databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId:"dbcc-login",
-    storageBucket:"dbcc-login.firebasestorage.app",
-    messagingSenderId:"878902780767",
-    appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
-    measurementId:"G-PT9S1K4E2K"
+const firebaseConfig={
+apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
+authDomain:"dbcc-login.firebaseapp.com",
+databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
+projectId:"dbcc-login",
+storageBucket:"dbcc-login.firebasestorage.app",
+messagingSenderId:"878902780767",
+appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
+measurementId:"G-PT9S1K4E2K"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
+const DEFAULT_PROFILE_PIC="basic_p.png";
+const BUZZY_PROFILE_PIC="buzzy_p.png";
+const PACK_PRICE=10;
+const STARTING_COINS=50;
+const STARTING_DOLB=0;
 
-/* PROFILE */
-
-const DEFAULT_PROFILE_PIC = "basic_p.png";
-const BUZZY_PROFILE_PIC = "buzzy_p.png";
-
-
-/* ECONOMY */
-
-const PACK_PRICE = 10;
-const STARTING_COINS = 50;
-const STARTING_DOLB = 0;
-
-
-/* CARDS */
-
-const cards = [
-
-    {
-        name:"Baby Pickels",
-        image:"baby pikels.png",
-        weight:14,
-        price:5,
-        rarity:"doll"
-    },
-
-    {
-        name:"Mr. Pickels",
-        image:"mr. pickels.png",
-        weight:9,
-        price:7,
-        rarity:"doll"
-    },
-
-    {
-        name:"Wily",
-        image:"wily.png",
-        weight:14,
-        price:5,
-        rarity:"doll"
-    },
-
-    {
-        name:"Will",
-        image:"will.png",
-        weight:9,
-        price:7,
-        rarity:"doll"
-    },
-
-    {
-        name:"Waffle",
-        image:"waffle.png",
-        weight:14,
-        price:5,
-        rarity:"doll"
-    },
-
-    {
-        name:"Cute Cake",
-        image:"cute cake.png",
-        weight:9,
-        price:7,
-        rarity:"doll"
-    },
-
-    {
-        name:"Buttyr",
-        image:"buttyr.png",
-        weight:20,
-        price:7,
-        rarity:"doll"
-    },
-
-    {
-        name:"Blossem",
-        image:"blossem.png",
-        weight:20,
-        price:7,
-        rarity:"doll"
-    },
-
-    {
-        name:"Buzzy",
-        image:"buzzy.png",
-        weight:5,
-        price:12,
-        rarity:"doll"
-    },
-
-    {
-        name:"Nico",
-        image:"nico.png",
-        weight:20,
-        price:3,
-        rarity:"doll"
-    },
-
-    {
-        name:"Choper",
-        image:"choper.png",
-        weight:10,
-        price:5,
-        rarity:"doll"
-    },
-
-    {
-        name:"Bullet",
-        image:"bullet.png",
-        weight:10,
-        price:5,
-        rarity:"doll"
-    }
-
+const cards=[
+{name:"Baby Pickels",image:"baby pikels.png",weight:14,price:5,rarity:"doll"},
+{name:"Mr. Pickels",image:"mr. pickels.png",weight:9,price:7,rarity:"doll"},
+{name:"Wily",image:"wily.png",weight:14,price:5,rarity:"doll"},
+{name:"Will",image:"will.png",weight:9,price:7,rarity:"doll"},
+{name:"Waffle",image:"waffle.png",weight:14,price:5,rarity:"doll"},
+{name:"Cute Cake",image:"cute cake.png",weight:9,price:7,rarity:"doll"},
+{name:"Buttyr",image:"buttyr.png",weight:20,price:7,rarity:"doll"},
+{name:"Blossem",image:"blossem.png",weight:20,price:7,rarity:"doll"},
+{name:"Buzzy",image:"buzzy.png",weight:5,price:12,rarity:"doll"},
+{name:"Nico",image:"nico.png",weight:20,price:3,rarity:"doll"},
+{name:"Choper",image:"choper.png",weight:10,price:5,rarity:"doll"},
+{name:"Bullet",image:"bullet.png",weight:10,price:5,rarity:"doll"}
 ];
 
-
-/* DAILY SHOP DATA */
-
-const dailyShopData = [
-
-    {
-        name:"Baby Pickels",
-        weight:20,
-        normalPrice:3,
-        cheapPrice:1
-    },
-
-    {
-        name:"Mr. Pickels",
-        weight:10,
-        normalPrice:5,
-        cheapPrice:1
-    },
-
-    {
-        name:"Wily",
-        weight:20,
-        normalPrice:3,
-        cheapPrice:1
-    },
-
-    {
-        name:"Will",
-        weight:10,
-        normalPrice:5,
-        cheapPrice:1
-    },
-
-    {
-        name:"Waffle",
-        weight:20,
-        normalPrice:5,
-        cheapPrice:1
-    },
-
-    {
-        name:"Cute Cake",
-        weight:10,
-        normalPrice:3,
-        cheapPrice:1
-    },
-
-    {
-        name:"Buttyr",
-        weight:7,
-        normalPrice:4,
-        cheapPrice:2
-    },
-
-    {
-        name:"Blossem",
-        weight:9,
-        normalPrice:4,
-        cheapPrice:2
-    },
-
-    {
-        name:"Buzzy",
-        weight:4,
-        normalPrice:7,
-        cheapPrice:4
-    },
-
-    {
-        name:"Nico",
-        weight:15,
-        normalPrice:1,
-        cheapPrice:1
-    },
-
-    {
-        name:"Choper",
-        weight:25,
-        normalPrice:1,
-        cheapPrice:1
-    },
-
-    {
-        name:"Bullet",
-        weight:20,
-        normalPrice:2,
-        cheapPrice:1
-    }
-
+const dailyShopData=[
+{name:"Baby Pickels",weight:20,normalPrice:3,cheapPrice:1},
+{name:"Mr. Pickels",weight:10,normalPrice:5,cheapPrice:1},
+{name:"Wily",weight:20,normalPrice:3,cheapPrice:1},
+{name:"Will",weight:10,normalPrice:5,cheapPrice:1},
+{name:"Waffle",weight:20,normalPrice:5,cheapPrice:1},
+{name:"Cute Cake",weight:10,normalPrice:3,cheapPrice:1},
+{name:"Buttyr",weight:7,normalPrice:4,cheapPrice:2},
+{name:"Blossem",weight:9,normalPrice:4,cheapPrice:2},
+{name:"Buzzy",weight:4,normalPrice:7,cheapPrice:4},
+{name:"Nico",weight:15,normalPrice:1,cheapPrice:1},
+{name:"Choper",weight:25,normalPrice:1,cheapPrice:1},
+{name:"Bullet",weight:20,normalPrice:2,cheapPrice:1}
 ];
 
-
-/* DOLB DEALS */
-
-const dolbDeals = [
-
-    {
-        coins:30,
-        dolb:10
-    },
-
-    {
-        coins:50,
-        dolb:25
-    },
-
-    {
-        coins:100,
-        dolb:75
-    },
-
-    {
-        coins:150,
-        dolb:150
-    }
-
+const dolbDeals=[
+{coins:30,dolb:10},
+{coins:50,dolb:25},
+{coins:100,dolb:75},
+{coins:150,dolb:150}
 ];
 
-
-/* PLAYER STATE */
-
-let currentUser = null;
-
-let money = STARTING_COINS;
-
-let dolb = STARTING_DOLB;
-
-let username = "";
-
-let profilePic = DEFAULT_PROFILE_PIC;
-
-let collection = [];
-
-let favorites = [];
-
-let completedTradeIds = [];
-
-let friends = [];
-
-let ownedProfilePics = [DEFAULT_PROFILE_PIC];
-
-let dailyShopOffer = null;
-
-let dailyShopBought = false;
-
-let dailyShopDate = "";
-
-let collectionTab = "all";
-
-let dexTab = "dolls";
-
-let activeTrade = null;
-
-let selectedTradeCards = [];
-
-let tradeRequests = [];
-
-let tradeListener = null;
-
-let friendRequests = [];
-
-let friendListener = null;
-
-let applyingTradeIds = new Set();
-
-
-/* HELPERS */
-
-function createCardId(){
-
-    return Date.now().toString(36) +
-        Math.random().toString(36).slice(2);
-
-}
-
-
-function createCardCopy(name,traded=false){
-
-    return {
-        id:createCardId(),
-        name:name,
-        traded:traded
-    };
-
-}
-
-
-function getCard(name){
-
-    return cards.find(
-        card => card.name === name
-    );
-
-}
-
-
-function escapeHtml(value){
-
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-
-}
-
-
-function encoded(value){
-
-    return encodeURIComponent(String(value));
-
-}
-
-
-/* MESSAGE */
-
-function showMessage(text){
-
-    const el =
-        document.getElementById("message");
-
-    el.textContent = text;
-    el.style.display = "block";
-
-    setTimeout(()=>{
-        el.style.display = "none";
-    },2500);
-
-}
-
-
-/* CARD VIEWER */
-
-window.openEncodedCardViewer =
-function(image,name){
-
-    openCardViewer(
-        decodeURIComponent(image),
-        decodeURIComponent(name)
-    );
-
-};
-
-
-window.openCardViewer =
-function(image,name){
-
-    const viewer =
-        document.getElementById("cardViewer");
-
-    const imageEl =
-        document.getElementById("cardViewerImage");
-
-    imageEl.src = image;
-    imageEl.alt = name;
-
-    viewer.classList.remove("hidden");
-
-};
-
-
-window.closeCardViewer =
-function(event){
-
-    if(event){
-        event.stopPropagation();
-    }
-
-    document
-        .getElementById("cardViewer")
-        .classList.add("hidden");
-
-};
-
-
-/* LOGIN */
-
-window.loginGoogle =
-async function(){
-
-    try{
-
-        const provider =
-            new GoogleAuthProvider();
-
-        await signInWithPopup(
-            auth,
-            provider
-        );
-
-    }catch(error){
-
-        console.error(error);
-        showMessage(error.message);
-
-    }
-
-};
-
-
-/* LOGOUT */
-
-window.logout =
-async function(){
-
-    try{
-
-        await savePlayerData();
-        await signOut(auth);
-
-    }catch(error){
-
-        console.error(error);
-
-    }
-
-};
-
-
-/* USERNAME */
+let currentUser=null,money=STARTING_COINS,dolb=STARTING_DOLB,username="",profilePic=DEFAULT_PROFILE_PIC;
+let collection=[],favorites=[],completedTradeIds=[],friends=[],ownedProfilePics=[DEFAULT_PROFILE_PIC];
+let dailyShopOffer=null,dailyShopBought=false,dailyShopDate="";
+let collectionTab="all",dexTab="dolls",activeTrade=null,selectedTradeCards=[];
+let tradeRequests=[],tradeListener=null,friendRequests=[],friendListener=null,applyingTradeIds=new Set();
+
+function createCardId(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
+function createCardCopy(name,traded=false){return{id:createCardId(),name,traded}}
+function getCard(name){return cards.find(c=>c.name===name)}
+function escapeHtml(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function encoded(v){return encodeURIComponent(String(v))}
+function showMessage(text){const e=document.getElementById("message");e.textContent=text;e.style.display="block";setTimeout(()=>e.style.display="none",2500)}
+
+window.openEncodedCardViewer=(image,name)=>openCardViewer(decodeURIComponent(image),decodeURIComponent(name));
+window.openCardViewer=(image,name)=>{document.getElementById("cardViewerImage").src=image;document.getElementById("cardViewerImage").alt=name;document.getElementById("cardViewer").classList.remove("hidden")};
+window.closeCardViewer=e=>{if(e)e.stopPropagation();document.getElementById("cardViewer").classList.add("hidden")};
+
+window.loginGoogle=async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){console.error(e);showMessage(e.message)}};
+window.logout=async()=>{try{await savePlayerData();await signOut(auth)}catch(e){console.error(e)}};
 
 async function askForUsername(){
-
-    while(!username){
-
-        let chosen =
-            prompt("Choose your unique username:");
-
-        if(chosen === null){
-            chosen = "";
-        }
-
-        chosen = chosen.trim();
-
-        if(chosen.length < 3){
-            alert("Username must be at least 3 characters.");
-            continue;
-        }
-
-        if(chosen.length > 20){
-            alert("Username must be 20 characters or less.");
-            continue;
-        }
-
-        if(!/^[a-zA-Z0-9_]+$/.test(chosen)){
-            alert("Only letters, numbers and _ are allowed.");
-            continue;
-        }
-
-        const normalized =
-            chosen.toLowerCase();
-
-        const usernameRef =
-            doc(
-                db,
-                "usernames",
-                normalized
-            );
-
-        const usernameSnap =
-            await getDoc(usernameRef);
-
-        if(
-            usernameSnap.exists() &&
-            usernameSnap.data().uid !== currentUser.uid
-        ){
-
-            alert("That username is already taken.");
-            continue;
-
-        }
-
-        await setDoc(
-            usernameRef,
-            {
-                uid:currentUser.uid,
-                username:chosen
-            },
-            {merge:true}
-        );
-
-        username = chosen;
-
-    }
-
+while(!username){
+let chosen=prompt("Choose your unique username:")||"";
+chosen=chosen.trim();
+if(chosen.length<3){alert("Username must be at least 3 characters.");continue}
+if(chosen.length>20){alert("Username must be 20 characters or less.");continue}
+if(!/^[a-zA-Z0-9_]+$/.test(chosen)){alert("Only letters, numbers and _ are allowed.");continue}
+const normalized=chosen.toLowerCase();
+const ref=doc(db,"usernames",normalized);
+const snap=await getDoc(ref);
+if(snap.exists()&&snap.data().uid!==currentUser.uid){alert("That username is already taken.");continue}
+await setDoc(ref,{uid:currentUser.uid,username:chosen},{merge:true});
+username=chosen;
 }
-
+}
 
 async function ensureUsernameDocument(){
-
-    if(!currentUser || !username){
-        return;
-    }
-
-    await setDoc(
-        doc(
-            db,
-            "usernames",
-            username.toLowerCase()
-        ),
-        {
-            uid:currentUser.uid,
-            username:username
-        },
-        {merge:true}
-    );
-
+if(!currentUser||!username)return;
+await setDoc(doc(db,"usernames",username.toLowerCase()),{uid:currentUser.uid,username},{merge:true});
 }
-
-
-/* COLLECTION NORMALIZATION */
 
 function normalizeCollection(data){
-
-    if(!Array.isArray(data)){
-        return [];
-    }
-
-    return data
-        .map(item=>{
-
-            if(typeof item === "string"){
-                return createCardCopy(item);
-            }
-
-            return {
-                id:item.id || createCardId(),
-                name:item.name,
-                traded:item.traded === true
-            };
-
-        })
-        .filter(item=>getCard(item.name));
-
+if(!Array.isArray(data))return[];
+return data.map(item=>{
+if(typeof item==="string")return createCardCopy(item);
+return{id:item.id||createCardId(),name:item.name,traded:item.traded===true};
+}).filter(item=>getCard(item.name));
 }
-
-
-/* LOAD PLAYER */
 
 async function loadPlayerData(){
+const ref=doc(db,"players",currentUser.uid);
+const snap=await getDoc(ref);
 
-    const ref =
-        doc(
-            db,
-            "players",
-            currentUser.uid
-        );
-
-    const snap =
-        await getDoc(ref);
-
-    if(!snap.exists()){
-
-        money = STARTING_COINS;
-
-        dolb = STARTING_DOLB;
-
-        collection = [];
-
-        favorites = [];
-
-        completedTradeIds = [];
-
-        friends = [];
-
-        ownedProfilePics = [
-            DEFAULT_PROFILE_PIC
-        ];
-
-        username = "";
-
-        profilePic = DEFAULT_PROFILE_PIC;
-
-        await setDoc(
-            ref,
-            {
-                money:money,
-                dolb:dolb,
-                collection:collection,
-                favorites:favorites,
-                completedTradeIds:completedTradeIds,
-                friends:friends,
-                ownedProfilePics:ownedProfilePics,
-                username:username,
-                profilePic:profilePic
-            }
-        );
-
-    }else{
-
-        const data = snap.data();
-
-        money =
-            typeof data.money === "number"
-                ? data.money
-                : STARTING_COINS;
-
-        dolb =
-            typeof data.dolb === "number"
-                ? data.dolb
-                : STARTING_DOLB;
-
-        collection =
-            normalizeCollection(data.collection);
-
-        favorites =
-            Array.isArray(data.favorites)
-                ? data.favorites
-                : [];
-
-        completedTradeIds =
-            Array.isArray(data.completedTradeIds)
-                ? data.completedTradeIds
-                : [];
-
-        friends =
-            Array.isArray(data.friends)
-                ? data.friends
-                : [];
-
-        ownedProfilePics =
-            Array.isArray(data.ownedProfilePics)
-                ? data.ownedProfilePics
-                : [DEFAULT_PROFILE_PIC];
-
-        if(!ownedProfilePics.includes(DEFAULT_PROFILE_PIC)){
-            ownedProfilePics.push(DEFAULT_PROFILE_PIC);
-        }
-
-        username =
-            data.username || "";
-
-        profilePic =
-            data.profilePic ||
-            DEFAULT_PROFILE_PIC;
-
-        if(!ownedProfilePics.includes(profilePic)){
-            ownedProfilePics.push(profilePic);
-        }
-
-    }
-
-    if(!username){
-        await askForUsername();
-    }
-
-    await ensureUsernameDocument();
-
-    await loadDailyShopData();
-
-    await savePlayerData();
-
+if(!snap.exists()){
+money=STARTING_COINS;dolb=STARTING_DOLB;collection=[];favorites=[];completedTradeIds=[];friends=[];ownedProfilePics=[DEFAULT_PROFILE_PIC];username="";profilePic=DEFAULT_PROFILE_PIC;
+await setDoc(ref,{money,dolb,collection,favorites,completedTradeIds,friends,ownedProfilePics,username,profilePic});
+}else{
+const data=snap.data();
+money=typeof data.money==="number"?data.money:STARTING_COINS;
+dolb=typeof data.dolb==="number"?data.dolb:STARTING_DOLB;
+collection=normalizeCollection(data.collection);
+favorites=Array.isArray(data.favorites)?data.favorites:[];
+completedTradeIds=Array.isArray(data.completedTradeIds)?data.completedTradeIds:[];
+friends=Array.isArray(data.friends)?data.friends:[];
+ownedProfilePics=Array.isArray(data.ownedProfilePics)?data.ownedProfilePics:[DEFAULT_PROFILE_PIC];
+if(!ownedProfilePics.includes(DEFAULT_PROFILE_PIC))ownedProfilePics.push(DEFAULT_PROFILE_PIC);
+username=data.username||"";
+profilePic=data.profilePic||DEFAULT_PROFILE_PIC;
+if(!ownedProfilePics.includes(profilePic))ownedProfilePics.push(profilePic);
 }
-
-
-/* SAVE PLAYER */
+if(!username)await askForUsername();
+await ensureUsernameDocument();
+await loadDailyShopData();
+await savePlayerData();
+}
 
 async function savePlayerData(){
-
-    if(!currentUser){
-        return;
-    }
-
-    await setDoc(
-        doc(
-            db,
-            "players",
-            currentUser.uid
-        ),
-        {
-            money:money,
-            dolb:dolb,
-            collection:collection,
-            favorites:favorites,
-            completedTradeIds:completedTradeIds,
-            friends:friends,
-            ownedProfilePics:ownedProfilePics,
-            username:username,
-            profilePic:profilePic
-        },
-        {merge:true}
-    );
-
+if(!currentUser)return;
+await setDoc(doc(db,"players",currentUser.uid),{
+money,dolb,collection,favorites,completedTradeIds,friends,ownedProfilePics,username,profilePic
+},{merge:true});
 }
 
-
-/* AUTH */
-
-onAuthStateChanged(
-    auth,
-    async user=>{
-
-        if(!user){
-
-            currentUser = null;
-
-            stopTradeListener();
-            stopFriendListener();
-
-            activeTrade = null;
-            tradeRequests = [];
-            friendRequests = [];
-
-            document
-                .getElementById("loginScreen")
-                .classList.remove("hidden");
-
-            document
-                .getElementById("gameScreen")
-                .classList.add("hidden");
-
-            return;
-
-        }
-
-        currentUser = user;
-
-        try{
-
-            await loadPlayerData();
-
-            document
-                .getElementById("loginScreen")
-                .classList.add("hidden");
-
-            document
-                .getElementById("gameScreen")
-                .classList.remove("hidden");
-
-            document
-                .getElementById("accountEmail")
-                .textContent =
-                user.email || "";
-
-            updateUI();
-
-            startTradeListener();
-            startFriendListener();
-
-        }catch(error){
-
-            console.error(error);
-
-            alert(
-                "Could not load your account:\n" +
-                error.message
-            );
-
-        }
-
-    }
-);
-
-
-/* UI */
+onAuthStateChanged(auth,async user=>{
+if(!user){
+currentUser=null;stopTradeListener();stopFriendListener();activeTrade=null;tradeRequests=[];friendRequests=[];
+document.getElementById("loginScreen").classList.remove("hidden");
+document.getElementById("gameScreen").classList.add("hidden");
+return;
+}
+currentUser=user;
+try{
+await loadPlayerData();
+document.getElementById("loginScreen").classList.add("hidden");
+document.getElementById("gameScreen").classList.remove("hidden");
+document.getElementById("accountEmail").textContent=user.email||"";
+updateUI();startTradeListener();startFriendListener();
+}catch(e){console.error(e);alert("Could not load your account:\n"+e.message)}
+});
 
 function updateUI(){
-
-    document.getElementById("money").textContent =
-        money;
-
-    document.getElementById("dolb").textContent =
-        dolb;
-
-    document.getElementById("usernameDisplay").textContent =
-        username;
-
-    document.getElementById("settingsUsername").textContent =
-        username;
-
-    document.getElementById("homeUsername").textContent =
-        username;
-
-    document.getElementById("homeProfilePic").src =
-        profilePic;
-
-    document.getElementById("settingsProfilePic").src =
-        profilePic;
-
-    renderCollection();
-    renderDex();
-    renderFriends();
-    renderShop();
-
+document.getElementById("money").textContent=money;
+document.getElementById("dolb").textContent=dolb;
+document.getElementById("usernameDisplay").textContent=username;
+document.getElementById("settingsUsername").textContent=username;
+document.getElementById("homeUsername").textContent=username;
+document.getElementById("homeProfilePic").src=profilePic;
+document.getElementById("settingsProfilePic").src=profilePic;
+renderCollection();renderDex();renderFriends();renderShop();
 }
 
-
-/* PAGE SWITCHING */
-
-window.showPage =
-function(page){
-
-    document
-        .querySelectorAll(".page")
-        .forEach(el=>{
-            el.classList.add("hidden");
-        });
-
-    const target =
-        document.getElementById(page+"Page");
-
-    if(target){
-        target.classList.remove("hidden");
-    }
-
-    if(page === "shop"){
-        renderShop();
-    }
-
-    if(page === "collection"){
-        renderCollection();
-    }
-
-    if(page === "dex"){
-        renderDex();
-    }
-
-    if(page === "trade"){
-        renderIncomingTrades();
-        renderActiveTrade();
-    }
-
-    if(page === "friends"){
-        renderFriendRequests();
-        renderFriends();
-    }
-
+window.showPage=page=>{
+document.querySelectorAll(".page").forEach(e=>e.classList.add("hidden"));
+const target=document.getElementById(page+"Page");
+if(target)target.classList.remove("hidden");
+if(page==="shop")renderShop();
+if(page==="collection")renderCollection();
+if(page==="dex")renderDex();
+if(page==="trade"){renderIncomingTrades();renderActiveTrade()}
+if(page==="friends"){renderFriendRequests();renderFriends()}
 };
 
-
-/* =========================================================
-   DAILY SHOP
-   ========================================================= */
-
-
-/*
-   The daily shop is the same for everyone on the same date.
-
-   The weights are:
-
-   Baby Pickels 20
-   Mr. Pickels 10
-   Wily 20
-   Will 10
-   Waffle 20
-   Cute Cake 10
-   Buttyr 7
-   Blossem 9
-   Buzzy 4
-   Nico 15
-   Choper 25
-   Bullet 20
-
-   "Sometimes" price = 50% chance.
-*/
-
+/* DAILY SHOP */
 
 function getTodayString(){
-
-    const now = new Date();
-
-    return (
-        now.getFullYear() +
-        "-" +
-        String(now.getMonth()+1).padStart(2,"0") +
-        "-" +
-        String(now.getDate()).padStart(2,"0")
-    );
-
+const d=new Date();
+return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
-
-
-/* Seeded random number */
 
 function seededRandom(seed){
-
-    let hash = 0;
-
-    for(let i=0;i<seed.length;i++){
-
-        hash =
-            ((hash << 5) - hash) +
-            seed.charCodeAt(i);
-
-        hash |= 0;
-
-    }
-
-    let x =
-        Math.sin(hash) * 10000;
-
-    return x - Math.floor(x);
-
+let hash=0;
+for(let i=0;i<seed.length;i++){hash=((hash<<5)-hash)+seed.charCodeAt(i);hash|=0}
+const x=Math.sin(hash)*10000;
+return x-Math.floor(x);
 }
 
-
-/* Weighted daily doll */
-
-function chooseDailyDoll(dateString){
-
-    const totalWeight =
-        dailyShopData.reduce(
-            (sum,item)=>sum + item.weight,
-            0
-        );
-
-    let random =
-        seededRandom(
-            "DBCC_DAILY_SHOP_" + dateString
-        ) * totalWeight;
-
-    for(const item of dailyShopData){
-
-        random -= item.weight;
-
-        if(random <= 0){
-            return item;
-        }
-
-    }
-
-    return dailyShopData[
-        dailyShopData.length - 1
-    ];
-
+function chooseDailyDoll(date){
+const total=dailyShopData.reduce((s,i)=>s+i.weight,0);
+let r=seededRandom("DBCC_DAILY_SHOP_"+date)*total;
+for(const item of dailyShopData){r-=item.weight;if(r<=0)return item}
+return dailyShopData[dailyShopData.length-1];
 }
 
+function getDailyBuzzyProfileChance(date){return seededRandom("DBCC_BUZZY_PROFILE_"+date)<.0075}
 
-/* Buzzy profile picture chance */
-
-function getDailyBuzzyProfileChance(dateString){
-
-    const value =
-        seededRandom(
-            "DBCC_BUZZY_PROFILE_" + dateString
-        );
-
-    /*
-       0.0075 = 0.75%
-    */
-
-    return value < 0.0075;
-
+function getDailyCheapPrice(item,date){
+if(item.normalPrice===item.cheapPrice)return item.normalPrice;
+return seededRandom("DBCC_CHEAP_PRICE_"+date+"_"+item.name)<.5?item.cheapPrice:item.normalPrice;
 }
-
-
-/* Cheap-price chance */
-
-function getDailyCheapPrice(
-    item,
-    dateString
-){
-
-    if(
-        item.normalPrice ===
-        item.cheapPrice
-    ){
-        return item.normalPrice;
-    }
-
-    const value =
-        seededRandom(
-            "DBCC_CHEAP_PRICE_" +
-            dateString +
-            "_" +
-            item.name
-        );
-
-    if(value < 0.5){
-        return item.cheapPrice;
-    }
-
-    return item.normalPrice;
-
-}
-
-
-/* Load / generate daily shop */
 
 async function loadDailyShopData(){
+const today=getTodayString();
+const ref=doc(db,"players",currentUser.uid);
+const snap=await getDoc(ref);
+if(!snap.exists())return;
+const data=snap.data();
 
-    const today =
-        getTodayString();
-
-    const playerRef =
-        doc(
-            db,
-            "players",
-            currentUser.uid
-        );
-
-    const snap =
-        await getDoc(playerRef);
-
-    if(!snap.exists()){
-        return;
-    }
-
-    const data = snap.data();
-
-    /*
-       Every player stores whether they bought
-       today's shop offer.
-
-       The actual offer is generated from today's
-       date, so everyone gets the same offer.
-    */
-
-    if(
-        data.dailyShopDate === today
-    ){
-
-        dailyShopDate = today;
-
-        dailyShopBought =
-            data.dailyShopBought === true;
-
-    }else{
-
-        dailyShopDate = today;
-
-        dailyShopBought = false;
-
-        await setDoc(
-            playerRef,
-            {
-                dailyShopDate:today,
-                dailyShopBought:false
-            },
-            {merge:true}
-        );
-
-    }
-
-    const item =
-        chooseDailyDoll(today);
-
-    /*
-       Buzzy has a 0.75% chance of being the
-       profile picture offer.
-    */
-
-    if(item.name === "Buzzy"){
-
-        const profileChance =
-            getDailyBuzzyProfileChance(today);
-
-        if(profileChance){
-
-            dailyShopOffer = {
-
-                type:"profilePic",
-
-                name:"Buzzy",
-
-                image:BUZZY_PROFILE_PIC,
-
-                normalPrice:30,
-
-                cheapPrice:15,
-
-                price:getDailyCheapPrice(
-                    {
-                        normalPrice:30,
-                        cheapPrice:15
-                    },
-                    today
-                )
-
-            };
-
-            return;
-
-        }
-
-    }
-
-    dailyShopOffer = {
-
-        type:"doll",
-
-        name:item.name,
-
-        image:getCard(item.name).image,
-
-        normalPrice:item.normalPrice,
-
-        cheapPrice:item.cheapPrice,
-
-        price:getDailyCheapPrice(
-            item,
-            today
-        )
-
-    };
-
+if(data.dailyShopDate===today){
+dailyShopDate=today;
+dailyShopBought=data.dailyShopBought===true;
+}else{
+dailyShopDate=today;dailyShopBought=false;
+await setDoc(ref,{dailyShopDate:today,dailyShopBought:false},{merge:true});
 }
 
+const item=chooseDailyDoll(today);
 
-/* RENDER SHOP */
+if(item.name==="Buzzy"&&getDailyBuzzyProfileChance(today)){
+dailyShopOffer={type:"profilePic",name:"Buzzy",image:BUZZY_PROFILE_PIC,normalPrice:30,cheapPrice:15,price:getDailyCheapPrice({normalPrice:30,cheapPrice:15},today)};
+return;
+}
+
+dailyShopOffer={type:"doll',name:item.name,image:getCard(item.name).image,normalPrice:item.normalPrice,cheapPrice:item.cheapPrice,price:getDailyCheapPrice(item,today)};
+}
+
+/* SHOP
+   IMPORTANT:
+   Dolls are NOT limited to one copy anymore.
+*/
 
 function renderShop(){
-
-    const daily =
-        document.getElementById("dailyShop");
-
-    const deals =
-        document.getElementById("dolbDeals");
-
-    const date =
-        document.getElementById("shopDate");
-
-    if(!daily || !deals){
-        return;
-    }
-
-    if(date){
-
-        date.textContent =
-            " Today: " + getTodayString();
-
-    }
-
-    /* DAILY OFFER */
-
-    if(!dailyShopOffer){
-
-        daily.innerHTML = `
-            <div class="dailyShopCard">
-                <p>Loading today's shop...</p>
-            </div>
-        `;
-
-    }else{
-
-        const owned =
-            dailyShopOffer.type === "doll"
-                ? collection.some(
-                    copy =>
-                        copy.name ===
-                        dailyShopOffer.name
-                )
-                : ownedProfilePics.includes(
-                    BUZZY_PROFILE_PIC
-                );
-
-        let imageHtml = "";
-
-        if(
-            dailyShopOffer.type ===
-            "profilePic"
-        ){
-
-            imageHtml = `
-
-                <img
-                    class="shopProfile"
-                    src="${escapeHtml(dailyShopOffer.image)}"
-                    alt="Buzzy Profile Picture"
-                    onclick="openEncodedCardViewer(
-                        '${encoded(dailyShopOffer.image)}',
-                        '${encoded("Buzzy Profile Picture")}'
-                    )">
-
-                <div class="profileShopLabel">
-                    Buzzy Profile Picture
-                </div>
-
-            `;
-
-        }else{
-
-            imageHtml = `
-
-                <img
-                    class="dailyShopImage"
-                    src="${escapeHtml(dailyShopOffer.image)}"
-                    alt="${escapeHtml(dailyShopOffer.name)}"
-                    onclick="openEncodedCardViewer(
-                        '${encoded(dailyShopOffer.image)}',
-                        '${encoded(dailyShopOffer.name)}'
-                    )">
-
-            `;
-
-        }
-
-        let button;
-
-        if(dailyShopBought){
-
-            button = `
-                <button
-                    class="shopOwned"
-                    disabled>
-                    PURCHASED TODAY
-                </button>
-            `;
-
-        }else if(owned){
-
-            button = `
-                <button
-                    class="shopOwned"
-                    disabled>
-                    ALREADY OWNED
-                </button>
-            `;
-
-        }else if(
-            dolb <
-            dailyShopOffer.price
-        ){
-
-            button = `
-                <button
-                    class="shopBuyButton"
-                    disabled>
-                    NOT ENOUGH DOLB
-                </button>
-            `;
-
-        }else{
-
-            button = `
-                <button
-                    class="shopBuyButton"
-                    onclick="buyDailyShopOffer()">
-
-                    BUY FOR
-                    ${dailyShopOffer.price}
-                    DOLB
-
-                </button>
-            `;
-
-        }
-
-        daily.innerHTML = `
-
-            <div class="dailyShopCard">
-
-                ${imageHtml}
-
-                ${
-                    dailyShopOffer.type === "doll"
-                        ? `
-                            <div class="dailyShopName">
-                                ${escapeHtml(
-                                    dailyShopOffer.name
-                                )}
-                            </div>
-                        `
-                        : ""
-                }
-
-                <div class="shopPrice">
-
-                    ${dailyShopOffer.price}
-                    Dolb
-
-                </div>
-
-                ${
-                    dailyShopOffer.price !==
-                    dailyShopOffer.normalPrice
-                        ? `
-                            <div style="
-                                text-decoration:line-through;
-                                opacity:.55;
-                                margin-bottom:8px;
-                            ">
-                                Normal price:
-                                ${dailyShopOffer.normalPrice}
-                                Dolb
-                            </div>
-
-                            <div style="
-                                color:#7ee7a7;
-                                font-weight:bold;
-                                margin-bottom:10px;
-                            ">
-                                TODAY'S DEAL!
-                            </div>
-                        `
-                        : ""
-                }
-
-                ${
-                    dailyShopOffer.type ===
-                    "profilePic"
-                        ? `
-                            <p>
-                                You can see this profile picture
-                                before buying it.
-                            </p>
-                        `
-                        : `
-                            <p>
-                                You can own only one copy
-                                of each doll.
-                            </p>
-                        `
-                }
-
-                ${button}
-
-            </div>
-
-        `;
-
-    }
-
-
-    /* DOLB DEALS */
-
-    deals.innerHTML = "";
-
-    dolbDeals.forEach(deal=>{
-
-        const div =
-            document.createElement("div");
-
-        div.className = "dealBox";
-
-        const alreadyEnough =
-            money >= deal.coins;
-
-        div.innerHTML = `
-
-            <div class="dealTitle">
-                ${deal.coins} Coins
-            </div>
-
-            <div class="dealArrow">
-                ↓
-            </div>
-
-            <div style="
-                font-size:20px;
-                font-weight:bold;
-                color:#d0b5ff;
-            ">
-                ${deal.dolb} Dolb
-            </div>
-
-            <p>
-                Spend ${deal.dolb} Dolb
-                to receive ${deal.coins} coins.
-            </p>
-
-            <button
-                class="dealButton"
-                onclick="buyDolbDeal(${deal.coins},${deal.dolb})">
-
-                BUY FOR ${deal.dolb} DOLB
-
-            </button>
-
-        `;
-
-        deals.appendChild(div);
-
-    });
-
+const daily=document.getElementById("dailyShop"),deals=document.getElementById("dolbDeals"),date=document.getElementById("shopDate");
+if(!daily||!deals)return;
+if(date)date.textContent=" Today: "+getTodayString();
+
+if(!dailyShopOffer){
+daily.innerHTML='<div class="dailyShopCard"><p>Loading today\'s shop...</p></div>';
+}else{
+/*
+   CHANGED:
+   We no longer check whether the player already owns the doll.
+   You can buy the same doll multiple times.
+*/
+let imageHtml=dailyShopOffer.type==="profilePic"
+?`<img class="shopProfile" src="${escapeHtml(dailyShopOffer.image)}" onclick="openEncodedCardViewer('${encoded(dailyShopOffer.image)}','Buzzy Profile Picture')"><div class="profileShopLabel">Buzzy Profile Picture</div>`
+:`<img class="dailyShopImage" src="${escapeHtml(dailyShopOffer.image)}" onclick="openEncodedCardViewer('${encoded(dailyShopOffer.image)}','${encoded(dailyShopOffer.name)}')">`;
+
+let button;
+
+if(dailyShopBought){
+button='<button class="shopOwned" disabled>PURCHASED TODAY</button>';
+}else if(dailyShopOffer.type==="profilePic"&&ownedProfilePics.includes(BUZZY_PROFILE_PIC)){
+button='<button class="shopOwned" disabled>ALREADY OWNED</button>';
+}else if(dolb<dailyShopOffer.price){
+button='<button class="shopBuyButton" disabled>NOT ENOUGH DOLB</button>';
+}else{
+button='<button class="shopBuyButton" onclick="buyDailyShopOffer()">BUY FOR '+dailyShopOffer.price+' DOLB</button>';
 }
 
-
-/* BUY DAILY OFFER */
-
-window.buyDailyShopOffer =
-async function(){
-
-    if(!currentUser){
-        return;
-    }
-
-    if(!dailyShopOffer){
-
-        showMessage(
-            "Today's shop is not loaded yet."
-        );
-
-        return;
-
-    }
-
-    if(dailyShopBought){
-
-        showMessage(
-            "You already bought today's shop offer."
-        );
-
-        return;
-
-    }
-
-    const today =
-        getTodayString();
-
-    /*
-       Reload from Firestore so the purchase
-       cannot accidentally be duplicated.
-    */
-
-    const playerRef =
-        doc(
-            db,
-            "players",
-            currentUser.uid
-        );
-
-    const snap =
-        await getDoc(playerRef);
-
-    if(snap.exists()){
-
-        const data =
-            snap.data();
-
-        if(
-            data.dailyShopDate === today &&
-            data.dailyShopBought === true
-        ){
-
-            dailyShopBought = true;
-
-            renderShop();
-
-            showMessage(
-                "You already bought today's offer."
-            );
-
-            return;
-
-        }
-
-    }
-
-    const price =
-        dailyShopOffer.price;
-
-    if(dolb < price){
-
-        showMessage(
-            "Not enough Dolb."
-        );
-
-        return;
-
-    }
-
-
-    /* PROFILE PICTURE */
-
-    if(
-        dailyShopOffer.type ===
-        "profilePic"
-    ){
-
-        if(
-            ownedProfilePics.includes(
-                BUZZY_PROFILE_PIC
-            )
-        ){
-
-            showMessage(
-                "You already own this profile picture."
-            );
-
-            return;
-
-        }
-
-        dolb -= price;
-
-        ownedProfilePics.push(
-            BUZZY_PROFILE_PIC
-        );
-
-        /*
-           Buying the profile picture does NOT
-           automatically equip it.
-        */
-
-        dailyShopBought = true;
-
-        await savePlayerData();
-
-        await setDoc(
-            playerRef,
-            {
-                dailyShopDate:today,
-                dailyShopBought:true
-            },
-            {merge:true}
-        );
-
-        updateUI();
-
-        showMessage(
-            "Buzzy profile picture purchased!"
-        );
-
-        return;
-
-    }
-
-
-    /* DOLL */
-
-    const alreadyOwned =
-        collection.some(
-            copy =>
-                copy.name ===
-                dailyShopOffer.name
-        );
-
-    if(alreadyOwned){
-
-        showMessage(
-            "You already own this doll."
-        );
-
-        return;
-
-    }
-
-    const card =
-        getCard(
-            dailyShopOffer.name
-        );
-
-    if(!card){
-
-        showMessage(
-            "Doll not found."
-        );
-
-        return;
-
-    }
-
-    dolb -= price;
-
-    collection.push(
-        createCardCopy(
-            dailyShopOffer.name
-        )
-    );
-
-    dailyShopBought = true;
-
-    await savePlayerData();
-
-    await setDoc(
-        playerRef,
-        {
-            dailyShopDate:today,
-            dailyShopBought:true
-        },
-        {merge:true}
-    );
-
-    updateUI();
-
-    showMessage(
-        dailyShopOffer.name +
-        " purchased from the Daily Shop!"
-    );
-
+daily.innerHTML=`
+<div class="dailyShopCard">
+${imageHtml}
+${dailyShopOffer.type==="doll"?`<div class="dailyShopName">${escapeHtml(dailyShopOffer.name)}</div>`:""}
+<div class="shopPrice">${dailyShopOffer.price} Dolb</div>
+${dailyShopOffer.price!==dailyShopOffer.normalPrice?`
+<div style="text-decoration:line-through;opacity:.55">Normal price: ${dailyShopOffer.normalPrice} Dolb</div>
+<div style="color:#7ee7a7;font-weight:bold;margin:10px">TODAY'S DEAL!</div>`:""}
+${dailyShopOffer.type==="doll"
+?`<p>You can own multiple copies of this doll.</p>`
+:`<p>You can own only one copy of this profile picture.</p>`}
+${button}
+</div>`;
+}
+
+deals.innerHTML="";
+dolbDeals.forEach(deal=>{
+const div=document.createElement("div");
+div.className="dealBox";
+div.innerHTML=`
+<div class="dealTitle">${deal.coins} Coins</div>
+<div class="dealArrow">↓</div>
+<div style="font-size:20px;font-weight:bold;color:#d0b5ff">${deal.dolb} Dolb</div>
+<p>Spend ${deal.dolb} Dolb to receive ${deal.coins} coins.</p>
+<button class="dealButton" onclick="buyDolbDeal(${deal.coins},${deal.dolb})">BUY FOR ${deal.dolb} DOLB</button>`;
+deals.appendChild(div);
+});
+}
+
+window.buyDailyShopOffer=async()=>{
+if(!currentUser||!dailyShopOffer)return;
+if(dailyShopBought){showMessage("You already bought today's shop offer.");return}
+const today=getTodayString();
+const ref=doc(db,"players",currentUser.uid);
+const snap=await getDoc(ref);
+if(snap.exists()&&snap.data().dailyShopDate===today&&snap.data().dailyShopBought===true){
+dailyShopBought=true;renderShop();showMessage("You already bought today's offer.");return;
+}
+const price=dailyShopOffer.price;
+if(dolb<price){showMessage("Not enough Dolb.");return}
+
+if(dailyShopOffer.type==="profilePic"){
+if(ownedProfilePics.includes(BUZZY_PROFILE_PIC)){showMessage("You already own this profile picture.");return}
+dolb-=price;ownedProfilePics.push(BUZZY_PROFILE_PIC);dailyShopBought=true;
+await savePlayerData();
+await setDoc(ref,{dailyShopDate:today,dailyShopBought:true},{merge:true});
+updateUI();showMessage("Buzzy profile picture purchased!");return;
+}
+
+/*
+   CHANGED:
+   No "alreadyOwned" check here.
+   Every purchase creates another individual card copy.
+*/
+if(!getCard(dailyShopOffer.name)){showMessage("Doll not found.");return}
+dolb-=price;
+collection.push(createCardCopy(dailyShopOffer.name));
+dailyShopBought=true;
+await savePlayerData();
+await setDoc(ref,{dailyShopDate:today,dailyShopBought:true},{merge:true});
+updateUI();
+showMessage(dailyShopOffer.name+" purchased! You now have "+collection.filter(c=>c.name===dailyShopOffer.name).length+" copies.");
 };
 
-
-/* BUY DOLB DEAL */
-
-window.buyDolbDeal =
-async function(coins,dolbPrice){
-
-    if(dolb < dolbPrice){
-
-        showMessage(
-            "Not enough Dolb."
-        );
-
-        return;
-
-    }
-
-    dolb -= dolbPrice;
-
-    money += coins;
-
-    await savePlayerData();
-
-    updateUI();
-
-    showMessage(
-        "You received " +
-        coins +
-        " coins!"
-    );
-
+window.buyDolbDeal=async(coins,price)=>{
+if(dolb<price){showMessage("Not enough Dolb.");return}
+dolb-=price;money+=coins;await savePlayerData();updateUI();showMessage("You received "+coins+" coins!");
 };
 
-
-/* =========================================================
-   PACK
-   ========================================================= */
+/* PACK */
 
 function weightedRandomCard(){
-
-    const totalWeight =
-        cards.reduce(
-            (sum,card)=>sum+card.weight,
-            0
-        );
-
-    let random =
-        Math.random()*totalWeight;
-
-    for(const card of cards){
-
-        random -= card.weight;
-
-        if(random <= 0){
-            return card;
-        }
-
-    }
-
-    return cards[cards.length-1];
-
+const total=cards.reduce((s,c)=>s+c.weight,0);
+let r=Math.random()*total;
+for(const card of cards){r-=card.weight;if(r<=0)return card}
+return cards[cards.length-1];
 }
 
-
-window.openPack =
-async function(){
-
-    if(money < PACK_PRICE){
-
-        showMessage("Not enough coins.");
-        return;
-
-    }
-
-    money -= PACK_PRICE;
-
-    const newCards = [];
-
-    for(let i=0;i<3;i++){
-
-        const card =
-            weightedRandomCard();
-
-        collection.push(
-            createCardCopy(card.name)
-        );
-
-        newCards.push(card);
-
-    }
-
-    await savePlayerData();
-
-    updateUI();
-
-    showPackResults(newCards);
-
+window.openPack=async()=>{
+if(money<PACK_PRICE){showMessage("Not enough coins.");return}
+money-=PACK_PRICE;
+const pulled=[];
+for(let i=0;i<3;i++){
+const card=weightedRandomCard();
+collection.push(createCardCopy(card.name));
+pulled.push(card);
+}
+await savePlayerData();updateUI();showPackResults(pulled);
 };
 
-
-/* PACK RESULTS */
-
-function showPackResults(pulledCards){
-
-    const overlay =
-        document.createElement("div");
-
-    Object.assign(
-        overlay.style,
-        {
-            position:"fixed",
-            inset:"0",
-            background:"rgba(0,0,0,.94)",
-            zIndex:"4000",
-            display:"flex",
-            flexDirection:"column",
-            alignItems:"center",
-            justifyContent:"center",
-            padding:"20px",
-            overflowY:"auto"
-        }
-    );
-
-    const title =
-        document.createElement("h2");
-
-    title.textContent = "You got:";
-
-    overlay.appendChild(title);
-
-    const grid =
-        document.createElement("div");
-
-    Object.assign(
-        grid.style,
-        {
-            display:"grid",
-            gridTemplateColumns:"repeat(3,minmax(0,1fr))",
-            gap:"15px",
-            width:"min(100%,900px)"
-        }
-    );
-
-    pulledCards.forEach(card=>{
-
-        const box =
-            document.createElement("div");
-
-        Object.assign(
-            box.style,
-            {
-                background:"#10243d",
-                borderRadius:"15px",
-                padding:"10px",
-                textAlign:"center"
-            }
-        );
-
-        const image =
-            document.createElement("img");
-
-        image.src = card.image;
-        image.alt = card.name;
-
-        Object.assign(
-            image.style,
-            {
-                width:"100%",
-                maxHeight:"55vh",
-                objectFit:"contain",
-                borderRadius:"10px",
-                cursor:"pointer"
-            }
-        );
-
-        image.onclick = event=>{
-
-            event.stopPropagation();
-
-            openCardViewer(
-                card.image,
-                card.name
-            );
-
-        };
-
-        box.appendChild(image);
-        grid.appendChild(box);
-
-    });
-
-    overlay.appendChild(grid);
-
-    const closeButton =
-        document.createElement("button");
-
-    closeButton.textContent = "CONTINUE";
-
-    Object.assign(
-        closeButton.style,
-        {
-            marginTop:"20px",
-            background:"#2674d9",
-            color:"white"
-        }
-    );
-
-    closeButton.onclick =
-        ()=>overlay.remove();
-
-    overlay.appendChild(closeButton);
-
-    overlay.onclick = event=>{
-
-        if(event.target === overlay){
-            overlay.remove();
-        }
-
-    };
-
-    document.body.appendChild(overlay);
-
+function showPackResults(pulled){
+const overlay=document.createElement("div");
+Object.assign(overlay.style,{position:"fixed",inset:"0",background:"rgba(0,0,0,.94)",zIndex:"4000",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"20px",overflowY:"auto"});
+const title=document.createElement("h2");title.textContent="You got:";overlay.appendChild(title);
+const grid=document.createElement("div");
+Object.assign(grid.style,{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:"15px",width:"min(100%,900px)"});
+pulled.forEach(card=>{
+const box=document.createElement("div");
+Object.assign(box.style,{background:"#10243d",borderRadius:"15px",padding:"10px",textAlign:"center"});
+const img=document.createElement("img");img.src=card.image;img.alt=card.name;
+Object.assign(img.style,{width:"100%",maxHeight:"55vh",objectFit:"contain",borderRadius:"10px",cursor:"pointer"});
+img.onclick=e=>{e.stopPropagation();openCardViewer(card.image,card.name)};
+box.appendChild(img);grid.appendChild(box);
+});
+overlay.appendChild(grid);
+const close=document.createElement("button");close.textContent="CONTINUE";Object.assign(close.style,{marginTop:"20px",background:"#2674d9",color:"white"});close.onclick=()=>overlay.remove();overlay.appendChild(close);
+document.body.appendChild(overlay);
 }
 
+/* COLLECTION */
 
-/* =========================================================
-   COLLECTION
-   ========================================================= */
-
-window.setCollectionTab =
-function(tab){
-
-    collectionTab = tab;
-
-    document
-        .getElementById("collectionAllButton")
-        .classList.toggle(
-            "active",
-            tab === "all"
-        );
-
-    document
-        .getElementById("collectionFavoritesButton")
-        .classList.toggle(
-            "active",
-            tab === "favorites"
-        );
-
-    renderCollection();
-
+window.setCollectionTab=tab=>{
+collectionTab=tab;
+document.getElementById("collectionAllButton").classList.toggle("active",tab==="all");
+document.getElementById("collectionFavoritesButton").classList.toggle("active",tab==="favorites");
+renderCollection();
 };
-
 
 function getCollectionCounts(){
-
-    const counts = {};
-
-    for(const copy of collection){
-
-        counts[copy.name] =
-            (counts[copy.name] || 0) + 1;
-
-    }
-
-    return counts;
-
+const counts={};
+for(const copy of collection)counts[copy.name]=(counts[copy.name]||0)+1;
+return counts;
 }
 
-
-function getFirstCopy(name){
-
-    return collection.find(
-        copy=>copy.name === name
-    );
-
-}
-
+function getFirstCopy(name){return collection.find(c=>c.name===name)}
 
 function renderCollection(){
+const grid=document.getElementById("collectionGrid");
+if(!grid)return;
+const search=(document.getElementById("collectionSearch")?.value||"").toLowerCase();
+const counts=getCollectionCounts();
+let names=cards.filter(c=>counts[c.name]).map(c=>c.name);
+if(collectionTab==="favorites")names=names.filter(n=>favorites.includes(n));
+if(search)names=names.filter(n=>n.toLowerCase().includes(search));
+grid.innerHTML="";
+if(!names.length){grid.innerHTML="<p>You don't have any cards here.</p>";return}
 
-    const grid =
-        document.getElementById("collectionGrid");
+for(const name of names){
+const card=getCard(name),copy=getFirstCopy(name);
+const fav=favorites.includes(name),traded=copy?.traded===true;
+let border="";
+if(fav&&traded)border=card.rarity==="rare"?"rareTradedFavoriteCard":"tradedFavoriteCard";
+else if(fav)border=card.rarity==="rare"?"rareFavoriteCard":"favoriteCard";
 
-    if(!grid){
-        return;
-    }
-
-    const search =
-        (
-            document.getElementById("collectionSearch")?.value ||
-            ""
-        ).toLowerCase();
-
-    const counts =
-        getCollectionCounts();
-
-    let names =
-        cards
-            .filter(card=>counts[card.name])
-            .map(card=>card.name);
-
-    if(collectionTab === "favorites"){
-
-        names =
-            names.filter(
-                name=>favorites.includes(name)
-            );
-
-    }
-
-    if(search){
-
-        names =
-            names.filter(
-                name =>
-                    name.toLowerCase().includes(search)
-            );
-
-    }
-
-    grid.innerHTML = "";
-
-    if(!names.length){
-
-        grid.innerHTML =
-            "<p>You don't have any cards here.</p>";
-
-        return;
-
-    }
-
-    for(const name of names){
-
-        const card = getCard(name);
-        const copy = getFirstCopy(name);
-
-        if(!card){
-            continue;
-        }
-
-        const isFavorite =
-            favorites.includes(name);
-
-        const traded =
-            copy?.traded === true;
-
-        let borderClass = "";
-
-        if(isFavorite && traded){
-
-            borderClass =
-                card.rarity === "rare"
-                    ? "rareTradedFavoriteCard"
-                    : "tradedFavoriteCard";
-
-        }else if(isFavorite){
-
-            borderClass =
-                card.rarity === "rare"
-                    ? "rareFavoriteCard"
-                    : "favoriteCard";
-
-        }
-
-        const div =
-            document.createElement("div");
-
-        div.className =
-            "card " + borderClass;
-
-        div.innerHTML = `
-
-            <button
-                class="starButton ${
-                    isFavorite ? "favorite" : ""
-                }"
-                onclick="toggleFavorite('${escapeHtml(name)}')">
-
-                ${isFavorite ? "★" : "☆"}
-
-            </button>
-
-            <div class="cardCount">
-                ${counts[name]}
-            </div>
-
-            <img
-                src="${escapeHtml(card.image)}"
-                alt="${escapeHtml(name)}"
-                onclick="openEncodedCardViewer(
-                    '${encoded(card.image)}',
-                    '${encoded(name)}'
-                )">
-
-            <div class="cardName">
-                ${escapeHtml(name)}
-            </div>
-
-            <div>
-                Sell: ${card.price}
-            </div>
-
-            <button
-                class="sellButton ${
-                    isFavorite ? "favoriteLocked" : ""
-                }"
-                ${isFavorite ? "disabled" : ""}
-                onclick="sellCard('${escapeHtml(name)}')">
-
-                ${isFavorite ? "FAVORITED" : "SELL"}
-
-            </button>
-        `;
-
-        grid.appendChild(div);
-
-    }
-
+const div=document.createElement("div");
+div.className="card "+border;
+div.innerHTML=`
+<button class="starButton ${fav?"favorite":""}" onclick="toggleFavorite('${escapeHtml(name)}')">${fav?"★":"☆"}</button>
+<div class="cardCount">${counts[name]}</div>
+<img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(name)}')">
+<div class="cardName">${escapeHtml(name)}</div>
+<div>${counts[name]} ${counts[name]===1?"copy":"copies"} • Sell: ${card.price}</div>
+<button class="sellButton ${fav?"favoriteLocked":""}" ${fav?"disabled":""} onclick="sellCard('${escapeHtml(name)}')">${fav?"FAVORITED":"SELL 1 COPY"}</button>`;
+grid.appendChild(div);
+}
 }
 
-
-window.toggleFavorite =
-async function(name){
-
-    if(favorites.includes(name)){
-
-        favorites =
-            favorites.filter(
-                item=>item !== name
-            );
-
-        showMessage(
-            name + " is no longer a favorite."
-        );
-
-    }else{
-
-        favorites.push(name);
-
-        showMessage(
-            name + " is now a favorite."
-        );
-
-    }
-
-    await savePlayerData();
-    updateUI();
-
+window.toggleFavorite=async name=>{
+if(favorites.includes(name)){favorites=favorites.filter(x=>x!==name);showMessage(name+" is no longer a favorite.")}
+else{favorites.push(name);showMessage(name+" is now a favorite.")}
+await savePlayerData();updateUI();
 };
 
-
-window.sellCard =
-async function(name){
-
-    if(favorites.includes(name)){
-
-        showMessage(
-            "Favorite cards cannot be sold."
-        );
-
-        return;
-
-    }
-
-    const index =
-        collection.findIndex(
-            copy=>copy.name === name
-        );
-
-    if(index === -1){
-        return;
-    }
-
-    const card = getCard(name);
-
-    if(!card){
-        return;
-    }
-
-    collection.splice(index,1);
-
-    money += card.price;
-
-    await savePlayerData();
-    updateUI();
-
-    showMessage(
-        name +
-        " sold for " +
-        card.price +
-        " coins."
-    );
-
+window.sellCard=async name=>{
+if(favorites.includes(name)){showMessage("Favorite cards cannot be sold.");return}
+const index=collection.findIndex(c=>c.name===name);
+if(index===-1)return;
+const card=getCard(name);
+if(!card)return;
+collection.splice(index,1);money+=card.price;
+await savePlayerData();updateUI();
+showMessage(name+" sold for "+card.price+" coins.");
 };
 
+/* DEX */
 
-/* =========================================================
-   DEX
-   ========================================================= */
-
-window.setDexTab =
-function(tab){
-
-    dexTab = tab;
-
-    document
-        .getElementById("dexDollsButton")
-        .classList.toggle(
-            "active",
-            tab === "dolls"
-        );
-
-    document
-        .getElementById("dexRaresButton")
-        .classList.toggle(
-            "active",
-            tab === "rares"
-        );
-
-    renderDex();
-
+window.setDexTab=tab=>{
+dexTab=tab;
+document.getElementById("dexDollsButton").classList.toggle("active",tab==="dolls");
+document.getElementById("dexRaresButton").classList.toggle("active",tab==="rares");
+renderDex();
 };
-
 
 function renderDex(){
-
-    const grid =
-        document.getElementById("dexGrid");
-
-    if(!grid){
-        return;
-    }
-
-    grid.innerHTML = "";
-
-    if(dexTab === "rares"){
-
-        for(let i=1;i<=6;i++){
-
-            const div =
-                document.createElement("div");
-
-            div.className =
-                "dexCard comingSoon";
-
-            div.innerHTML = `
-
-                <div style="
-                    aspect-ratio:1/1.35;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    font-size:25px;
-                ">
-                    ?
-                </div>
-
-                <b>Rare ${i}</b>
-
-                <p>Coming Soon</p>
-
-            `;
-
-            grid.appendChild(div);
-
-        }
-
-        return;
-
-    }
-
-    for(const card of cards){
-
-        const owned =
-            collection.some(
-                copy=>copy.name === card.name
-            );
-
-        const div =
-            document.createElement("div");
-
-        div.className =
-            "dexCard " +
-            (!owned ? "comingSoon" : "");
-
-        div.innerHTML = `
-
-            <img
-                src="${escapeHtml(card.image)}"
-                alt="${escapeHtml(card.name)}"
-                onclick="openEncodedCardViewer(
-                    '${encoded(card.image)}',
-                    '${encoded(card.name)}'
-                )">
-
-            <b>
-                ${escapeHtml(card.name)}
-            </b>
-
-            <p>
-                ${owned ? "Owned" : "Not Owned"}
-            </p>
-
-        `;
-
-        grid.appendChild(div);
-
-    }
-
+const grid=document.getElementById("dexGrid");
+if(!grid)return;
+grid.innerHTML="";
+if(dexTab==="rares"){
+for(let i=1;i<=6;i++){
+const div=document.createElement("div");div.className="dexCard comingSoon";
+div.innerHTML=`<div style="aspect-ratio:1/1.35;display:flex;align-items:center;justify-content:center;font-size:25px">?</div><b>Rare ${i}</b><p>Coming Soon</p>`;
+grid.appendChild(div);
+}
+return;
+}
+for(const card of cards){
+const count=collection.filter(c=>c.name===card.name).length;
+const div=document.createElement("div");div.className="dexCard "+(!count?"comingSoon":"");
+div.innerHTML=`<img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')"><b>${escapeHtml(card.name)}</b><p>${count?`Owned: ${count}`:"Not Owned"}</p>`;
+grid.appendChild(div);
+}
 }
 
+/* TRADE */
 
-/* =========================================================
-   TRADE
-   ========================================================= */
-
-window.findPlayer =
-async function(){
-
-    const input =
-        document.getElementById("tradePlayerInput");
-
-    const result =
-        document.getElementById("tradePlayerResult");
-
-    const name =
-        input.value.trim();
-
-    if(!name){
-
-        result.innerHTML =
-            "<p>Enter a username.</p>";
-
-        return;
-
-    }
-
-    if(
-        username &&
-        name.toLowerCase() === username.toLowerCase()
-    ){
-
-        result.innerHTML = `
-            <div class="tradeNotice">
-                You cannot trade with yourself.
-            </div>
-        `;
-
-        return;
-
-    }
-
-    result.innerHTML =
-        "<p>Searching...</p>";
-
-    try{
-
-        const ref =
-            doc(
-                db,
-                "usernames",
-                name.toLowerCase()
-            );
-
-        const snap =
-            await getDoc(ref);
-
-        if(!snap.exists()){
-
-            result.innerHTML = `
-                <div class="tradeNotice">
-                    Player not found.
-                </div>
-            `;
-
-            return;
-
-        }
-
-        const usernameData =
-            snap.data();
-
-        if(usernameData.uid === currentUser.uid){
-
-            result.innerHTML = `
-                <div class="tradeNotice">
-                    You cannot trade with yourself.
-                </div>
-            `;
-
-            return;
-
-        }
-
-        const playerSnap =
-            await getDoc(
-                doc(
-                    db,
-                    "players",
-                    usernameData.uid
-                )
-            );
-
-        const playerData =
-            playerSnap.exists()
-                ? playerSnap.data()
-                : {};
-
-        const otherProfilePic =
-            playerData.profilePic ||
-            DEFAULT_PROFILE_PIC;
-
-        const otherUsername =
-            playerData.username ||
-            usernameData.username ||
-            name;
-
-        result.innerHTML = `
-
-            <div class="tradeNotice">
-
-                <div class="playerResultBox">
-
-                    <img
-                        class="profilePicSmall"
-                        src="${escapeHtml(otherProfilePic)}"
-                        alt="Profile Picture">
-
-                    <div class="playerResultInfo">
-
-                        <div class="profileUsername">
-                            ${escapeHtml(otherUsername)}
-                        </div>
-
-                        <p>
-                            Player found.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <button
-                    class="tradeSearchButton"
-                    style="margin-top:15px"
-                    onclick="sendTradeRequest('${escapeHtml(usernameData.uid)}')">
-
-                    SEND TRADE REQUEST
-
-                </button>
-
-            </div>
-
-        `;
-
-    }catch(error){
-
-        console.error(error);
-
-        result.innerHTML = `
-            <div class="tradeNotice">
-                Search error:<br>
-                ${escapeHtml(error.message)}
-            </div>
-        `;
-
-    }
-
+window.findPlayer=async()=>{
+const input=document.getElementById("tradePlayerInput"),result=document.getElementById("tradePlayerResult"),name=input.value.trim();
+if(!name){result.innerHTML="<p>Enter a username.</p>";return}
+if(username&&name.toLowerCase()===username.toLowerCase()){result.innerHTML='<div class="tradeNotice">You cannot trade with yourself.</div>';return}
+result.innerHTML="<p>Searching...</p>";
+try{
+const snap=await getDoc(doc(db,"usernames",name.toLowerCase()));
+if(!snap.exists()){result.innerHTML='<div class="tradeNotice">Player not found.</div>';return}
+const d=snap.data();
+if(d.uid===currentUser.uid){result.innerHTML='<div class="tradeNotice">You cannot trade with yourself.</div>';return}
+const ps=await getDoc(doc(db,"players",d.uid)),pd=ps.exists()?ps.data():{};
+const pic=pd.profilePic||DEFAULT_PROFILE_PIC,n=pd.username||d.username||name;
+result.innerHTML=`<div class="tradeNotice"><div class="playerResultBox"><img class="profilePicSmall" src="${escapeHtml(pic)}"><div class="playerResultInfo"><div class="profileUsername">${escapeHtml(n)}</div><p>Player found.</p></div></div><button class="tradeSearchButton" style="margin-top:15px" onclick="sendTradeRequest('${escapeHtml(d.uid)}')">SEND TRADE REQUEST</button></div>`;
+}catch(e){console.error(e);result.innerHTML=`<div class="tradeNotice">Search error:<br>${escapeHtml(e.message)}</div>`}
 };
 
-
-window.sendTradeRequest =
-async function(receiverUid){
-
-    if(!currentUser){
-        return;
-    }
-
-    if(receiverUid === currentUser.uid){
-
-        showMessage(
-            "You cannot trade with yourself."
-        );
-
-        return;
-
-    }
-
-    try{
-
-        const alreadyPending =
-            tradeRequests.some(
-                trade =>
-                    trade.status === "pending" &&
-                    (
-                        (
-                            trade.senderUid === currentUser.uid &&
-                            trade.receiverUid === receiverUid
-                        ) ||
-                        (
-                            trade.receiverUid === currentUser.uid &&
-                            trade.senderUid === receiverUid
-                        )
-                    )
-            );
-
-        if(alreadyPending){
-
-            showMessage(
-                "You already have a pending trade with this player."
-            );
-
-            return;
-
-        }
-
-        const tradeId = createCardId();
-
-        await setDoc(
-            doc(
-                db,
-                "tradeRequests",
-                tradeId
-            ),
-            {
-                participants:[
-                    currentUser.uid,
-                    receiverUid
-                ],
-                senderUid:currentUser.uid,
-                receiverUid:receiverUid,
-                senderUsername:username,
-                receiverUsername:"",
-                senderOffer:[],
-                receiverOffer:[],
-                senderConfirmed:false,
-                receiverConfirmed:false,
-                status:"pending",
-                createdAt:serverTimestamp()
-            }
-        );
-
-        showPage("trade");
-
-        showMessage(
-            "Trade request sent."
-        );
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Could not send trade request: " +
-            error.message
-        );
-
-    }
-
+window.sendTradeRequest=async receiverUid=>{
+if(!currentUser||receiverUid===currentUser.uid)return;
+try{
+const pending=tradeRequests.some(t=>t.status==="pending"&&((t.senderUid===currentUser.uid&&t.receiverUid===receiverUid)||(t.receiverUid===currentUser.uid&&t.senderUid===receiverUid)));
+if(pending){showMessage("You already have a pending trade with this player.");return}
+await setDoc(doc(db,"tradeRequests",createCardId()),{
+participants:[currentUser.uid,receiverUid],senderUid:currentUser.uid,receiverUid,senderUsername:username,receiverUsername:"",
+senderOffer:[],receiverOffer:[],senderConfirmed:false,receiverConfirmed:false,status:"pending",createdAt:serverTimestamp()
+});
+showMessage("Trade request sent!");
+}catch(e){console.error(e);showMessage("Could not send trade request: "+e.message)}
 };
 
-
-function stopTradeListener(){
-
-    if(tradeListener){
-
-        tradeListener();
-        tradeListener = null;
-
-    }
-
-}
-
+function stopTradeListener(){if(tradeListener){tradeListener();tradeListener=null}}
 
 function startTradeListener(){
-
-    stopTradeListener();
-
-    if(!currentUser){
-        return;
-    }
-
-    const tradeCollection =
-        firestoreCollection(
-            db,
-            "tradeRequests"
-        );
-
-    const tradeQuery =
-        query(
-            tradeCollection,
-            where(
-                "participants",
-                "array-contains",
-                currentUser.uid
-            )
-        );
-
-    tradeListener =
-        onSnapshot(
-            tradeQuery,
-            snapshot=>{
-
-                tradeRequests =
-                    snapshot.docs.map(
-                        snap=>({
-                            id:snap.id,
-                            ...snap.data()
-                        })
-                    );
-
-                for(const trade of tradeRequests){
-
-                    if(
-                        trade.status === "pending" &&
-                        trade.senderConfirmed === true &&
-                        trade.receiverConfirmed === true
-                    ){
-
-                        tryFinalizeTrade(trade);
-
-                    }
-
-                    if(trade.status === "completed"){
-
-                        applyCompletedTrade(trade);
-
-                    }
-
-                }
-
-                if(activeTrade){
-
-                    const fresh =
-                        tradeRequests.find(
-                            trade =>
-                                trade.id === activeTrade.id
-                        );
-
-                    if(fresh){
-                        activeTrade = fresh;
-                    }
-
-                }
-
-                renderIncomingTrades();
-                renderActiveTrade();
-
-            },
-            error=>{
-
-                console.error(error);
-
-                showMessage(
-                    "Trade connection error: " +
-                    error.message
-                );
-
-            }
-        );
-
+stopTradeListener();if(!currentUser)return;
+const q=query(firestoreCollection(db,"tradeRequests"),where("participants","array-contains",currentUser.uid));
+tradeListener=onSnapshot(q,s=>{
+tradeRequests=s.docs.map(x=>({id:x.id,...x.data()}));
+for(const t of tradeRequests){
+if(t.status==="pending"&&t.senderConfirmed===true&&t.receiverConfirmed===true)tryFinalizeTrade(t);
+if(t.status==="completed")applyCompletedTrade(t);
 }
-
+if(activeTrade){const fresh=tradeRequests.find(t=>t.id===activeTrade.id);if(fresh)activeTrade=fresh}
+renderIncomingTrades();renderActiveTrade();
+},e=>{console.error(e);showMessage("Trade connection error: "+e.message)});
+}
 
 function renderIncomingTrades(){
-
-    const container =
-        document.getElementById("incomingTrades");
-
-    if(!container){
-        return;
-    }
-
-    container.innerHTML = "";
-
-    const incoming =
-        tradeRequests.filter(
-            trade =>
-                trade.receiverUid === currentUser?.uid &&
-                trade.status === "pending" &&
-                (
-                    !activeTrade ||
-                    trade.id !== activeTrade.id
-                )
-        );
-
-    for(const trade of incoming){
-
-        const div =
-            document.createElement("div");
-
-        div.className = "tradeRequest";
-
-        div.innerHTML = `
-
-            <b>Incoming Trade Request</b>
-
-            <p>
-                ${escapeHtml(
-                    trade.senderUsername ||
-                    "Another player"
-                )}
-                wants to trade with you.
-            </p>
-
-            <button
-                class="tradeSearchButton"
-                onclick="acceptTrade('${escapeHtml(trade.id)}')">
-
-                ACCEPT TRADE
-
-            </button>
-
-        `;
-
-        container.appendChild(div);
-
-    }
-
+const c=document.getElementById("incomingTrades");if(!c)return;c.innerHTML="";
+const incoming=tradeRequests.filter(t=>t.receiverUid===currentUser?.uid&&t.status==="pending"&&(!activeTrade||t.id!==activeTrade.id));
+incoming.forEach(t=>{
+const d=document.createElement("div");d.className="tradeRequest";
+d.innerHTML=`<b>Incoming Trade Request</b><p>${escapeHtml(t.senderUsername||"Another player")} wants to trade with you.</p><button class="tradeSearchButton" onclick="acceptTrade('${escapeHtml(t.id)}')">ACCEPT TRADE</button>`;
+c.appendChild(d);
+});
 }
 
-
-window.acceptTrade =
-function(tradeId){
-
-    const trade =
-        tradeRequests.find(
-            item=>item.id === tradeId
-        );
-
-    if(!trade){
-
-        showMessage(
-            "Trade request not found."
-        );
-
-        return;
-
-    }
-
-    if(trade.receiverUid !== currentUser.uid){
-
-        showMessage(
-            "You cannot accept this trade."
-        );
-
-        return;
-
-    }
-
-    if(trade.status !== "pending"){
-
-        showMessage(
-            "This trade is no longer pending."
-        );
-
-        return;
-
-    }
-
-    activeTrade = trade;
-
-    selectedTradeCards =
-        getMyOffer(trade).map(
-            card=>card.id
-        );
-
-    showPage("trade");
-
-    renderIncomingTrades();
-    renderActiveTrade();
-
+window.acceptTrade=id=>{
+const t=tradeRequests.find(x=>x.id===id);
+if(!t||t.receiverUid!==currentUser.uid||t.status!=="pending"){showMessage("This trade cannot be accepted.");return}
+activeTrade=t;selectedTradeCards=getMyOffer(t).map(c=>c.id);showPage("trade");renderActiveTrade();
 };
-
 
 function openOutgoingTradeIfNeeded(){
-
-    if(activeTrade){
-        return;
-    }
-
-    const outgoing =
-        tradeRequests.find(
-            trade =>
-                trade.senderUid === currentUser?.uid &&
-                trade.status === "pending"
-        );
-
-    if(outgoing){
-
-        activeTrade = outgoing;
-
-        selectedTradeCards =
-            getMyOffer(outgoing).map(
-                card=>card.id
-            );
-
-    }
-
+if(activeTrade)return;
+const t=tradeRequests.find(x=>x.senderUid===currentUser?.uid&&x.status==="pending");
+if(t){activeTrade=t;selectedTradeCards=getMyOffer(t).map(c=>c.id)}
 }
 
+function getMyOffer(t){return t.senderUid===currentUser.uid?(t.senderOffer||[]):(t.receiverOffer||[])}
+function getTheirOffer(t){return t.senderUid===currentUser.uid?(t.receiverOffer||[]):(t.senderOffer||[])}
 
-function getMyOffer(trade){
-
-    if(trade.senderUid === currentUser.uid){
-
-        return Array.isArray(trade.senderOffer)
-            ? trade.senderOffer
-            : [];
-
-    }
-
-    return Array.isArray(trade.receiverOffer)
-        ? trade.receiverOffer
-        : [];
-
-}
-
-
-function getTheirOffer(trade){
-
-    if(trade.senderUid === currentUser.uid){
-
-        return Array.isArray(trade.receiverOffer)
-            ? trade.receiverOffer
-            : [];
-
-    }
-
-    return Array.isArray(trade.senderOffer)
-        ? trade.senderOffer
-        : [];
-
-}
-
-
-function sameIds(a,b){
-
-    if(!Array.isArray(a) || !Array.isArray(b)){
-        return false;
-    }
-
-    if(a.length !== b.length){
-        return false;
-    }
-
-    for(let i=0;i<a.length;i++){
-
-        if(a[i] !== b[i]){
-            return false;
-        }
-
-    }
-
-    return true;
-
-}
-
+function sameIds(a,b){return Array.isArray(a)&&Array.isArray(b)&&a.length===b.length&&a.every(x=>b.includes(x))}
 
 function renderOfferCards(offer,selectable=false){
-
-    if(!Array.isArray(offer) || !offer.length){
-
-        return `
-            <p style="text-align:center">
-                No cards offered yet.
-            </p>
-        `;
-
-    }
-
-    return `
-
-        <div class="tradeCardGrid">
-
-            ${
-                offer.map(copy=>{
-
-                    const card =
-                        getCard(copy.name);
-
-                    if(!card){
-                        return "";
-                    }
-
-                    const selected =
-                        selectable &&
-                        selectedTradeCards.includes(copy.id);
-
-                    return `
-
-                        <div
-                            class="tradeCard ${
-                                selected ? "selected" : ""
-                            }"
-                            ${
-                                selectable
-                                    ? `onclick="toggleTradeCard('${escapeHtml(copy.id)}')"`
-                                    : ""
-                            }>
-
-                            <img
-                                src="${escapeHtml(card.image)}"
-                                alt="${escapeHtml(card.name)}"
-                                onclick="
-                                    event.stopPropagation();
-                                    openEncodedCardViewer(
-                                        '${encoded(card.image)}',
-                                        '${encoded(card.name)}'
-                                    )
-                                ">
-
-                            <div>
-                                ${escapeHtml(card.name)}
-                            </div>
-
-                            ${
-                                copy.traded
-                                    ? "<small>Traded</small>"
-                                    : ""
-                            }
-
-                        </div>
-
-                    `;
-
-                }).join("")
-            }
-
-        </div>
-
-    `;
-
+if(!offer.length)return'<p style="text-align:center">No cards offered yet.</p>';
+return`<div class="tradeCardGrid">${offer.map(copy=>{
+const card=getCard(copy.name);if(!card)return"";
+const selected=selectable&&selectedTradeCards.includes(copy.id);
+return`<div class="tradeCard ${selected?"selected":""}" ${selectable?`onclick="toggleTradeCard('${escapeHtml(copy.id)}')"`:""}>
+<img src="${escapeHtml(card.image)}" onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
+<div>${escapeHtml(card.name)}</div></div>`;
+}).join("")}</div>`;
 }
-
 
 function renderSelectableTradeCards(){
-
-    if(!collection.length){
-
-        return `
-            <p style="text-align:center">
-                You have no cards.
-            </p>
-        `;
-
-    }
-
-    return `
-
-        <div class="tradeCardGrid">
-
-            ${
-                collection.map(copy=>{
-
-                    const card =
-                        getCard(copy.name);
-
-                    if(!card){
-                        return "";
-                    }
-
-                    const selected =
-                        selectedTradeCards.includes(copy.id);
-
-                    return `
-
-                        <div
-                            class="tradeCard ${
-                                selected ? "selected" : ""
-                            }"
-                            onclick="toggleTradeCard('${escapeHtml(copy.id)}')">
-
-                            <img
-                                src="${escapeHtml(card.image)}"
-                                alt="${escapeHtml(card.name)}"
-                                onclick="
-                                    event.stopPropagation();
-                                    openEncodedCardViewer(
-                                        '${encoded(card.image)}',
-                                        '${encoded(card.name)}'
-                                    )
-                                ">
-
-                            <div>
-                                ${escapeHtml(card.name)}
-                            </div>
-
-                        </div>
-
-                    `;
-
-                }).join("")
-            }
-
-        </div>
-
-    `;
-
+if(!collection.length)return'<p style="text-align:center">You have no cards.</p>';
+return`<div class="tradeCardGrid">${collection.map(copy=>{
+const card=getCard(copy.name);if(!card)return"";
+return`<div class="tradeCard ${selectedTradeCards.includes(copy.id)?"selected":""}" onclick="toggleTradeCard('${escapeHtml(copy.id)}')">
+<img src="${escapeHtml(card.image)}" onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
+<div>${escapeHtml(card.name)}</div></div>`;
+}).join("")}</div>`;
 }
-
 
 function renderActiveTrade(){
-
-    const container =
-        document.getElementById("activeTrade");
-
-    if(!container){
-        return;
-    }
-
-    openOutgoingTradeIfNeeded();
-
-    if(!activeTrade){
-
-        container.innerHTML = "";
-        return;
-
-    }
-
-    if(activeTrade.status !== "pending"){
-
-        if(activeTrade.status === "completed"){
-
-            container.innerHTML = `
-
-                <div class="tradeArea">
-
-                    <h2>Trade Completed</h2>
-
-                    <p style="text-align:center">
-                        The cards were successfully swapped.
-                    </p>
-
-                </div>
-
-            `;
-
-        }else{
-
-            container.innerHTML = "";
-
-        }
-
-        return;
-
-    }
-
-    const isSender =
-        activeTrade.senderUid === currentUser.uid;
-
-    const myOffer =
-        getMyOffer(activeTrade);
-
-    const theirOffer =
-        getTheirOffer(activeTrade);
-
-    const myConfirmed =
-        isSender
-            ? activeTrade.senderConfirmed === true
-            : activeTrade.receiverConfirmed === true;
-
-    const theirConfirmed =
-        isSender
-            ? activeTrade.receiverConfirmed === true
-            : activeTrade.senderConfirmed === true;
-
-    const offerMatches =
-        sameIds(
-            myOffer.map(card=>card.id),
-            selectedTradeCards
-        );
-
-    container.innerHTML = `
-
-        <div class="tradeArea">
-
-            <h2>Trading</h2>
-
-            <div class="tradeColumns">
-
-                <div class="tradeSide">
-
-                    <h3>Your Offer</h3>
-
-                    ${renderOfferCards(myOffer)}
-
-                    <p style="text-align:center">
-                        Current offer:
-                        ${myOffer.length}
-                        card(s)
-                    </p>
-
-                    <hr>
-
-                    <h3>Choose Cards</h3>
-
-                    ${renderSelectableTradeCards()}
-
-                    <p style="text-align:center">
-                        ${selectedTradeCards.length}
-                        card(s) selected
-                    </p>
-
-                    <button
-                        class="changeOfferButton"
-                        onclick="submitTradeOffer()">
-
-                        UPDATE MY OFFER
-
-                    </button>
-
-                </div>
-
-
-                <div class="tradeSide">
-
-                    <h3>Their Offer</h3>
-
-                    ${renderOfferCards(theirOffer)}
-
-                    <p style="text-align:center">
-                        Their offer:
-                        ${theirOffer.length}
-                        card(s)
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="tradeStatus">
-
-                ${
-                    myConfirmed
-                        ? "You confirmed this trade."
-                        : "You have not confirmed."
-                }
-
-                <br>
-
-                ${
-                    theirConfirmed
-                        ? "They confirmed this trade."
-                        : "They have not confirmed."
-                }
-
-            </div>
-
-
-            ${
-                !offerMatches
-                    ? `
-                        <p style="
-                            text-align:center;
-                            color:#36b9ff;
-                        ">
-                            Update your offer before confirming.
-                        </p>
-                    `
-                    : ""
-            }
-
-
-            ${
-                myOffer.length === 0
-                    ? `
-                        <p style="
-                            text-align:center;
-                            color:#36b9ff;
-                        ">
-                            You must offer at least one card.
-                        </p>
-                    `
-                    : ""
-            }
-
-
-            ${
-                theirOffer.length === 0
-                    ? `
-                        <p style="
-                            text-align:center;
-                            color:#36b9ff;
-                        ">
-                            Waiting for them to offer a card.
-                        </p>
-                    `
-                    : ""
-            }
-
-
-            <button
-                class="confirmButton"
-                onclick="confirmTrade()"
-                ${
-                    myConfirmed ||
-                    !offerMatches ||
-                    myOffer.length === 0 ||
-                    theirOffer.length === 0
-                        ? "disabled"
-                        : ""
-                }>
-
-                ${
-                    myConfirmed
-                        ? "CONFIRMED"
-                        : "CONFIRM TRADE"
-                }
-
-            </button>
-
-
-            <button
-                class="cancelButton"
-                onclick="cancelTrade('${escapeHtml(activeTrade.id)}')">
-
-                CANCEL TRADE
-
-            </button>
-
-        </div>
-
-    `;
-
+const c=document.getElementById("activeTrade");if(!c)return;
+openOutgoingTradeIfNeeded();
+if(!activeTrade){c.innerHTML="";return}
+if(activeTrade.status!=="pending"){c.innerHTML=activeTrade.status==="completed"?'<div class="tradeArea"><h2>Trade Completed</h2><p>The cards were successfully swapped.</p></div>':"";return}
+
+const sender=activeTrade.senderUid===currentUser.uid;
+const my=getMyOffer(activeTrade),their=getTheirOffer(activeTrade);
+const myConfirmed=sender?activeTrade.senderConfirmed===true:activeTrade.receiverConfirmed===true;
+const theirConfirmed=sender?activeTrade.receiverConfirmed===true:activeTrade.senderConfirmed===true;
+const matches=sameIds(my.map(c=>c.id),selectedTradeCards);
+
+c.innerHTML=`
+<div class="tradeArea"><h2>Trading</h2>
+<div class="tradeColumns">
+<div class="tradeSide"><h3>Your Offer</h3>${renderOfferCards(my)}<p>Current offer: ${my.length} card(s)</p><hr><h3>Choose Cards</h3>${renderSelectableTradeCards()}<p>${selectedTradeCards.length} card(s) selected</p><button class="changeOfferButton" onclick="submitTradeOffer()">UPDATE MY OFFER</button></div>
+<div class="tradeSide"><h3>Their Offer</h3>${renderOfferCards(their)}<p>Their offer: ${their.length} card(s)</p></div>
+</div>
+<div class="tradeStatus">${myConfirmed?"You confirmed this trade.":"You have not confirmed."}<br>${theirConfirmed?"They confirmed this trade.":"They have not confirmed."}</div>
+${!matches?'<p style="text-align:center;color:#36b9ff">Update your offer before confirming.</p>':""}
+${!my.length?'<p style="text-align:center;color:#36b9ff">You must offer at least one card.</p>':""}
+${!their.length?'<p style="text-align:center;color:#36b9ff">Waiting for them to offer a card.</p>':""}
+<button class="confirmButton" onclick="confirmTrade()" ${myConfirmed||!matches||!my.length||!their.length?"disabled":""}>${myConfirmed?"CONFIRMED":"CONFIRM TRADE"}</button>
+<button class="cancelButton" onclick="cancelTrade('${escapeHtml(activeTrade.id)}')">CANCEL TRADE</button>
+</div>`;
 }
 
-
-window.toggleTradeCard =
-function(cardId){
-
-    if(
-        !activeTrade ||
-        activeTrade.status !== "pending"
-    ){
-        return;
-    }
-
-    const copy =
-        collection.find(
-            card=>card.id === cardId
-        );
-
-    if(!copy){
-        return;
-    }
-
-    if(selectedTradeCards.includes(cardId)){
-
-        selectedTradeCards =
-            selectedTradeCards.filter(
-                id=>id !== cardId
-            );
-
-    }else{
-
-        selectedTradeCards.push(cardId);
-
-    }
-
-    renderActiveTrade();
-
+window.toggleTradeCard=id=>{
+if(!activeTrade||activeTrade.status!=="pending")return;
+if(!collection.some(c=>c.id===id))return;
+if(selectedTradeCards.includes(id))selectedTradeCards=selectedTradeCards.filter(x=>x!==id);
+else selectedTradeCards.push(id);
+renderActiveTrade();
 };
 
-
-window.submitTradeOffer =
-async function(){
-
-    if(
-        !activeTrade ||
-        activeTrade.status !== "pending"
-    ){
-        return;
-    }
-
-    selectedTradeCards =
-        selectedTradeCards.filter(
-            id =>
-                collection.some(
-                    copy=>copy.id === id
-                )
-        );
-
-    const offer =
-        selectedTradeCards
-            .map(id=>{
-
-                const copy =
-                    collection.find(
-                        item=>item.id === id
-                    );
-
-                if(!copy){
-                    return null;
-                }
-
-                return {
-                    id:copy.id,
-                    name:copy.name,
-                    traded:copy.traded === true,
-                    favorite:favorites.includes(copy.name)
-                };
-
-            })
-            .filter(Boolean);
-
-    const isSender =
-        activeTrade.senderUid === currentUser.uid;
-
-    const field =
-        isSender
-            ? "senderOffer"
-            : "receiverOffer";
-
-    try{
-
-        await updateDoc(
-            doc(
-                db,
-                "tradeRequests",
-                activeTrade.id
-            ),
-            {
-                [field]:offer,
-                senderConfirmed:false,
-                receiverConfirmed:false
-            }
-        );
-
-        showMessage(
-            "Offer updated. Both players must confirm again."
-        );
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Could not update offer: " +
-            error.message
-        );
-
-    }
-
+window.submitTradeOffer=async()=>{
+if(!activeTrade||activeTrade.status!=="pending")return;
+selectedTradeCards=selectedTradeCards.filter(id=>collection.some(c=>c.id===id));
+const offer=selectedTradeCards.map(id=>{
+const c=collection.find(x=>x.id===id);return c?{id:c.id,name:c.name,traded:c.traded===true,favorite:favorites.includes(c.name)}:null
+}).filter(Boolean);
+const sender=activeTrade.senderUid===currentUser.uid;
+try{
+await updateDoc(doc(db,"tradeRequests",activeTrade.id),{[sender?"senderOffer":"receiverOffer"]:offer,senderConfirmed:false,receiverConfirmed:false});
+showMessage("Offer updated. Both players must confirm again.");
+}catch(e){showMessage("Could not update offer: "+e.message)}
 };
 
-
-window.confirmTrade =
-async function(){
-
-    if(
-        !activeTrade ||
-        activeTrade.status !== "pending"
-    ){
-        return;
-    }
-
-    try{
-
-        const tradeRef =
-            doc(
-                db,
-                "tradeRequests",
-                activeTrade.id
-            );
-
-        const snap =
-            await getDoc(tradeRef);
-
-        if(!snap.exists()){
-
-            showMessage(
-                "Trade no longer exists."
-            );
-
-            return;
-
-        }
-
-        const trade = {
-            id:snap.id,
-            ...snap.data()
-        };
-
-        const myOffer =
-            getMyOffer(trade);
-
-        const theirOffer =
-            getTheirOffer(trade);
-
-        if(!myOffer.length){
-
-            showMessage(
-                "You must offer at least one card."
-            );
-
-            return;
-
-        }
-
-        if(!theirOffer.length){
-
-            showMessage(
-                "Wait for the other player to offer a card."
-            );
-
-            return;
-
-        }
-
-        if(
-            !sameIds(
-                myOffer.map(card=>card.id),
-                selectedTradeCards
-            )
-        ){
-
-            showMessage(
-                "Update your offer before confirming."
-            );
-
-            return;
-
-        }
-
-        const stillOwns =
-            myOffer.every(
-                offered =>
-                    collection.some(
-                        copy=>copy.id === offered.id
-                    )
-            );
-
-        if(!stillOwns){
-
-            showMessage(
-                "One of your offered cards is no longer in your collection."
-            );
-
-            return;
-
-        }
-
-        const isSender =
-            trade.senderUid === currentUser.uid;
-
-        const field =
-            isSender
-                ? "senderConfirmed"
-                : "receiverConfirmed";
-
-        await updateDoc(
-            tradeRef,
-            {
-                [field]:true
-            }
-        );
-
-        activeTrade = {
-            ...trade,
-            [field]:true
-        };
-
-        renderActiveTrade();
-
-        showMessage(
-            "Confirmed. Waiting for the other player."
-        );
-
-        await tryFinalizeTrade({
-            ...trade,
-            [field]:true
-        });
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Could not confirm trade: " +
-            error.message
-        );
-
-    }
-
+window.confirmTrade=async()=>{
+if(!activeTrade||activeTrade.status!=="pending")return;
+try{
+const ref=doc(db,"tradeRequests",activeTrade.id),snap=await getDoc(ref);
+if(!snap.exists()){showMessage("Trade no longer exists.");return}
+const t={id:snap.id,...snap.data()},my=getMyOffer(t),their=getTheirOffer(t);
+if(!my.length){showMessage("You must offer at least one card.");return}
+if(!their.length){showMessage("Wait for the other player to offer a card.");return}
+if(!sameIds(my.map(c=>c.id),selectedTradeCards)){showMessage("Update your offer before confirming.");return}
+if(!my.every(o=>collection.some(c=>c.id===o.id))){showMessage("One of your offered cards is no longer in your collection.");return}
+const sender=t.senderUid===currentUser.uid,field=sender?"senderConfirmed":"receiverConfirmed";
+await updateDoc(ref,{[field]:true});activeTrade={...t,[field]:true};renderActiveTrade();
+showMessage("Confirmed. Waiting for the other player.");
+await tryFinalizeTrade({...t,[field]:true});
+}catch(e){console.error(e);showMessage("Could not confirm trade: "+e.message)}
 };
 
-
-async function tryFinalizeTrade(trade){
-
-    if(
-        !trade ||
-        trade.status !== "pending" ||
-        trade.senderConfirmed !== true ||
-        trade.receiverConfirmed !== true
-    ){
-        return;
-    }
-
-    const senderOffer =
-        Array.isArray(trade.senderOffer)
-            ? trade.senderOffer
-            : [];
-
-    const receiverOffer =
-        Array.isArray(trade.receiverOffer)
-            ? trade.receiverOffer
-            : [];
-
-    if(!senderOffer.length || !receiverOffer.length){
-        return;
-    }
-
-    try{
-
-        const tradeRef =
-            doc(
-                db,
-                "tradeRequests",
-                trade.id
-            );
-
-        const snap =
-            await getDoc(tradeRef);
-
-        if(!snap.exists()){
-            return;
-        }
-
-        const fresh = {
-            id:snap.id,
-            ...snap.data()
-        };
-
-        if(
-            fresh.status !== "pending" ||
-            fresh.senderConfirmed !== true ||
-            fresh.receiverConfirmed !== true
-        ){
-            return;
-        }
-
-        await updateDoc(
-            tradeRef,
-            {
-                status:"completed",
-                completedAt:serverTimestamp()
-            }
-        );
-
-        await applyCompletedTrade({
-            ...fresh,
-            status:"completed"
-        });
-
-    }catch(error){
-
-        console.error(
-            "FINALIZE TRADE ERROR:",
-            error
-        );
-
-    }
-
+async function tryFinalizeTrade(t){
+if(!t||t.status!=="pending"||t.senderConfirmed!==true||t.receiverConfirmed!==true)return;
+const sender=t.senderOffer||[],receiver=t.receiverOffer||[];if(!sender.length||!receiver.length)return;
+try{
+const ref=doc(db,"tradeRequests",t.id),snap=await getDoc(ref);if(!snap.exists())return;
+const fresh={id:snap.id,...snap.data()};
+if(fresh.status!=="pending"||fresh.senderConfirmed!==true||fresh.receiverConfirmed!==true)return;
+await updateDoc(ref,{status:"completed",completedAt:serverTimestamp()});
+await applyCompletedTrade({...fresh,status:"completed"});
+}catch(e){console.error(e)}
 }
 
-
-async function applyCompletedTrade(trade){
-
-    if(
-        !currentUser ||
-        trade.status !== "completed"
-    ){
-        return;
-    }
-
-    if(
-        completedTradeIds.includes(trade.id) ||
-        applyingTradeIds.has(trade.id)
-    ){
-        return;
-    }
-
-    applyingTradeIds.add(trade.id);
-
-    try{
-
-        const isSender =
-            trade.senderUid === currentUser.uid;
-
-        const myOffer =
-            isSender
-                ? trade.senderOffer || []
-                : trade.receiverOffer || [];
-
-        const incomingOffer =
-            isSender
-                ? trade.receiverOffer || []
-                : trade.senderOffer || [];
-
-        if(!myOffer.length || !incomingOffer.length){
-            return;
-        }
-
-        const playerRef =
-            doc(
-                db,
-                "players",
-                currentUser.uid
-            );
-
-        const playerSnap =
-            await getDoc(playerRef);
-
-        if(!playerSnap.exists()){
-            return;
-        }
-
-        const data =
-            playerSnap.data();
-
-        let currentCollection =
-            normalizeCollection(data.collection);
-
-        let currentFavorites =
-            Array.isArray(data.favorites)
-                ? [...data.favorites]
-                : [];
-
-        let currentCompleted =
-            Array.isArray(data.completedTradeIds)
-                ? [...data.completedTradeIds]
-                : [];
-
-        if(currentCompleted.includes(trade.id)){
-
-            completedTradeIds =
-                currentCompleted;
-
-            return;
-
-        }
-
-        const outgoingIds =
-            new Set(
-                myOffer.map(card=>card.id)
-            );
-
-        const ownsAll =
-            myOffer.every(
-                offered =>
-                    currentCollection.some(
-                        copy=>copy.id === offered.id
-                    )
-            );
-
-        if(!ownsAll){
-
-            const incomingAlreadyThere =
-                incomingOffer.every(
-                    offered =>
-                        currentCollection.some(
-                            copy=>copy.id === offered.id
-                        )
-                );
-
-            if(incomingAlreadyThere){
-
-                currentCompleted.push(trade.id);
-
-                await setDoc(
-                    playerRef,
-                    {
-                        completedTradeIds:
-                            currentCompleted
-                    },
-                    {merge:true}
-                );
-
-                completedTradeIds =
-                    currentCompleted;
-
-            }
-
-            return;
-
-        }
-
-        currentCollection =
-            currentCollection.filter(
-                copy=>!outgoingIds.has(copy.id)
-            );
-
-        for(const offered of incomingOffer){
-
-            if(
-                currentCollection.some(
-                    copy=>copy.id === offered.id
-                )
-            ){
-                continue;
-            }
-
-            currentCollection.push({
-                id:offered.id,
-                name:offered.name,
-                traded:true
-            });
-
-            if(
-                offered.favorite === true &&
-                !currentFavorites.includes(offered.name)
-            ){
-
-                currentFavorites.push(
-                    offered.name
-                );
-
-            }
-
-        }
-
-        currentCompleted.push(trade.id);
-
-        await setDoc(
-            playerRef,
-            {
-                collection:currentCollection,
-                favorites:currentFavorites,
-                completedTradeIds:currentCompleted
-            },
-            {merge:true}
-        );
-
-        collection = currentCollection;
-        favorites = currentFavorites;
-        completedTradeIds = currentCompleted;
-
-        updateUI();
-
-        showMessage(
-            "Trade completed! Cards swapped."
-        );
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Could not finish the trade: " +
-            error.message
-        );
-
-    }finally{
-
-        applyingTradeIds.delete(trade.id);
-
-    }
-
+async function applyCompletedTrade(t){
+if(!currentUser||t.status!=="completed")return;
+if(completedTradeIds.includes(t.id)||applyingTradeIds.has(t.id))return;
+applyingTradeIds.add(t.id);
+try{
+const sender=t.senderUid===currentUser.uid,my=sender?(t.senderOffer||[]):(t.receiverOffer||[]),incoming=sender?(t.receiverOffer||[]):(t.senderOffer||[]);
+if(!my.length||!incoming.length)return;
+const ref=doc(db,"players",currentUser.uid),snap=await getDoc(ref);if(!snap.exists())return;
+let col=normalizeCollection(snap.data().collection),favs=Array.isArray(snap.data().favorites)?[...snap.data().favorites]:[],done=Array.isArray(snap.data().completedTradeIds)?[...snap.data().completedTradeIds]:[];
+if(done.includes(t.id)){completedTradeIds=done;return}
+const ids=new Set(my.map(c=>c.id));
+if(!my.every(o=>col.some(c=>c.id===o.id)))return;
+col=col.filter(c=>!ids.has(c.id));
+for(const o of incoming){
+if(!col.some(c=>c.id===o.id)){
+col.push({id:o.id,name:o.name,traded:true});
+if(o.favorite&&!favs.includes(o.name))favs.push(o.name);
+}
+}
+done.push(t.id);
+await setDoc(ref,{collection:col,favorites:favs,completedTradeIds:done},{merge:true});
+collection=col;favorites=favs;completedTradeIds=done;updateUI();showMessage("Trade completed! Cards swapped.");
+}catch(e){console.error(e)}finally{applyingTradeIds.delete(t.id)}
 }
 
-
-window.cancelTrade =
-async function(tradeId){
-
-    try{
-
-        await updateDoc(
-            doc(
-                db,
-                "tradeRequests",
-                tradeId
-            ),
-            {
-                status:"cancelled"
-            }
-        );
-
-        if(
-            activeTrade &&
-            activeTrade.id === tradeId
-        ){
-            activeTrade = null;
-        }
-
-        selectedTradeCards = [];
-
-        renderActiveTrade();
-        renderIncomingTrades();
-
-        showMessage("Trade cancelled.");
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Could not cancel trade: " +
-            error.message
-        );
-
-    }
-
+window.cancelTrade=async id=>{
+try{
+await updateDoc(doc(db,"tradeRequests",id),{status:"cancelled"});
+if(activeTrade?.id===id)activeTrade=null;
+selectedTradeCards=[];renderActiveTrade();renderIncomingTrades();showMessage("Trade cancelled.");
+}catch(e){showMessage("Could not cancel trade: "+e.message)}
 };
 
+/* FRIENDS */
 
-/* =========================================================
-   FRIEND SYSTEM
-   ========================================================= */
-
-window.findFriend =
-async function(){
-
-    const input =
-        document.getElementById("friendPlayerInput");
-
-    const result =
-        document.getElementById("friendSearchResult");
-
-    const name =
-        input.value.trim();
-
-    if(!name){
-
-        result.innerHTML =
-            "<p>Enter a username.</p>";
-
-        return;
-
-    }
-
-    if(
-        username &&
-        name.toLowerCase() === username.toLowerCase()
-    ){
-
-        result.innerHTML = `
-            <div class="tradeNotice">
-                You cannot add yourself as a friend.
-            </div>
-        `;
-
-        return;
-
-    }
-
-    result.innerHTML =
-        "<p>Searching...</p>";
-
-    try{
-
-        const usernameRef =
-            doc(
-                db,
-                "usernames",
-                name.toLowerCase()
-            );
-
-        const usernameSnap =
-            await getDoc(usernameRef);
-
-        if(!usernameSnap.exists()){
-
-            result.innerHTML = `
-                <div class="friendEmpty">
-                    Player not found.
-                </div>
-            `;
-
-            return;
-
-        }
-
-        const usernameData =
-            usernameSnap.data();
-
-        const targetUid =
-            usernameData.uid;
-
-        if(targetUid === currentUser.uid){
-
-            result.innerHTML = `
-                <div class="friendEmpty">
-                    You cannot add yourself.
-                </div>
-            `;
-
-            return;
-
-        }
-
-        const playerSnap =
-            await getDoc(
-                doc(
-                    db,
-                    "players",
-                    targetUid
-                )
-            );
-
-        const playerData =
-            playerSnap.exists()
-                ? playerSnap.data()
-                : {};
-
-        const targetUsername =
-            playerData.username ||
-            usernameData.username ||
-            name;
-
-        const targetProfilePic =
-            playerData.profilePic ||
-            DEFAULT_PROFILE_PIC;
-
-        const alreadyFriend =
-            friends.includes(targetUid);
-
-        const alreadySent =
-            friendRequests.some(
-                request =>
-                    request.status === "pending" &&
-                    request.senderUid === currentUser.uid &&
-                    request.receiverUid === targetUid
-            );
-
-        const alreadyReceived =
-            friendRequests.some(
-                request =>
-                    request.status === "pending" &&
-                    request.senderUid === targetUid &&
-                    request.receiverUid === currentUser.uid
-            );
-
-        let actionHtml = "";
-
-        if(alreadyFriend){
-
-            actionHtml = `
-                <button
-                    class="friendActionButton"
-                    disabled>
-                    ALREADY FRIENDS
-                </button>
-            `;
-
-        }else if(alreadySent){
-
-            actionHtml = `
-                <button
-                    class="friendActionButton"
-                    disabled>
-                    REQUEST SENT
-                </button>
-            `;
-
-        }else if(alreadyReceived){
-
-            actionHtml = `
-                <button
-                    class="friendActionButton friendAcceptButton"
-                    onclick="acceptFriendRequestByUser('${escapeHtml(targetUid)}')">
-                    ACCEPT FRIEND REQUEST
-                </button>
-            `;
-
-        }else{
-
-            actionHtml = `
-                <button
-                    class="friendActionButton"
-                    onclick="sendFriendRequest('${escapeHtml(targetUid)}')">
-                    ADD FRIEND
-                </button>
-            `;
-
-        }
-
-        result.innerHTML = `
-
-            <div class="friendResultBox">
-
-                <img
-                    class="profilePicSmall"
-                    src="${escapeHtml(targetProfilePic)}"
-                    alt="Profile Picture">
-
-                <div class="friendResultInfo">
-
-                    <div class="friendName">
-                        ${escapeHtml(targetUsername)}
-                    </div>
-
-                    <div>
-                        Player found.
-                    </div>
-
-                    ${actionHtml}
-
-                </div>
-
-            </div>
-
-        `;
-
-    }catch(error){
-
-        console.error(error);
-
-        result.innerHTML = `
-            <div class="friendEmpty">
-                Search error:<br>
-                ${escapeHtml(error.message)}
-            </div>
-        `;
-
-    }
-
+window.findFriend=async()=>{
+const input=document.getElementById("friendPlayerInput"),result=document.getElementById("friendSearchResult"),name=input.value.trim();
+if(!name){result.innerHTML="<p>Enter a username.</p>";return}
+if(username&&name.toLowerCase()===username.toLowerCase()){result.innerHTML='<div class="friendEmpty">You cannot add yourself.</div>';return}
+result.innerHTML="<p>Searching...</p>";
+try{
+const snap=await getDoc(doc(db,"usernames",name.toLowerCase()));
+if(!snap.exists()){result.innerHTML='<div class="friendEmpty">Player not found.</div>';return}
+const d=snap.data(),uid=d.uid;
+const ps=await getDoc(doc(db,"players",uid)),pd=ps.exists()?ps.data():{};
+const n=pd.username||d.username||name,pic=pd.profilePic||DEFAULT_PROFILE_PIC;
+const already=friends.includes(uid);
+const sent=friendRequests.some(r=>r.status==="pending"&&r.senderUid===currentUser.uid&&r.receiverUid===uid);
+const received=friendRequests.some(r=>r.status==="pending"&&r.senderUid===uid&&r.receiverUid===currentUser.uid);
+let action;
+if(already)action='<button class="friendActionButton" disabled>ALREADY FRIENDS</button>';
+else if(sent)action='<button class="friendActionButton" disabled>REQUEST SENT</button>';
+else if(received)action=`<button class="friendActionButton friendAcceptButton" onclick="acceptFriendRequestByUser('${escapeHtml(uid)}')">ACCEPT FRIEND REQUEST</button>`;
+else action=`<button class="friendActionButton" onclick="sendFriendRequest('${escapeHtml(uid)}')">ADD FRIEND</button>`;
+result.innerHTML=`<div class="friendResultBox"><img class="profilePicSmall" src="${escapeHtml(pic)}"><div class="friendResultInfo"><div class="friendName">${escapeHtml(n)}</div><div>Player found.</div>${action}</div></div>`;
+}catch(e){console.error(e);result.innerHTML=`<div class="friendEmpty">Search error:<br>${escapeHtml(e.message)}</div>`}
 };
 
-
-window.sendFriendRequest =
-async function(receiverUid){
-
-    if(!currentUser){
-        return;
-    }
-
-    if(receiverUid === currentUser.uid){
-
-        showMessage(
-            "You cannot add yourself."
-        );
-
-        return;
-
-    }
-
-    try{
-
-        if(friends.includes(receiverUid)){
-
-            showMessage(
-                "You are already friends."
-            );
-
-            return;
-
-        }
-
-        const existingQuery =
-            query(
-                firestoreCollection(
-                    db,
-                    "friendRequests"
-                ),
-                where(
-                    "participants",
-                    "array-contains",
-                    currentUser.uid
-                )
-            );
-
-        const existingSnap =
-            await new Promise(
-                (resolve,reject)=>{
-
-                    const unsubscribe =
-                        onSnapshot(
-                            existingQuery,
-                            snap=>{
-                                unsubscribe();
-                                resolve(snap);
-                            },
-                            error=>{
-                                unsubscribe();
-                                reject(error);
-                            }
-                        );
-
-                }
-            );
-
-        const existing =
-            existingSnap.docs
-                .map(snap=>({
-                    id:snap.id,
-                    ...snap.data()
-                }))
-                .find(
-                    request =>
-                        request.status === "pending" &&
-                        (
-                            (
-                                request.senderUid === currentUser.uid &&
-                                request.receiverUid === receiverUid
-                            ) ||
-                            (
-                                request.receiverUid === currentUser.uid &&
-                                request.senderUid === receiverUid
-                            )
-                        )
-                );
-
-        if(existing){
-
-            showMessage(
-                "A friend request already exists."
-            );
-
-            return;
-
-        }
-
-        const targetSnap =
-            await getDoc(
-                doc(
-                    db,
-                    "players",
-                    receiverUid
-                )
-            );
-
-        const targetData =
-            targetSnap.exists()
-                ? targetSnap.data()
-                : {};
-
-        const requestId =
-            createCardId();
-
-        await setDoc(
-            doc(
-                db,
-                "friendRequests",
-                requestId
-            ),
-            {
-                participants:[
-                    currentUser.uid,
-                    receiverUid
-                ],
-                senderUid:currentUser.uid,
-                receiverUid:receiverUid,
-                senderUsername:username,
-                receiverUsername:
-                    targetData.username || "",
-                status:"pending",
-                createdAt:serverTimestamp()
-            }
-        );
-
-        showMessage(
-            "Friend request sent!"
-        );
-
-        document.getElementById(
-            "friendSearchResult"
-        ).innerHTML = `
-            <div class="friendEmpty">
-                Friend request sent!
-            </div>
-        `;
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Could not send friend request: " +
-            error.message
-        );
-
-    }
-
+window.sendFriendRequest=async receiverUid=>{
+if(!currentUser||receiverUid===currentUser.uid)return;
+try{
+if(friends.includes(receiverUid)){showMessage("You are already friends.");return}
+const existing=friendRequests.some(r=>r.status==="pending"&&((r.senderUid===currentUser.uid&&r.receiverUid===receiverUid)||(r.receiverUid===currentUser.uid&&r.senderUid===receiverUid)));
+if(existing){showMessage("A friend request already exists.");return}
+const snap=await getDoc(doc(db,"players",receiverUid)),data=snap.exists()?snap.data():{};
+await setDoc(doc(db,"friendRequests",createCardId()),{
+participants:[currentUser.uid,receiverUid],
+senderUid:currentUser.uid,
+receiverUid,
+senderUsername:username,
+receiverUsername:data.username||"",
+status:"pending",
+createdAt:serverTimestamp()
+});
+showMessage("Friend request sent!");
+document.getElementById("friendSearchResult").innerHTML='<div class="friendEmpty">Friend request sent!</div>';
+}catch(e){console.error(e);showMessage("Could not send friend request: "+e.message)}
 };
 
-
-function stopFriendListener(){
-
-    if(friendListener){
-
-        friendListener();
-        friendListener = null;
-
-    }
-
-}
-
+function stopFriendListener(){if(friendListener){friendListener();friendListener=null}}
 
 function startFriendListener(){
-
-    stopFriendListener();
-
-    if(!currentUser){
-        return;
-    }
-
-    const requestCollection =
-        firestoreCollection(
-            db,
-            "friendRequests"
-        );
-
-    const requestQuery =
-        query(
-            requestCollection,
-            where(
-                "participants",
-                "array-contains",
-                currentUser.uid
-            )
-        );
-
-    friendListener =
-        onSnapshot(
-            requestQuery,
-            snapshot=>{
-
-                friendRequests =
-                    snapshot.docs.map(
-                        snap=>({
-                            id:snap.id,
-                            ...snap.data()
-                        })
-                    );
-
-                renderFriendRequests();
-                renderFriends();
-
-            },
-            error=>{
-
-                console.error(error);
-
-                showMessage(
-                    "Friend connection error: " +
-                    error.message
-                );
-
-            }
-        );
-
+stopFriendListener();if(!currentUser)return;
+const q=query(firestoreCollection(db,"friendRequests"),where("participants","array-contains",currentUser.uid));
+friendListener=onSnapshot(q,s=>{
+friendRequests=s.docs.map(x=>({id:x.id,...x.data()}));
+renderFriendRequests();renderFriends();
+},e=>{console.error(e);showMessage("Friend connection error: "+e.message)});
 }
-
 
 function renderFriendRequests(){
-
-    const container =
-        document.getElementById(
-            "friendRequestsArea"
-        );
-
-    if(!container){
-        return;
-    }
-
-    const incoming =
-        friendRequests.filter(
-            request =>
-                request.receiverUid === currentUser?.uid &&
-                request.status === "pending"
-        );
-
-    if(!incoming.length){
-
-        container.innerHTML = "";
-        return;
-
-    }
-
-    container.innerHTML = `
-        <h2 class="friendSection">
-            Friend Requests
-        </h2>
-    `;
-
-    incoming.forEach(request=>{
-
-        const div =
-            document.createElement("div");
-
-        div.className = "tradeRequest";
-
-        div.innerHTML = `
-
-            <div class="playerResultBox">
-
-                <img
-                    class="profilePicTiny"
-                    src="basic_p.png"
-                    id="friendRequestPic_${escapeHtml(request.id)}"
-                    alt="Profile Picture">
-
-                <div class="playerResultInfo">
-
-                    <div class="friendName">
-                        ${escapeHtml(
-                            request.senderUsername ||
-                            "Another player"
-                        )}
-                    </div>
-
-                    <p>
-                        Wants to be your friend.
-                    </p>
-
-                    <button
-                        class="friendAcceptButton"
-                        onclick="acceptFriendRequest('${escapeHtml(request.id)}')">
-
-                        ACCEPT
-
-                    </button>
-
-                    <button
-                        class="friendDeclineButton"
-                        onclick="declineFriendRequest('${escapeHtml(request.id)}')">
-
-                        DECLINE
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        `;
-
-        container.appendChild(div);
-
-        loadFriendRequestPicture(
-            request.id,
-            request.senderUid
-        );
-
-    });
-
+const c=document.getElementById("friendRequestsArea");if(!c)return;
+const incoming=friendRequests.filter(r=>r.receiverUid===currentUser?.uid&&r.status==="pending");
+if(!incoming.length){c.innerHTML="";return}
+c.innerHTML="<h2 class='friendSection'>Friend Requests</h2>";
+incoming.forEach(r=>{
+const d=document.createElement("div");d.className="tradeRequest";
+d.innerHTML=`<div class="playerResultBox"><img class="profilePicTiny" id="fr_${escapeHtml(r.id)}" src="${DEFAULT_PROFILE_PIC}"><div class="playerResultInfo"><div class="friendName">${escapeHtml(r.senderUsername||"Another player")}</div><p>Wants to be your friend.</p><button class="friendAcceptButton" onclick="acceptFriendRequest('${escapeHtml(r.id)}')">ACCEPT</button> <button class="friendDeclineButton" onclick="declineFriendRequest('${escapeHtml(r.id)}')">DECLINE</button></div></div>`;
+c.appendChild(d);
+loadFriendRequestPicture(r.id,r.senderUid);
+});
 }
 
-
-async function loadFriendRequestPicture(
-    requestId,
-    senderUid
-){
-
-    try{
-
-        const snap =
-            await getDoc(
-                doc(
-                    db,
-                    "players",
-                    senderUid
-                )
-            );
-
-        if(!snap.exists()){
-            return;
-        }
-
-        const data = snap.data();
-
-        const image =
-            document.getElementById(
-                "friendRequestPic_" + requestId
-            );
-
-        if(image){
-
-            image.src =
-                data.profilePic ||
-                DEFAULT_PROFILE_PIC;
-
-        }
-
-    }catch(error){
-
-        console.error(error);
-
-    }
-
+async function loadFriendRequestPicture(id,uid){
+try{
+const s=await getDoc(doc(db,"players",uid));if(!s.exists())return;
+const img=document.getElementById("fr_"+id);if(img)img.src=s.data().profilePic||DEFAULT_PROFILE_PIC;
+}catch(e){console.error(e)}
 }
 
-
-window.acceptFriendRequest =
-async function(requestId){
-
-    const request =
-        friendRequests.find(
-            item=>item.id === requestId
-        );
-
-    if(!request){
-
-        showMessage(
-            "Friend request not found."
-        );
-
-        return;
-
-    }
-
-    if(
-        request.receiverUid !== currentUser.uid ||
-        request.status !== "pending"
-    ){
-
-        showMessage(
-            "This request cannot be accepted."
-        );
-
-        return;
-
-    }
-
-    try{
-
-        const myRef =
-            doc(
-                db,
-                "players",
-                currentUser.uid
-            );
-
-        const otherRef =
-            doc(
-                db,
-                "players",
-                request.senderUid
-            );
-
-        await setDoc(
-            myRef,
-            {
-                friends:
-                    arrayUnion(request.senderUid)
-            },
-            {merge:true}
-        );
-
-        await setDoc(
-            otherRef,
-            {
-                friends:
-                    arrayUnion(currentUser.uid)
-            },
-            {merge:true}
-        );
-
-        await updateDoc(
-            doc(
-                db,
-                "friendRequests",
-                requestId
-            ),
-            {
-                status:"accepted"
-            }
-        );
-
-        if(!friends.includes(request.senderUid)){
-            friends.push(request.senderUid);
-        }
-
-        await savePlayerData();
-
-        showMessage(
-            "You are now friends with " +
-            request.senderUsername + "!"
-        );
-
-        renderFriends();
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Could not accept friend request: " +
-            error.message
-        );
-
-    }
-
+window.acceptFriendRequest=async id=>{
+const r=friendRequests.find(x=>x.id===id);
+if(!r||r.receiverUid!==currentUser.uid||r.status!=="pending"){showMessage("This request cannot be accepted.");return}
+try{
+await setDoc(doc(db,"players",currentUser.uid),{friends:arrayUnion(r.senderUid)},{merge:true});
+await setDoc(doc(db,"players",r.senderUid),{friends:arrayUnion(currentUser.uid)},{merge:true});
+await updateDoc(doc(db,"friendRequests",id),{status:"accepted"});
+if(!friends.includes(r.senderUid))friends.push(r.senderUid);
+await savePlayerData();showMessage("You are now friends with "+r.senderUsername+"!");renderFriends();
+}catch(e){console.error(e);showMessage("Could not accept friend request: "+e.message)}
 };
 
-
-window.acceptFriendRequestByUser =
-async function(userId){
-
-    const request =
-        friendRequests.find(
-            request =>
-                request.senderUid === userId &&
-                request.receiverUid === currentUser.uid &&
-                request.status === "pending"
-        );
-
-    if(!request){
-
-        showMessage(
-            "Friend request not found."
-        );
-
-        return;
-
-    }
-
-    await acceptFriendRequest(request.id);
-
+window.acceptFriendRequestByUser=async uid=>{
+const r=friendRequests.find(x=>x.senderUid===uid&&x.receiverUid===currentUser.uid&&x.status==="pending");
+if(r)await acceptFriendRequest(r.id);else showMessage("Friend request not found.");
 };
 
-
-window.declineFriendRequest =
-async function(requestId){
-
-    const request =
-        friendRequests.find(
-            item=>item.id === requestId
-        );
-
-    if(!request){
-
-        showMessage(
-            "Friend request not found."
-        );
-
-        return;
-
-    }
-
-    try{
-
-        await updateDoc(
-            doc(
-                db,
-                "friendRequests",
-                requestId
-            ),
-            {
-                status:"declined"
-            }
-        );
-
-        showMessage(
-            "Friend request declined."
-        );
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Could not decline request: " +
-            error.message
-        );
-
-    }
-
+window.declineFriendRequest=async id=>{
+const r=friendRequests.find(x=>x.id===id);
+if(!r)return;
+try{await updateDoc(doc(db,"friendRequests",id),{status:"declined"});showMessage("Friend request declined.")}catch(e){showMessage("Could not decline request: "+e.message)}
 };
-
 
 async function renderFriends(){
-
-    const container =
-        document.getElementById("friendsList");
-
-    if(
-        !container ||
-        !currentUser
-    ){
-        return;
-    }
-
-    if(!friends.length){
-
-        container.innerHTML = `
-            <div class="friendEmpty">
-
-                <h3>
-                    No friends yet
-                </h3>
-
-                <p>
-                    Search for a player above to add them.
-                </p>
-
-            </div>
-        `;
-
-        return;
-
-    }
-
-    container.innerHTML =
-        "<p>Loading friends...</p>";
-
-    try{
-
-        const friendProfiles = [];
-
-        for(const friendId of friends){
-
-            const snap =
-                await getDoc(
-                    doc(
-                        db,
-                        "players",
-                        friendId
-                    )
-                );
-
-            if(!snap.exists()){
-                continue;
-            }
-
-            const data =
-                snap.data();
-
-            friendProfiles.push({
-
-                uid:friendId,
-
-                username:
-                    data.username ||
-                    "Unknown Player",
-
-                profilePic:
-                    data.profilePic ||
-                    DEFAULT_PROFILE_PIC
-
-            });
-
-        }
-
-        if(!friendProfiles.length){
-
-            container.innerHTML = `
-                <div class="friendEmpty">
-                    No friends found.
-                </div>
-            `;
-
-            return;
-
-        }
-
-        container.innerHTML = "";
-
-        friendProfiles.forEach(friend=>{
-
-            const div =
-                document.createElement("div");
-
-            div.className = "friendBox";
-
-            div.innerHTML = `
-
-                <img
-                    class="profilePicSmall"
-                    src="${escapeHtml(friend.profilePic)}"
-                    alt="Profile Picture">
-
-                <div class="friendInfo">
-
-                    <div class="friendName">
-                        ${escapeHtml(friend.username)}
-                    </div>
-
-                    <div>
-                        Friend
-                    </div>
-
-                </div>
-
-                <button
-                    class="friendActionButton"
-                    onclick="openTradeWithFriend('${escapeHtml(friend.username)}')">
-
-                    TRADE
-
-                </button>
-
-            `;
-
-            container.appendChild(div);
-
-        });
-
-    }catch(error){
-
-        console.error(error);
-
-        container.innerHTML = `
-            <div class="friendEmpty">
-                Could not load friends.
-            </div>
-        `;
-
-    }
-
+const c=document.getElementById("friendsList");
+if(!c||!currentUser)return;
+if(!friends.length){
+c.innerHTML='<div class="friendEmpty"><h3>No friends yet</h3><p>Search for a player above to add them.</p></div>';
+return;
+}
+c.innerHTML="<p>Loading friends...</p>";
+try{
+const profiles=[];
+for(const id of friends){
+const s=await getDoc(doc(db,"players",id));
+if(s.exists()){
+const d=s.data();
+profiles.push({username:d.username||"Unknown Player",profilePic:d.profilePic||DEFAULT_PROFILE_PIC});
+}
+}
+if(!profiles.length){c.innerHTML='<div class="friendEmpty">No friends found.</div>';return}
+c.innerHTML="";
+profiles.forEach(f=>{
+const d=document.createElement("div");d.className="friendBox";
+d.innerHTML=`<img class="profilePicSmall" src="${escapeHtml(f.profilePic)}"><div class="friendInfo"><div class="friendName">${escapeHtml(f.username)}</div><div>Friend</div></div><button class="friendActionButton" onclick="openTradeWithFriend('${escapeHtml(f.username)}')">TRADE</button>`;
+c.appendChild(d);
+});
+}catch(e){console.error(e);c.innerHTML='<div class="friendEmpty">Could not load friends.</div>'}
 }
 
-
-window.openTradeWithFriend =
-function(friendUsername){
-
-    showPage("trade");
-
-    const input =
-        document.getElementById(
-            "tradePlayerInput"
-        );
-
-    input.value = friendUsername;
-
-    findPlayer();
-
+window.openTradeWithFriend=name=>{
+showPage("trade");
+document.getElementById("tradePlayerInput").value=name;
+findPlayer();
 };
-
 
 /* SETTINGS */
 
-window.openSettings =
-function(){
+window.openSettings=()=>document.getElementById("settingsOverlay").classList.remove("hidden");
+window.closeSettings=()=>document.getElementById("settingsOverlay").classList.add("hidden");
 
-    document
-        .getElementById("settingsOverlay")
-        .classList.remove("hidden");
-
-};
-
-
-window.closeSettings =
-function(){
-
-    document
-        .getElementById("settingsOverlay")
-        .classList.add("hidden");
-
-};
-
-
-/* RESET */
-
-window.resetAccount =
-async function(){
-
-    const yes =
-        confirm(
-            "Are you sure you want to reset your account? This deletes your coins and collection."
-        );
-
-    if(!yes){
-        return;
-    }
-
-    money = STARTING_COINS;
-
-    dolb = STARTING_DOLB;
-
-    collection = [];
-
-    favorites = [];
-
-    completedTradeIds = [];
-
-    await savePlayerData();
-
-    updateUI();
-
-    closeSettings();
-
-    showMessage(
-        "Account reset. You now have 50 coins and 0 Dolb."
-    );
-
+window.resetAccount=async()=>{
+if(!confirm("Are you sure you want to reset your account? This deletes your coins and collection."))return;
+money=STARTING_COINS;dolb=STARTING_DOLB;collection=[];favorites=[];completedTradeIds=[];
+await savePlayerData();updateUI();closeSettings();showMessage("Account reset. You now have 50 coins and 0 Dolb.");
 };
 
 </script>
-
 </body>
 </html>
