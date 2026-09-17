@@ -1,4636 +1,4401 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Doll Ball Collector Cards</title>  <style>  
-* {  
-    box-sizing: border-box;  
-}  
-  
-body {  
-    margin: 0;  
-    font-family: Arial, sans-serif;  
-    background: #071525;  
-    color: white;  
-}  
-  
-button {  
-    border: none;  
-    border-radius: 10px;  
-    padding: 12px 16px;  
-    font-weight: bold;  
-    cursor: pointer;  
-}  
-  
-button:disabled {  
-    opacity: 0.45;  
-    cursor: not-allowed;  
-}  
-  
-.hidden {  
-    display: none !important;  
-}  
-  
-/* LOGIN */  
-  
-#loginScreen {  
-    min-height: 100vh;  
-    display: flex;  
-    align-items: center;  
-    justify-content: center;  
-    text-align: center;  
-}  
-  
-.loginBox {  
-    background: #10243d;  
-    padding: 35px;  
-    border-radius: 20px;  
-    width: min(90%, 420px);  
-}  
-  
-.loginBox h1 {  
-    margin-top: 0;  
-}  
-  
-.googleButton {  
-    background: white;  
-    color: #222;  
-    width: 100%;  
-    font-size: 16px;  
-}  
-  
-/* GAME */  
-  
-#gameScreen {  
-    min-height: 100vh;  
-}  
-  
-.topBar {  
-    background: #10243d;  
-    padding: 10px;  
-    display: flex;  
-    gap: 7px;  
-    overflow-x: auto;  
-    align-items: center;  
-}  
-  
-.topBar button {  
-    background: #183653;  
-    color: white;  
-    white-space: nowrap;  
-}  
-  
-.topBar button:hover {  
-    background: #234b70;  
-}  
-  
-.moneyBox {  
-    background: #183653;  
-    padding: 10px 14px;  
-    border-radius: 10px;  
-    white-space: nowrap;  
-    order: -1;  
-}  
-  
-.page {  
-    padding: 20px;  
-    max-width: 1200px;  
-    margin: auto;  
-}  
-  
-h1, h2, h3 {  
-    margin-top: 0;  
-}  
-  
-/* HOME */  
-  
-.homeBox {  
-    background: #10243d;  
-    padding: 25px;  
-    border-radius: 18px;  
-}  
-  
-.username {  
-    font-size: 20px;  
-    font-weight: bold;  
-}  
-  
-/* PACK */  
-  
-.packButton {  
-    background: #2674d9;  
-    color: white;  
-    font-size: 18px;  
-    margin-top: 15px;  
-}  
-  
-/* TABS */  
-  
-.tabs {  
-    display: flex;  
-    gap: 8px;  
-    margin-bottom: 18px;  
-}  
-  
-.tabs button {  
-    background: #183653;  
-    color: white;  
-}  
-  
-.tabs button.active {  
-    background: #2674d9;  
-}  
-  
-/* SEARCH */  
-  
-.searchBox {  
-    width: 100%;  
-    padding: 13px;  
-    border-radius: 10px;  
-    border: none;  
-    margin-bottom: 20px;  
-    font-size: 16px;  
-}  
-  
-/* CARDS */  
-  
-.cardGrid {  
-    display: grid;  
-    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));  
-    gap: 18px;  
-}  
-  
-.card {  
-    background: #10243d;  
-    border-radius: 15px;  
-    padding: 10px;  
-    position: relative;  
-    text-align: center;  
-    border: 3px solid transparent;  
-}  
-  
-.card img {  
-    width: 100%;  
-    aspect-ratio: 1 / 1.35;  
-    object-fit: contain;  
-    border-radius: 10px;  
-    background: #091a2d;  
-    cursor: pointer;  
-}  
-  
-.cardName {  
-    font-weight: bold;  
-    margin-top: 8px;  
-}  
-  
-.cardCount {  
-    position: absolute;  
-    top: 7px;  
-    right: 7px;  
-    background: #2674d9;  
-    min-width: 28px;  
-    height: 28px;  
-    border-radius: 50%;  
-    display: flex;  
-    align-items: center;  
-    justify-content: center;  
-    font-weight: bold;  
-}  
-  
-.starButton {  
-    position: absolute;  
-    top: 7px;  
-    left: 7px;  
-    width: 31px;  
-    height: 31px;  
-    padding: 0;  
-    border-radius: 50%;  
-    background: #172b43;  
-    color: white;  
-    font-size: 17px;  
-    z-index: 10;  
-}  
-  
-.starButton.favorite {  
-    color: #36b9ff;  
-}  
-  
-.favoriteCard {  
-    border: 4px solid #36b9ff;  
-    box-shadow:  
-        0 0 0 2px #8ee0ff,  
-        0 0 12px #36b9ff;  
-}  
-  
-.tradedFavoriteCard {  
-    border: 4px solid #36b9ff;  
-    box-shadow:  
-        0 0 0 2px #8ee0ff,  
-        0 0 8px #36b9ff,  
-        0 0 18px white;  
-}  
-  
-.tradedFavoriteCard::before {  
-    content: "✦ ✧ ✦";  
-    position: absolute;  
-    top: -15px;  
-    left: 50%;  
-    transform: translateX(-50%);  
-    color: #36b9ff;  
-    font-size: 17px;  
-    white-space: nowrap;  
-    z-index: 102;  
-}  
-  
-.rareFavoriteCard {  
-    border: 4px solid gold;  
-    box-shadow:  
-        0 0 0 2px #fff0a3,  
-        0 0 10px gold,  
-        0 0 22px #ffd700;  
-}  
-  
-.rareTradedFavoriteCard {  
-    border: 4px solid gold;  
-    box-shadow:  
-        0 0 0 2px #fff0a3,  
-        0 0 10px gold,  
-        0 0 22px #ffd700,  
-        0 0 32px white;  
-}  
-  
-.rareTradedFavoriteCard::before {  
-    content: "✦ ◆ ✧ ◆ ✦";  
-    position: absolute;  
-    top: -16px;  
-    left: 50%;  
-    transform: translateX(-50%);  
-    color: gold;  
-    font-size: 17px;  
-    white-space: nowrap;  
-    z-index: 102;  
-}  
-  
-/* SELL */  
-  
-.sellButton {  
-    width: 100%;  
-    margin-top: 8px;  
-    background: #176f46;  
-    color: white;  
-}  
-  
-.sellButton.favoriteLocked {  
-    background: #555;  
-}  
-  
-/* DEX */  
-  
-.dexCard {  
-    background: #10243d;  
-    border-radius: 15px;  
-    padding: 10px;  
-    text-align: center;  
-}  
-  
-.dexCard img {  
-    width: 100%;  
-    aspect-ratio: 1 / 1.35;  
-    object-fit: contain;  
-    background: #091a2d;  
-    border-radius: 10px;  
-    cursor: pointer;  
-}  
-  
-.comingSoon {  
-    opacity: 0.5;  
-}  
-  
-/* TRADE */  
-  
-.tradeNotice {  
-    background: #10243d;  
-    border-radius: 15px;  
-    padding: 18px;  
-    margin-bottom: 18px;  
-}  
-  
-.tradeSearchArea {  
-    display: flex;  
-    gap: 8px;  
-}  
-  
-.tradeSearchArea input {  
-    flex: 1;  
-    min-width: 0;  
-    padding: 13px;  
-    border: none;  
-    border-radius: 10px;  
-    font-size: 16px;  
-}  
-  
-.tradeSearchButton {  
-    background: #2674d9;  
-    color: white;  
-}  
-  
-.tradePlayerResult {  
-    margin-top: 15px;  
-}  
-  
-.tradeRequest {  
-    background: #183653;  
-    padding: 15px;  
-    border-radius: 12px;  
-    margin-top: 10px;  
-}  
-  
-.tradeArea {  
-    background: #10243d;  
-    padding: 18px;  
-    border-radius: 18px;  
-    margin-top: 20px;  
-}  
-  
-.tradeColumns {  
-    display: grid;  
-    grid-template-columns: 1fr 1fr;  
-    gap: 15px;  
-}  
-  
-.tradeSide {  
-    background: #091a2d;  
-    padding: 15px;  
-    border-radius: 15px;  
-}  
-  
-.tradeSide h3 {  
-    text-align: center;  
-}  
-  
-.tradeCardGrid {  
-    display: grid;  
-    grid-template-columns: repeat(2, 1fr);  
-    gap: 10px;  
-}  
-  
-.tradeCard {  
-    background: #10243d;  
-    border-radius: 10px;  
-    padding: 7px;  
-    text-align: center;  
-    border: 2px solid transparent;  
-    cursor: pointer;  
-}  
-  
-.tradeCard.selected {  
-    border-color: #36b9ff;  
-    box-shadow: 0 0 10px #36b9ff;  
-}  
-  
-.tradeCard img {  
-    width: 100%;  
-    aspect-ratio: 1 / 1.25;  
-    object-fit: contain;  
-}  
-  
-.tradeStatus {  
-    text-align: center;  
-    margin: 15px 0;  
-    font-size: 18px;  
-    font-weight: bold;  
-}  
-  
-.confirmButton {  
-    background: #198754;  
-    color: white;  
-    width: 100%;  
-}  
-  
-.cancelButton {  
-    background: #9b2929;  
-    color: white;  
-    width: 100%;  
-    margin-top: 8px;  
-}  
-  
-.changeOfferButton {  
-    background: #2674d9;  
-    color: white;  
-    width: 100%;  
-    margin-top: 8px;  
-}  
-  
-/* SETTINGS */  
-  
-.settingsOverlay {  
-    position: fixed;  
-    inset: 0;  
-    background: rgba(0,0,0,0.8);  
-    display: flex;  
-    align-items: center;  
-    justify-content: center;  
-    z-index: 999;  
-}  
-  
-.settingsBox {  
-    background: #10243d;  
-    padding: 25px;  
-    width: min(90%, 450px);  
-    border-radius: 20px;  
-}  
-  
-.settingsButton {  
-    width: 100%;  
-    background: #183653;  
-    color: white;  
-    margin-top: 10px;  
-}  
-  
-.resetButton {  
-    background: #8d2525;  
-}  
-  
-.logoutButton {  
-    background: #c62828 !important;  
-}  
-  
-/* MESSAGE */  
-  
-#message {  
-    position: fixed;  
-    bottom: 20px;  
-    left: 50%;  
-    transform: translateX(-50%);  
-    background: #183653;  
-    padding: 13px 18px;  
-    border-radius: 12px;  
-    z-index: 2000;  
-    display: none;  
-    text-align: center;  
-}  
-  
-/* FULL SCREEN CARD VIEW */  
-  
-.cardViewer {  
-    position: fixed;  
-    inset: 0;  
-    background: rgba(0,0,0,0.94);  
-    z-index: 5000;  
-    display: flex;  
-    align-items: center;  
-    justify-content: center;  
-    padding: 20px;  
-}  
-  
-.cardViewerImage {  
-    max-width: 95vw;  
-    max-height: 90vh;  
-    width: auto;  
-    height: auto;  
-    object-fit: contain;  
-    border-radius: 12px;  
-}  
-  
-.cardViewerClose {  
-    position: fixed;  
-    top: 15px;  
-    right: 15px;  
-    background: #183653;  
-    color: white;  
-    font-size: 24px;  
-    width: 48px;  
-    height: 48px;  
-    padding: 0;  
-    z-index: 5001;  
-}  
-  
-@media (max-width: 650px) {  
-    .tradeColumns {  
-        grid-template-columns: 1fr;  
-    }  
-  
-    .topBar {  
-        flex-wrap: nowrap;  
-    }  
-  
-    .moneyBox {  
-        margin-left: 0;  
-    }  
-}  
-</style>  </head>  <body>  <div id="loginScreen">  
-    <div class="loginBox">  
-        <h1>Doll Ball Collector Cards</h1>  
-        <p>Log in to play.</p>  
-        <button class="googleButton" onclick="loginGoogle()">  
-            Sign in with Google  
-        </button>  
-    </div>  
-</div>  <div id="gameScreen" class="hidden">  <div class="topBar">  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doll Ball Collector Cards</title>
 
-    <div class="moneyBox">  
-        Coins: <span id="money">0</span>  
-    </div>  
+<style>
+*{box-sizing:border-box}
 
-    <button onclick="showPage('home')">HOME</button>  
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#071525;
+color:white
+}
 
-    <button onclick="showPage('collection')">  
-        COLLECTION  
-    </button>  
+button{
+border:none;
+border-radius:10px;
+padding:12px 16px;
+font-weight:bold;
+cursor:pointer
+}
 
-    <button onclick="showPage('dex')">  
-        DEX  
-    </button>  
+button:disabled{
+opacity:.45;
+cursor:not-allowed
+}
 
-    <button onclick="showPage('trade')">  
-        TRADE  
-    </button>  
+.hidden{display:none!important}
 
-    <button onclick="openSettings()">  
-        SETTINGS  
-    </button>  
+/* LOGIN */
 
-    <button class="logoutButton" onclick="logout()">  
-        LOG OUT  
-    </button>  
+#loginScreen{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center
+}
 
-</div>  
+.loginBox{
+background:#10243d;
+padding:35px;
+border-radius:20px;
+width:min(90%,420px)
+}
 
-<div id="homePage" class="page">  
+.loginBox h1{margin-top:0}
 
-    <div class="homeBox">  
+.googleButton{
+background:white;
+color:#222;
+width:100%;
+font-size:16px
+}
 
-        <h1>Welcome!</h1>  
+/* GAME */
 
-        <p>  
-            Google Account:  
-            <span id="accountEmail"></span>  
-        </p>  
+#gameScreen{min-height:100vh}
 
-        <p>  
-            Username:  
-            <span class="username" id="usernameDisplay"></span>  
-        </p>  
+.topBar{
+background:#10243d;
+padding:10px;
+display:flex;
+gap:7px;
+overflow-x:auto;
+align-items:center
+}
 
-        <hr>  
+.topBar button{
+background:#183653;
+color:white;
+white-space:nowrap
+}
 
-        <h2>Open a Pack</h2>  
+.topBar button:hover{background:#234b70}
 
-        <p>  
-            Cost: 10 coins<br>  
-            Cards: 3  
-        </p>  
+.moneyBox{
+background:#183653;
+padding:10px 14px;
+border-radius:10px;
+white-space:nowrap;
+order:-1
+}
 
-        <button class="packButton" onclick="openPack()">  
-            OPEN PACK  
-        </button>  
+.dolbBox{
+background:#183653;
+padding:10px 14px;
+border-radius:10px;
+white-space:nowrap
+}
 
-    </div>  
+.profileTop{
+display:flex;
+align-items:center;
+gap:7px;
+background:#183653;
+padding:6px 10px;
+border-radius:10px;
+white-space:nowrap
+}
 
-</div>  
+.profileTop img{
+width:32px;
+height:32px;
+border-radius:50%;
+object-fit:cover;
+background:#091a2d
+}
 
-<div id="collectionPage" class="page hidden">  
+.page{
+padding:20px;
+max-width:1200px;
+margin:auto
+}
 
-    <h1>Collection</h1>  
+h1,h2,h3{margin-top:0}
 
-    <div class="tabs">  
+/* HOME */
 
-        <button  
-            id="collectionAllButton"  
-            class="active"  
-            onclick="setCollectionTab('all')">  
-            ALL  
-        </button>  
+.homeBox{
+background:#10243d;
+padding:25px;
+border-radius:18px
+}
 
-        <button  
-            id="collectionFavoritesButton"  
-            onclick="setCollectionTab('favorites')">  
-            FAVORITES  
-        </button>  
+.username{
+font-size:20px;
+font-weight:bold
+}
 
-    </div>  
+/* PACK */
 
-    <input  
-        id="collectionSearch"  
-        class="searchBox"  
-        placeholder="Search cards..."  
-        oninput="renderCollection()"  
-    >  
+.packButton{
+background:#2674d9;
+color:white;
+font-size:18px;
+margin-top:15px
+}
 
-    <div  
-        id="collectionGrid"  
-        class="cardGrid">  
-    </div>  
+/* TABS */
 
-</div>  
+.tabs{
+display:flex;
+gap:8px;
+margin-bottom:18px;
+flex-wrap:wrap
+}
 
-<div id="dexPage" class="page hidden">  
+.tabs button{
+background:#183653;
+color:white
+}
 
-    <h1>DEX</h1>  
+.tabs button.active{background:#2674d9}
 
-    <div class="tabs">  
+/* SEARCH */
 
-        <button  
-            id="dexDollsButton"  
-            class="active"  
-            onclick="setDexTab('dolls')">  
-            DOLLS  
-        </button>  
+.searchBox{
+width:100%;
+padding:13px;
+border-radius:10px;
+border:none;
+margin-bottom:20px;
+font-size:16px
+}
 
-        <button  
-            id="dexRaresButton"  
-            onclick="setDexTab('rares')">  
-            RARES  
-        </button>  
+/* CARDS */
 
-    </div>  
+.cardGrid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
+gap:18px
+}
 
-    <div id="dexGrid" class="cardGrid"></div>  
+.card{
+background:#10243d;
+border-radius:15px;
+padding:10px;
+position:relative;
+text-align:center;
+border:3px solid transparent
+}
 
-</div>  
+.card img{
+width:100%;
+aspect-ratio:1/1.35;
+object-fit:contain;
+border-radius:10px;
+background:#091a2d;
+cursor:pointer
+}
 
-<div id="tradePage" class="page hidden">  
+.cardName{
+font-weight:bold;
+margin-top:8px
+}
 
-    <h1>Trading</h1>  
+.cardCount{
+position:absolute;
+top:7px;
+right:7px;
+background:#2674d9;
+min-width:28px;
+height:28px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold
+}
 
-    <div id="tradeSearchBox">  
+.starButton{
+position:absolute;
+top:7px;
+left:7px;
+width:31px;
+height:31px;
+padding:0;
+border-radius:50%;
+background:#172b43;
+color:white;
+font-size:17px;
+z-index:10
+}
 
-        <div class="tradeNotice">  
+.starButton.favorite{color:#36b9ff}
 
-            <b>Find a player</b>  
+.favoriteCard{
+border:4px solid #36b9ff;
+box-shadow:0 0 0 2px #8ee0ff,0 0 12px #36b9ff
+}
 
-            <p>  
-                Search using their username.  
-            </p>  
+.tradedFavoriteCard{
+border:4px solid #36b9ff;
+box-shadow:0 0 0 2px #8ee0ff,0 0 8px #36b9ff,0 0 18px white
+}
 
-            <div class="tradeSearchArea">  
+.tradedFavoriteCard::before{
+content:"✦ ✧ ✦";
+position:absolute;
+top:-15px;
+left:50%;
+transform:translateX(-50%);
+color:#36b9ff;
+font-size:17px;
+white-space:nowrap;
+z-index:102
+}
 
-                <input  
-                    id="tradePlayerInput"  
-                    placeholder="Username"  
-                >  
+.rareFavoriteCard{
+border:4px solid gold;
+box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700
+}
 
-                <button  
-                    class="tradeSearchButton"  
-                    onclick="findPlayer()">  
-                    SEARCH  
-                </button>  
+.rareTradedFavoriteCard{
+border:4px solid gold;
+box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700,0 0 32px white
+}
 
-            </div>  
+.rareTradedFavoriteCard::before{
+content:"✦ ◆ ✧ ◆ ✦";
+position:absolute;
+top:-16px;
+left:50%;
+transform:translateX(-50%);
+color:gold;
+font-size:17px;
+white-space:nowrap;
+z-index:102
+}
 
-            <div  
-                id="tradePlayerResult"  
-                class="tradePlayerResult">  
-            </div>  
+/* SELL */
 
-        </div>  
+.sellButton{
+width:100%;
+margin-top:8px;
+background:#176f46;
+color:white
+}
 
-    </div>  
+.sellButton.favoriteLocked{background:#555}
 
-    <div id="incomingTrades"></div>  
+/* DEX */
 
-    <div id="activeTrade"></div>  
+.dexCard{
+background:#10243d;
+border-radius:15px;
+padding:10px;
+text-align:center
+}
+
+.dexCard img{
+width:100%;
+aspect-ratio:1/1.35;
+object-fit:contain;
+background:#091a2d;
+border-radius:10px;
+cursor:pointer
+}
+
+.comingSoon{opacity:.5}
+
+/* TRADE */
+
+.tradeNotice{
+background:#10243d;
+border-radius:15px;
+padding:18px;
+margin-bottom:18px
+}
+
+.tradeSearchArea{
+display:flex;
+gap:8px
+}
+
+.tradeSearchArea input{
+flex:1;
+min-width:0;
+padding:13px;
+border:none;
+border-radius:10px;
+font-size:16px
+}
+
+.tradeSearchButton{
+background:#2674d9;
+color:white
+}
+
+.tradePlayerResult{margin-top:15px}
+
+.tradeRequest{
+background:#183653;
+padding:15px;
+border-radius:12px;
+margin-top:10px
+}
+
+.tradeArea{
+background:#10243d;
+padding:18px;
+border-radius:18px;
+margin-top:20px
+}
+
+.tradeColumns{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px
+}
+
+.tradeSide{
+background:#091a2d;
+padding:15px;
+border-radius:15px
+}
+
+.tradeSide h3{text-align:center}
+
+.tradeCardGrid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px
+}
+
+.tradeCard{
+background:#10243d;
+border-radius:10px;
+padding:7px;
+text-align:center;
+border:2px solid transparent;
+cursor:pointer
+}
+
+.tradeCard.selected{
+border-color:#36b9ff;
+box-shadow:0 0 10px #36b9ff
+}
+
+.tradeCard img{
+width:100%;
+aspect-ratio:1/1.25;
+object-fit:contain
+}
+
+.tradeStatus{
+text-align:center;
+margin:15px 0;
+font-size:18px;
+font-weight:bold
+}
+
+.confirmButton{
+background:#198754;
+color:white;
+width:100%
+}
+
+.cancelButton{
+background:#9b2929;
+color:white;
+width:100%;
+margin-top:8px
+}
+
+.changeOfferButton{
+background:#2674d9;
+color:white;
+width:100%;
+margin-top:8px
+}
+
+/* SHOP */
+
+.shopGrid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+gap:18px
+}
+
+.shopItem{
+background:#10243d;
+border-radius:15px;
+padding:15px;
+text-align:center
+}
+
+.shopItem img{
+width:100%;
+max-height:220px;
+object-fit:contain;
+background:#091a2d;
+border-radius:10px
+}
+
+.shopButton{
+background:#2674d9;
+color:white;
+width:100%;
+margin-top:10px
+}
+
+.shopPrice{
+font-weight:bold;
+margin-top:8px
+}
+
+/* PROFILE */
+
+.profileCard{
+background:#10243d;
+border-radius:18px;
+padding:20px;
+text-align:center
+}
+
+.profileBig{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+background:#091a2d
+}
+
+/* FRIENDS */
+
+.friendBox{
+background:#10243d;
+border-radius:15px;
+padding:18px;
+margin-bottom:15px
+}
+
+.friendRow{
+background:#183653;
+padding:12px;
+border-radius:12px;
+margin-top:8px;
+display:flex;
+align-items:center;
+gap:10px
+}
+
+.friendRow img{
+width:45px;
+height:45px;
+border-radius:50%;
+object-fit:cover
+}
+
+.online{
+color:#4cff86;
+font-weight:bold
+}
+
+.offline{
+color:#aaa
+}
+
+.friendActions{
+margin-left:auto;
+display:flex;
+gap:6px;
+flex-wrap:wrap
+}
+
+/* BATTLES */
+
+.battleBox{
+background:#10243d;
+padding:20px;
+border-radius:18px;
+margin-bottom:18px
+}
+
+.battleButton{
+background:#2674d9;
+color:white;
+width:100%;
+margin-top:8px
+}
+
+.battleArena{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px
+}
+
+.battlePlayer{
+background:#091a2d;
+border-radius:15px;
+padding:15px;
+text-align:center
+}
+
+.battlePlayer img{
+width:80px;
+height:80px;
+border-radius:50%;
+object-fit:cover
+}
+
+.hpBar{
+height:22px;
+background:#26384b;
+border-radius:12px;
+overflow:hidden;
+margin:10px 0
+}
+
+.hpFill{
+height:100%;
+background:#31b66f;
+transition:.25s
+}
+
+.battleCard{
+background:#10243d;
+border-radius:12px;
+padding:8px;
+margin-top:8px;
+cursor:pointer
+}
+
+.battleCard img{
+width:100%;
+max-height:180px;
+object-fit:contain
+}
+
+.moveButton{
+background:#2674d9;
+color:white;
+width:100%;
+margin-top:7px
+}
+
+/* SETTINGS */
+
+.settingsOverlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.8);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:999
+}
+
+.settingsBox{
+background:#10243d;
+padding:25px;
+width:min(90%,450px);
+border-radius:20px
+}
+
+.settingsButton{
+width:100%;
+background:#183653;
+color:white;
+margin-top:10px
+}
+
+.resetButton{background:#8d2525}
+
+.logoutButton{background:#c62828!important}
+
+/* MESSAGE */
+
+#message{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#183653;
+padding:13px 18px;
+border-radius:12px;
+z-index:6000;
+display:none;
+text-align:center;
+max-width:90%
+}
+
+/* FULLSCREEN */
+
+.cardViewer{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.94);
+z-index:5000;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px
+}
+
+.cardViewerImage{
+max-width:95vw;
+max-height:90vh;
+width:auto;
+height:auto;
+object-fit:contain;
+border-radius:12px
+}
+
+.cardViewerClose{
+position:fixed;
+top:15px;
+right:15px;
+background:#183653;
+color:white;
+font-size:24px;
+width:48px;
+height:48px;
+padding:0;
+z-index:5001
+}
+
+@media(max-width:650px){
+.tradeColumns,
+.battleArena{
+grid-template-columns:1fr
+}
+
+.topBar{flex-wrap:nowrap}
+
+.moneyBox{margin-left:0}
+
+.friendActions{
+margin-left:0
+}
+}
+</style>
+</head>
+
+<body>
+
+<div id="loginScreen">
+<div class="loginBox">
+<h1>Doll Ball Collector Cards</h1>
+<p>Log in to play.</p>
+<button class="googleButton" onclick="loginGoogle()">
+Sign in with Google
+</button>
+</div>
+</div>
+
+<div id="gameScreen" class="hidden">
+
+<div class="topBar">
+
+<div class="moneyBox">
+Coins: <span id="money">0</span>
+</div>
+
+<div class="dolbBox">
+Dolb: <span id="dolb">0</span>
+</div>
+
+<div class="profileTop">
+<img id="topProfilePic" src="basic_p.png" alt="">
+<span id="topUsername"></span>
+</div>
+
+<button onclick="showPage('home')">HOME</button>
+<button onclick="showPage('collection')">COLLECTION</button>
+<button onclick="showPage('dex')">DEX</button>
+<button onclick="showPage('shop')">SHOP</button>
+<button onclick="showPage('friends')">FRIENDS</button>
+<button onclick="showPage('battle')">BATTLES</button>
+<button onclick="showPage('trade')">TRADE</button>
+<button onclick="openSettings()">SETTINGS</button>
+<button class="logoutButton" onclick="logout()">LOG OUT</button>
 
 </div>
 
-</div>  <div  
-    id="settingsOverlay"  
-    class="settingsOverlay hidden">  <div class="settingsBox">  
+<!-- HOME -->
 
-    <h2>Settings</h2>  
+<div id="homePage" class="page">
 
-    <p>  
-        Username:  
-        <b id="settingsUsername"></b>  
-    </p>  
+<div class="homeBox">
 
-    <button  
-        class="settingsButton resetButton"  
-        onclick="resetAccount()">  
-        RESET ACCOUNT  
-    </button>  
+<h1>Welcome!</h1>
 
-    <button  
-        class="settingsButton"  
-        onclick="closeSettings()">  
-        CLOSE  
-    </button>  
+<p>
+Google Account:
+<span id="accountEmail"></span>
+</p>
+
+<p>
+Username:
+<span class="username" id="usernameDisplay"></span>
+</p>
+
+<hr>
+
+<h2>Open a Pack</h2>
+
+<p>
+Cost: 10 coins<br>
+Cards: 3
+</p>
+
+<button class="packButton" onclick="openPack()">
+OPEN PACK
+</button>
+
+</div>
+</div>
+
+<!-- COLLECTION -->
+
+<div id="collectionPage" class="page hidden">
+
+<h1>Collection</h1>
+
+<div class="tabs">
+
+<button id="collectionAllButton"
+class="active"
+onclick="setCollectionTab('all')">
+ALL
+</button>
+
+<button id="collectionFavoritesButton"
+onclick="setCollectionTab('favorites')">
+FAVORITES
+</button>
 
 </div>
 
-</div>  <div  
-    id="cardViewer"  
-    class="cardViewer hidden"  
-    onclick="closeCardViewer()">  <button  
-    class="cardViewerClose"  
-    onclick="closeCardViewer(event)">  
-    X  
-</button>  
+<input id="collectionSearch"
+class="searchBox"
+placeholder="Search cards..."
+oninput="renderCollection()">
 
-<img  
-    id="cardViewerImage"  
-    class="cardViewerImage"  
-    src=""  
-    alt=""  
-    onclick="event.stopPropagation()"  
->
+<div id="collectionGrid" class="cardGrid"></div>
 
-</div>  <div id="message"></div>  <script type="module">  
-  
-import {  
-    initializeApp  
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";  
-  
-import {  
-    getAuth,  
-    GoogleAuthProvider,  
-    signInWithPopup,  
-    signOut,  
-    onAuthStateChanged  
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";  
-  
-import {  
-    getFirestore,  
-    doc,  
-    getDoc,  
-    setDoc,  
-    updateDoc,  
-    onSnapshot,  
-    collection as firestoreCollection,  
-    query,  
-    where,  
-    serverTimestamp  
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";  
-  
-  
-const firebaseConfig = {  
-    apiKey: "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",  
-    authDomain: "dbcc-login.firebaseapp.com",  
-    databaseURL: "https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",  
-    projectId: "dbcc-login",  
-    storageBucket: "dbcc-login.firebasestorage.app",  
-    messagingSenderId: "878902780767",  
-    appId: "1:878902780767:web:4020d11730e5d9c0ee0cea",  
-    measurementId: "G-PT9S1K4E2K"  
-};  
-  
-const app = initializeApp(firebaseConfig);  
-  
-const auth = getAuth(app);  
-  
-const db = getFirestore(app);  
-  
-  
-/* CARDS */  
-  
-const cards = [  
-  
-    {  
-        name: "Baby Pickels",  
-        image: "baby pikels.png",  
-        weight: 14,  
-        price: 5,  
-        rarity: "doll"  
-    },  
-  
-    {  
-        name: "Mr. Pickels",  
-        image: "mr. pickels.png",  
-        weight: 9,  
-        price: 7,  
-        rarity: "doll"  
-    },  
-  
-    {  
-        name: "Wily",  
-        image: "wily.png",  
-        weight: 14,  
-        price: 5,  
-        rarity: "doll"  
-    },  
-  
-    {  
-        name: "Will",  
-        image: "will.png",  
-        weight: 9,  
-        price: 7,  
-        rarity: "doll"  
-    },  
-  
-    {  
-        name: "Waffle",  
-        image: "waffle.png",  
-        weight: 14,  
-        price: 5,  
-        rarity: "doll"  
-    },  
-  
-    {  
-        name: "Cute Cake",  
-        image: "cute cake.png",  
-        weight: 9,  
-        price: 7,  
-        rarity: "doll"  
-    },  
-  
-    {  
-        name: "Buttyr",  
-        image: "buttyr.png",  
-        weight: 20,  
-        price: 7,  
-        rarity: "doll"  
-    },  
-  
-    {  
-        name: "Blossem",  
-        image: "blossem.png",  
-        weight: 20,  
-        price: 7,  
-        rarity: "doll"  
-    },  
-  
-    {  
-        name: "Buzzy",  
-        image: "buzzy.png",  
-        weight: 5,  
-        price: 12,  
-        rarity: "doll"  
-    },  
-  
-    {  
-        name: "Nico",  
-        image: "nico.png",  
-        weight: 20,  
-        price: 3,  
-        rarity: "doll"  
-    },  
-  
-    {  
-        name: "Choper",  
-        image: "choper.png",  
-        weight: 10,  
-        price: 5,  
-        rarity: "doll"  
-    },  
-  
-    {  
-        name: "Bullet",  
-        image: "bullet.png",  
-        weight: 10,  
-        price: 5,  
-        rarity: "doll"  
-    }  
-  
-];  
-  
-  
-/* STATE */  
-  
-let currentUser = null;  
-  
-let money = 50;  
-  
-let username = "";  
-  
-let collection = [];  
-  
-let favorites = [];  
-  
-let completedTradeIds = [];  
-  
-let collectionTab = "all";  
-  
-let dexTab = "dolls";  
-  
-let activeTrade = null;  
-  
-let selectedTradeCards = [];  
-  
-let tradeRequests = [];  
-  
-let tradeListener = null;  
-  
-let applyingTradeIds = new Set();  
-  
-  
-/* HELPERS */  
-  
-function createCardId() {  
-  
-    return Date.now().toString(36) +  
-        Math.random().toString(36).slice(2);  
-  
-}  
-  
-  
-function createCardCopy(  
-    name,  
-    traded = false  
-) {  
-  
-    return {  
-        id: createCardId(),  
-        name: name,  
-        traded: traded  
-    };  
-  
-}  
-  
-  
-function getCard(name) {  
-  
-    return cards.find(  
-        card => card.name === name  
-    );  
-  
-}  
-  
-  
-function escapeHtml(value) {  
-  
-    return String(value)  
-        .replaceAll("&", "&amp;")  
-        .replaceAll("<", "&lt;")  
-        .replaceAll(">", "&gt;")  
-        .replaceAll('"', "&quot;")  
-        .replaceAll("'", "&#039;");  
-  
-}  
-  
-  
-function encoded(value) {  
-  
-    return encodeURIComponent(  
-        String(value)  
-    );  
-  
-}  
-  
-  
-window.openEncodedCardViewer =  
-function(image, name) {  
-  
-    openCardViewer(  
-        decodeURIComponent(image),  
-        decodeURIComponent(name)  
-    );  
-  
-};  
-  
-  
-function showMessage(text) {  
-  
-    const el =  
-        document.getElementById("message");  
-  
-    el.textContent = text;  
-  
-    el.style.display = "block";  
-  
-    setTimeout(() => {  
-  
-        el.style.display = "none";  
-  
-    }, 2500);  
-  
-}  
-  
-  
-/* FULL SCREEN CARD VIEW */  
-  
-window.openCardViewer =  
-function(image, name) {  
-  
-    const viewer =  
-        document.getElementById(  
-            "cardViewer"  
-        );  
-  
-    const viewerImage =  
-        document.getElementById(  
-            "cardViewerImage"  
-        );  
-  
-    viewerImage.src = image;  
-  
-    viewerImage.alt = name;  
-  
-    viewer.classList.remove(  
-        "hidden"  
-    );  
-  
-};  
-  
-  
-window.closeCardViewer =  
-function(event) {  
-  
-    if (event) {  
-        event.stopPropagation();  
-    }  
-  
-    document  
-        .getElementById(  
-            "cardViewer"  
-        )  
-        .classList.add("hidden");  
-  
-};  
-  
-  
-/* AUTH */  
-  
-window.loginGoogle =  
-async function() {  
-  
-    try {  
-  
-        const provider =  
-            new GoogleAuthProvider();  
-  
-        await signInWithPopup(  
-            auth,  
-            provider  
-        );  
-  
-    } catch (error) {  
-  
-        console.error(error);  
-  
-        showMessage(  
-            error.message  
-        );  
-  
-    }  
-  
-};  
-  
-  
-window.logout =  
-async function() {  
-  
-    try {  
-  
-        await signOut(auth);  
-  
-    } catch (error) {  
-  
-        console.error(error);  
-  
-    }  
-  
-};  
-  
-  
-/* USERNAME */  
-  
-async function askForUsername() {  
-  
-    while (!username) {  
-  
-        let chosen =  
-            prompt(  
-                "Choose your unique username:"  
-            );  
-  
-        if (chosen === null) {  
-            chosen = "";  
-        }  
-  
-        chosen =  
-            chosen.trim();  
-  
-        if (chosen.length < 3) {  
-  
-            alert(  
-                "Username must be at least 3 characters."  
-            );  
-  
-            continue;  
-  
-        }  
-  
-        if (chosen.length > 20) {  
-  
-            alert(  
-                "Username must be 20 characters or less."  
-            );  
-  
-            continue;  
-  
-        }  
-  
-        if (  
-            !/^[a-zA-Z0-9_]+$/.test(  
-                chosen  
-            )  
-        ) {  
-  
-            alert(  
-                "Only letters, numbers and _ are allowed."  
-            );  
-  
-            continue;  
-  
-        }  
-  
-        const normalized =  
-            chosen.toLowerCase();  
-  
-        const usernameRef =  
-            doc(  
-                db,  
-                "usernames",  
-                normalized  
-            );  
-  
-        const usernameSnap =  
-            await getDoc(  
-                usernameRef  
-            );  
-  
-        if (  
-            usernameSnap.exists() &&  
-            usernameSnap.data().uid !==  
-            currentUser.uid  
-        ) {  
-  
-            alert(  
-                "That username is already taken."  
-            );  
-  
-            continue;  
-  
-        }  
-  
-        await setDoc(  
-            usernameRef,  
-            {  
-                uid:  
-                    currentUser.uid,  
-  
-                username:  
-                    chosen  
-            },  
-            {  
-                merge: true  
-            }  
-        );  
-  
-        username =  
-            chosen;  
-  
-        break;  
-  
-    }  
-  
-}  
-  
-  
-async function ensureUsernameDocument() {  
-  
-    if (  
-        !currentUser ||  
-        !username  
-    ) {  
-  
-        return;  
-  
-    }  
-  
-    await setDoc(  
-        doc(  
-            db,  
-            "usernames",  
-            username.toLowerCase()  
-        ),  
-        {  
-            uid:  
-                currentUser.uid,  
-  
-            username:  
-                username  
-        },  
-        {  
-            merge: true  
-        }  
-    );  
-  
-}  
-  
-  
-/* PLAYER DATA */  
-  
-function normalizeCollection(data) {  
-  
-    if (!Array.isArray(data)) {  
-        return [];  
-    }  
-  
-    return data.map(item => {  
-  
-        if (  
-            typeof item ===  
-            "string"  
-        ) {  
-  
-            return createCardCopy(  
-                item  
-            );  
-  
-        }  
-  
-        return {  
-  
-            id:  
-                item.id ||  
-                createCardId(),  
-  
-            name:  
-                item.name,  
-  
-            traded:  
-                item.traded === true  
-  
-        };  
-  
-    }).filter(  
-        item =>  
-            getCard(item.name)  
-    );  
-  
-}  
-  
-  
-async function loadPlayerData() {  
-  
-    const ref =  
-        doc(  
-            db,  
-            "players",  
-            currentUser.uid  
-        );  
-  
-    const snap =  
-        await getDoc(ref);  
-  
-    if (!snap.exists()) {  
-  
-        money = 50;  
-  
-        collection = [];  
-  
-        favorites = [];  
-  
-        completedTradeIds = [];  
-  
-        username = "";  
-  
-        await setDoc(  
-            ref,  
-            {  
-                money:  
-                    money,  
-  
-                collection:  
-                    collection,  
-  
-                favorites:  
-                    favorites,  
-  
-                completedTradeIds:  
-                    completedTradeIds,  
-  
-                username:  
-                    username  
-            }  
-        );  
-  
-    } else {  
-  
-        const data =  
-            snap.data();  
-  
-        money =  
-            typeof data.money ===  
-            "number"  
-                ? data.money  
-                : 50;  
-  
-        collection =  
-            normalizeCollection(  
-                data.collection  
-            );  
-  
-        favorites =  
-            Array.isArray(  
-                data.favorites  
-            )  
-                ? data.favorites  
-                : [];  
-  
-        completedTradeIds =  
-            Array.isArray(  
-                data.completedTradeIds  
-            )  
-                ? data.completedTradeIds  
-                : [];  
-  
-        username =  
-            data.username ||  
-            "";  
-  
-    }  
-  
-    if (!username) {  
-  
-        await askForUsername();  
-  
-    }  
-  
-    await ensureUsernameDocument();  
-  
-    await savePlayerData();  
-  
-}  
-  
-  
-async function savePlayerData() {  
-  
-    if (!currentUser) {  
-        return;  
-    }  
-  
-    await setDoc(  
-        doc(  
-            db,  
-            "players",  
-            currentUser.uid  
-        ),  
-        {  
-  
-            money:  
-                money,  
-  
-            collection:  
-                collection,  
-  
-            favorites:  
-                favorites,  
-  
-            completedTradeIds:  
-                completedTradeIds,  
-  
-            username:  
-                username  
-  
-        },  
-        {  
-            merge: true  
-        }  
-    );  
-  
-}  
-  
-  
-/* AUTH STATE */  
-  
-onAuthStateChanged(  
-    auth,  
-    async user => {  
-  
-        if (!user) {  
-  
-            currentUser = null;  
-  
-            stopTradeListener();  
-  
-            activeTrade = null;  
-  
-            tradeRequests = [];  
-  
-            document  
-                .getElementById(  
-                    "loginScreen"  
-                )  
-                .classList.remove(  
-                    "hidden"  
-                );  
-  
-            document  
-                .getElementById(  
-                    "gameScreen"  
-                )  
-                .classList.add(  
-                    "hidden"  
-                );  
-  
-            return;  
-  
-        }  
-  
-        currentUser = user;  
-  
-        try {  
-  
-            await loadPlayerData();  
-  
-            document  
-                .getElementById(  
-                    "loginScreen"  
-                )  
-                .classList.add(  
-                    "hidden"  
-                );  
-  
-            document  
-                .getElementById(  
-                    "gameScreen"  
-                )  
-                .classList.remove(  
-                    "hidden"  
-                );  
-  
-            document  
-                .getElementById(  
-                    "accountEmail"  
-                )  
-                .textContent =  
-                user.email || "";  
-  
-            updateUI();  
-  
-            startTradeListener();  
-  
-        } catch (error) {  
-  
-            console.error(error);  
-  
-            alert(  
-                "Could not load your account:\n" +  
-                error.message  
-            );  
-  
-        }  
-  
-    }  
-);  
-  
-  
-/* UI */  
-  
-function updateUI() {  
-  
-    document  
-        .getElementById(  
-            "money"  
-        )  
-        .textContent =  
-        money;  
-  
-    document  
-        .getElementById(  
-            "usernameDisplay"  
-        )  
-        .textContent =  
-        username;  
-  
-    document  
-        .getElementById(  
-            "settingsUsername"  
-        )  
-        .textContent =  
-        username;  
-  
-    renderCollection();  
-  
-    renderDex();  
-  
-}  
-  
-  
-window.showPage =  
-function(page) {  
-  
-    document  
-        .querySelectorAll(".page")  
-        .forEach(  
-            el =>  
-                el.classList.add(  
-                    "hidden"  
-                )  
-        );  
-  
-    const target =  
-        document.getElementById(  
-            page + "Page"  
-        );  
-  
-    if (target) {  
-  
-        target.classList.remove(  
-            "hidden"  
-        );  
-  
-    }  
-  
-    if (  
-        page ===  
-        "collection"  
-    ) {  
-  
-        renderCollection();  
-  
-    }  
-  
-    if (  
-        page ===  
-        "dex"  
-    ) {  
-  
-        renderDex();  
-  
-    }  
-  
-    if (  
-        page ===  
-        "trade"  
-    ) {  
-  
-        renderIncomingTrades();  
-  
-        renderActiveTrade();  
-  
-    }  
-  
-};  
-  
-  
-/* PACK */  
-  
-function weightedRandomCard() {  
-  
-    const totalWeight =  
-        cards.reduce(  
-            (  
-                sum,  
-                card  
-            ) =>  
-                sum +  
-                card.weight,  
-            0  
-        );  
-  
-    let random =  
-        Math.random() *  
-        totalWeight;  
-  
-    for (  
-        const card  
-        of cards  
-    ) {  
-  
-        random -=  
-            card.weight;  
-  
-        if (  
-            random <=  
-            0  
-        ) {  
-  
-            return card;  
-  
-        }  
-  
-    }  
-  
-    return cards[  
-        cards.length - 1  
-    ];  
-  
-}  
-  
-  
-window.openPack =  
-async function() {  
-  
-    if (  
-        money < 10  
-    ) {  
-  
-        showMessage(  
-            "Not enough coins."  
-        );  
-  
-        return;  
-  
-    }  
-  
-    money -= 10;  
-  
-    const newCards = [];  
-  
-    for (  
-        let i = 0;  
-        i < 3;  
-        i++  
-    ) {  
-  
-        const card =  
-            weightedRandomCard();  
-  
-        collection.push(  
-            createCardCopy(  
-                card.name  
-            )  
-        );  
-  
-        newCards.push(  
-            card  
-        );  
-  
-    }  
-  
-    await savePlayerData();  
-  
-    updateUI();  
-  
-    showPackResults(  
-        newCards  
-    );  
-  
-};  
-  
-  
-function showPackResults(  
-    pulledCards  
-) {  
-  
-    const overlay =  
-        document.createElement(  
-            "div"  
-        );  
-  
-    overlay.style.position =  
-        "fixed";  
-  
-    overlay.style.inset =  
-        "0";  
-  
-    overlay.style.background =  
-        "rgba(0,0,0,0.94)";  
-  
-    overlay.style.zIndex =  
-        "4000";  
-  
-    overlay.style.display =  
-        "flex";  
-  
-    overlay.style.flexDirection =  
-        "column";  
-  
-    overlay.style.alignItems =  
-        "center";  
-  
-    overlay.style.justifyContent =  
-        "center";  
-  
-    overlay.style.padding =  
-        "20px";  
-  
-    overlay.style.overflowY =  
-        "auto";  
-  
-    const title =  
-        document.createElement(  
-            "h2"  
-        );  
-  
-    title.textContent =  
-        "You got:";  
-  
-    overlay.appendChild(  
-        title  
-    );  
-  
-    const grid =  
-        document.createElement(  
-            "div"  
-        );  
-  
-    grid.style.display =  
-        "grid";  
-  
-    grid.style.gridTemplateColumns =  
-        "repeat(3, minmax(0, 1fr))";  
-  
-    grid.style.gap =  
-        "15px";  
-  
-    grid.style.width =  
-        "min(100%, 900px)";  
-  
-    pulledCards.forEach(  
-        card => {  
-  
-            const cardBox =  
-                document.createElement(  
-                    "div"  
-                );  
-  
-            cardBox.style.background =  
-                "#10243d";  
-  
-            cardBox.style.borderRadius =  
-                "15px";  
-  
-            cardBox.style.padding =  
-                "10px";  
-  
-            cardBox.style.textAlign =  
-                "center";  
-  
-            const image =  
-                document.createElement(  
-                    "img"  
-                );  
-  
-            image.src =  
-                card.image;  
-  
-            image.alt =  
-                card.name;  
-  
-            image.style.width =  
-                "100%";  
-  
-            image.style.maxHeight =  
-                "55vh";  
-  
-            image.style.objectFit =  
-                "contain";  
-  
-            image.style.borderRadius =  
-                "10px";  
-  
-            image.style.cursor =  
-                "pointer";  
-  
-            image.onclick =  
-                function(event) {  
-  
-                    event.stopPropagation();  
-  
-                    openCardViewer(  
-                        card.image,  
-                        card.name  
-                    );  
-  
-                };  
-  
-            cardBox.appendChild(  
-                image  
-            );  
-  
-            grid.appendChild(  
-                cardBox  
-            );  
-  
-        }  
-    );  
-  
-    overlay.appendChild(  
-        grid  
-    );  
-  
-    const closeButton =  
-        document.createElement(  
-            "button"  
-        );  
-  
-    closeButton.textContent =  
-        "CONTINUE";  
-  
-    closeButton.style.marginTop =  
-        "20px";  
-  
-    closeButton.style.background =  
-        "#2674d9";  
-  
-    closeButton.style.color =  
-        "white";  
-  
-    closeButton.onclick =  
-        function() {  
-  
-            overlay.remove();  
-  
-        };  
-  
-    overlay.appendChild(  
-        closeButton  
-    );  
-  
-    overlay.onclick =  
-        function(event) {  
-  
-            if (  
-                event.target ===  
-                overlay  
-            ) {  
-  
-                overlay.remove();  
-  
-            }  
-  
-        };  
-  
-    document.body.appendChild(  
-        overlay  
-    );  
-  
-}  
-  
-/* COLLECTION */  
-  
-window.setCollectionTab =  
-function(tab) {  
-  
-    collectionTab =  
-        tab;  
-  
-    document  
-        .getElementById(  
-            "collectionAllButton"  
-        )  
-        .classList.toggle(  
-            "active",  
-            tab === "all"  
-        );  
-  
-    document  
-        .getElementById(  
-            "collectionFavoritesButton"  
-        )  
-        .classList.toggle(  
-            "active",  
-            tab === "favorites"  
-        );  
-  
-    renderCollection();  
-  
-};  
-  
-  
-function getCollectionCounts() {  
-  
-    const counts = {};  
-  
-    for (  
-        const copy  
-        of collection  
-    ) {  
-  
-        counts[  
-            copy.name  
-        ] =  
-            (  
-                counts[  
-                    copy.name  
-                ] || 0  
-            ) + 1;  
-  
-    }  
-  
-    return counts;  
-  
-}  
-  
-  
-function getFirstCopy(name) {  
-  
-    return collection.find(  
-        copy =>  
-            copy.name ===  
-            name  
-    );  
-  
-}  
-  
-  
-function renderCollection() {  
-  
-    const grid =  
-        document.getElementById(  
-            "collectionGrid"  
-        );  
-  
-    if (!grid) {  
-        return;  
-    }  
-  
-    const search =  
-        (  
-            document  
-                .getElementById(  
-                    "collectionSearch"  
-                )  
-                ?.value ||  
-            ""  
-        ).toLowerCase();  
-  
-    const counts =  
-        getCollectionCounts();  
-  
-    let names =  
-        cards  
-            .filter(  
-                card =>  
-                    counts[  
-                        card.name  
-                    ]  
-            )  
-            .map(  
-                card =>  
-                    card.name  
-            );  
-  
-    if (  
-        collectionTab ===  
-        "favorites"  
-    ) {  
-  
-        names =  
-            names.filter(  
-                name =>  
-                    favorites.includes(  
-                        name  
-                    )  
-            );  
-  
-    }  
-  
-    if (search) {  
-  
-        names =  
-            names.filter(  
-                name =>  
-                    name  
-                        .toLowerCase()  
-                        .includes(  
-                            search  
-                        )  
-            );  
-  
-    }  
-  
-    grid.innerHTML = "";  
-  
-    if (!names.length) {  
-  
-        grid.innerHTML =  
-            "<p>You don't have any cards here.</p>";  
-  
-        return;  
-  
-    }  
-  
-    for (  
-        const name  
-        of names  
-    ) {  
-  
-        const card =  
-            getCard(name);  
-  
-        const copy =  
-            getFirstCopy(name);  
-  
-        if (!card) {  
-            continue;  
-        }  
-  
-        const isFavorite =  
-            favorites.includes(  
-                name  
-            );  
-  
-        const traded =  
-            copy?.traded === true;  
-  
-        let borderClass =  
-            "";  
-  
-        if (  
-            isFavorite &&  
-            traded  
-        ) {  
-  
-            borderClass =  
-                card.rarity === "rare"  
-                    ? "rareTradedFavoriteCard"  
-                    : "tradedFavoriteCard";  
-  
-        } else if (  
-            isFavorite  
-        ) {  
-  
-            borderClass =  
-                card.rarity === "rare"  
-                    ? "rareFavoriteCard"  
-                    : "favoriteCard";  
-  
-        }  
-  
-        const div =  
-            document.createElement(  
-                "div"  
-            );  
-  
-        div.className =  
-            "card " +  
-            borderClass;  
-  
-        div.innerHTML = `  
-  
-            <button  
-                class="starButton ${  
-                    isFavorite  
-                        ? "favorite"  
-                        : ""  
-                }"  
-                onclick="toggleFavorite('${escapeHtml(name)}')">  
-                ${  
-                    isFavorite  
-                        ? "★"  
-                        : "☆"  
-                }  
-            </button>  
-  
-            <div class="cardCount">  
-                ${counts[name]}  
-            </div>  
-  
-            <img  
-                src="${escapeHtml(card.image)}"  
-                alt="${escapeHtml(name)}"  
-                onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(name)}')"  
-            >  
-  
-            <div class="cardName">  
-                ${escapeHtml(name)}  
-            </div>  
-  
-            <div>  
-                Sell: ${card.price}  
-            </div>  
-  
-            <button  
-                class="sellButton ${  
-                    isFavorite  
-                        ? "favoriteLocked"  
-                        : ""  
-                }"  
-                ${  
-                    isFavorite  
-                        ? "disabled"  
-                        : ""  
-                }  
-                onclick="sellCard('${escapeHtml(name)}')">  
-  
-                ${  
-                    isFavorite  
-                        ? "FAVORITED"  
-                        : "SELL"  
-                }  
-  
-            </button>  
-  
-        `;  
-  
-        grid.appendChild(div);  
-  
-    }  
-  
-}  
-  
-  
-window.toggleFavorite =  
-async function(name) {  
-  
-    if (  
-        favorites.includes(  
-            name  
-        )  
-    ) {  
-  
-        favorites =  
-            favorites.filter(  
-                item =>  
-                    item !==  
-                    name  
-            );  
-  
-        showMessage(  
-            name +  
-            " is no longer a favorite."  
-        );  
-  
-    } else {  
-  
-        favorites.push(  
-            name  
-        );  
-  
-        showMessage(  
-            name +  
-            " is now a favorite!"  
-        );  
-  
-    }  
-  
-    await savePlayerData();  
-  
-    updateUI();  
-  
-};  
-  
-  
-window.sellCard =  
-async function(name) {  
-  
-    if (  
-        favorites.includes(  
-            name  
-        )  
-    ) {  
-  
-        showMessage(  
-            "Favorite cards cannot be sold."  
-        );  
-  
-        return;  
-  
-    }  
-  
-    const index =  
-        collection.findIndex(  
-            copy =>  
-                copy.name ===  
-                name  
-        );  
-  
-    if (  
-        index ===  
-        -1  
-    ) {  
-  
-        return;  
-  
-    }  
-  
-    const card =  
-        getCard(name);  
-  
-    if (!card) {  
-        return;  
-    }  
-  
-    collection.splice(  
-        index,  
-        1  
-    );  
-  
-    money +=  
-        card.price;  
-  
-    await savePlayerData();  
-  
-    updateUI();  
-  
-    showMessage(  
-        name +  
-        " sold for " +  
-        card.price +  
-        " coins."  
-    );  
-  
-};  
-  
-  
-/* DEX */  
-  
-window.setDexTab =  
-function(tab) {  
-  
-    dexTab =  
-        tab;  
-  
-    document  
-        .getElementById(  
-            "dexDollsButton"  
-        )  
-        .classList.toggle(  
-            "active",  
-            tab === "dolls"  
-        );  
-  
-    document  
-        .getElementById(  
-            "dexRaresButton"  
-        )  
-        .classList.toggle(  
-            "active",  
-            tab === "rares"  
-        );  
-  
-    renderDex();  
-  
-};  
-  
-  
-function renderDex() {  
-  
-    const grid =  
-        document.getElementById(  
-            "dexGrid"  
-        );  
-  
-    if (!grid) {  
-        return;  
-    }  
-  
-    grid.innerHTML = "";  
-  
-    if (  
-        dexTab ===  
-        "rares"  
-    ) {  
-  
-        for (  
-            let i = 1;  
-            i <= 6;  
-            i++  
-        ) {  
-  
-            const div =  
-                document.createElement(  
-                    "div"  
-                );  
-  
-            div.className =  
-                "dexCard comingSoon";  
-  
-            div.innerHTML = `  
-  
-                <div style="  
-                    aspect-ratio:1/1.35;  
-                    display:flex;  
-                    align-items:center;  
-                    justify-content:center;  
-                    font-size:25px;  
-                ">  
-                    ?  
-                </div>  
-  
-                <b>  
-                    Rare ${i}  
-                </b>  
-  
-                <p>  
-                    Coming Soon  
-                </p>  
-  
-            `;  
-  
-            grid.appendChild(div);  
-  
-        }  
-  
-        return;  
-  
-    }  
-  
-    for (  
-        const card  
-        of cards  
-    ) {  
-  
-        const owned =  
-            collection.some(  
-                copy =>  
-                    copy.name ===  
-                    card.name  
-            );  
-  
-        const div =  
-            document.createElement(  
-                "div"  
-            );  
-  
-        div.className =  
-            "dexCard " +  
-            (  
-                !owned  
-                    ? "comingSoon"  
-                    : ""  
-            );  
-  
-        div.innerHTML = `  
-  
-            <img  
-                src="${escapeHtml(card.image)}"  
-                alt="${escapeHtml(card.name)}"  
-                onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')"  
-            >  
-  
-            <b>  
-                ${escapeHtml(card.name)}  
-            </b>  
-  
-            <p>  
-                ${  
-                    owned  
-                        ? "Owned"  
-                        : "Not Owned"  
-                }  
-            </p>  
-  
-        `;  
-  
-        grid.appendChild(div);  
-  
-    }  
-  
-}  
-  
-  
-/* PLAYER SEARCH */  
-  
-window.findPlayer =  
-async function() {  
-  
-    const input =  
-        document.getElementById(  
-            "tradePlayerInput"  
-        );  
-  
-    const result =  
-        document.getElementById(  
-            "tradePlayerResult"  
-        );  
-  
-    const name =  
-        input.value.trim();  
-  
-    if (!name) {  
-  
-        result.innerHTML =  
-            "<p>Enter a username.</p>";  
-  
-        return;  
-  
-    }  
-  
-    if (  
-        username &&  
-        name.toLowerCase() ===  
-        username.toLowerCase()  
-    ) {  
-  
-        result.innerHTML = `  
-  
-            <div class="tradeNotice">  
-                You cannot trade with yourself.  
-            </div>  
-  
-        `;  
-  
-        return;  
-  
-    }  
-  
-    result.innerHTML =  
-        "<p>Searching...</p>";  
-  
-    try {  
-  
-        const ref =  
-            doc(  
-                db,  
-                "usernames",  
-                name.toLowerCase()  
-            );  
-  
-        const snap =  
-            await getDoc(ref);  
-  
-        if (!snap.exists()) {  
-  
-            result.innerHTML = `  
-  
-                <div class="tradeNotice">  
-                    Player not found.  
-                </div>  
-  
-            `;  
-  
-            return;  
-  
-        }  
-  
-        const data =  
-            snap.data();  
-  
-        if (  
-            data.uid ===  
-            currentUser.uid  
-        ) {  
-  
-            result.innerHTML = `  
-                <div class="tradeNotice">  
-                    You cannot trade with yourself.  
-                </div>  
-            `;  
-  
-            return;  
-  
-        }  
-  
-        result.innerHTML = `  
-  
-            <div class="tradeNotice">  
-  
-                <b>  
-                    ${escapeHtml(  
-                        data.username ||  
-                        name  
-                    )}  
-                </b>  
-  
-                <p>  
-                    Player found!  
-                </p>  
-  
-                <button  
-                    class="tradeSearchButton"  
-                    onclick="sendTradeRequest('${escapeHtml(data.uid)}')">  
-  
-                    SEND TRADE REQUEST  
-  
-                </button>  
-  
-            </div>  
-  
-        `;  
-  
-    } catch (error) {  
-  
-        console.error(error);  
-  
-        result.innerHTML = `  
-  
-            <div class="tradeNotice">  
-  
-                Search error:<br>  
-  
-                ${escapeHtml(  
-                    error.message  
-                )}  
-  
-            </div>  
-  
-        `;  
-  
-    }  
-  
-};  
-  
-  
-/* SEND TRADE */  
-  
-window.sendTradeRequest =  
-async function(receiverUid) {  
-  
-    if (!currentUser) {  
-        return;  
-    }  
-  
-    if (  
-        receiverUid ===  
-        currentUser.uid  
-    ) {  
-  
-        showMessage(  
-            "You cannot trade with yourself."  
-        );  
-  
-        return;  
-  
-    }  
-  
-    try {  
-  
-        const alreadyPending =  
-            tradeRequests.some(  
-                trade =>  
-                    trade.status ===  
-                    "pending" &&  
-                    (  
-                        (  
-                            trade.senderUid ===  
-                            currentUser.uid &&  
-                            trade.receiverUid ===  
-                            receiverUid  
-                        ) ||  
-                        (  
-                            trade.receiverUid ===  
-                            currentUser.uid &&  
-                            trade.senderUid ===  
-                            receiverUid  
-                        )  
-                    )  
-            );  
-  
-        if (alreadyPending) {  
-  
-            showMessage(  
-                "You already have a pending trade with this player."  
-            );  
-  
-            return;  
-  
-        }  
-  
-        const tradeId =  
-            createCardId();  
-  
-        const tradeRef =  
-            doc(  
-                db,  
-                "tradeRequests",  
-                tradeId  
-            );  
-  
-        await setDoc(  
-            tradeRef,  
-            {  
-  
-                participants: [  
-                    currentUser.uid,  
-                    receiverUid  
-                ],  
-  
-                senderUid:  
-                    currentUser.uid,  
-  
-                receiverUid:  
-                    receiverUid,  
-  
-                senderUsername:  
-                    username,  
-  
-                receiverUsername:  
-                    "",  
-  
-                senderOffer:  
-                    [],  
-  
-                receiverOffer:  
-                    [],  
-  
-                senderConfirmed:  
-                    false,  
-  
-                receiverConfirmed:  
-                    false,  
-  
-                status:  
-                    "pending",  
-  
-                createdAt:  
-                    serverTimestamp()  
-  
-            }  
-        );  
-  
-        showPage("trade");  
-  
-        showMessage(  
-            "Trade request sent."  
-        );  
-  
-    } catch (error) {  
-  
-        console.error(  
-            "SEND TRADE ERROR:",  
-            error  
-        );  
-  
-        showMessage(  
-            "Could not send trade request: " +  
-            error.message  
-        );  
-  
-    }  
-  
-};  
-  
-  
-/* TRADE LISTENER */  
-  
-function stopTradeListener() {  
-  
-    if (tradeListener) {  
-  
-        tradeListener();  
-  
-        tradeListener =  
-            null;  
-  
-    }  
-  
-}  
-  
-  
-function startTradeListener() {  
-  
-    stopTradeListener();  
-  
-    if (!currentUser) {  
-        return;  
-    }  
-  
-    try {  
-  
-        const tradeCollection =  
-            firestoreCollection(  
-                db,  
-                "tradeRequests"  
-            );  
-  
-        const tradeQuery =  
-            query(  
-                tradeCollection,  
-                where(  
-                    "participants",  
-                    "array-contains",  
-                    currentUser.uid  
-                )  
-            );  
-  
-        tradeListener =  
-            onSnapshot(  
-                tradeQuery,  
-                snapshot => {  
-  
-                    tradeRequests =  
-                        snapshot.docs.map(  
-                            snap => ({  
-                                id:  
-                                    snap.id,  
-  
-                                ...snap.data()  
-                            })  
-                        );  
-  
-                    /*  
-                     Automatically try to finish  
-                     trades where both players  
-                     have confirmed.  
-                    */  
-  
-                    for (  
-                        const trade  
-                        of tradeRequests  
-                    ) {  
-  
-                        if (  
-                            trade.status ===  
-                            "pending" &&  
-                            trade.senderConfirmed ===  
-                            true &&  
-                            trade.receiverConfirmed ===  
-                            true  
-                        ) {  
-  
-                            tryFinalizeTrade(  
-                                trade  
-                            );  
-  
-                        }  
-  
-                    }  
-  
-                    /*  
-                     Apply trades that have  
-                     already been completed.  
-                    */  
-  
-                    for (  
-                        const trade  
-                        of tradeRequests  
-                    ) {  
-  
-                        if (  
-                            trade.status ===  
-                            "completed"  
-                        ) {  
-  
-                            applyCompletedTrade(  
-                                trade  
-                            );  
-  
-                        }  
-  
-                    }  
-  
-                    /*  
-                     Keep active trade updated.  
-                    */  
-  
-                    if (activeTrade) {  
-  
-                        const fresh =  
-                            tradeRequests.find(  
-                                trade =>  
-                                    trade.id ===  
-                                    activeTrade.id  
-                            );  
-  
-                        if (fresh) {  
-  
-                            activeTrade =  
-                                fresh;  
-  
-                            /*  
-                             Keep local selection  
-                             synchronized with the  
-                             saved offer.  
-                            */  
-  
-                            const savedOffer =  
-                                getMyOffer(  
-                                    fresh  
-                                );  
-  
-                            if (  
-                                savedOffer.length > 0 &&  
-                                selectedTradeCards.length === 0  
-                            ) {  
-  
-                                selectedTradeCards =  
-                                    savedOffer.map(  
-                                        card =>  
-                                            card.id  
-                                    );  
-  
-                            }  
-  
-                        }  
-  
-                    }  
-  
-                    renderIncomingTrades();  
-  
-                    renderActiveTrade();  
-  
-                },  
-                error => {  
-  
-                    console.error(  
-                        "TRADE LISTENER ERROR:",  
-                        error  
-                    );  
-  
-                    showMessage(  
-                        "Trade connection error: " +  
-                        error.message  
-                    );  
-  
-                }  
-            );  
-  
-    } catch (error) {  
-  
-        console.error(error);  
-  
-    }  
-  
-}  
-  
-  
-/* INCOMING REQUESTS */  
-  
-function renderIncomingTrades() {  
-  
-    const container =  
-        document.getElementById(  
-            "incomingTrades"  
-        );  
-  
-    if (!container) {  
-        return;  
-    }  
-  
-    container.innerHTML = "";  
-  
-    const incoming =  
-        tradeRequests.filter(  
-            trade =>  
-                trade.receiverUid ===  
-                currentUser?.uid &&  
-                trade.status ===  
-                "pending" &&  
-                (  
-                    !activeTrade ||  
-                    trade.id !==  
-                    activeTrade.id  
-                )  
-        );  
-  
-    if (!incoming.length) {  
-        return;  
-    }  
-  
-    for (  
-        const trade  
-        of incoming  
-    ) {  
-  
-        const sender =  
-            trade.senderUsername ||  
-            "Another player";  
-  
-        const div =  
-            document.createElement(  
-                "div"  
-            );  
-  
-        div.className =  
-            "tradeRequest";  
-  
-        div.innerHTML = `  
-  
-            <b>  
-                Incoming Trade Request  
-            </b>  
-  
-            <p>  
-                ${escapeHtml(sender)}  
-                wants to trade with you.  
-            </p>  
-  
-            <button  
-                class="tradeSearchButton"  
-                onclick="acceptTrade('${escapeHtml(trade.id)}')">  
-  
-                ACCEPT TRADE  
-  
-            </button>  
-  
-        `;  
-  
-        container.appendChild(div);  
-  
-    }  
-  
-}  
-  
-  
-/* ACCEPT TRADE */  
-  
-window.acceptTrade =  
-function(tradeId) {  
-  
-    const trade =  
-        tradeRequests.find(  
-            item =>  
-                item.id ===  
-                tradeId  
-        );  
-  
-    if (!trade) {  
-  
-        showMessage(  
-            "Trade request not found."  
-        );  
-  
-        return;  
-  
-    }  
-  
-    if (  
-        trade.receiverUid !==  
-        currentUser.uid  
-    ) {  
-  
-        showMessage(  
-            "You cannot accept this trade."  
-        );  
-  
-        return;  
-  
-    }  
-  
-    if (  
-        trade.status !==  
-        "pending"  
-    ) {  
-  
-        showMessage(  
-            "This trade is no longer pending."  
-        );  
-  
-        return;  
-  
-    }  
-  
-    activeTrade =  
-        trade;  
-  
-    selectedTradeCards =  
-        getMyOffer(  
-            trade  
-        ).map(  
-            card =>  
-                card.id  
-        );  
-  
-    showPage("trade");  
-  
-    renderIncomingTrades();  
-  
-    renderActiveTrade();  
-  
-};  
-  
-  
-/* OPEN OUTGOING TRADE */  
-  
-function openOutgoingTradeIfNeeded() {  
-  
-    if (activeTrade) {  
-        return;  
-    }  
-  
-    const outgoing =  
-        tradeRequests.find(  
-            trade =>  
-                trade.senderUid ===  
-                currentUser?.uid &&  
-                trade.status ===  
-                "pending"  
-        );  
-  
-    if (outgoing) {  
-  
-        activeTrade =  
-            outgoing;  
-  
-        selectedTradeCards =  
-            getMyOffer(  
-                outgoing  
-            ).map(  
-                card =>  
-                    card.id  
-            );  
-  
-    }  
-  
-}  
-  
-  
-window.openTrade =  
-function(tradeId) {  
-  
-    const trade =  
-        tradeRequests.find(  
-            item =>  
-                item.id ===  
-                tradeId  
-        );  
-  
-    if (!trade) {  
-        return;  
-    }  
-  
-    activeTrade =  
-        trade;  
-  
-    selectedTradeCards =  
-        getMyOffer(  
-            trade  
-        ).map(  
-            card =>  
-                card.id  
-        );  
-  
-    renderIncomingTrades();  
-  
-    renderActiveTrade();  
-  
-};  
-  
-  
-/* TRADE DATA */  
-  
-function getMyOffer(trade) {  
-  
-    if (  
-        trade.senderUid ===  
-        currentUser.uid  
-    ) {  
-  
-        return Array.isArray(  
-            trade.senderOffer  
-        )  
-            ? trade.senderOffer  
-            : [];  
-  
-    }  
-  
-    return Array.isArray(  
-        trade.receiverOffer  
-    )  
-        ? trade.receiverOffer  
-        : [];  
-  
-}  
-  
-  
-function getTheirOffer(trade) {  
-  
-    if (  
-        trade.senderUid ===  
-        currentUser.uid  
-    ) {  
-  
-        return Array.isArray(  
-            trade.receiverOffer  
-        )  
-            ? trade.receiverOffer  
-            : [];  
-  
-    }  
-  
-    return Array.isArray(  
-        trade.senderOffer  
-    )  
-        ? trade.senderOffer  
-        : [];  
-  
-}  
-  
-  
-function sameIds(a, b) {  
-  
-    if (  
-        !Array.isArray(a) ||  
-        !Array.isArray(b)  
-    ) {  
-  
-        return false;  
-  
-    }  
-  
-    if (  
-        a.length !==  
-        b.length  
-    ) {  
-  
-        return false;  
-  
-    }  
-  
-    for (  
-        let i = 0;  
-        i < a.length;  
-        i++  
-    ) {  
-  
-        if (  
-            a[i] !==  
-            b[i]  
-        ) {  
-  
-            return false;  
-  
-        }  
-  
-    }  
-  
-    return true;  
-  
-}  
-  
-  
-/* RENDER OFFER CARDS */  
-  
-function renderOfferCards(  
-    offer,  
-    selectable = false  
-) {  
-  
-    if (  
-        !Array.isArray(offer) ||  
-        !offer.length  
-    ) {  
-  
-        return `  
-            <p style="text-align:center">  
-                No cards offered yet.  
-            </p>  
-        `;  
-  
-    }  
-  
-    return `  
-  
-        <div class="tradeCardGrid">  
-  
-            ${  
-                offer.map(  
-                    copy => {  
-  
-                        const card =  
-                            getCard(  
-                                copy.name  
-                            );  
-  
-                        if (!card) {  
-                            return "";  
-                        }  
-  
-                        const selected =  
-                            selectable &&  
-                            selectedTradeCards.includes(  
-                                copy.id  
-                            );  
-  
-                        return `  
-  
-                            <div  
-                                class="tradeCard ${  
-                                    selected  
-                                        ? "selected"  
-                                        : ""  
-                                }"  
-                                ${  
-                                    selectable  
-                                        ? `onclick="toggleTradeCard('${escapeHtml(copy.id)}')"`  
-                                        : ""  
-                                }  
-                            >  
-  
-                                <img  
-                                    src="${escapeHtml(card.image)}"  
-                                    alt="${escapeHtml(card.name)}"  
-                                    onclick="event.stopPropagation(); openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')"  
-                                >  
-  
-                                <div>  
-                                    ${escapeHtml(card.name)}  
-                                </div>  
-  
-                                ${  
-                                    copy.traded  
-                                        ? "<small>Traded</small>"  
-                                        : ""  
-                                }  
-  
-                            </div>  
-  
-                        `;  
-  
-                    }  
-                ).join("")  
-            }  
-  
-        </div>  
-  
-    `;  
-  
-}  
-  
-  
-/* SELECTABLE OWN COLLECTION */  
-  
-function renderSelectableTradeCards() {  
-  
-    if (!collection.length) {  
-  
-        return `  
-            <p style="text-align:center">  
-                You have no cards.  
-            </p>  
-        `;  
-  
-    }  
-  
-    return `  
-  
-        <div class="tradeCardGrid">  
-  
-            ${  
-                collection.map(  
-                    copy => {  
-  
-                        const card =  
-                            getCard(  
-                                copy.name  
-                            );  
-  
-                        if (!card) {  
-                            return "";  
-                        }  
-  
-                        const selected =  
-                            selectedTradeCards.includes(  
-                                copy.id  
-                            );  
-  
-                        return `  
-  
-                            <div  
-                                class="tradeCard ${  
-                                    selected  
-                                        ? "selected"  
-                                        : ""  
-                                }"  
-                                onclick="toggleTradeCard('${escapeHtml(copy.id)}')"  
-                            >  
-  
-                                <img  
-                                    src="${escapeHtml(card.image)}"  
-                                    alt="${escapeHtml(card.name)}"  
-                                    onclick="event.stopPropagation(); openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')"  
-                                >  
-  
-                                <div>  
-                                    ${escapeHtml(card.name)}  
-                                </div>  
-  
-                                ${  
-                                    copy.traded  
-                                        ? "<small>Traded</small>"  
-                                        : ""  
-                                }  
-  
-                            </div>  
-  
-                        `;  
-  
-                    }  
-                ).join("")  
-            }  
-  
-        </div>  
-  
-    `;  
-  
-}  
-  
-  
-/* ACTIVE TRADE */  
-  
-function renderActiveTrade() {  
-  
-    const container =  
-        document.getElementById(  
-            "activeTrade"  
-        );  
-  
-    if (!container) {  
-        return;  
-    }  
-  
-    openOutgoingTradeIfNeeded();  
-  
-    if (  
-        !activeTrade  
-    ) {  
-  
-        container.innerHTML = "";  
-  
-        return;  
-  
-    }  
-  
-    if (  
-        activeTrade.status !==  
-        "pending"  
-    ) {  
-  
-        if (  
-            activeTrade.status ===  
-            "completed"  
-        ) {  
-  
-            container.innerHTML = `  
-  
-                <div class="tradeArea">  
-  
-                    <h2>  
-                        Trade Completed  
-                    </h2>  
-  
-                    <p style="text-align:center">  
-                        The cards were successfully swapped.  
-                    </p>  
-  
-                </div>  
-  
-            `;  
-  
-        } else {  
-  
-            container.innerHTML = "";  
-  
-        }  
-  
-        return;  
-  
-    }  
-  
-    const isSender =  
-        activeTrade.senderUid ===  
-        currentUser.uid;  
-  
-    const myOffer =  
-        getMyOffer(  
-            activeTrade  
-        );  
-  
-    const theirOffer =  
-        getTheirOffer(  
-            activeTrade  
-        );  
-  
-    const myConfirmed =  
-        isSender  
-            ? activeTrade.senderConfirmed === true  
-            : activeTrade.receiverConfirmed === true;  
-  
-    const theirConfirmed =  
-        isSender  
-            ? activeTrade.receiverConfirmed === true  
-            : activeTrade.senderConfirmed === true;  
-  
-    const offerMatches =  
-        sameIds(  
-            myOffer.map(  
-                card =>  
-                    card.id  
-            ),  
-            selectedTradeCards  
-        );  
-  
-    container.innerHTML = `  
-  
-        <div class="tradeArea">  
-  
-            <h2>  
-                Trading  
-            </h2>  
-  
-            <div class="tradeColumns">  
-  
-                <div class="tradeSide">  
-  
-                    <h3>  
-                        Your Offer  
-                    </h3>  
-  
-                    ${  
-                        renderOfferCards(  
-                            myOffer  
-                        )  
-                    }  
-  
-                    <p style="text-align:center">  
-                        Current offer:  
-                        ${myOffer.length}  
-                        card(s)  
-                    </p>  
-  
-                    <hr>  
-  
-                    <h3>  
-                        Choose Cards  
-                    </h3>  
-  
-                    ${  
-                        renderSelectableTradeCards()  
-                    }  
-  
-                    <p style="text-align:center">  
-  
-                        ${  
-                            selectedTradeCards.length  
-                        }  
-  
-                        card(s) selected  
-  
-                    </p>  
-  
-                    <button  
-                        class="changeOfferButton"  
-                        onclick="submitTradeOffer()">  
-  
-                        UPDATE MY OFFER  
-  
-                    </button>  
-  
-                </div>  
-  
-  
-                <div class="tradeSide">  
-  
-                    <h3>  
-                        Their Offer  
-                    </h3>  
-  
-                    ${  
-                        renderOfferCards(  
-                            theirOffer  
-                        )  
-                    }  
-  
-                    <p style="text-align:center">  
-                        Their offer:  
-                        ${theirOffer.length}  
-                        card(s)  
-                    </p>  
-  
-                </div>  
-  
-            </div>  
-  
-  
-            <div class="tradeStatus">  
-  
-                ${  
-                    myConfirmed  
-                        ? "You confirmed this trade."  
-                        : "You have not confirmed."  
-                }  
-  
-                <br>  
-  
-                ${  
-                    theirConfirmed  
-                        ? "They confirmed this trade."  
-                        : "They have not confirmed."  
-                }  
-  
-            </div>  
-  
-  
-            ${  
-                !offerMatches  
-                    ? `  
-                        <p style="  
-                            text-align:center;  
-                            color:#36b9ff;  
-                        ">  
-                            Update your offer before confirming.  
-                        </p>  
-                    `  
-                    : ""  
-            }  
-  
-  
-            ${  
-                myOffer.length === 0  
-                    ? `  
-                        <p style="  
-                            text-align:center;  
-                            color:#36b9ff;  
-                        ">  
-                            You must offer at least one card.  
-                        </p>  
-                    `  
-                    : ""  
-            }  
-  
-  
-            ${  
-                theirOffer.length === 0  
-                    ? `  
-                        <p style="  
-                            text-align:center;  
-                            color:#36b9ff;  
-                        ">  
-                            Waiting for them to offer a card.  
-                        </p>  
-                    `  
-                    : ""  
-            }  
-  
-  
-            <button  
-                class="confirmButton"  
-                onclick="confirmTrade()"  
-                ${  
-                    myConfirmed ||  
-                    !offerMatches ||  
-                    myOffer.length === 0 ||  
-                    theirOffer.length === 0  
-                        ? "disabled"  
-                        : ""  
-                }>  
-  
-                ${  
-                    myConfirmed  
-                        ? "CONFIRMED"  
-                        : "CONFIRM TRADE"  
-                }  
-  
-            </button>  
-  
-  
-            <button  
-                class="cancelButton"  
-                onclick="cancelTrade('${escapeHtml(activeTrade.id)}')">  
-  
-                CANCEL TRADE  
-  
-            </button>  
-  
-        </div>  
-  
-    `;  
-  
-}  
-  
-  
-/* SELECT CARDS */  
-  
-window.toggleTradeCard =  
-function(cardId) {  
-  
-    if (  
-        !activeTrade ||  
-        activeTrade.status !==  
-        "pending"  
-    ) {  
-  
-        return;  
-  
-    }  
-  
-    const copy =  
-        collection.find(  
-            card =>  
-                card.id ===  
-                cardId  
-        );  
-  
-    if (!copy) {  
-        return;  
-    }  
-  
-    if (  
-        selectedTradeCards.includes(  
-            cardId  
-        )  
-    ) {  
-  
-        selectedTradeCards =  
-            selectedTradeCards.filter(  
-                id =>  
-                    id !==  
-                    cardId  
-            );  
-  
-    } else {  
-  
-        selectedTradeCards.push(  
-            cardId  
-        );  
-  
-    }  
-  
-    renderActiveTrade();  
-  
-};  
-  
-  
-/* UPDATE OFFER */  
-  
-window.submitTradeOffer =  
-async function() {  
-  
-    if (  
-        !activeTrade ||  
-        activeTrade.status !==  
-        "pending"  
-    ) {  
-  
-        return;  
-  
-    }  
-  
-    const validIds =  
-        selectedTradeCards.filter(  
-            id =>  
-                collection.some(  
-                    copy =>  
-                        copy.id ===  
-                        id  
-                )  
-        );  
-  
-    selectedTradeCards =  
-        validIds;  
-  
-    const offer =  
-        selectedTradeCards.map(  
-            id => {  
-  
-                const copy =  
-                    collection.find(  
-                        item =>  
-                            item.id ===  
-                            id  
-                    );  
-  
-                if (!copy) {  
-                    return null;  
-                }  
-  
-                return {  
-  
-                    id:  
-                        copy.id,  
-  
-                    name:  
-                        copy.name,  
-  
-                    traded:  
-                        copy.traded === true,  
-  
-                    favorite:  
-                        favorites.includes(  
-                            copy.name  
-                        )  
-  
-                };  
-  
-            }  
-        ).filter(Boolean);  
-  
-    const ids =  
-        offer.map(  
-            card =>  
-                card.id  
-        );  
-  
-    if (  
-        new Set(ids).size !==  
-        ids.length  
-    ) {  
-  
-        showMessage(  
-            "Invalid card selection."  
-        );  
-  
-        return;  
-  
-    }  
-  
-    const isSender =  
-        activeTrade.senderUid ===  
-        currentUser.uid;  
-  
-    const field =  
-        isSender  
-            ? "senderOffer"  
-            : "receiverOffer";  
-  
-    try {  
-  
-        await updateDoc(  
-            doc(  
-                db,  
-                "tradeRequests",  
-                activeTrade.id  
-            ),  
-            {  
-  
-                [field]:  
-                    offer,  
-  
-                senderConfirmed:  
-                    false,  
-  
-                receiverConfirmed:  
-                    false  
-  
-            }  
-        );  
-  
-        /*  
-         Keep the selected cards.  
-         Do not clear them.  
-        */  
-  
-        showMessage(  
-            "Offer updated. Both players must confirm again."  
-        );  
-  
-    } catch (error) {  
-  
-        console.error(  
-            "OFFER UPDATE ERROR:",  
-            error  
-        );  
-  
-        showMessage(  
-            "Could not update offer: " +  
-            error.message  
-        );  
-  
-    }  
-  
-};  
-  
-  
-/* CONFIRM */  
-  
-window.confirmTrade =  
-async function() {  
-  
-    if (  
-        !activeTrade ||  
-        activeTrade.status !==  
-        "pending"  
-    ) {  
-  
-        return;  
-  
-    }  
-  
-    /*  
-     Get the newest trade document.  
-     */  
-  
-    try {  
-  
-        const tradeRef =  
-            doc(  
-                db,  
-                "tradeRequests",  
-                activeTrade.id  
-            );  
-  
-        const tradeSnap =  
-            await getDoc(  
-                tradeRef  
-            );  
-  
-        if (!tradeSnap.exists()) {  
-  
-            showMessage(  
-                "Trade no longer exists."  
-            );  
-  
-            return;  
-  
-        }  
-  
-        const trade = {  
-  
-            id:  
-                tradeSnap.id,  
-  
-            ...tradeSnap.data()  
-  
-        };  
-  
-        if (  
-            trade.status !==  
-            "pending"  
-        ) {  
-  
-            return;  
-  
-        }  
-  
-        const myOffer =  
-            getMyOffer(  
-                trade  
-            );  
-  
-        const theirOffer =  
-            getTheirOffer(  
-                trade  
-            );  
-  
-        const currentIds =  
-            myOffer.map(  
-                card =>  
-                    card.id  
-            );  
-  
-        if (  
-            myOffer.length ===  
-            0  
-        ) {  
-  
-            showMessage(  
-                "You must offer at least one card."  
-            );  
-  
-            return;  
-  
-        }  
-  
-        if (  
-            theirOffer.length ===  
-            0  
-        ) {  
-  
-            showMessage(  
-                "Wait for the other player to offer a card."  
-            );  
-  
-            return;  
-  
-        }  
-  
-        if (  
-            !sameIds(  
-                currentIds,  
-                selectedTradeCards  
-            )  
-        ) {  
-  
-            showMessage(  
-                "Update your offer before confirming."  
-            );  
-  
-            return;  
-  
-        }  
-  
-        const stillOwns =  
-            myOffer.every(  
-                offered =>  
-                    collection.some(  
-                        copy =>  
-                            copy.id ===  
-                            offered.id  
-                    )  
-            );  
-  
-        if (!stillOwns) {  
-  
-            showMessage(  
-                "One of your offered cards is no longer in your collection."  
-            );  
-  
-            return;  
-  
-        }  
-  
-        const isSender =  
-            trade.senderUid ===  
-            currentUser.uid;  
-  
-        const field =  
-            isSender  
-                ? "senderConfirmed"  
-                : "receiverConfirmed";  
-  
-        await updateDoc(  
-            tradeRef,  
-            {  
-  
-                [field]:  
-                    true  
-  
-            }  
-        );  
-  
-        /*  
-         Update local state immediately.  
-        */  
-  
-        activeTrade = {  
-  
-            ...trade,  
-  
-            [field]:  
-                true  
-  
-        };  
-  
-        renderActiveTrade();  
-  
-        showMessage(  
-            "Confirmed. Waiting for the other player."  
-        );  
-  
-        /*  
-         Immediately check whether the  
-         other player had already confirmed.  
-        */  
-  
-        await tryFinalizeTrade({  
-  
-            ...trade,  
-  
-            [field]:  
-                true  
-  
-        });  
-  
-    } catch (error) {  
-  
-        console.error(  
-            "CONFIRM ERROR:",  
-            error  
-        );  
-  
-        showMessage(  
-            "Could not confirm trade: " +  
-            error.message  
-        );  
-  
-    }  
-  
-};  
-  
-  
-/* FINALIZE */  
-  
-async function tryFinalizeTrade(  
-    trade  
-) {  
-  
-    if (  
-        !trade ||  
-        trade.status !==  
-        "pending"  
-    ) {  
-  
-        return;  
-  
-    }  
-  
-    if (  
-        trade.senderConfirmed !==  
-        true ||  
-        trade.receiverConfirmed !==  
-        true  
-    ) {  
-  
-        return;  
-  
-    }  
-  
-    const senderOffer =  
-        Array.isArray(  
-            trade.senderOffer  
-        )  
-            ? trade.senderOffer  
-            : [];  
-  
-    const receiverOffer =  
-        Array.isArray(  
-            trade.receiverOffer  
-        )  
-            ? trade.receiverOffer  
-            : [];  
-  
-    if (  
-        senderOffer.length ===  
-        0 ||  
-        receiverOffer.length ===  
-        0  
-    ) {  
-  
-        return;  
-  
-    }  
-  
-    try {  
-  
-        const tradeRef =  
-            doc(  
-                db,  
-                "tradeRequests",  
-                trade.id  
-            );  
-  
-        /*  
-         Read the newest version again so  
-         neither player can finalize using  
-         stale confirmation data.  
-        */  
-  
-        const snap =  
-            await getDoc(  
-                tradeRef  
-            );  
-  
-        if (!snap.exists()) {  
-            return;  
-        }  
-  
-        const freshTrade = {  
-  
-            id:  
-                snap.id,  
-  
-            ...snap.data()  
-  
-        };  
-  
-        if (  
-            freshTrade.status !==  
-            "pending"  
-        ) {  
-  
-            /*  
-             Someone else already finalized it.  
-             */  
-  
-            return;  
-  
-        }  
-  
-        if (  
-            freshTrade.senderConfirmed !==  
-            true ||  
-            freshTrade.receiverConfirmed !==  
-            true  
-        ) {  
-  
-            return;  
-  
-        }  
-  
-        const freshSenderOffer =  
-            Array.isArray(  
-                freshTrade.senderOffer  
-            )  
-                ? freshTrade.senderOffer  
-                : [];  
-  
-        const freshReceiverOffer =  
-            Array.isArray(  
-                freshTrade.receiverOffer  
-            )  
-                ? freshTrade.receiverOffer  
-                : [];  
-  
-        if (  
-            freshSenderOffer.length ===  
-            0 ||  
-            freshReceiverOffer.length ===  
-            0  
-        ) {  
-  
-            return;  
-  
-        }  
-  
-        /*  
-         Mark the trade completed.  
-        */  
-  
-        await updateDoc(  
-            tradeRef,  
-            {  
-  
-                status:  
-                    "completed",  
-  
-                completedAt:  
-                    serverTimestamp()  
-  
-            }  
-        );  
-  
-        /*  
-         Apply it immediately for this player.  
-         The other player will receive the same  
-         completed trade through their listener.  
-        */  
-  
-        await applyCompletedTrade({  
-  
-            ...freshTrade,  
-  
-            status:  
-                "completed"  
-  
-        });  
-  
-    } catch (error) {  
-  
-        console.error(  
-            "FINALIZE TRADE ERROR:",  
-            error  
-        );  
-  
-    }  
-  
-}  
-  
-  
-/* APPLY COMPLETED TRADE */  
-  
-async function applyCompletedTrade(  
-    trade  
-) {  
-  
-    if (  
-        !currentUser ||  
-        trade.status !==  
-        "completed"  
-    ) {  
-  
-        return;  
-  
-    }  
-  
-    if (  
-        completedTradeIds.includes(  
-            trade.id  
-        )  
-    ) {  
-  
-        return;  
-  
-    }  
-  
-    if (  
-        applyingTradeIds.has(  
-            trade.id  
-        )  
-    ) {  
-  
-        return;  
-  
-    }  
-  
-    applyingTradeIds.add(  
-        trade.id  
-    );  
-  
-    try {  
-  
-        const isSender =  
-            trade.senderUid ===  
-            currentUser.uid;  
-  
-        const myOffer =  
-            isSender  
-                ? (  
-                    Array.isArray(  
-                        trade.senderOffer  
-                    )  
-                        ? trade.senderOffer  
-                        : []  
-                )  
-                : (  
-                    Array.isArray(  
-                        trade.receiverOffer  
-                    )  
-                        ? trade.receiverOffer  
-                        : []  
-                );  
-  
-        const incomingOffer =  
-            isSender  
-                ? (  
-                    Array.isArray(  
-                        trade.receiverOffer  
-                    )  
-                        ? trade.receiverOffer  
-                        : []  
-                )  
-                : (  
-                    Array.isArray(  
-                        trade.senderOffer  
-                    )  
-                        ? trade.senderOffer  
-                        : []  
-                );  
-  
-        if (  
-            myOffer.length ===  
-            0 ||  
-            incomingOffer.length ===  
-            0  
-        ) {  
-  
-            return;  
-  
-        }  
-  
-        const playerRef =  
-            doc(  
-                db,  
-                "players",  
-                currentUser.uid  
-            );  
-  
-        const playerSnap =  
-            await getDoc(  
-                playerRef  
-            );  
-  
-        if (!playerSnap.exists()) {  
-  
-            return;  
-  
-        }  
-  
-        const data =  
-            playerSnap.data();  
-  
-        let currentCollection =  
-            normalizeCollection(  
-                data.collection  
-            );  
-  
-        let currentFavorites =  
-            Array.isArray(  
-                data.favorites  
-            )  
-                ? [...data.favorites]  
-                : [];  
-  
-        let currentCompleted =  
-            Array.isArray(  
-                data.completedTradeIds  
-            )  
-                ? [...data.completedTradeIds]  
-                : [];  
-  
-        if (  
-            currentCompleted.includes(  
-                trade.id  
-            )  
-        ) {  
-  
-            completedTradeIds =  
-                currentCompleted;  
-  
-            return;  
-  
-        }  
-  
-        /*  
-         Make sure every outgoing physical  
-         card still exists.  
-        */  
-  
-        const ownsAll =  
-            myOffer.every(  
-                offered =>  
-                    currentCollection.some(  
-                        copy =>  
-                            copy.id ===  
-                            offered.id  
-                    )  
-            );  
-  
-        if (!ownsAll) {  
-  
-            /*  
-             If the cards are already gone and  
-             incoming cards are already present,  
-             treat the trade as already applied.  
-            */  
-  
-            const incomingAlreadyThere =  
-                incomingOffer.every(  
-                    offered =>  
-                        currentCollection.some(  
-                            copy =>  
-                                copy.id ===  
-                                offered.id  
-                        )  
-                );  
-  
-            if (  
-                incomingAlreadyThere  
-            ) {  
-  
-                currentCompleted.push(  
-                    trade.id  
-                );  
-  
-                await setDoc(  
-                    playerRef,  
-                    {  
-                        completedTradeIds:  
-                            currentCompleted  
-                    },  
-                    {  
-                        merge: true  
-                    }  
-                );  
-  
-                completedTradeIds =  
-                    currentCompleted;  
-  
-            }  
-  
-            return;  
-  
-        }  
-  
-        /*  
-         Remove the exact physical cards.  
-        */  
-  
-        const outgoingIds =  
-            new Set(  
-                myOffer.map(  
-                    card =>  
-                        card.id  
-                )  
-            );  
-  
-        currentCollection =  
-            currentCollection.filter(  
-                copy =>  
-                    !outgoingIds.has(  
-                        copy.id  
-                    )  
-            );  
-  
-        /*  
-         Add the exact incoming physical cards.  
-        */  
-  
-        for (  
-            const offered  
-            of incomingOffer  
-        ) {  
-  
-            const alreadyExists =  
-                currentCollection.some(  
-                    copy =>  
-                        copy.id ===  
-                        offered.id  
-                );  
-  
-            if (  
-                alreadyExists  
-            ) {  
-  
-                continue;  
-  
-            }  
-  
-            currentCollection.push({  
-  
-                id:  
-                    offered.id,  
-  
-                name:  
-                    offered.name,  
-  
-                traded:  
-                    true  
-  
-            });  
-  
-            /*  
-             Favorite status travels with  
-             the physical card.  
-            */  
-  
-            if (  
-                offered.favorite ===  
-                true &&  
-                !currentFavorites.includes(  
-                    offered.name  
-                )  
-            ) {  
-  
-                currentFavorites.push(  
-                    offered.name  
-                );  
-  
-            }  
-  
-        }  
-  
-        /*  
-         Record completion only after the  
-         collection has been successfully  
-         prepared.  
-        */  
-  
-        currentCompleted.push(  
-            trade.id  
-        );  
-  
-        await setDoc(  
-            playerRef,  
-            {  
-  
-                collection:  
-                    currentCollection,  
-  
-                favorites:  
-                    currentFavorites,  
-  
-                completedTradeIds:  
-                    currentCompleted  
-  
-            },  
-            {  
-                merge: true  
-            }  
-        );  
-  
-        /*  
-         Update local game state.  
-        */  
-  
-        collection =  
-            currentCollection;  
-  
-        favorites =  
-            currentFavorites;  
-  
-        completedTradeIds =  
-            currentCompleted;  
-  
-        /*  
-         Only now is the trade considered  
-         applied locally.  
-        */  
-  
-        updateUI();  
-  
-        showMessage(  
-            "Trade completed! Cards swapped."  
-        );  
-  
-    } catch (error) {  
-  
-        console.error(  
-            "APPLY TRADE ERROR:",  
-            error  
-        );  
-  
-        showMessage(  
-            "Could not finish the trade: " +  
-            error.message  
-        );  
-  
-    } finally {  
-  
-        /*  
-         If anything failed, this is removed  
-         so the listener can retry later.  
-        */  
-  
-        applyingTradeIds.delete(  
-            trade.id  
-        );  
-  
-    }  
-  
-}  
-  
-  
-/* CANCEL */  
-  
-window.cancelTrade =  
-async function(tradeId) {  
-  
-    if (!tradeId) {  
-        return;  
-    }  
-  
-    try {  
-  
-        await updateDoc(  
-            doc(  
-                db,  
-                "tradeRequests",  
-                tradeId  
-            ),  
-            {  
-  
-                status:  
-                    "cancelled"  
-  
-            }  
-        );  
-  
-        if (  
-            activeTrade &&  
-            activeTrade.id ===  
-            tradeId  
-        ) {  
-  
-            activeTrade =  
-                null;  
-  
-        }  
-  
-        selectedTradeCards = [];  
-  
-        renderActiveTrade();  
-  
-        renderIncomingTrades();  
-  
-        showMessage(  
-            "Trade cancelled."  
-        );  
-  
-    } catch (error) {  
-  
-        console.error(  
-            error  
-        );  
-  
-        showMessage(  
-            "Could not cancel trade: " +  
-            error.message  
-        );  
-  
-    }  
-  
-};  
-  
-  
-/* SETTINGS */  
-  
-window.openSettings =  
-function() {  
-  
-    document  
-        .getElementById(  
-            "settingsOverlay"  
-        )  
-        .classList.remove(  
-            "hidden"  
-        );  
-  
-};  
-  
-  
-window.closeSettings =  
-function() {  
-  
-    document  
-        .getElementById(  
-            "settingsOverlay"  
-        )  
-        .classList.add(  
-            "hidden"  
-        );  
-  
-};  
-  
-  
-/* RESET */  
-  
-window.resetAccount =  
-async function() {  
-  
-    const yes =  
-        confirm(  
-            "Are you sure you want to reset your account? This deletes your coins and collection."  
-        );  
-  
-    if (!yes) {  
-        return;  
-    }  
-  
-    money = 50;  
-  
-    collection = [];  
-  
-    favorites = [];  
-  
-    completedTradeIds = [];  
-  
-    await savePlayerData();  
-  
-    updateUI();  
-  
-    closeSettings();  
-  
-    showMessage(  
-        "Account reset."  
-    );  
-  
-};  
-  
-</script>  </body>  
+</div>
+
+<!-- DEX -->
+
+<div id="dexPage" class="page hidden">
+
+<h1>DEX</h1>
+
+<div class="tabs">
+
+<button id="dexDollsButton"
+class="active"
+onclick="setDexTab('dolls')">
+DOLLS
+</button>
+
+<button id="dexRaresButton"
+onclick="setDexTab('rares')">
+RARES
+</button>
+
+</div>
+
+<div id="dexGrid" class="cardGrid"></div>
+
+</div>
+
+<!-- SHOP -->
+
+<div id="shopPage" class="page hidden">
+
+<h1>Shop</h1>
+
+<div class="tabs">
+
+<button id="shopDollsButton"
+class="active"
+onclick="setShopTab('dolls')">
+DOLLS
+</button>
+
+<button id="shopProfileButton"
+onclick="setShopTab('profile')">
+PROFILE PICTURES
+</button>
+
+<button id="shopDolbButton"
+onclick="setShopTab('dolb')">
+DOLB DEALS
+</button>
+
+<button id="shopEventButton"
+onclick="setShopTab('event')">
+EVENT
+</button>
+
+</div>
+
+<div id="shopGrid" class="shopGrid"></div>
+
+</div>
+
+<!-- FRIENDS -->
+
+<div id="friendsPage" class="page hidden">
+
+<h1>Friends</h1>
+
+<div class="friendBox">
+
+<h3>Find Player</h3>
+
+<div class="tradeSearchArea">
+
+<input id="friendSearchInput"
+placeholder="Username">
+
+<button class="tradeSearchButton"
+onclick="findFriend()">
+SEARCH
+</button>
+
+</div>
+
+<div id="friendSearchResult"></div>
+
+</div>
+
+<div class="friendBox">
+
+<h2>Friend Requests</h2>
+
+<div id="friendRequestsList"></div>
+
+</div>
+
+<div class="friendBox">
+
+<h2>Your Friends</h2>
+
+<div id="friendsList"></div>
+
+</div>
+
+</div>
+
+<!-- BATTLES -->
+
+<div id="battlePage" class="page hidden">
+
+<h1>Battles</h1>
+
+<div id="battleMenu">
+
+<div class="battleBox">
+
+<h2>Battle Bots</h2>
+
+<button class="battleButton"
+onclick="startBotBattle('easy')">
+EASY BOT
+</button>
+
+<button class="battleButton"
+onclick="startBotBattle('hard')">
+HARD BOT
+</button>
+
+</div>
+
+<div class="battleBox">
+
+<h2>Friend Battle</h2>
+
+<p>Search for a friend and send them a battle request.</p>
+
+<div class="tradeSearchArea">
+
+<input id="battlePlayerInput"
+placeholder="Username">
+
+<button class="tradeSearchButton"
+onclick="findBattlePlayer()">
+SEARCH
+</button>
+
+</div>
+
+<div id="battlePlayerResult"></div>
+
+</div>
+
+<div id="incomingBattles"></div>
+
+</div>
+
+<div id="battleArenaContainer"></div>
+
+</div>
+
+<!-- TRADE -->
+
+<div id="tradePage" class="page hidden">
+
+<h1>Trading</h1>
+
+<div id="tradeSearchBox">
+
+<div class="tradeNotice">
+
+<b>Find a player</b>
+
+<p>Search using their username.</p>
+
+<div class="tradeSearchArea">
+
+<input id="tradePlayerInput"
+placeholder="Username">
+
+<button class="tradeSearchButton"
+onclick="findPlayer()">
+SEARCH
+</button>
+
+</div>
+
+<div id="tradePlayerResult"></div>
+
+</div>
+
+</div>
+
+<div id="incomingTrades"></div>
+<div id="activeTrade"></div>
+
+</div>
+
+<!-- SETTINGS -->
+
+<div id="settingsOverlay"
+class="settingsOverlay hidden">
+
+<div class="settingsBox">
+
+<h2>Settings</h2>
+
+<p>
+Username:
+<b id="settingsUsername"></b>
+</p>
+
+<button class="settingsButton"
+onclick="openProfileSettings()">
+PROFILE PICTURE
+</button>
+
+<button class="settingsButton resetButton"
+onclick="resetAccount()">
+RESET ACCOUNT
+</button>
+
+<button class="settingsButton"
+onclick="closeSettings()">
+CLOSE
+</button>
+
+</div>
+</div>
+
+<!-- PROFILE SETTINGS -->
+
+<div id="profileOverlay"
+class="settingsOverlay hidden">
+
+<div class="settingsBox">
+
+<h2>Profile Picture</h2>
+
+<div style="text-align:center">
+
+<img id="profileSettingsImage"
+class="profileBig"
+src="basic_p.png">
+
+<p>Choose one you own.</p>
+
+<div id="profileChoices"></div>
+
+</div>
+
+<button class="settingsButton"
+onclick="closeProfileSettings()">
+CLOSE
+</button>
+
+</div>
+</div>
+
+<!-- CARD VIEWER -->
+
+<div id="cardViewer"
+class="cardViewer hidden"
+onclick="closeCardViewer()">
+
+<button class="cardViewerClose"
+onclick="closeCardViewer(event)">
+X
+</button>
+
+<img id="cardViewerImage"
+class="cardViewerImage"
+src=""
+alt=""
+onclick="event.stopPropagation()">
+
+</div>
+
+<div id="message"></div>
+
+<script type="module">
+
+import {
+initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+signOut,
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+setDoc,
+updateDoc,
+onSnapshot,
+collection as firestoreCollection,
+query,
+where,
+serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
+authDomain:"dbcc-login.firebaseapp.com",
+databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
+projectId:"dbcc-login",
+storageBucket:"dbcc-login.firebasestorage.app",
+messagingSenderId:"878902780767",
+appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
+measurementId:"G-PT9S1K4E2K"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+/* SETTINGS */
+
+const STARTING_COINS=50;
+const STARTING_DOLB=0;
+const PACK_PRICE=10;
+const BATTLE_WIN_REWARD=30;
+const BATTLE_HP=100;
+
+/* CARDS */
+
+const cards=[
+
+{name:"Baby Pickels",image:"baby pikels.png",weight:14,price:5,rarity:"doll"},
+{name:"Mr. Pickels",image:"mr. pickels.png",weight:9,price:7,rarity:"doll"},
+{name:"Wily",image:"wily.png",weight:14,price:5,rarity:"doll"},
+{name:"Will",image:"will.png",weight:9,price:7,rarity:"doll"},
+{name:"Waffle",image:"waffle.png",weight:14,price:5,rarity:"doll"},
+{name:"Cute Cake",image:"cute cake.png",weight:9,price:7,rarity:"doll"},
+{name:"Buttyr",image:"buttyr.png",weight:20,price:7,rarity:"doll"},
+{name:"Blossem",image:"blossem.png",weight:20,price:7,rarity:"doll"},
+{name:"Buzzy",image:"buzzy.png",weight:5,price:12,rarity:"doll"},
+{name:"Nico",image:"nico.png",weight:20,price:3,rarity:"doll"},
+{name:"Choper",image:"choper.png",weight:10,price:5,rarity:"doll"},
+{name:"Bullet",image:"bullet.png",weight:10,price:5,rarity:"doll"}
+
+];
+
+/* PROFILE PICTURES */
+
+const profilePictures=[
+
+{
+id:"basic",
+name:"Basic",
+image:"basic_p.png",
+price:0
+},
+
+{
+id:"buzzy",
+name:"Buzzy",
+image:"buzzy_p.png",
+price:100
+}
+
+];
+
+/* STATE */
+
+let currentUser=null;
+let money=STARTING_COINS;
+let dolb=STARTING_DOLB;
+let username="";
+let profilePic="basic_p.png";
+let ownedProfilePics=["basic_p.png"];
+
+let collection=[];
+let favorites=[];
+let completedTradeIds=[];
+
+let friends=[];
+let friendRequests=[];
+
+let collectionTab="all";
+let dexTab="dolls";
+let shopTab="dolls";
+
+let activeTrade=null;
+let selectedTradeCards=[];
+let tradeRequests=[];
+let tradeListener=null;
+let applyingTradeIds=new Set();
+
+let friendListener=null;
+let battleListener=null;
+
+let battleRequests=[];
+let activeBattle=null;
+
+/* HELPERS */
+
+function createId(){
+return Date.now().toString(36)+Math.random().toString(36).slice(2);
+}
+
+function createCardCopy(name,traded=false){
+return{
+id:createId(),
+name:name,
+traded:traded
+};
+}
+
+function getCard(name){
+return cards.find(card=>card.name===name);
+}
+
+function escapeHtml(value){
+return String(value)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+}
+
+function encoded(value){
+return encodeURIComponent(String(value));
+}
+
+window.openEncodedCardViewer=function(image,name){
+openCardViewer(
+decodeURIComponent(image),
+decodeURIComponent(name)
+);
+};
+
+function showMessage(text){
+const el=document.getElementById("message");
+el.textContent=text;
+el.style.display="block";
+setTimeout(()=>{
+el.style.display="none";
+},2500);
+}
+
+window.openCardViewer=function(image,name){
+const viewer=document.getElementById("cardViewer");
+const imageEl=document.getElementById("cardViewerImage");
+
+imageEl.src=image;
+imageEl.alt=name;
+viewer.classList.remove("hidden");
+};
+
+window.closeCardViewer=function(event){
+if(event)event.stopPropagation();
+document.getElementById("cardViewer").classList.add("hidden");
+};
+
+/* AUTH */
+
+window.loginGoogle=async function(){
+
+try{
+
+const provider=new GoogleAuthProvider();
+
+await signInWithPopup(auth,provider);
+
+}catch(error){
+
+console.error(error);
+showMessage(error.message);
+
+}
+
+};
+
+window.logout=async function(){
+
+try{
+
+stopTradeListener();
+stopFriendListener();
+stopBattleListener();
+
+await signOut(auth);
+
+}catch(error){
+
+console.error(error);
+
+}
+
+};
+
+/* USERNAME */
+
+async function askForUsername(){
+
+while(!username){
+
+let chosen=prompt("Choose your unique username:");
+
+if(chosen===null)chosen="";
+
+chosen=chosen.trim();
+
+if(chosen.length<3){
+alert("Username must be at least 3 characters.");
+continue;
+}
+
+if(chosen.length>20){
+alert("Username must be 20 characters or less.");
+continue;
+}
+
+if(!/^[a-zA-Z0-9_]+$/.test(chosen)){
+alert("Only letters, numbers and _ are allowed.");
+continue;
+}
+
+const normalized=chosen.toLowerCase();
+
+const usernameRef=doc(db,"usernames",normalized);
+const usernameSnap=await getDoc(usernameRef);
+
+if(usernameSnap.exists() &&
+usernameSnap.data().uid!==currentUser.uid){
+
+alert("That username is already taken.");
+continue;
+
+}
+
+await setDoc(usernameRef,{
+uid:currentUser.uid,
+username:chosen
+},{merge:true});
+
+username=chosen;
+
+break;
+
+}
+
+}
+
+async function ensureUsernameDocument(){
+
+if(!currentUser||!username)return;
+
+await setDoc(
+doc(db,"usernames",username.toLowerCase()),
+{
+uid:currentUser.uid,
+username:username
+},
+{merge:true}
+);
+
+}
+
+/* COLLECTION */
+
+function normalizeCollection(data){
+
+if(!Array.isArray(data))return[];
+
+return data.map(item=>{
+
+if(typeof item==="string"){
+return createCardCopy(item);
+}
+
+return{
+id:item.id||createId(),
+name:item.name,
+traded:item.traded===true
+};
+
+}).filter(item=>getCard(item.name));
+
+}
+
+/* PLAYER DATA */
+
+async function loadPlayerData(){
+
+const ref=doc(db,"players",currentUser.uid);
+const snap=await getDoc(ref);
+
+if(!snap.exists()){
+
+money=STARTING_COINS;
+dolb=STARTING_DOLB;
+collection=[];
+favorites=[];
+completedTradeIds=[];
+friends=[];
+friendRequests=[];
+username="";
+profilePic="basic_p.png";
+ownedProfilePics=["basic_p.png"];
+
+await setDoc(ref,{
+money,
+dolb,
+collection,
+favorites,
+completedTradeIds,
+friends,
+friendRequests,
+username,
+profilePic,
+ownedProfilePics
+});
+
+}else{
+
+const data=snap.data();
+
+money=typeof data.money==="number"
+?data.money:STARTING_COINS;
+
+dolb=typeof data.dolb==="number"
+?data.dolb:STARTING_DOLB;
+
+collection=normalizeCollection(data.collection);
+
+favorites=Array.isArray(data.favorites)
+?data.favorites:[];
+
+completedTradeIds=Array.isArray(data.completedTradeIds)
+?data.completedTradeIds:[];
+
+friends=Array.isArray(data.friends)
+?data.friends:[];
+
+friendRequests=Array.isArray(data.friendRequests)
+?data.friendRequests:[];
+
+username=data.username||"";
+
+profilePic=data.profilePic||"basic_p.png";
+
+ownedProfilePics=Array.isArray(data.ownedProfilePics)
+?data.ownedProfilePics:["basic_p.png"];
+
+if(!ownedProfilePics.includes("basic_p.png"))
+ownedProfilePics.push("basic_p.png");
+
+}
+
+if(!username){
+await askForUsername();
+}
+
+await ensureUsernameDocument();
+await savePlayerData();
+
+}
+
+async function savePlayerData(){
+
+if(!currentUser)return;
+
+await setDoc(
+doc(db,"players",currentUser.uid),
+{
+money,
+dolb,
+collection,
+favorites,
+completedTradeIds,
+friends,
+friendRequests,
+username,
+profilePic,
+ownedProfilePics
+},
+{merge:true}
+);
+
+}
+
+/* AUTH STATE */
+
+onAuthStateChanged(auth,async user=>{
+
+if(!user){
+
+currentUser=null;
+
+stopTradeListener();
+stopFriendListener();
+stopBattleListener();
+
+activeTrade=null;
+tradeRequests=[];
+friendRequests=[];
+battleRequests=[];
+
+document.getElementById("loginScreen")
+.classList.remove("hidden");
+
+document.getElementById("gameScreen")
+.classList.add("hidden");
+
+return;
+
+}
+
+currentUser=user;
+
+try{
+
+await loadPlayerData();
+
+document.getElementById("loginScreen")
+.classList.add("hidden");
+
+document.getElementById("gameScreen")
+.classList.remove("hidden");
+
+document.getElementById("accountEmail").textContent=
+user.email||"";
+
+updateUI();
+
+startTradeListener();
+startFriendListener();
+startBattleListener();
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Could not load your account:\n"+
+error.message
+);
+
+}
+
+});
+
+/* UI */
+
+function updateUI(){
+
+document.getElementById("money").textContent=money;
+document.getElementById("dolb").textContent=dolb;
+
+document.getElementById("usernameDisplay").textContent=username;
+document.getElementById("settingsUsername").textContent=username;
+document.getElementById("topUsername").textContent=username;
+
+document.getElementById("topProfilePic").src=profilePic;
+
+renderCollection();
+renderDex();
+renderShop();
+renderFriends();
+renderFriendRequests();
+renderIncomingBattles();
+
+if(activeBattle)renderBattleArena();
+
+}
+
+window.showPage=function(page){
+
+document.querySelectorAll(".page")
+.forEach(el=>el.classList.add("hidden"));
+
+const target=document.getElementById(page+"Page");
+
+if(target)target.classList.remove("hidden");
+
+if(page==="collection")renderCollection();
+if(page==="dex")renderDex();
+if(page==="shop")renderShop();
+
+if(page==="friends"){
+renderFriends();
+renderFriendRequests();
+}
+
+if(page==="battle"){
+renderIncomingBattles();
+if(activeBattle)renderBattleArena();
+}
+
+if(page==="trade"){
+renderIncomingTrades();
+renderActiveTrade();
+}
+
+};
+
+/* PACK */
+
+function weightedRandomCard(){
+
+const totalWeight=cards.reduce(
+(sum,card)=>sum+card.weight,0
+);
+
+let random=Math.random()*totalWeight;
+
+for(const card of cards){
+
+random-=card.weight;
+
+if(random<=0)return card;
+
+}
+
+return cards[cards.length-1];
+
+}
+
+window.openPack=async function(){
+
+if(money<PACK_PRICE){
+
+showMessage("Not enough coins.");
+return;
+
+}
+
+money-=PACK_PRICE;
+
+const newCards=[];
+
+for(let i=0;i<3;i++){
+
+const card=weightedRandomCard();
+
+collection.push(createCardCopy(card.name));
+
+newCards.push(card);
+
+}
+
+await savePlayerData();
+updateUI();
+showPackResults(newCards);
+
+};
+
+function showPackResults(pulledCards){
+
+const overlay=document.createElement("div");
+
+overlay.style.position="fixed";
+overlay.style.inset="0";
+overlay.style.background="rgba(0,0,0,.94)";
+overlay.style.zIndex="4000";
+overlay.style.display="flex";
+overlay.style.flexDirection="column";
+overlay.style.alignItems="center";
+overlay.style.justifyContent="center";
+overlay.style.padding="20px";
+overlay.style.overflowY="auto";
+
+const title=document.createElement("h2");
+title.textContent="You got:";
+overlay.appendChild(title);
+
+const grid=document.createElement("div");
+
+grid.style.display="grid";
+grid.style.gridTemplateColumns="repeat(3,minmax(0,1fr))";
+grid.style.gap="15px";
+grid.style.width="min(100%,900px)";
+
+pulledCards.forEach(card=>{
+
+const box=document.createElement("div");
+
+box.style.background="#10243d";
+box.style.borderRadius="15px";
+box.style.padding="10px";
+box.style.textAlign="center";
+
+const image=document.createElement("img");
+
+image.src=card.image;
+image.alt=card.name;
+image.style.width="100%";
+image.style.maxHeight="55vh";
+image.style.objectFit="contain";
+image.style.borderRadius="10px";
+image.style.cursor="pointer";
+
+image.onclick=event=>{
+event.stopPropagation();
+openCardViewer(card.image,card.name);
+};
+
+box.appendChild(image);
+grid.appendChild(box);
+
+});
+
+overlay.appendChild(grid);
+
+const close=document.createElement("button");
+
+close.textContent="CONTINUE";
+close.style.marginTop="20px";
+close.style.background="#2674d9";
+close.style.color="white";
+
+close.onclick=()=>overlay.remove();
+
+overlay.appendChild(close);
+
+overlay.onclick=event=>{
+if(event.target===overlay)overlay.remove();
+};
+
+document.body.appendChild(overlay);
+
+}
+
+/* COLLECTION */
+
+window.setCollectionTab=function(tab){
+
+collectionTab=tab;
+
+document.getElementById("collectionAllButton")
+.classList.toggle("active",tab==="all");
+
+document.getElementById("collectionFavoritesButton")
+.classList.toggle("active",tab==="favorites");
+
+renderCollection();
+
+};
+
+function getCollectionCounts(){
+
+const counts={};
+
+for(const copy of collection){
+counts[copy.name]=(counts[copy.name]||0)+1;
+}
+
+return counts;
+
+}
+
+function getFirstCopy(name){
+return collection.find(copy=>copy.name===name);
+}
+
+function renderCollection(){
+
+const grid=document.getElementById("collectionGrid");
+
+if(!grid)return;
+
+const search=
+(document.getElementById("collectionSearch")?.value||"")
+.toLowerCase();
+
+const counts=getCollectionCounts();
+
+let names=cards
+.filter(card=>counts[card.name])
+.map(card=>card.name);
+
+if(collectionTab==="favorites"){
+names=names.filter(name=>favorites.includes(name));
+}
+
+if(search){
+names=names.filter(name=>
+name.toLowerCase().includes(search)
+);
+}
+
+grid.innerHTML="";
+
+if(!names.length){
+
+grid.innerHTML="<p>You don't have any cards here.</p>";
+return;
+
+}
+
+for(const name of names){
+
+const card=getCard(name);
+const copy=getFirstCopy(name);
+
+const isFavorite=favorites.includes(name);
+const traded=copy?.traded===true;
+
+let borderClass="";
+
+if(isFavorite&&traded){
+
+borderClass=
+card.rarity==="rare"
+?"rareTradedFavoriteCard"
+:"tradedFavoriteCard";
+
+}else if(isFavorite){
+
+borderClass=
+card.rarity==="rare"
+?"rareFavoriteCard"
+:"favoriteCard";
+
+}
+
+const div=document.createElement("div");
+
+div.className="card "+borderClass;
+
+div.innerHTML=`
+
+<button class="starButton ${isFavorite?"favorite":""}"
+onclick="toggleFavorite('${escapeHtml(name)}')">
+${isFavorite?"★":"☆"}
+</button>
+
+<div class="cardCount">${counts[name]}</div>
+
+<img src="${escapeHtml(card.image)}"
+alt="${escapeHtml(name)}"
+onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(name)}')">
+
+<div class="cardName">
+${escapeHtml(name)}
+</div>
+
+<div>Sell: ${card.price}</div>
+
+<button
+class="sellButton ${isFavorite?"favoriteLocked":""}"
+${isFavorite?"disabled":""}
+onclick="sellCard('${escapeHtml(name)}')">
+
+${isFavorite?"FAVORITED":"SELL"}
+
+</button>
+
+`;
+
+grid.appendChild(div);
+
+}
+
+}
+
+window.toggleFavorite=async function(name){
+
+if(favorites.includes(name)){
+
+favorites=favorites.filter(item=>item!==name);
+
+showMessage(name+" is no longer a favorite.");
+
+}else{
+
+favorites.push(name);
+
+showMessage(name+" is now a favorite!");
+
+}
+
+await savePlayerData();
+updateUI();
+
+};
+
+window.sellCard=async function(name){
+
+if(favorites.includes(name)){
+
+showMessage("Favorite cards cannot be sold.");
+return;
+
+}
+
+const index=collection.findIndex(
+copy=>copy.name===name
+);
+
+if(index===-1)return;
+
+const card=getCard(name);
+if(!card)return;
+
+collection.splice(index,1);
+money+=card.price;
+
+await savePlayerData();
+updateUI();
+
+showMessage(
+name+" sold for "+card.price+" coins."
+);
+
+};
+
+/* DEX */
+
+window.setDexTab=function(tab){
+
+dexTab=tab;
+
+document.getElementById("dexDollsButton")
+.classList.toggle("active",tab==="dolls");
+
+document.getElementById("dexRaresButton")
+.classList.toggle("active",tab==="rares");
+
+renderDex();
+
+};
+
+function renderDex(){
+
+const grid=document.getElementById("dexGrid");
+if(!grid)return;
+
+grid.innerHTML="";
+
+if(dexTab==="rares"){
+
+for(let i=1;i<=6;i++){
+
+const div=document.createElement("div");
+
+div.className="dexCard comingSoon";
+
+div.innerHTML=`
+
+<div style="
+aspect-ratio:1/1.35;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:25px;">
+?
+</div>
+
+<b>Rare ${i}</b>
+
+<p>Coming Soon</p>
+
+`;
+
+grid.appendChild(div);
+
+}
+
+return;
+
+}
+
+for(const card of cards){
+
+const owned=collection.some(
+copy=>copy.name===card.name
+);
+
+const div=document.createElement("div");
+
+div.className=
+"dexCard "+(!owned?"comingSoon":"");
+
+div.innerHTML=`
+
+<img src="${escapeHtml(card.image)}"
+alt="${escapeHtml(card.name)}"
+onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
+
+<b>${escapeHtml(card.name)}</b>
+
+<p>${owned?"Owned":"Not Owned"}</p>
+
+`;
+
+grid.appendChild(div);
+
+}
+
+}
+
+/* SHOP */
+
+window.setShopTab=function(tab){
+
+shopTab=tab;
+
+document.getElementById("shopDollsButton")
+.classList.toggle("active",tab==="dolls");
+
+document.getElementById("shopProfileButton")
+.classList.toggle("active",tab==="profile");
+
+document.getElementById("shopDolbButton")
+.classList.toggle("active",tab==="dolb");
+
+document.getElementById("shopEventButton")
+.classList.toggle("active",tab==="event");
+
+renderShop();
+
+};
+
+function renderShop(){
+
+const grid=document.getElementById("shopGrid");
+if(!grid)return;
+
+grid.innerHTML="";
+
+if(shopTab==="dolls"){
+
+const shopCards=cards.slice(0,6);
+
+for(const card of shopCards){
+
+const div=document.createElement("div");
+div.className="shopItem";
+
+div.innerHTML=`
+
+<img src="${escapeHtml(card.image)}">
+
+<h3>${escapeHtml(card.name)}</h3>
+
+<div class="shopPrice">
+100 coins
+</div>
+
+<button class="shopButton"
+onclick="buyShopDoll('${escapeHtml(card.name)}')">
+BUY DOLL
+</button>
+
+`;
+
+grid.appendChild(div);
+
+}
+
+return;
+
+}
+
+if(shopTab==="profile"){
+
+for(const pic of profilePictures){
+
+const owned=ownedProfilePics.includes(pic.image);
+
+const div=document.createElement("div");
+div.className="shopItem";
+
+div.innerHTML=`
+
+<img src="${escapeHtml(pic.image)}">
+
+<h3>${escapeHtml(pic.name)}</h3>
+
+<div class="shopPrice">
+${pic.price===0?"FREE":pic.price+" coins"}
+</div>
+
+<button class="shopButton"
+${owned?"disabled":""}
+onclick="buyProfilePic('${escapeHtml(pic.id)}')">
+
+${owned?"OWNED":"BUY"}
+
+</button>
+
+`;
+
+grid.appendChild(div);
+
+}
+
+return;
+
+}
+
+if(shopTab==="dolb"){
+
+const deals=[
+{dolb:30,coins:10},
+{dolb:50,coins:25},
+{dolb:100,coins:75},
+{dolb:150,coins:150}
+];
+
+for(const deal of deals){
+
+const div=document.createElement("div");
+div.className="shopItem";
+
+div.innerHTML=`
+
+<h2>${deal.dolb} Dolb</h2>
+
+<p>Get ${deal.coins} coins.</p>
+
+<button class="shopButton"
+onclick="buyDolbDeal(${deal.dolb},${deal.coins})">
+BUY WITH DOLB
+</button>
+
+`;
+
+grid.appendChild(div);
+
+}
+
+return;
+
+}
+
+grid.innerHTML=`
+
+<div class="shopItem">
+
+<h2>Event Shop</h2>
+
+<p>Coming Soon</p>
+
+</div>
+
+`;
+
+}
+
+window.buyShopDoll=async function(name){
+
+if(money<100){
+
+showMessage("Not enough coins.");
+return;
+
+}
+
+money-=100;
+collection.push(createCardCopy(name));
+
+await savePlayerData();
+updateUI();
+
+showMessage("You bought "+name+"!");
+
+};
+
+window.buyProfilePic=async function(id){
+
+const pic=profilePictures.find(p=>p.id===id);
+
+if(!pic)return;
+
+if(ownedProfilePics.includes(pic.image)){
+
+showMessage("You already own this profile picture.");
+return;
+
+}
+
+if(money<pic.price){
+
+showMessage("Not enough coins.");
+return;
+
+}
+
+money-=pic.price;
+ownedProfilePics.push(pic.image);
+profilePic=pic.image;
+
+await savePlayerData();
+updateUI();
+
+showMessage("Profile picture unlocked!");
+
+};
+
+window.buyDolbDeal=async function(cost,coinsReceived){
+
+if(dolb<cost){
+
+showMessage("Not enough Dolb.");
+return;
+
+}
+
+dolb-=cost;
+money+=coinsReceived;
+
+await savePlayerData();
+updateUI();
+
+showMessage(
+"Received "+coinsReceived+" coins!"
+);
+
+};
+
+/* PROFILE SETTINGS */
+
+window.openProfileSettings=function(){
+
+document.getElementById("profileOverlay")
+.classList.remove("hidden");
+
+renderProfileChoices();
+
+};
+
+window.closeProfileSettings=function(){
+
+document.getElementById("profileOverlay")
+.classList.add("hidden");
+
+};
+
+function renderProfileChoices(){
+
+const box=document.getElementById("profileChoices");
+
+box.innerHTML="";
+
+for(const image of ownedProfilePics){
+
+const pic=profilePictures.find(
+p=>p.image===image
+);
+
+if(!pic)continue;
+
+const button=document.createElement("button");
+
+button.style.background="#183653";
+button.style.color="white";
+button.style.margin="5px";
+button.style.padding="8px";
+
+button.innerHTML=`
+
+<img src="${escapeHtml(image)}"
+style="width:55px;height:55px;border-radius:50%;object-fit:cover;display:block">
+
+${escapeHtml(pic.name)}
+
+`;
+
+button.onclick=()=>selectProfilePic(image);
+
+box.appendChild(button);
+
+}
+
+}
+
+window.selectProfilePic=async function(image){
+
+if(!ownedProfilePics.includes(image))return;
+
+profilePic=image;
+
+await savePlayerData();
+updateUI();
+
+showMessage("Profile picture changed.");
+
+};
+
+/* FRIENDS */
+
+window.findFriend=async function(){
+
+const input=document.getElementById("friendSearchInput");
+const result=document.getElementById("friendSearchResult");
+
+const name=input.value.trim();
+
+if(!name){
+
+result.innerHTML="<p>Enter a username.</p>";
+return;
+
+}
+
+if(name.toLowerCase()===username.toLowerCase()){
+
+result.innerHTML=
+"<div class='tradeNotice'>You cannot add yourself.</div>";
+return;
+
+}
+
+result.innerHTML="<p>Searching...</p>";
+
+try{
+
+const snap=await getDoc(
+doc(db,"usernames",name.toLowerCase())
+);
+
+if(!snap.exists()){
+
+result.innerHTML=
+"<div class='tradeNotice'>Player not found.</div>";
+
+return;
+
+}
+
+const data=snap.data();
+
+if(friends.includes(data.uid)){
+
+result.innerHTML=
+"<div class='tradeNotice'>Already friends.</div>";
+
+return;
+
+}
+
+result.innerHTML=`
+
+<div class="friendBox">
+
+<b>${escapeHtml(data.username)}</b>
+
+<p>Player found.</p>
+
+<button class="tradeSearchButton"
+onclick="sendFriendRequest('${escapeHtml(data.uid)}')">
+
+SEND FRIEND REQUEST
+
+</button>
+
+</div>
+
+`;
+
+}catch(error){
+
+console.error(error);
+
+result.innerHTML=
+"<p>"+escapeHtml(error.message)+"</p>";
+
+}
+
+};
+
+window.sendFriendRequest=async function(receiverUid){
+
+if(!currentUser||receiverUid===currentUser.uid)return;
+
+try{
+
+const ref=doc(
+db,
+"friendRequests",
+createId()
+);
+
+await setDoc(ref,{
+
+senderUid:currentUser.uid,
+receiverUid:receiverUid,
+senderUsername:username,
+participants:[
+currentUser.uid,
+receiverUid
+],
+status:"pending",
+createdAt:serverTimestamp()
+
+});
+
+showMessage("Friend request sent.");
+
+}catch(error){
+
+console.error(error);
+showMessage("Could not send request.");
+
+}
+
+};
+
+function startFriendListener(){
+
+stopFriendListener();
+
+if(!currentUser)return;
+
+const q=query(
+firestoreCollection(db,"friendRequests"),
+where(
+"participants",
+"array-contains",
+currentUser.uid
+)
+);
+
+friendListener=onSnapshot(
+q,
+snapshot=>{
+
+friendRequests=snapshot.docs.map(
+s=>({
+id:s.id,
+...s.data()
+})
+);
+
+renderFriendRequests();
+renderFriends();
+
+},
+error=>console.error(error)
+);
+
+}
+
+function stopFriendListener(){
+
+if(friendListener){
+friendListener();
+friendListener=null;
+}
+
+}
+
+function renderFriendRequests(){
+
+const box=document.getElementById("friendRequestsList");
+
+if(!box)return;
+
+const incoming=friendRequests.filter(
+r=>r.receiverUid===currentUser?.uid &&
+r.status==="pending"
+);
+
+if(!incoming.length){
+
+box.innerHTML="<p>No friend requests.</p>";
+return;
+
+}
+
+box.innerHTML="";
+
+for(const request of incoming){
+
+const div=document.createElement("div");
+
+div.className="friendRow";
+
+div.innerHTML=`
+
+<div>
+
+<b>${escapeHtml(request.senderUsername||"Player")}</b>
+
+</div>
+
+<div class="friendActions">
+
+<button class="tradeSearchButton"
+onclick="acceptFriend('${escapeHtml(request.id)}')">
+ACCEPT
+</button>
+
+<button class="cancelButton"
+onclick="declineFriend('${escapeHtml(request.id)}')">
+DECLINE
+</button>
+
+</div>
+
+`;
+
+box.appendChild(div);
+
+}
+
+}
+
+window.acceptFriend=async function(requestId){
+
+const request=friendRequests.find(
+r=>r.id===requestId
+);
+
+if(!request)return;
+
+if(request.receiverUid!==currentUser.uid)return;
+
+const senderRef=doc(
+db,
+"players",
+request.senderUid
+);
+
+const receiverRef=doc(
+db,
+"players",
+currentUser.uid
+);
+
+try{
+
+const senderSnap=await getDoc(senderRef);
+const receiverSnap=await getDoc(receiverRef);
+
+const senderData=senderSnap.exists()
+?senderSnap.data():{};
+
+const receiverData=receiverSnap.exists()
+?receiverSnap.data():{};
+
+const senderFriends=
+Array.isArray(senderData.friends)
+?[...senderData.friends]:[];
+
+const receiverFriends=
+Array.isArray(receiverData.friends)
+?[...receiverData.friends]:[];
+
+if(!senderFriends.includes(currentUser.uid))
+senderFriends.push(currentUser.uid);
+
+if(!receiverFriends.includes(request.senderUid))
+receiverFriends.push(request.senderUid);
+
+await updateDoc(senderRef,{
+friends:senderFriends
+});
+
+await updateDoc(receiverRef,{
+friends:receiverFriends
+});
+
+await updateDoc(
+doc(db,"friendRequests",requestId),
+{status:"accepted"}
+);
+
+friends=receiverFriends;
+
+updateUI();
+
+showMessage("Friend added!");
+
+}catch(error){
+
+console.error(error);
+showMessage("Could not accept request.");
+
+}
+
+};
+
+window.declineFriend=async function(requestId){
+
+try{
+
+await updateDoc(
+doc(db,"friendRequests",requestId),
+{status:"declined"}
+);
+
+showMessage("Friend request declined.");
+
+}catch(error){
+
+console.error(error);
+
+}
+
+};
+
+async function getPlayerInfo(uid){
+
+try{
+
+const snap=await getDoc(doc(db,"players",uid));
+
+if(!snap.exists())return null;
+
+return{
+uid,
+username:snap.data().username||"Player",
+profilePic:snap.data().profilePic||"basic_p.png"
+};
+
+}catch(error){
+
+return null;
+
+}
+
+}
+
+async function renderFriends(){
+
+const box=document.getElementById("friendsList");
+
+if(!box||!currentUser)return;
+
+if(!friends.length){
+
+box.innerHTML="<p>You don't have any friends yet.</p>";
+return;
+
+}
+
+box.innerHTML="<p>Loading friends...</p>";
+
+const people=[];
+
+for(const uid of friends){
+
+const info=await getPlayerInfo(uid);
+
+if(info)people.push(info);
+
+}
+
+if(!people.length){
+
+box.innerHTML="<p>You don't have any friends yet.</p>";
+return;
+
+}
+
+box.innerHTML="";
+
+for(const friend of people){
+
+const row=document.createElement("div");
+
+row.className="friendRow";
+
+row.innerHTML=`
+
+<img src="${escapeHtml(friend.profilePic)}">
+
+<div>
+
+<b>${escapeHtml(friend.username)}</b>
+
+<br>
+
+<span class="offline">Offline</span>
+
+</div>
+
+<div class="friendActions">
+
+<button class="tradeSearchButton"
+onclick="sendBattleRequest('${escapeHtml(friend.uid)}')">
+BATTLE
+</button>
+
+</div>
+
+`;
+
+box.appendChild(row);
+
+}
+
+}
+
+/* BATTLES */
+
+window.findBattlePlayer=async function(){
+
+const input=document.getElementById("battlePlayerInput");
+const result=document.getElementById("battlePlayerResult");
+
+const name=input.value.trim();
+
+if(!name){
+
+result.innerHTML="<p>Enter a username.</p>";
+return;
+
+}
+
+const snap=await getDoc(
+doc(db,"usernames",name.toLowerCase())
+);
+
+if(!snap.exists()){
+
+result.innerHTML=
+"<div class='tradeNotice'>Player not found.</div>";
+return;
+
+}
+
+const data=snap.data();
+
+if(data.uid===currentUser.uid){
+
+result.innerHTML=
+"<div class='tradeNotice'>You cannot battle yourself.</div>";
+return;
+
+}
+
+result.innerHTML=`
+
+<div class="tradeNotice">
+
+<b>${escapeHtml(data.username)}</b>
+
+<p>Player found.</p>
+
+<button class="tradeSearchButton"
+onclick="sendBattleRequest('${escapeHtml(data.uid)}')">
+SEND BATTLE REQUEST
+</button>
+
+</div>
+
+`;
+
+};
+
+window.sendBattleRequest=async function(receiverUid){
+
+if(!currentUser||receiverUid===currentUser.uid)return;
+
+const battleId=createId();
+
+try{
+
+await setDoc(
+doc(db,"battleRooms",battleId),
+{
+
+participants:[
+currentUser.uid,
+receiverUid
+],
+
+player1:currentUser.uid,
+player2:receiverUid,
+
+player1Username:username,
+player2Username:"",
+
+player1Ready:false,
+player2Ready:false,
+
+player1Hp:BATTLE_HP,
+player2Hp:BATTLE_HP,
+
+turn:currentUser.uid,
+
+status:"pending",
+
+createdAt:serverTimestamp()
+
+}
+);
+
+showMessage("Battle request sent.");
+
+}catch(error){
+
+console.error(error);
+showMessage("Could not send battle request.");
+
+}
+
+};
+
+function startBattleListener(){
+
+stopBattleListener();
+
+if(!currentUser)return;
+
+const q=query(
+firestoreCollection(db,"battleRooms"),
+where(
+"participants",
+"array-contains",
+currentUser.uid
+)
+);
+
+battleListener=onSnapshot(
+q,
+snapshot=>{
+
+battleRequests=snapshot.docs.map(
+s=>({
+id:s.id,
+...s.data()
+})
+);
+
+renderIncomingBattles();
+
+},
+
+error=>console.error(error)
+);
+
+}
+
+function stopBattleListener(){
+
+if(battleListener){
+battleListener();
+battleListener=null;
+}
+
+}
+
+function renderIncomingBattles(){
+
+const box=document.getElementById("incomingBattles");
+
+if(!box)return;
+
+const incoming=battleRequests.filter(
+b=>
+b.player2===currentUser?.uid &&
+b.status==="pending"
+);
+
+if(!incoming.length){
+
+box.innerHTML="";
+return;
+
+}
+
+box.innerHTML="";
+
+for(const battle of incoming){
+
+const div=document.createElement("div");
+
+div.className="battleBox";
+
+div.innerHTML=`
+
+<h3>Incoming Battle</h3>
+
+<p>
+${escapeHtml(battle.player1Username||"Player")}
+wants to battle you.
+</p>
+
+<button class="battleButton"
+onclick="acceptBattle('${escapeHtml(battle.id)}')">
+ACCEPT BATTLE
+</button>
+
+<button class="cancelButton"
+onclick="declineBattle('${escapeHtml(battle.id)}')">
+DECLINE
+</button>
+
+`;
+
+box.appendChild(div);
+
+}
+
+}
+
+window.acceptBattle=async function(battleId){
+
+const battle=battleRequests.find(
+b=>b.id===battleId
+);
+
+if(!battle)return;
+
+if(battle.player2!==currentUser.uid)return;
+
+activeBattle={
+...battle,
+status:"active"
+};
+
+await updateDoc(
+doc(db,"battleRooms",battleId),
+{
+status:"active",
+player2Username:username
+}
+);
+
+renderBattleArena();
+
+};
+
+window.declineBattle=async function(battleId){
+
+try{
+
+await updateDoc(
+doc(db,"battleRooms",battleId),
+{
+status:"declined"
+}
+);
+
+}catch(error){
+
+console.error(error);
+
+}
+
+};
+
+window.startBotBattle=function(difficulty){
+
+activeBattle={
+
+id:"bot_"+createId(),
+
+bot:true,
+
+difficulty:difficulty,
+
+player1Hp:BATTLE_HP,
+player2Hp:BATTLE_HP,
+
+turn:"player",
+
+status:"active",
+
+player1Username:username,
+
+player2Username:
+difficulty==="hard"
+?"Hard Bot"
+:"Easy Bot"
+
+};
+
+showPage("battle");
+renderBattleArena();
+
+};
+
+function getPlayableCards(){
+
+if(!collection.length)return[];
+
+const result=[];
+
+for(const copy of collection){
+
+const card=getCard(copy.name);
+
+if(card&&!result.some(c=>c.name===card.name)){
+result.push(card);
+}
+
+}
+
+return result;
+
+}
+
+function cardPower(card){
+
+const index=cards.indexOf(card);
+
+return 20+(index%5)*8;
+
+}
+
+function renderBattleArena(){
+
+const box=document.getElementById("battleArenaContainer");
+
+if(!box)return;
+
+if(!activeBattle){
+
+box.innerHTML="";
+return;
+
+}
+
+const isBot=activeBattle.bot===true;
+
+const opponentName=isBot
+?activeBattle.player2Username
+:"Friend";
+
+const playerHp=isBot
+?activeBattle.player1Hp
+:activeBattle.player1Hp;
+
+const opponentHp=activeBattle.player2Hp;
+
+const playable=getPlayableCards();
+
+box.innerHTML=`
+
+<div class="battleBox">
+
+<h2>Battle</h2>
+
+<div class="battleArena">
+
+<div class="battlePlayer">
+
+<img src="${escapeHtml(profilePic)}">
+
+<h3>${escapeHtml(username)}</h3>
+
+<div class="hpBar">
+
+<div class="hpFill"
+style="width:${Math.max(0,playerHp)}%">
+</div>
+
+</div>
+
+<p>HP: ${Math.max(0,playerHp)}/100</p>
+
+</div>
+
+<div class="battlePlayer">
+
+<img src="${
+isBot
+?"basic_p.png"
+:"basic_p.png"
+}">
+
+<h3>${escapeHtml(opponentName)}</h3>
+
+<div class="hpBar">
+
+<div class="hpFill"
+style="width:${Math.max(0,opponentHp)}%">
+</div>
+
+</div>
+
+<p>HP: ${Math.max(0,opponentHp)}/100</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<h3>Choose a Card</h3>
+
+${
+playable.length
+?playable.map(card=>`
+
+<div class="battleCard"
+onclick="useBattleCard('${escapeHtml(card.name)}')">
+
+<img src="${escapeHtml(card.image)}">
+
+<b>${escapeHtml(card.name)}</b>
+
+<p>
+Power: ${cardPower(card)}
+</p>
+
+</div>
+
+`).join("")
+:"<p>You need cards to battle.</p>"
+}
+
+<button class="cancelButton"
+onclick="endBattle()">
+END BATTLE
+</button>
+
+</div>
+
+`;
+
+}
+
+window.useBattleCard=async function(name){
+
+if(!activeBattle||activeBattle.status!=="active")return;
+
+const card=getCard(name);
+if(!card)return;
+
+const damage=cardPower(card);
+
+if(activeBattle.bot){
+
+activeBattle.player2Hp-=damage;
+
+if(activeBattle.player2Hp<=0){
+
+activeBattle.player2Hp=0;
+
+renderBattleArena();
+
+await finishBotBattle(true);
+
+return;
+
+}
+
+renderBattleArena();
+
+setTimeout(()=>botAttack(),700);
+
+return;
+
+}
+
+if(!currentUser)return;
+
+const battleRef=doc(
+db,"battleRooms",activeBattle.id
+);
+
+const snap=await getDoc(battleRef);
+
+if(!snap.exists())return;
+
+const battle=snap.data();
+
+if(battle.status!=="active")return;
+
+const isPlayer1=
+battle.player1===currentUser.uid;
+
+if(
+(isPlayer1&&battle.turn!==currentUser.uid)||
+(!isPlayer1&&battle.turn!==currentUser.uid)
+){
+
+showMessage("Wait for your turn.");
+return;
+
+}
+
+const targetField=isPlayer1
+?"player2Hp"
+:"player1Hp";
+
+const targetHp=
+typeof battle[targetField]==="number"
+?battle[targetField]
+:BATTLE_HP;
+
+const newHp=Math.max(
+0,
+targetHp-damage
+);
+
+const opponentUid=isPlayer1
+?battle.player2
+:battle.player1;
+
+await updateDoc(
+battleRef,
+{
+
+[targetField]:newHp,
+
+turn:opponentUid,
+
+status:newHp<=0
+?"finished"
+:"active",
+
+winner:newHp<=0
+?currentUser.uid
+:null
+
+}
+);
+
+activeBattle={
+...battle,
+[targetField]:newHp,
+turn:opponentUid,
+status:newHp<=0?"finished":"active",
+winner:newHp<=0?currentUser.uid:null
+};
+
+renderBattleArena();
+
+if(newHp<=0){
+
+await awardBattleWin();
+
+}
+
+};
+
+function botAttack(){
+
+if(!activeBattle||!activeBattle.bot)return;
+if(activeBattle.status!=="active")return;
+
+const damage=
+activeBattle.difficulty==="hard"
+?28
+:18;
+
+activeBattle.player1Hp=
+Math.max(
+0,
+activeBattle.player1Hp-damage
+);
+
+if(activeBattle.player1Hp<=0){
+
+finishBotBattle(false);
+return;
+
+}
+
+renderBattleArena();
+
+}
+
+async function finishBotBattle(won){
+
+if(!activeBattle)return;
+
+activeBattle.status="finished";
+
+renderBattleArena();
+
+if(won){
+
+money+=BATTLE_WIN_REWARD;
+
+await savePlayerData();
+updateUI();
+
+showMessage(
+"You won! +"+BATTLE_WIN_REWARD+" coins."
+);
+
+}else{
+
+showMessage("You lost the battle.");
+
+}
+
+}
+
+async function awardBattleWin(){
+
+if(activeBattle?.rewardGiven)return;
+
+if(activeBattle)activeBattle.rewardGiven=true;
+
+money+=BATTLE_WIN_REWARD;
+
+await savePlayerData();
+updateUI();
+
+showMessage(
+"You won! +"+BATTLE_WIN_REWARD+" coins."
+);
+
+}
+
+window.endBattle=function(){
+
+activeBattle=null;
+renderBattleArena();
+
+};
+
+ /* TRADE SEARCH */
+
+window.findPlayer=async function(){
+
+const input=document.getElementById("tradePlayerInput");
+const result=document.getElementById("tradePlayerResult");
+
+const name=input.value.trim();
+
+if(!name){
+
+result.innerHTML="<p>Enter a username.</p>";
+return;
+
+}
+
+if(
+username &&
+name.toLowerCase()===username.toLowerCase()
+){
+
+result.innerHTML=`
+
+<div class="tradeNotice">
+You cannot trade with yourself.
+</div>
+
+`;
+
+return;
+
+}
+
+result.innerHTML="<p>Searching...</p>";
+
+try{
+
+const snap=await getDoc(
+doc(db,"usernames",name.toLowerCase())
+);
+
+if(!snap.exists()){
+
+result.innerHTML=`
+
+<div class="tradeNotice">
+Player not found.
+</div>
+
+`;
+
+return;
+
+}
+
+const data=snap.data();
+
+result.innerHTML=`
+
+<div class="tradeNotice">
+
+<b>${escapeHtml(data.username||name)}</b>
+
+<p>Player found!</p>
+
+<button class="tradeSearchButton"
+onclick="sendTradeRequest('${escapeHtml(data.uid)}')">
+
+SEND TRADE REQUEST
+
+</button>
+
+</div>
+
+`;
+
+}catch(error){
+
+console.error(error);
+
+result.innerHTML=
+"<p>"+escapeHtml(error.message)+"</p>";
+
+}
+
+};
+
+/* TRADES */
+
+window.sendTradeRequest=async function(receiverUid){
+
+if(!currentUser)return;
+
+if(receiverUid===currentUser.uid){
+
+showMessage("You cannot trade with yourself.");
+return;
+
+}
+
+try{
+
+const tradeId=createId();
+
+await setDoc(
+doc(db,"tradeRequests",tradeId),
+{
+
+participants:[
+currentUser.uid,
+receiverUid
+],
+
+senderUid:currentUser.uid,
+receiverUid:receiverUid,
+
+senderUsername:username,
+receiverUsername:"",
+
+senderOffer:[],
+receiverOffer:[],
+
+senderConfirmed:false,
+receiverConfirmed:false,
+
+status:"pending",
+
+createdAt:serverTimestamp()
+
+}
+);
+
+showPage("trade");
+
+showMessage("Trade request sent.");
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"Could not send trade request: "+error.message
+);
+
+}
+
+};
+
+function stopTradeListener(){
+
+if(tradeListener){
+
+tradeListener();
+tradeListener=null;
+
+}
+
+}
+
+function startTradeListener(){
+
+stopTradeListener();
+
+if(!currentUser)return;
+
+const q=query(
+firestoreCollection(db,"tradeRequests"),
+where(
+"participants",
+"array-contains",
+currentUser.uid
+)
+);
+
+tradeListener=onSnapshot(
+q,
+snapshot=>{
+
+tradeRequests=snapshot.docs.map(
+snap=>({
+id:snap.id,
+...snap.data()
+})
+);
+
+for(const trade of tradeRequests){
+
+if(
+trade.status==="pending" &&
+trade.senderConfirmed===true &&
+trade.receiverConfirmed===true
+){
+
+tryFinalizeTrade(trade);
+
+}
+
+if(trade.status==="completed"){
+
+applyCompletedTrade(trade);
+
+}
+
+}
+
+if(activeTrade){
+
+const fresh=tradeRequests.find(
+trade=>trade.id===activeTrade.id
+);
+
+if(fresh){
+
+activeTrade=fresh;
+
+const savedOffer=getMyOffer(fresh);
+
+if(
+savedOffer.length>0 &&
+selectedTradeCards.length===0
+){
+
+selectedTradeCards=savedOffer.map(
+card=>card.id
+);
+
+}
+
+}
+
+}
+
+renderIncomingTrades();
+renderActiveTrade();
+
+},
+error=>{
+
+console.error(error);
+
+showMessage(
+"Trade connection error: "+error.message
+);
+
+}
+);
+
+}
+
+function renderIncomingTrades(){
+
+const container=
+document.getElementById("incomingTrades");
+
+if(!container)return;
+
+container.innerHTML="";
+
+const incoming=tradeRequests.filter(
+trade=>
+trade.receiverUid===currentUser?.uid &&
+trade.status==="pending" &&
+(!activeTrade||trade.id!==activeTrade.id)
+);
+
+for(const trade of incoming){
+
+const div=document.createElement("div");
+
+div.className="tradeRequest";
+
+div.innerHTML=`
+
+<b>Incoming Trade Request</b>
+
+<p>
+${escapeHtml(trade.senderUsername||"Another player")}
+wants to trade with you.
+</p>
+
+<button class="tradeSearchButton"
+onclick="acceptTrade('${escapeHtml(trade.id)}')">
+ACCEPT TRADE
+</button>
+
+`;
+
+container.appendChild(div);
+
+}
+
+}
+
+window.acceptTrade=function(tradeId){
+
+const trade=tradeRequests.find(
+item=>item.id===tradeId
+);
+
+if(!trade)return;
+
+activeTrade=trade;
+
+selectedTradeCards=getMyOffer(trade)
+.map(card=>card.id);
+
+showPage("trade");
+
+renderIncomingTrades();
+renderActiveTrade();
+
+};
+
+function openOutgoingTradeIfNeeded(){
+
+if(activeTrade)return;
+
+const outgoing=tradeRequests.find(
+trade=>
+trade.senderUid===currentUser?.uid &&
+trade.status==="pending"
+);
+
+if(outgoing){
+
+activeTrade=outgoing;
+
+selectedTradeCards=getMyOffer(outgoing)
+.map(card=>card.id);
+
+}
+
+}
+
+function getMyOffer(trade){
+
+if(trade.senderUid===currentUser.uid){
+
+return Array.isArray(trade.senderOffer)
+?trade.senderOffer:[];
+
+}
+
+return Array.isArray(trade.receiverOffer)
+?trade.receiverOffer:[];
+
+}
+
+function getTheirOffer(trade){
+
+if(trade.senderUid===currentUser.uid){
+
+return Array.isArray(trade.receiverOffer)
+?trade.receiverOffer:[];
+
+}
+
+return Array.isArray(trade.senderOffer)
+?trade.senderOffer:[];
+
+}
+
+function sameIds(a,b){
+
+if(!Array.isArray(a)||!Array.isArray(b))
+return false;
+
+if(a.length!==b.length)return false;
+
+for(let i=0;i<a.length;i++){
+
+if(a[i]!==b[i])return false;
+
+}
+
+return true;
+
+}
+
+function renderOfferCards(offer,selectable=false){
+
+if(!Array.isArray(offer)||!offer.length){
+
+return `<p style="text-align:center">
+No cards offered yet.
+</p>`;
+
+}
+
+return `
+
+<div class="tradeCardGrid">
+
+${offer.map(copy=>{
+
+const card=getCard(copy.name);
+
+if(!card)return"";
+
+const selected=
+selectable &&
+selectedTradeCards.includes(copy.id);
+
+return`
+
+<div class="tradeCard ${selected?"selected":""}"
+${selectable?
+`onclick="toggleTradeCard('${escapeHtml(copy.id)}')"`:""}>
+
+<img
+src="${escapeHtml(card.image)}"
+alt="${escapeHtml(card.name)}"
+onclick="event.stopPropagation();
+openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
+
+<div>${escapeHtml(card.name)}</div>
+
+${copy.traded?"<small>Traded</small>":""}
+
+</div>
+
+`;
+
+}).join("")}
+
+</div>
+
+`;
+
+}
+
+function renderSelectableTradeCards(){
+
+if(!collection.length){
+
+return `<p style="text-align:center">
+You have no cards.
+</p>`;
+
+}
+
+return `
+
+<div class="tradeCardGrid">
+
+${collection.map(copy=>{
+
+const card=getCard(copy.name);
+
+if(!card)return"";
+
+const selected=
+selectedTradeCards.includes(copy.id);
+
+return`
+
+<div class="tradeCard ${selected?"selected":""}"
+onclick="toggleTradeCard('${escapeHtml(copy.id)}')">
+
+<img
+src="${escapeHtml(card.image)}"
+alt="${escapeHtml(card.name)}"
+onclick="event.stopPropagation();
+openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
+
+<div>${escapeHtml(card.name)}</div>
+
+${copy.traded?"<small>Traded</small>":""}
+
+</div>
+
+`;
+
+}).join("")}
+
+</div>
+
+`;
+
+}
+
+function renderActiveTrade(){
+
+const container=document.getElementById("activeTrade");
+
+if(!container)return;
+
+openOutgoingTradeIfNeeded();
+
+if(!activeTrade){
+
+container.innerHTML="";
+return;
+
+}
+
+if(activeTrade.status!=="pending"){
+
+if(activeTrade.status==="completed"){
+
+container.innerHTML=`
+
+<div class="tradeArea">
+
+<h2>Trade Completed</h2>
+
+<p style="text-align:center">
+The cards were successfully swapped.
+</p>
+
+</div>
+
+`;
+
+}else{
+
+container.innerHTML="";
+
+}
+
+return;
+
+}
+
+const isSender=
+activeTrade.senderUid===currentUser.uid;
+
+const myOffer=getMyOffer(activeTrade);
+const theirOffer=getTheirOffer(activeTrade);
+
+const myConfirmed=isSender
+?activeTrade.senderConfirmed===true
+:activeTrade.receiverConfirmed===true;
+
+const theirConfirmed=isSender
+?activeTrade.receiverConfirmed===true
+:activeTrade.senderConfirmed===true;
+
+const offerMatches=sameIds(
+myOffer.map(card=>card.id),
+selectedTradeCards
+);
+
+container.innerHTML=`
+
+<div class="tradeArea">
+
+<h2>Trading</h2>
+
+<div class="tradeColumns">
+
+<div class="tradeSide">
+
+<h3>Your Offer</h3>
+
+${renderOfferCards(myOffer)}
+
+<p style="text-align:center">
+Current offer: ${myOffer.length} card(s)
+</p>
+
+<hr>
+
+<h3>Choose Cards</h3>
+
+${renderSelectableTradeCards()}
+
+<p style="text-align:center">
+${selectedTradeCards.length} card(s) selected
+</p>
+
+<button class="changeOfferButton"
+onclick="submitTradeOffer()">
+UPDATE MY OFFER
+</button>
+
+</div>
+
+<div class="tradeSide">
+
+<h3>Their Offer</h3>
+
+${renderOfferCards(theirOffer)}
+
+<p style="text-align:center">
+Their offer: ${theirOffer.length} card(s)
+</p>
+
+</div>
+
+</div>
+
+<div class="tradeStatus">
+
+${myConfirmed
+?"You confirmed this trade."
+:"You have not confirmed."}
+
+<br>
+
+${theirConfirmed
+?"They confirmed this trade."
+:"They have not confirmed."}
+
+</div>
+
+${!offerMatches?
+`<p style="text-align:center;color:#36b9ff">
+Update your offer before confirming.
+</p>`:""}
+
+${myOffer.length===0?
+`<p style="text-align:center;color:#36b9ff">
+You must offer at least one card.
+</p>`:""}
+
+${theirOffer.length===0?
+`<p style="text-align:center;color:#36b9ff">
+Waiting for them to offer a card.
+</p>`:""}
+
+<button
+class="confirmButton"
+onclick="confirmTrade()"
+${myConfirmed||
+!offerMatches||
+myOffer.length===0||
+theirOffer.length===0
+?"disabled":""}>
+
+${myConfirmed?"CONFIRMED":"CONFIRM TRADE"}
+
+</button>
+
+<button
+class="cancelButton"
+onclick="cancelTrade('${escapeHtml(activeTrade.id)}')">
+
+CANCEL TRADE
+
+</button>
+
+</div>
+
+`;
+
+}
+
+window.toggleTradeCard=function(cardId){
+
+if(!activeTrade||
+activeTrade.status!=="pending")return;
+
+const copy=collection.find(
+card=>card.id===cardId
+);
+
+if(!copy)return;
+
+if(selectedTradeCards.includes(cardId)){
+
+selectedTradeCards=
+selectedTradeCards.filter(id=>id!==cardId);
+
+}else{
+
+selectedTradeCards.push(cardId);
+
+}
+
+renderActiveTrade();
+
+};
+
+window.submitTradeOffer=async function(){
+
+if(!activeTrade||
+activeTrade.status!=="pending")return;
+
+selectedTradeCards=
+selectedTradeCards.filter(id=>
+collection.some(copy=>copy.id===id)
+);
+
+const offer=selectedTradeCards.map(id=>{
+
+const copy=collection.find(
+item=>item.id===id
+);
+
+if(!copy)return null;
+
+return{
+
+id:copy.id,
+name:copy.name,
+traded:copy.traded===true,
+favorite:favorites.includes(copy.name)
+
+};
+
+}).filter(Boolean);
+
+const isSender=
+activeTrade.senderUid===currentUser.uid;
+
+const field=isSender
+?"senderOffer"
+:"receiverOffer";
+
+try{
+
+await updateDoc(
+doc(db,"tradeRequests",activeTrade.id),
+{
+
+[field]:offer,
+
+senderConfirmed:false,
+receiverConfirmed:false
+
+}
+);
+
+showMessage(
+"Offer updated. Both players must confirm again."
+);
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"Could not update offer: "+error.message
+);
+
+}
+
+};
+
+window.confirmTrade=async function(){
+
+if(!activeTrade||
+activeTrade.status!=="pending")return;
+
+try{
+
+const tradeRef=doc(
+db,"tradeRequests",activeTrade.id
+);
+
+const snap=await getDoc(tradeRef);
+
+if(!snap.exists()){
+
+showMessage("Trade no longer exists.");
+return;
+
+}
+
+const trade={
+id:snap.id,
+...snap.data()
+};
+
+const myOffer=getMyOffer(trade);
+const theirOffer=getTheirOffer(trade);
+
+if(!myOffer.length){
+
+showMessage("You must offer at least one card.");
+return;
+
+}
+
+if(!theirOffer.length){
+
+showMessage("Wait for the other player to offer a card.");
+return;
+
+}
+
+if(!sameIds(
+myOffer.map(card=>card.id),
+selectedTradeCards
+)){
+
+showMessage("Update your offer before confirming.");
+return;
+
+}
+
+const stillOwns=myOffer.every(
+offered=>
+collection.some(copy=>copy.id===offered.id)
+);
+
+if(!stillOwns){
+
+showMessage(
+"One offered card is no longer in your collection."
+);
+
+return;
+
+}
+
+const isSender=
+trade.senderUid===currentUser.uid;
+
+const field=isSender
+?"senderConfirmed"
+:"receiverConfirmed";
+
+await updateDoc(
+tradeRef,
+{[field]:true}
+);
+
+activeTrade={
+...trade,
+[field]:true
+};
+
+renderActiveTrade();
+
+await tryFinalizeTrade({
+...trade,
+[field]:true
+});
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"Could not confirm trade: "+error.message
+);
+
+}
+
+};
+
+async function tryFinalizeTrade(trade){
+
+if(!trade||
+trade.status!=="pending")return;
+
+if(
+trade.senderConfirmed!==true||
+trade.receiverConfirmed!==true
+)return;
+
+const senderOffer=
+Array.isArray(trade.senderOffer)
+?trade.senderOffer:[];
+
+const receiverOffer=
+Array.isArray(trade.receiverOffer)
+?trade.receiverOffer:[];
+
+if(!senderOffer.length||!receiverOffer.length)return;
+
+try{
+
+const ref=doc(
+db,"tradeRequests",trade.id
+);
+
+const snap=await getDoc(ref);
+
+if(!snap.exists())return;
+
+const fresh={
+id:snap.id,
+...snap.data()
+};
+
+if(fresh.status!=="pending")return;
+
+if(
+fresh.senderConfirmed!==true||
+fresh.receiverConfirmed!==true
+)return;
+
+await updateDoc(
+ref,
+{
+status:"completed",
+completedAt:serverTimestamp()
+}
+);
+
+await applyCompletedTrade({
+...fresh,
+status:"completed"
+});
+
+}catch(error){
+
+console.error("FINALIZE TRADE ERROR:",error);
+
+}
+
+}
+
+async function applyCompletedTrade(trade){
+
+if(!currentUser||
+trade.status!=="completed")return;
+
+if(completedTradeIds.includes(trade.id))return;
+
+if(applyingTradeIds.has(trade.id))return;
+
+applyingTradeIds.add(trade.id);
+
+try{
+
+const isSender=
+trade.senderUid===currentUser.uid;
+
+const myOffer=isSender
+?(Array.isArray(trade.senderOffer)
+?trade.senderOffer:[])
+:(Array.isArray(trade.receiverOffer)
+?trade.receiverOffer:[]);
+
+const incomingOffer=isSender
+?(Array.isArray(trade.receiverOffer)
+?trade.receiverOffer:[])
+:(Array.isArray(trade.senderOffer)
+?trade.senderOffer:[]);
+
+const ref=doc(
+db,"players",currentUser.uid
+);
+
+const snap=await getDoc(ref);
+
+if(!snap.exists())return;
+
+const data=snap.data();
+
+let currentCollection=
+normalizeCollection(data.collection);
+
+let currentFavorites=
+Array.isArray(data.favorites)
+?[...data.favorites]:[];
+
+let currentCompleted=
+Array.isArray(data.completedTradeIds)
+?[...data.completedTradeIds]:[];
+
+if(currentCompleted.includes(trade.id))return;
+
+const outgoingIds=new Set(
+myOffer.map(card=>card.id)
+);
+
+currentCollection=
+currentCollection.filter(
+copy=>!outgoingIds.has(copy.id)
+);
+
+for(const offered of incomingOffer){
+
+if(!currentCollection.some(
+copy=>copy.id===offered.id
+)){
+
+currentCollection.push({
+id:offered.id,
+name:offered.name,
+traded:true
+});
+
+}
+
+if(
+offered.favorite===true &&
+!currentFavorites.includes(offered.name)
+){
+
+currentFavorites.push(offered.name);
+
+}
+
+}
+
+currentCompleted.push(trade.id);
+
+await setDoc(
+ref,
+{
+collection:currentCollection,
+favorites:currentFavorites,
+completedTradeIds:currentCompleted
+},
+{merge:true}
+);
+
+collection=currentCollection;
+favorites=currentFavorites;
+completedTradeIds=currentCompleted;
+
+updateUI();
+
+showMessage("Trade completed! Cards swapped.");
+
+}catch(error){
+
+console.error(error);
+
+}finally{
+
+applyingTradeIds.delete(trade.id);
+
+}
+
+}
+
+window.cancelTrade=async function(tradeId){
+
+try{
+
+await updateDoc(
+doc(db,"tradeRequests",tradeId),
+{status:"cancelled"}
+);
+
+if(activeTrade?.id===tradeId){
+
+activeTrade=null;
+
+}
+
+selectedTradeCards=[];
+
+renderActiveTrade();
+renderIncomingTrades();
+
+showMessage("Trade cancelled.");
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"Could not cancel trade: "+error.message
+);
+
+}
+
+};
+
+/* SETTINGS */
+
+window.openSettings=function(){
+
+document.getElementById("settingsOverlay")
+.classList.remove("hidden");
+
+};
+
+window.closeSettings=function(){
+
+document.getElementById("settingsOverlay")
+.classList.add("hidden");
+
+};
+
+/* RESET */
+
+window.resetAccount=async function(){
+
+const yes=confirm(
+"Are you sure you want to reset your account? This deletes your coins, Dolb, cards and profile pictures."
+);
+
+if(!yes)return;
+
+money=STARTING_COINS;
+dolb=STARTING_DOLB;
+collection=[];
+favorites=[];
+completedTradeIds=[];
+friends=[];
+friendRequests=[];
+profilePic="basic_p.png";
+ownedProfilePics=["basic_p.png"];
+
+await savePlayerData();
+
+updateUI();
+closeSettings();
+
+showMessage("Account reset.");
+
+};
+
+/* START BATTLE LISTENER */
+
+startBattleListener();
+
+</script>
+</body>
 </html>
