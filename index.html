@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Doll Ball Collector Cards</title>
-
 <style>
 *{box-sizing:border-box}
 
@@ -981,7 +980,6 @@ height:140px
 }
 </style>
 </head>
-
 <body>
 
 <div id="loginScreen">
@@ -993,17 +991,9 @@ height:140px
 </div>
 
 <div id="gameScreen" class="hidden">
-
 <div class="topBar">
-
-<div class="moneyBox">
-Coins: <span id="money">0</span>
-</div>
-
-<div class="dolbBox">
-Dolb: <span id="dolb">0</span>
-</div>
-
+<div class="moneyBox">Coins: <span id="money">0</span></div>
+<div class="dolbBox">Dolb: <span id="dolb">0</span></div>
 <button onclick="showPage('battle')">BATTLE</button>
 <button onclick="showPage('home')">HOME</button>
 <button onclick="showPage('shop')">SHOP</button>
@@ -1013,429 +1003,166 @@ Dolb: <span id="dolb">0</span>
 <button onclick="showPage('friends')">FRIENDS</button>
 <button onclick="openSettings()">SETTINGS</button>
 <button class="logoutButton" onclick="logout()">LOG OUT</button>
-
 </div>
 
+<!-- HOME PAGE -->
 <div id="homePage" class="page">
-
 <div class="homeBox">
-
 <div class="profileBox">
-
 <img id="homeProfilePic" class="profilePic" src="basic_p.png">
-
 <div class="profileInfo">
-
 <div class="profileUsername" id="homeUsername"></div>
-
 <div>Doll Ball Collector Cards</div>
-
 </div>
-
 </div>
-
 <h1>Welcome!</h1>
-
-<p>
-Google Account:
-<span id="accountEmail"></span>
-</p>
-
-<p>
-Username:
-<span class="username" id="usernameDisplay"></span>
-</p>
-
+<p>Google Account: <span id="accountEmail"></span></p>
+<p>Username: <span class="username" id="usernameDisplay"></span></p>
 <hr>
-
 <h2>Open a Pack</h2>
-
-<p>
-Cost: 10 coins<br>
-Cards: 3
-</p>
-
-<button class="packButton" onclick="openPack()">
-OPEN PACK - 10 COINS
-</button>
-
+<p>Cost: 10 coins<br>Cards: 3</p>
+<button class="packButton" onclick="openPack()">OPEN PACK - 10 COINS</button>
+</div>
 </div>
 
-</div>
-
-
-<!-- ================= BATTLE PAGE ================= -->
-
+<!-- BATTLE PAGE -->
 <div id="battlePage" class="page hidden">
-
 <h1>Battle</h1>
-
 <div id="battleMain">
-
 <div class="battleHome">
-
 <h2>Choose a Battle</h2>
-
-<p>
-Pick one card from your collection and battle!
-</p>
-
+<p>Pick one card from your collection and battle!</p>
 <div class="battleModes">
-
 <div class="battleMode">
-
 <h3>Easy Bot</h3>
-
-<p>
-A simple bot with random choices.
-</p>
-
-<button onclick="startBotBattle('easy')">
-BATTLE EASY BOT
-</button>
-
+<p>A simple bot with random choices.</p>
+<button onclick="startBotBattle('easy')">BATTLE EASY BOT</button>
 </div>
-
 <div class="battleMode hard">
-
 <h3>Hard Bot</h3>
-
-<p>
-The hard bot chooses cards that counter your type.
-</p>
-
-<button onclick="startBotBattle('hard')">
-BATTLE HARD BOT
-</button>
-
+<p>The hard bot chooses cards that counter your type.</p>
+<button onclick="startBotBattle('hard')">BATTLE HARD BOT</button>
 </div>
-
 <div class="battleMode friend">
-
 <h3>Friend Battle</h3>
-
-<p>
-Challenge one of your friends.
-</p>
-
-<button onclick="showPage('friends')">
-CHOOSE FRIEND
-</button>
-
+<p>Challenge one of your friends.</p>
+<button onclick="showPage('friends')">CHOOSE FRIEND</button>
 </div>
-
 </div>
-
 </div>
-
 <div id="battleRequests"></div>
-
-<div id="battleFriendsList"></div>
-
 </div>
 
 <div id="battleChoice" class="battleHome hidden">
-
 <h2 id="battleChoiceTitle">Choose Your Card</h2>
-
-<p id="battleChoiceDescription">
-Choose one card to use in battle.
-</p>
-
+<p id="battleChoiceDescription">Pick one card to use in battle.</p>
 <div id="battleChoiceGrid" class="battleChoiceGrid"></div>
-
-<button
-id="battleStartButton"
-class="battleStartButton"
-onclick="confirmBattleCard()"
-disabled>
-BATTLE!
-</button>
-
-<button
-class="battleCancelButton"
-onclick="cancelBattleSetup()">
-CANCEL
-</button>
-
+<button id="battleStartButton" class="battleStartButton" onclick="confirmBattleCard()" disabled>BATTLE!</button>
+<button class="battleCancelButton" onclick="cancelBattleSetup()">CANCEL</button>
 </div>
 
 <div id="battleArena" class="battleArena hidden"></div>
-
 </div>
 
-
+<!-- SHOP PAGE -->
 <div id="shopPage" class="page hidden">
-
 <div class="shopHeader">
-
 <h1>Shop</h1>
-
-<p>
-Buy special daily dolls with Dolb.
-</p>
-
-<div class="shopDate">
-Daily shop changes every day.
-<span id="shopDate"></span>
+<p>Buy special daily dolls with Dolb.</p>
+<div class="shopDate">Daily shop changes every day. <span id="shopDate"></span></div>
 </div>
-
-</div>
-
 <h2 class="shopSection">Daily Doll</h2>
-
 <div id="dailyShop"></div>
-
 <h2 class="shopSection">Coins → Dolb</h2>
-
 <div id="dolbDeals" class="dealGrid"></div>
-
 <h2 class="shopSection">Event Shop</h2>
-
 <div class="eventShopBox">
 <h3>No Event Right Now</h3>
-<p>
-Event shops will appear here when an event is active.
-</p>
+<p>Event shops will appear here when an event is active.</p>
+</div>
 </div>
 
-</div>
-
-
+<!-- COLLECTION PAGE -->
 <div id="collectionPage" class="page hidden">
-
 <h1>Collection</h1>
-
 <div class="tabs">
-
-<button
-id="collectionAllButton"
-class="active"
-onclick="setCollectionTab('all')">
-ALL
-</button>
-
-<button
-id="collectionFavoritesButton"
-onclick="setCollectionTab('favorites')">
-FAVORITES
-</button>
-
+<button id="collectionAllButton" class="active" onclick="setCollectionTab('all')">ALL</button>
+<button id="collectionFavoritesButton" onclick="setCollectionTab('favorites')">FAVORITES</button>
 </div>
-
-<input
-id="collectionSearch"
-class="searchBox"
-type="search"
-autocomplete="off"
-placeholder="Search cards..."
-oninput="renderCollection()">
-
+<input id="collectionSearch" class="searchBox" type="search" autocomplete="off" placeholder="Search cards..." oninput="renderCollection()">
 <div id="collectionGrid" class="cardGrid"></div>
-
 </div>
 
-
+<!-- DEX PAGE -->
 <div id="dexPage" class="page hidden">
-
 <h1>DEX</h1>
-
 <div class="tabs">
-
-<button
-id="dexDollsButton"
-class="active"
-onclick="setDexTab('dolls')">
-DOLLS
-</button>
-
-<button
-id="dexRaresButton"
-onclick="setDexTab('rares')">
-RARES
-</button>
-
+<button id="dexDollsButton" class="active" onclick="setDexTab('dolls')">DOLLS</button>
+<button id="dexRaresButton" onclick="setDexTab('rares')">RARES</button>
 </div>
-
 <div id="dexGrid" class="cardGrid"></div>
-
 </div>
 
-
+<!-- TRADE PAGE -->
 <div id="tradePage" class="page hidden">
-
 <h1>Trading</h1>
-
 <div class="tradeNotice">
-
 <b>Find a player</b>
-
-<p>
-Search using their username.
-</p>
-
+<p>Search using their username.</p>
 <div class="tradeSearchArea">
-
-<input
-id="tradePlayerInput"
-type="search"
-autocomplete="off"
-placeholder="Username">
-
-<button
-class="tradeSearchButton"
-onclick="findPlayer()">
-SEARCH
-</button>
-
+<input id="tradePlayerInput" type="search" autocomplete="off" placeholder="Username" oninput="findPlayer()">
+<button class="tradeSearchButton" onclick="findPlayer()">SEARCH</button>
 </div>
-
 <div id="tradePlayerResult"></div>
-
 </div>
-
 <div id="incomingTrades"></div>
-
 <div id="activeTrade"></div>
-
 </div>
 
-
+<!-- FRIENDS PAGE -->
 <div id="friendsPage" class="page hidden">
-
 <h1>Friends</h1>
-
 <div class="friendSearchBox">
-
 <h2>Find a Friend</h2>
-
-<p>
-Search for another player using their username.
-</p>
-
+<p>Search for another player using their username.</p>
 <div class="friendSearchArea">
-
-<input
-id="friendPlayerInput"
-type="search"
-autocomplete="off"
-placeholder="Username">
-
-<button
-class="friendSearchButton"
-onclick="findFriend()">
-SEARCH
-</button>
-
+<input id="friendPlayerInput" type="search" autocomplete="off" placeholder="Username" oninput="findFriend()">
+<button class="friendSearchButton" onclick="findFriend()">SEARCH</button>
 </div>
-
 <div id="friendSearchResult"></div>
-
 </div>
-
 <div id="friendRequestsArea"></div>
-
-<h2 class="friendSection">
-Your Friends
-</h2>
-
+<h2 class="friendSection">Your Friends</h2>
 <div id="friendsList"></div>
-
 </div>
 
-
+<!-- SETTINGS -->
 <div id="settingsOverlay" class="settingsOverlay hidden">
-
 <div class="settingsBox">
-
 <h2>Settings</h2>
-
-<p>
-Username:
-<b id="settingsUsername"></b>
-</p>
-
+<p>Username: <b id="settingsUsername"></b></p>
 <div style="text-align:center;margin:20px 0">
-
-<img
-id="settingsProfilePic"
-class="profilePic"
-src="basic_p.png">
-
+<img id="settingsProfilePic" class="profilePic" src="basic_p.png">
 <p>Profile Picture</p>
-
+</div>
+<button class="settingsButton resetButton" onclick="resetAccount()">RESET ACCOUNT</button>
+<button class="settingsButton" onclick="closeSettings()">CLOSE</button>
+</div>
 </div>
 
-<button
-class="settingsButton resetButton"
-onclick="resetAccount()">
-RESET ACCOUNT
-</button>
-
-<button
-class="settingsButton"
-onclick="closeSettings()">
-CLOSE
-</button>
-
+<!-- VIEWER & NOTIFICATIONS -->
+<div id="cardViewer" class="cardViewer hidden" onclick="closeCardViewer()">
+<button class="cardViewerClose" onclick="closeCardViewer(event)">X</button>
+<img id="cardViewerImage" class="cardViewerImage" src="" onclick="event.stopPropagation()">
 </div>
-
-</div>
-
-
-<div
-id="cardViewer"
-class="cardViewer hidden"
-onclick="closeCardViewer()">
-
-<button
-class="cardViewerClose"
-onclick="closeCardViewer(event)">
-X
-</button>
-
-<img
-id="cardViewerImage"
-class="cardViewerImage"
-src=""
-onclick="event.stopPropagation()">
-
-</div>
-
-
 <div id="message"></div>
 
-
 <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection as firestoreCollection, query, where, serverTimestamp, arrayUnion } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-import {
-initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
-import {
-getAuth,
-GoogleAuthProvider,
-signInWithPopup,
-signOut,
-onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-import {
-getFirestore,
-doc,
-getDoc,
-setDoc,
-updateDoc,
-onSnapshot,
-collection as firestoreCollection,
-query,
-where,
-serverTimestamp,
-arrayUnion
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-
-const firebaseConfig={
+const firebaseConfig = {
 apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
 authDomain:"dbcc-login.firebaseapp.com",
 databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -1446,180 +1173,34 @@ appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
 measurementId:"G-PT9S1K4E2K"
 };
 
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-const DEFAULT_PROFILE_PIC="basic_p.png";
-const BUZZY_PROFILE_PIC="buzzy_p.png";
+const DEFAULT_PROFILE_PIC = "basic_p.png";
+const BUZZY_PROFILE_PIC = "buzzy_p.png";
+const PACK_PRICE = 10;
+const STARTING_COINS = 50;
+const STARTING_DOLB = 0;
+const BATTLE_WIN_REWARD = 30;
+const BATTLE_HP = 100;
 
-const PACK_PRICE=10;
-const STARTING_COINS=50;
-const STARTING_DOLB=0;
-
-const BATTLE_WIN_REWARD=30;
-const BATTLE_HP=100;
-
-
-/* =========================
-   CARDS
-========================= */
-
-const cards=[
-
-{
-name:"Baby Pickels",
-image:"baby pikels.png",
-weight:14,
-price:5,
-rarity:"doll",
-type:["Grass"],
-move:"Baby Food",
-moveType:"Grass",
-power:50
-},
-
-{
-name:"Mr. Pickels",
-image:"mr. pickels.png",
-weight:9,
-price:7,
-rarity:"doll",
-type:["Grass"],
-move:"Fancy Food",
-moveType:"Grass",
-power:58
-},
-
-{
-name:"Wily",
-image:"wily.png",
-weight:14,
-price:5,
-rarity:"doll",
-type:["Water"],
-move:"Small Splash",
-moveType:"Water",
-power:50
-},
-
-{
-name:"Will",
-image:"will.png",
-weight:9,
-price:7,
-rarity:"doll",
-type:["Water"],
-move:"Big Splash",
-moveType:"Water",
-power:62
-},
-
-{
-name:"Waffle",
-image:"waffle.png",
-weight:14,
-price:5,
-rarity:"doll",
-type:["Fire"],
-move:"Tasty Fire",
-moveType:"Fire",
-power:50
-},
-
-{
-name:"Cute Cake",
-image:"cute cake.png",
-weight:9,
-price:7,
-rarity:"doll",
-type:["Fire"],
-move:"Delicuse",
-moveType:"Fire",
-power:60
-},
-
-{
-name:"Buttyr",
-image:"buttyr.png",
-weight:20,
-price:7,
-rarity:"doll",
-type:["Flying","Rock"],
-move:"Hard Wing",
-moveType:"Flying",
-power:55
-},
-
-{
-name:"Blossem",
-image:"blossem.png",
-weight:20,
-price:7,
-rarity:"doll",
-type:["Flying","Fairy"],
-move:"Flying Cuteness",
-moveType:"Flying",
-power:55
-},
-
-{
-name:"Buzzy",
-image:"buzzy.png",
-weight:5,
-price:12,
-rarity:"doll",
-type:["Flying","Fairy"],
-move:"Flying Hat",
-moveType:"Flying",
-power:65
-},
-
-{
-name:"Nico",
-image:"nico.png",
-weight:20,
-price:3,
-rarity:"doll",
-type:["Flying"],
-move:"Beak Attack",
-moveType:"Flying",
-power:52
-},
-
-{
-name:"Choper",
-image:"choper.png",
-weight:10,
-price:5,
-rarity:"doll",
-type:["Normal","Fighting"],
-move:"Hand Combat",
-moveType:"Fighting",
-power:57
-},
-
-{
-name:"Bullet",
-image:"bullet.png",
-weight:10,
-price:5,
-rarity:"doll",
-type:["Normal","Fighting"],
-move:"Tail Combat",
-moveType:"Fighting",
-power:62
-}
-
+const cards = [
+{ name:"Baby Pickels", image:"baby pikels.png", weight:14, price:5, rarity:"doll", type:["Grass"], move:"Baby Food", moveType:"Grass", power:50 },
+{ name:"Mr. Pickels", image:"mr. pickels.png", weight:9, price:7, rarity:"doll", type:["Grass"], move:"Fancy Food", moveType:"Grass", power:58 },
+{ name:"Wily", image:"wily.png", weight:14, price:5, rarity:"doll", type:["Water"], move:"Small Splash", moveType:"Water", power:50 },
+{ name:"Will", image:"will.png", weight:9, price:7, rarity:"doll", type:["Water"], move:"Big Splash", moveType:"Water", power:62 },
+{ name:"Waffle", image:"waffle.png", weight:14, price:5, rarity:"doll", type:["Fire"], move:"Tasty Fire", moveType:"Fire", power:50 },
+{ name:"Cute Cake", image:"cute cake.png", weight:9, price:7, rarity:"doll", type:["Fire"], move:"Delicuse", moveType:"Fire", power:60 },
+{ name:"Buttyr", image:"buttyr.png", weight:20, price:7, rarity:"doll", type:["Flying","Rock"], move:"Hard Wing", moveType:"Flying", power:55 },
+{ name:"Blossem", image:"blossem.png", weight:20, price:7, rarity:"doll", type:["Flying","Fairy"], move:"Flying Cuteness", moveType:"Flying", power:55 },
+{ name:"Buzzy", image:"buzzy.png", weight:5, price:12, rarity:"doll", type:["Flying","Fairy"], move:"Flying Hat", moveType:"Flying", power:65 },
+{ name:"Nico", image:"nico.png", weight:20, price:3, rarity:"doll", type:["Flying"], move:"Beak Attack", moveType:"Flying", power:52 },
+{ name:"Choper", image:"choper.png", weight:10, price:5, rarity:"doll", type:["Normal","Fighting"], move:"Hand Combat", moveType:"Fighting", power:57 },
+{ name:"Bullet", image:"bullet.png", weight:10, price:5, rarity:"doll", type:["Normal","Fighting"], move:"Tail Combat", moveType:"Fighting", power:62 }
 ];
 
-
-/* =========================
-   DAILY SHOP
-========================= */
-
-const dailyShopData=[
-
+const dailyShopData = [
 {name:"Baby Pickels",weight:20,normalPrice:3,cheapPrice:1},
 {name:"Mr. Pickels",weight:10,normalPrice:5,cheapPrice:1},
 {name:"Wily",weight:20,normalPrice:3,cheapPrice:1},
@@ -1632,5453 +1213,1064 @@ const dailyShopData=[
 {name:"Nico",weight:15,normalPrice:1,cheapPrice:1},
 {name:"Choper",weight:25,normalPrice:1,cheapPrice:1},
 {name:"Bullet",weight:20,normalPrice:2,cheapPrice:1}
-
 ];
 
-const dolbDeals=[
+const dolbDeals = [
 {coins:30,dolb:10},
 {coins:50,dolb:25},
 {coins:100,dolb:75},
 {coins:150,dolb:150}
 ];
 
+let currentUser = null;
+let money = STARTING_COINS;
+let dolb = STARTING_DOLB;
+let username = "";
+let profilePic = DEFAULT_PROFILE_PIC;
+let collection = [];
+let favorites = [];
+let completedTradeIds = [];
+let friends = [];
+let ownedProfilePics = [DEFAULT_PROFILE_PIC];
 
-/* =========================
-   STATE
-========================= */
+let dailyShopOffer = null;
+let dailyShopBought = false;
+let dailyShopDate = "";
 
-let currentUser=null;
-let money=STARTING_COINS;
-let dolb=STARTING_DOLB;
-let username="";
-let profilePic=DEFAULT_PROFILE_PIC;
-let collection=[];
-let favorites=[];
-let completedTradeIds=[];
-let friends=[];
-let ownedProfilePics=[DEFAULT_PROFILE_PIC];
+let collectionTab = "all";
+let dexTab = "dolls";
 
-let dailyShopOffer=null;
-let dailyShopBought=false;
-let dailyShopDate="";
+let activeTrade = null;
+let selectedTradeCards = [];
+let tradeRequests = [];
+let tradeListener = null;
 
-let collectionTab="all";
-let dexTab="dolls";
+let friendRequests = [];
+let friendListener = null;
 
-let activeTrade=null;
-let selectedTradeCards=[];
-let tradeRequests=[];
-let tradeListener=null;
+let applyingTradeIds = new Set();
 
-let friendRequests=[];
-let friendListener=null;
-
-let applyingTradeIds=new Set();
-
-
-/* BATTLE STATE */
-
-let battleMode=null;
-let battleDifficulty="easy";
-let battleOpponentUid=null;
-let battleOpponentUsername="";
-let battleOpponentPic=DEFAULT_PROFILE_PIC;
-let battleSelectedCardId=null;
-let battleRoomId=null;
-let battleListener=null;
-let battleChoiceSubmitted=false;
-let battleRewardGiven=false;
-
-
-/* =========================
-   GENERAL
-========================= */
+let battleMode = null;
+let battleDifficulty = "easy";
+let battleOpponentUid = null;
+let battleOpponentUsername = "";
+let battleOpponentPic = DEFAULT_PROFILE_PIC;
+let battleSelectedCardId = null;
+let battleRoomId = null;
+let battleListener = null;
+let battleChoiceSubmitted = false;
+let battleRewardGiven = false;
 
 function createCardId(){
-
-return Date.now().toString(36)+
-Math.random().toString(36).slice(2);
-
+return Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
-
-function createCardCopy(name,traded=false){
-
-return{
-id:createCardId(),
-name,
-traded
-};
-
+function createCardCopy(name, traded=false){
+return { id: createCardId(), name, traded };
 }
-
 
 function getCard(name){
-
-return cards.find(c=>c.name===name);
-
+return cards.find(c => c.name === name);
 }
-
 
 function escapeHtml(v){
-
-return String(v)
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
+return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
-
 
 function encoded(v){
-
 return encodeURIComponent(String(v));
-
 }
-
 
 function showMessage(text){
-
-const e=document.getElementById("message");
-
-e.textContent=text;
-e.style.display="block";
-
+const e = document.getElementById("message");
+e.textContent = text;
+e.style.display = "block";
 clearTimeout(showMessage.timer);
-
-showMessage.timer=setTimeout(()=>{
-e.style.display="none";
-},2800);
-
+showMessage.timer = setTimeout(() => { e.style.display = "none"; }, 2800);
 }
 
-
-/* =========================
-   CARD VIEWER
-========================= */
-
-window.openEncodedCardViewer=(image,name)=>{
-
-openCardViewer(
-decodeURIComponent(image),
-decodeURIComponent(name)
-);
-
+window.openEncodedCardViewer = (image, name) => {
+openCardViewer(decodeURIComponent(image), decodeURIComponent(name));
 };
 
-
-window.openCardViewer=(image,name)=>{
-
-document.getElementById("cardViewerImage").src=image;
-document.getElementById("cardViewerImage").alt=name;
-
-document
-.getElementById("cardViewer")
-.classList.remove("hidden");
-
+window.openCardViewer = (image, name) => {
+document.getElementById("cardViewerImage").src = image;
+document.getElementById("cardViewerImage").alt = name;
+document.getElementById("cardViewer").classList.remove("hidden");
 };
 
-
-window.closeCardViewer=e=>{
-
-if(e)e.stopPropagation();
-
-document
-.getElementById("cardViewer")
-.classList.add("hidden");
-
+window.closeCardViewer = e => {
+if(e) e.stopPropagation();
+document.getElementById("cardViewer").classList.add("hidden");
 };
 
-
-/* =========================
-   LOGIN
-========================= */
-
-window.loginGoogle=async()=>{
-
-try{
-
-await signInWithPopup(
-auth,
-new GoogleAuthProvider()
-);
-
-}catch(e){
-
+window.loginGoogle = async () => {
+try {
+await signInWithPopup(auth, new GoogleAuthProvider());
+} catch(e) {
 console.error(e);
 showMessage(e.message);
-
 }
-
 };
 
-
-window.logout=async()=>{
-
-try{
-
+window.logout = async () => {
+try {
 await savePlayerData();
-
 stopTradeListener();
 stopFriendListener();
 stopBattleListener();
-
 await signOut(auth);
-
-}catch(e){
-
+} catch(e) {
 console.error(e);
 showMessage(e.message);
-
 }
-
 };
 
+window.openSettings = () => {
+document.getElementById("settingsOverlay").classList.remove("hidden");
+};
 
-/* =========================
-   USERNAME
-========================= */
+window.closeSettings = () => {
+document.getElementById("settingsOverlay").classList.add("hidden");
+};
+
+window.resetAccount = async () => {
+if(!confirm("Are you sure you want to reset your account progress?")) return;
+money = STARTING_COINS;
+dolb = STARTING_DOLB;
+collection = [];
+favorites = [];
+completedTradeIds = [];
+friends = [];
+ownedProfilePics = [DEFAULT_PROFILE_PIC];
+profilePic = DEFAULT_PROFILE_PIC;
+await savePlayerData();
+updateUI();
+closeSettings();
+showMessage("Account reset successfully.");
+};
 
 async function askForUsername(){
-
 while(!username){
-
-let chosen=prompt(
-"Choose your unique username:"
-)||"";
-
-chosen=chosen.trim();
-
-if(chosen.length<3){
-
-alert("Username must be at least 3 characters.");
-continue;
-
+let chosen = prompt("Choose your unique username:") || "";
+chosen = chosen.trim();
+if(chosen.length < 3){ alert("Username must be at least 3 characters."); continue; }
+if(chosen.length > 20){ alert("Username must be 20 characters or less."); continue; }
+if(!/^[a-zA-Z0-9_]+$/.test(chosen)){ alert("Only letters, numbers and _ are allowed."); continue; }
+const normalized = chosen.toLowerCase();
+const ref = doc(db, "usernames", normalized);
+const snap = await getDoc(ref);
+if(snap.exists() && snap.data().uid !== currentUser.uid){
+alert("That username is already taken."); continue;
 }
-
-if(chosen.length>20){
-
-alert("Username must be 20 characters or less.");
-continue;
-
+await setDoc(ref, { uid: currentUser.uid, username: chosen }, { merge: true });
+username = chosen;
 }
-
-if(!/^[a-zA-Z0-9_]+$/.test(chosen)){
-
-alert(
-"Only letters, numbers and _ are allowed."
-);
-
-continue;
-
 }
-
-const normalized=chosen.toLowerCase();
-
-const ref=doc(
-db,
-"usernames",
-normalized
-);
-
-const snap=await getDoc(ref);
-
-if(
-snap.exists() &&
-snap.data().uid!==currentUser.uid
-){
-
-alert("That username is already taken.");
-continue;
-
-}
-
-await setDoc(
-ref,
-{
-uid:currentUser.uid,
-username:chosen
-},
-{merge:true}
-);
-
-username=chosen;
-
-}
-
-}
-
 
 async function ensureUsernameDocument(){
-
-if(!currentUser||!username)return;
-
-await setDoc(
-doc(db,"usernames",username.toLowerCase()),
-{
-uid:currentUser.uid,
-username
-},
-{merge:true}
-);
-
+if(!currentUser || !username) return;
+await setDoc(doc(db, "usernames", username.toLowerCase()), { uid: currentUser.uid, username }, { merge: true });
 }
-
-
-/* =========================
-   COLLECTION SAVE
-========================= */
 
 function normalizeCollection(data){
-
-if(!Array.isArray(data))return[];
-
-return data.map(item=>{
-
-if(typeof item==="string"){
-
-return createCardCopy(item);
-
+if(!Array.isArray(data)) return [];
+return data.map(item => {
+if(typeof item === "string") return createCardCopy(item);
+return { id: item.id || createCardId(), name: item.name, traded: item.traded === true };
+}).filter(item => getCard(item.name));
 }
-
-return{
-
-id:item.id||createCardId(),
-name:item.name,
-traded:item.traded===true
-
-};
-
-}).filter(item=>getCard(item.name));
-
-}
-
-
-/* =========================
-   PLAYER DATA
-========================= */
 
 async function loadPlayerData(){
-
-const ref=doc(
-db,
-"players",
-currentUser.uid
-);
-
-const snap=await getDoc(ref);
-
+const ref = doc(db, "players", currentUser.uid);
+const snap = await getDoc(ref);
 if(!snap.exists()){
-
-money=STARTING_COINS;
-dolb=STARTING_DOLB;
-collection=[];
-favorites=[];
-completedTradeIds=[];
-friends=[];
-ownedProfilePics=[DEFAULT_PROFILE_PIC];
-username="";
-profilePic=DEFAULT_PROFILE_PIC;
-
-await setDoc(
-ref,
-{
-money,
-dolb,
-collection,
-favorites,
-completedTradeIds,
-friends,
-ownedProfilePics,
-username,
-profilePic
+money = STARTING_COINS; dolb = STARTING_DOLB; collection = []; favorites = [];
+completedTradeIds = []; friends = []; ownedProfilePics = [DEFAULT_PROFILE_PIC];
+username = ""; profilePic = DEFAULT_PROFILE_PIC;
+await setDoc(ref, { money, dolb, collection, favorites, completedTradeIds, friends, ownedProfilePics, username, profilePic });
+} else {
+const data = snap.data();
+money = typeof data.money === "number" ? data.money : STARTING_COINS;
+dolb = typeof data.dolb === "number" ? data.dolb : STARTING_DOLB;
+collection = normalizeCollection(data.collection);
+favorites = Array.isArray(data.favorites) ? data.favorites : [];
+completedTradeIds = Array.isArray(data.completedTradeIds) ? data.completedTradeIds : [];
+friends = Array.isArray(data.friends) ? data.friends : [];
+ownedProfilePics = Array.isArray(data.ownedProfilePics) ? data.ownedProfilePics : [DEFAULT_PROFILE_PIC];
+if(!ownedProfilePics.includes(DEFAULT_PROFILE_PIC)) ownedProfilePics.push(DEFAULT_PROFILE_PIC);
+username = data.username || "";
+profilePic = data.profilePic || DEFAULT_PROFILE_PIC;
+if(!ownedProfilePics.includes(profilePic)) ownedProfilePics.push(profilePic);
 }
-);
-
-}else{
-
-const data=snap.data();
-
-money=
-typeof data.money==="number"
-?data.money
-:STARTING_COINS;
-
-dolb=
-typeof data.dolb==="number"
-?data.dolb
-:STARTING_DOLB;
-
-collection=normalizeCollection(data.collection);
-
-favorites=
-Array.isArray(data.favorites)
-?data.favorites
-:[];
-
-completedTradeIds=
-Array.isArray(data.completedTradeIds)
-?data.completedTradeIds
-:[];
-
-friends=
-Array.isArray(data.friends)
-?data.friends
-:[];
-
-ownedProfilePics=
-Array.isArray(data.ownedProfilePics)
-?data.ownedProfilePics
-:[DEFAULT_PROFILE_PIC];
-
-if(!ownedProfilePics.includes(DEFAULT_PROFILE_PIC)){
-
-ownedProfilePics.push(DEFAULT_PROFILE_PIC);
-
-}
-
-username=data.username||"";
-
-profilePic=
-data.profilePic||
-DEFAULT_PROFILE_PIC;
-
-if(!ownedProfilePics.includes(profilePic)){
-
-ownedProfilePics.push(profilePic);
-
-}
-
-}
-
-if(!username){
-
-await askForUsername();
-
-}
-
+if(!username) await askForUsername();
 await ensureUsernameDocument();
-
 await loadDailyShopData();
-
 await savePlayerData();
-
 }
-
 
 async function savePlayerData(){
-
-if(!currentUser)return;
-
-await setDoc(
-doc(db,"players",currentUser.uid),
-{
-money,
-dolb,
-collection,
-favorites,
-completedTradeIds,
-friends,
-ownedProfilePics,
-username,
-profilePic
-},
-{merge:true}
-);
-
+if(!currentUser) return;
+await setDoc(doc(db, "players", currentUser.uid), {
+money, dolb, collection, favorites, completedTradeIds, friends, ownedProfilePics, username, profilePic
+}, { merge: true });
 }
 
-
-/* =========================
-   AUTH
-========================= */
-
-onAuthStateChanged(auth,async user=>{
-
+onAuthStateChanged(auth, async user => {
 if(!user){
-
-currentUser=null;
-
-stopTradeListener();
-stopFriendListener();
-stopBattleListener();
-
-activeTrade=null;
-tradeRequests=[];
-friendRequests=[];
-friends=[];
-
-document
-.getElementById("loginScreen")
-.classList.remove("hidden");
-
-document
-.getElementById("gameScreen")
-.classList.add("hidden");
-
+currentUser = null;
+stopTradeListener(); stopFriendListener(); stopBattleListener();
+activeTrade = null; tradeRequests = []; friendRequests = []; friends = [];
+document.getElementById("loginScreen").classList.remove("hidden");
+document.getElementById("gameScreen").classList.add("hidden");
 return;
-
 }
-
-currentUser=user;
-
-try{
-
+currentUser = user;
+try {
 await loadPlayerData();
-
-document
-.getElementById("loginScreen")
-.classList.add("hidden");
-
-document
-.getElementById("gameScreen")
-.classList.remove("hidden");
-
+document.getElementById("loginScreen").classList.add("hidden");
+document.getElementById("gameScreen").classList.remove("hidden");
 showPage("home");
-
-document
-.getElementById("accountEmail")
-.textContent=user.email||"";
-
+document.getElementById("accountEmail").textContent = user.email || "";
 updateUI();
-
 startTradeListener();
 startFriendListener();
-
-}catch(e){
-
+} catch(e) {
 console.error(e);
-
-alert(
-"Could not load your account:\n"+
-e.message
-);
-
+alert("Could not load your account:\n" + e.message);
 }
-
 });
 
-
 function updateUI(){
-
-const moneyEl=document.getElementById("money");
-const dolbEl=document.getElementById("dolb");
-
-if(moneyEl)moneyEl.textContent=money;
-if(dolbEl)dolbEl.textContent=dolb;
-
-document.getElementById("usernameDisplay").textContent=username;
-document.getElementById("settingsUsername").textContent=username;
-document.getElementById("homeUsername").textContent=username;
-
-document.getElementById("homeProfilePic").src=profilePic;
-document.getElementById("settingsProfilePic").src=profilePic;
-
+const moneyEl = document.getElementById("money");
+const dolbEl = document.getElementById("dolb");
+if(moneyEl) moneyEl.textContent = money;
+if(dolbEl) dolbEl.textContent = dolb;
+document.getElementById("usernameDisplay").textContent = username;
+document.getElementById("settingsUsername").textContent = username;
+document.getElementById("homeUsername").textContent = username;
+document.getElementById("homeProfilePic").src = profilePic;
+document.getElementById("settingsProfilePic").src = profilePic;
 renderCollection();
 renderDex();
 renderFriends();
 renderFriendRequests();
 renderShop();
 renderBattleHome();
-
 }
 
-
-/* =========================
-   PAGE NAVIGATION
-========================= */
-
-window.showPage=page=>{
-
-document
-.querySelectorAll(".page")
-.forEach(e=>e.classList.add("hidden"));
-
-const target=
-document.getElementById(page+"Page");
-
-if(target){
-
-target.classList.remove("hidden");
-
-}
-
-if(page==="shop")renderShop();
-
-if(page==="collection")renderCollection();
-
-if(page==="dex")renderDex();
-
-if(page==="trade"){
-
-renderIncomingTrades();
-renderActiveTrade();
-
-}
-
-if(page==="friends"){
-
-renderFriendRequests();
-renderFriends();
-
-}
-
-if(page==="battle"){
-
-renderBattleHome();
-renderBattleRequests();
-
-}
-
+window.showPage = page => {
+document.querySelectorAll(".page").forEach(e => e.classList.add("hidden"));
+const target = document.getElementById(page + "Page");
+if(target) target.classList.remove("hidden");
+if(page === "shop") renderShop();
+if(page === "collection") renderCollection();
+if(page === "dex") renderDex();
+if(page === "trade"){ renderIncomingTrades(); renderActiveTrade(); }
+if(page === "friends"){ renderFriendRequests(); renderFriends(); }
+if(page === "battle"){ renderBattleHome(); renderBattleRequests(); }
 };
-
-
-/* =========================
-   DAILY SHOP
-========================= */
 
 function getTodayString(){
-
-const d=new Date();
-
-return d.getFullYear()+
-"-"+
-String(d.getMonth()+1).padStart(2,"0")+
-"-"+
-String(d.getDate()).padStart(2,"0");
-
+const d = new Date();
+return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
 }
-
 
 function seededRandom(seed){
-
-let hash=0;
-
-for(let i=0;i<seed.length;i++){
-
-hash=((hash<<5)-hash)+seed.charCodeAt(i);
-hash|=0;
-
+let hash = 0;
+for(let i = 0; i < seed.length; i++){
+hash = ((hash << 5) - hash) + seed.charCodeAt(i); hash |= 0;
 }
-
-const x=Math.sin(hash)*10000;
-
-return x-Math.floor(x);
-
+const x = Math.sin(hash) * 10000;
+return x - Math.floor(x);
 }
-
 
 function chooseDailyDoll(date){
-
-const total=
-dailyShopData.reduce(
-(s,i)=>s+i.weight,
-0
-);
-
-let r=
-seededRandom(
-"DBCC_DAILY_SHOP_"+
-currentUser.uid+
-"_"+date
-)*total;
-
+const total = dailyShopData.reduce((s,i) => s + i.weight, 0);
+let r = seededRandom("DBCC_DAILY_SHOP_" + currentUser.uid + "_" + date) * total;
 for(const item of dailyShopData){
-
-r-=item.weight;
-
-if(r<=0)return item;
-
+r -= item.weight;
+if(r <= 0) return item;
 }
-
-return dailyShopData[
-dailyShopData.length-1
-];
-
+return dailyShopData[dailyShopData.length - 1];
 }
-
 
 function getDailyBuzzyProfileChance(date){
-
-return seededRandom(
-"DBCC_BUZZY_PROFILE_"+
-currentUser.uid+
-"_"+date
-)<.0075;
-
+return seededRandom("DBCC_BUZZY_PROFILE_" + currentUser.uid + "_" + date) < .0075;
 }
 
-
-function getDailyCheapPrice(item,date){
-
-if(
-item.normalPrice===
-item.cheapPrice
-){
-
-return item.normalPrice;
-
+function getDailyCheapPrice(item, date){
+if(item.normalPrice === item.cheapPrice) return item.normalPrice;
+return seededRandom("DBCC_CHEAP_PRICE_" + currentUser.uid + "_" + date + "_" + item.name) < .5 ? item.cheapPrice : item.normalPrice;
 }
-
-return seededRandom(
-"DBCC_CHEAP_PRICE_"+
-currentUser.uid+
-"_"+date+
-"_"+item.name
-)<.5
-?item.cheapPrice
-:item.normalPrice;
-
-}
-
 
 async function loadDailyShopData(){
-
-const today=getTodayString();
-
-const ref=doc(
-db,
-"players",
-currentUser.uid
-);
-
-const snap=await getDoc(ref);
-
-if(!snap.exists())return;
-
-const data=snap.data();
-
-if(data.dailyShopDate===today){
-
-dailyShopDate=today;
-dailyShopBought=
-data.dailyShopBought===true;
-
-}else{
-
-dailyShopDate=today;
-dailyShopBought=false;
-
-await setDoc(
-ref,
-{
-dailyShopDate:today,
-dailyShopBought:false
-},
-{merge:true}
-);
-
+const today = getTodayString();
+const ref = doc(db, "players", currentUser.uid);
+const snap = await getDoc(ref);
+if(!snap.exists()) return;
+const data = snap.data();
+if(data.dailyShopDate === today){
+dailyShopDate = today;
+dailyShopBought = data.dailyShopBought === true;
+} else {
+dailyShopDate = today; dailyShopBought = false;
+await setDoc(ref, { dailyShopDate: today, dailyShopBought: false }, { merge: true });
 }
-
-const item=chooseDailyDoll(today);
-
-if(
-item.name==="Buzzy" &&
-getDailyBuzzyProfileChance(today)
-){
-
-dailyShopOffer={
-
-type:"profilePic",
-name:"Buzzy",
-image:BUZZY_PROFILE_PIC,
-normalPrice:30,
-cheapPrice:15,
-price:getDailyCheapPrice(
-{
-normalPrice:30,
-cheapPrice:15
-},
-today
-)
-
-};
-
+const item = chooseDailyDoll(today);
+if(item.name === "Buzzy" && getDailyBuzzyProfileChance(today)){
+dailyShopOffer = { type: "profilePic", name: "Buzzy", image: BUZZY_PROFILE_PIC, normalPrice: 30, cheapPrice: 15, price: getDailyCheapPrice({ normalPrice: 30, cheapPrice: 15 }, today) };
 return;
-
 }
-
-dailyShopOffer={
-
-type:"doll",
-name:item.name,
-image:getCard(item.name).image,
-normalPrice:item.normalPrice,
-cheapPrice:item.cheapPrice,
-price:getDailyCheapPrice(item,today)
-
-};
-
+dailyShopOffer = { type: "doll", name: item.name, image: getCard(item.name).image, normalPrice: item.normalPrice, cheapPrice: item.cheapPrice, price: getDailyCheapPrice(item, today) };
 }
-
-
-/* =========================
-   SHOP
-========================= */
 
 function renderShop(){
-
-const daily=document.getElementById("dailyShop");
-const deals=document.getElementById("dolbDeals");
-const date=document.getElementById("shopDate");
-
-if(!daily||!deals)return;
-
-if(date){
-
-date.textContent=" Today: "+getTodayString();
-
-}
-
+const daily = document.getElementById("dailyShop");
+const deals = document.getElementById("dolbDeals");
+const date = document.getElementById("shopDate");
+if(!daily || !deals) return;
+if(date) date.textContent = " Today: " + getTodayString();
 if(!dailyShopOffer){
+daily.innerHTML = '<div class="dailyShopCard"><p>Loading today\'s shop...</p></div>';
+} else {
+let imageHtml = dailyShopOffer.type === "profilePic"
+? `<img class="shopProfile" src="${escapeHtml(dailyShopOffer.image)}" onclick="openEncodedCardViewer('${encoded(dailyShopOffer.image)}','Buzzy Profile Picture')"><div class="profileShopLabel">Buzzy Profile Picture</div>`
+: `<img class="dailyShopImage" src="${escapeHtml(dailyShopOffer.image)}" onclick="openEncodedCardViewer('${encoded(dailyShopOffer.image)}','${encoded(dailyShopOffer.name)}')">`;
+let button = dailyShopBought ? '<button class="shopOwned" disabled>PURCHASED TODAY</button>'
+: (dailyShopOffer.type === "profilePic" && ownedProfilePics.includes(BUZZY_PROFILE_PIC)) ? '<button class="shopOwned" disabled>ALREADY OWNED</button>'
+: dolb < dailyShopOffer.price ? '<button class="shopBuyButton" disabled>NOT ENOUGH DOLB</button>'
+: `<button class="shopBuyButton" onclick="buyDailyShopOffer()">BUY FOR ${dailyShopOffer.price} DOLB</button>`;
 
-daily.innerHTML=
-'<div class="dailyShopCard"><p>Loading today\'s shop...</p></div>';
-
-}else{
-
-let imageHtml;
-
-if(
-dailyShopOffer.type==="profilePic"
-){
-
-imageHtml=`
-
-<img
-class="shopProfile"
-src="${escapeHtml(dailyShopOffer.image)}"
-onclick="openEncodedCardViewer('${encoded(dailyShopOffer.image)}','Buzzy Profile Picture')">
-
-<div class="profileShopLabel">
-Buzzy Profile Picture
-</div>
-
-`;
-
-}else{
-
-imageHtml=`
-
-<img
-class="dailyShopImage"
-src="${escapeHtml(dailyShopOffer.image)}"
-onclick="openEncodedCardViewer('${encoded(dailyShopOffer.image)}','${encoded(dailyShopOffer.name)}')">
-
-`;
-
+daily.innerHTML = `<div class="dailyShopCard">${imageHtml}${dailyShopOffer.type==="doll"?`<div class="dailyShopName">${escapeHtml(dailyShopOffer.name)}</div>`:""}<div class="shopPrice">${dailyShopOffer.price} Dolb</div>${dailyShopOffer.price!==dailyShopOffer.normalPrice?`<div style="text-decoration:line-through;opacity:.55">Normal price: ${dailyShopOffer.normalPrice} Dolb</div><div style="color:#7ee7a7;font-weight:bold;margin:10px">TODAY'S DEAL!</div>`:""}${dailyShopOffer.type==="doll"?`<p>You can own multiple copies of this doll.</p>`:`<p>You can own only one copy of this profile picture.</p>`}${button}</div>`;
 }
-
-let button;
-
-if(dailyShopBought){
-
-button=
-'<button class="shopOwned" disabled>PURCHASED TODAY</button>';
-
-}else if(
-dailyShopOffer.type==="profilePic" &&
-ownedProfilePics.includes(BUZZY_PROFILE_PIC)
-){
-
-button=
-'<button class="shopOwned" disabled>ALREADY OWNED</button>';
-
-}else if(dolb<dailyShopOffer.price){
-
-button=
-'<button class="shopBuyButton" disabled>NOT ENOUGH DOLB</button>';
-
-}else{
-
-button=`
-
-<button
-class="shopBuyButton"
-onclick="buyDailyShopOffer()">
-
-BUY FOR ${dailyShopOffer.price} DOLB
-
-</button>
-
-`;
-
-}
-
-daily.innerHTML=`
-
-<div class="dailyShopCard">
-
-${imageHtml}
-
-${
-dailyShopOffer.type==="doll"
-?
-`<div class="dailyShopName">
-${escapeHtml(dailyShopOffer.name)}
-</div>`
-:""
-}
-
-<div class="shopPrice">
-${dailyShopOffer.price} Dolb
-</div>
-
-${
-dailyShopOffer.price!==dailyShopOffer.normalPrice
-?
-`
-
-<div style="text-decoration:line-through;opacity:.55">
-
-Normal price:
-${dailyShopOffer.normalPrice} Dolb
-
-</div>
-
-<div style="color:#7ee7a7;font-weight:bold;margin:10px">
-
-TODAY'S DEAL!
-
-</div>
-
-`
-:""
-}
-
-${
-dailyShopOffer.type==="doll"
-?
-`<p>You can own multiple copies of this doll.</p>`
-:
-`<p>You can own only one copy of this profile picture.</p>`
-}
-
-${button}
-
-</div>
-
-`;
-
-}
-
-deals.innerHTML="";
-
-dolbDeals.forEach(deal=>{
-
-const div=document.createElement("div");
-
-div.className="dealBox";
-
-div.innerHTML=`
-
-<div class="dealTitle">
-${deal.coins} Coins
-</div>
-
-<div class="dealArrow">↓</div>
-
-<div style="font-size:20px;font-weight:bold;color:#d0b5ff">
-${deal.dolb} Dolb
-</div>
-
-<p>
-Spend ${deal.coins} Coins
-to receive ${deal.dolb} Dolb.
-</p>
-
-<button
-class="dealButton"
-onclick="buyDolbDeal(${deal.coins},${deal.dolb})">
-
-BUY FOR ${deal.coins} COINS
-
-</button>
-
-`;
-
+deals.innerHTML = "";
+dolbDeals.forEach(deal => {
+const div = document.createElement("div");
+div.className = "dealBox";
+div.innerHTML = `<div class="dealTitle">${deal.coins} Coins</div><div class="dealArrow">↓</div><div style="font-size:20px;font-weight:bold;color:#d0b5ff">${deal.dolb} Dolb</div><p>Spend ${deal.coins} Coins to receive ${deal.dolb} Dolb.</p><button class="dealButton" onclick="buyDolbDeal(${deal.coins},${deal.dolb})">BUY FOR ${deal.coins} COINS</button>`;
 deals.appendChild(div);
-
 });
-
 }
 
-
-window.buyDailyShopOffer=async()=>{
-
-if(!currentUser||!dailyShopOffer)return;
-
-if(dailyShopBought){
-
-showMessage(
-"You already bought today's shop offer."
-);
-
-return;
-
-}
-
-const price=dailyShopOffer.price;
-
-if(dolb<price){
-
-showMessage("Not enough Dolb.");
-return;
-
-}
-
-const today=getTodayString();
-
-const ref=doc(
-db,
-"players",
-currentUser.uid
-);
-
-if(
-dailyShopOffer.type==="profilePic"
-){
-
-if(ownedProfilePics.includes(BUZZY_PROFILE_PIC)){
-
-showMessage(
-"You already own this profile picture."
-);
-
-return;
-
-}
-
-dolb-=price;
-
-ownedProfilePics.push(BUZZY_PROFILE_PIC);
-dailyShopBought=true;
-
+window.buyDailyShopOffer = async () => {
+if(!currentUser || !dailyShopOffer) return;
+if(dailyShopBought){ showMessage("You already bought today's shop offer."); return; }
+const price = dailyShopOffer.price;
+if(dolb < price){ showMessage("Not enough Dolb."); return; }
+const today = getTodayString();
+const ref = doc(db, "players", currentUser.uid);
+if(dailyShopOffer.type === "profilePic"){
+if(ownedProfilePics.includes(BUZZY_PROFILE_PIC)){ showMessage("You already own this profile picture."); return; }
+dolb -= price; ownedProfilePics.push(BUZZY_PROFILE_PIC); dailyShopBought = true;
 await savePlayerData();
-
-await setDoc(
-ref,
-{
-dailyShopDate:today,
-dailyShopBought:true
-},
-{merge:true}
-);
-
-updateUI();
-
-showMessage(
-"Buzzy profile picture purchased!"
-);
-
-return;
-
+await setDoc(ref, { dailyShopDate: today, dailyShopBought: true }, { merge: true });
+updateUI(); showMessage("Buzzy profile picture purchased!"); return;
 }
-
-dolb-=price;
-
-collection.push(
-createCardCopy(dailyShopOffer.name)
-);
-
-dailyShopBought=true;
-
+dolb -= price; collection.push(createCardCopy(dailyShopOffer.name)); dailyShopBought = true;
 await savePlayerData();
-
-await setDoc(
-ref,
-{
-dailyShopDate:today,
-dailyShopBought:true
-},
-{merge:true}
-);
-
-updateUI();
-
-showMessage(
-dailyShopOffer.name+
-" purchased!"
-);
-
+await setDoc(ref, { dailyShopDate: today, dailyShopBought: true }, { merge: true });
+updateUI(); showMessage(dailyShopOffer.name + " purchased!");
 };
 
-
-window.buyDolbDeal=async(coins,amountDolb)=>{
-
-if(money<coins){
-
-showMessage("Not enough coins.");
-return;
-
-}
-
-money-=coins;
-dolb+=amountDolb;
-
-await savePlayerData();
-
-updateUI();
-
-showMessage(
-"You received "+
-amountDolb+
-" Dolb!"
-);
-
+window.buyDolbDeal = async (coins, amountDolb) => {
+if(money < coins){ showMessage("Not enough coins."); return; }
+money -= coins; dolb += amountDolb;
+await savePlayerData(); updateUI(); showMessage("You received " + amountDolb + " Dolb!");
 };
-
-
-/* =========================
-   PACKS
-========================= */
 
 function weightedRandomCard(){
-
-const total=
-cards.reduce(
-(s,c)=>s+c.weight,
-0
-);
-
-let r=Math.random()*total;
-
+const total = cards.reduce((s,c) => s + c.weight, 0);
+let r = Math.random() * total;
 for(const card of cards){
-
-r-=card.weight;
-
-if(r<=0)return card;
-
+r -= card.weight;
+if(r <= 0) return card;
+}
+return cards[cards.length - 1];
 }
 
-return cards[cards.length-1];
-
-}
-
-
-window.openPack=async()=>{
-
-if(money<PACK_PRICE){
-
-showMessage("Not enough coins.");
-return;
-
-}
-
-money-=PACK_PRICE;
-
-const pulled=[];
-
-for(let i=0;i<3;i++){
-
-const card=weightedRandomCard();
-
-collection.push(
-createCardCopy(card.name)
-);
-
+window.openPack = async () => {
+if(money < PACK_PRICE){ showMessage("Not enough coins."); return; }
+money -= PACK_PRICE;
+const pulled = [];
+for(let i = 0; i < 3; i++){
+const card = weightedRandomCard();
+collection.push(createCardCopy(card.name));
 pulled.push(card);
-
 }
-
-await savePlayerData();
-
-updateUI();
-
-showPackResults(pulled);
-
+await savePlayerData(); updateUI(); showPackResults(pulled);
 };
-
 
 function showPackResults(pulled){
-
-const overlay=document.createElement("div");
-
-Object.assign(
-overlay.style,
-{
-position:"fixed",
-inset:"0",
-background:"rgba(0,0,0,.94)",
-zIndex:"4000",
-display:"flex",
-flexDirection:"column",
-alignItems:"center",
-justifyContent:"center",
-padding:"20px",
-overflowY:"auto"
-}
-);
-
-const title=document.createElement("h2");
-
-title.textContent="You got:";
-
-overlay.appendChild(title);
-
-const grid=document.createElement("div");
-
-Object.assign(
-grid.style,
-{
-display:"grid",
-gridTemplateColumns:
-"repeat(3,minmax(0,1fr))",
-gap:"15px",
-width:"min(100%,900px)"
-}
-);
-
-pulled.forEach(card=>{
-
-const box=document.createElement("div");
-
-Object.assign(
-box.style,
-{
-background:"#10243d",
-borderRadius:"15px",
-padding:"10px",
-textAlign:"center"
-}
-);
-
-const img=document.createElement("img");
-
-img.src=card.image;
-img.alt=card.name;
-
-Object.assign(
-img.style,
-{
-width:"100%",
-maxHeight:"55vh",
-objectFit:"contain",
-borderRadius:"10px",
-cursor:"pointer"
-}
-);
-
-img.onclick=e=>{
-
-e.stopPropagation();
-
-openCardViewer(
-card.image,
-card.name
-);
-
-};
-
-box.appendChild(img);
-grid.appendChild(box);
-
+const overlay = document.createElement("div");
+Object.assign(overlay.style, { position:"fixed", inset:"0", background:"rgba(0,0,0,.94)", zIndex:"4000", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"20px", overflowY:"auto" });
+const title = document.createElement("h2"); title.textContent = "You got:"; overlay.appendChild(title);
+const grid = document.createElement("div");
+Object.assign(grid.style, { display:"grid", gridTemplateColumns:"repeat(3,minmax(0,1fr))", gap:"15px", width:"min(100%,900px)" });
+pulled.forEach(card => {
+const box = document.createElement("div");
+Object.assign(box.style, { background:"#10243d", borderRadius:"15px", padding:"10px", textAlign:"center" });
+const img = document.createElement("img"); img.src = card.image; img.alt = card.name;
+Object.assign(img.style, { width:"100%", maxHeight:"55vh", objectFit:"contain", borderRadius:"10px", cursor:"pointer" });
+img.onclick = e => { e.stopPropagation(); openCardViewer(card.image, card.name); };
+box.appendChild(img); grid.appendChild(box);
 });
-
 overlay.appendChild(grid);
-
-const close=document.createElement("button");
-
-close.textContent="CONTINUE";
-
-Object.assign(
-close.style,
-{
-marginTop:"20px",
-background:"#2674d9",
-color:"white"
-}
-);
-
-close.onclick=()=>overlay.remove();
-
-overlay.appendChild(close);
-
-document.body.appendChild(overlay);
-
+const close = document.createElement("button"); close.textContent = "CONTINUE";
+Object.assign(close.style, { marginTop:"20px", background:"#2674d9", color:"white" });
+close.onclick = () => overlay.remove();
+overlay.appendChild(close); document.body.appendChild(overlay);
 }
 
-
-/* =========================
-   COLLECTION
-========================= */
-
-window.setCollectionTab=tab=>{
-
-collectionTab=tab;
-
-document
-.getElementById("collectionAllButton")
-.classList.toggle(
-"active",
-tab==="all"
-);
-
-document
-.getElementById("collectionFavoritesButton")
-.classList.toggle(
-"active",
-tab==="favorites"
-);
-
+window.setCollectionTab = tab => {
+collectionTab = tab;
+document.getElementById("collectionAllButton").classList.toggle("active", tab === "all");
+document.getElementById("collectionFavoritesButton").classList.toggle("active", tab === "favorites");
 renderCollection();
-
 };
-
 
 function getCollectionCounts(){
-
-const counts={};
-
-for(const copy of collection){
-
-counts[copy.name]=
-(counts[copy.name]||0)+1;
-
-}
-
+const counts = {};
+for(const copy of collection){ counts[copy.name] = (counts[copy.name] || 0) + 1; }
 return counts;
-
 }
-
 
 function getFirstCopy(name){
-
-return collection.find(
-c=>c.name===name
-);
-
+return collection.find(c => c.name === name);
 }
-
 
 function renderCollection(){
-
-const grid=
-document.getElementById("collectionGrid");
-
-if(!grid)return;
-
-const search=
-(
-document.getElementById("collectionSearch")?.value||""
-).trim().toLowerCase();
-
-const counts=getCollectionCounts();
-
-let names=
-cards
-.filter(c=>counts[c.name])
-.map(c=>c.name);
-
-if(collectionTab==="favorites"){
-
-names=names.filter(
-n=>favorites.includes(n)
-);
-
-}
-
-if(search){
-
-names=names.filter(
-n=>n.toLowerCase().includes(search)
-);
-
-}
-
-grid.innerHTML="";
-
+const grid = document.getElementById("collectionGrid");
+if(!grid) return;
+const search = (document.getElementById("collectionSearch")?.value || "").trim().toLowerCase();
+const counts = getCollectionCounts();
+let names = cards.filter(c => counts[c.name]).map(c => c.name);
+if(collectionTab === "favorites") names = names.filter(n => favorites.includes(n));
+if(search) names = names.filter(n => n.toLowerCase().includes(search));
+grid.innerHTML = "";
 if(!names.length){
-
-grid.innerHTML=
-search
-?
-"<p>No cards match your search.</p>"
-:
-"<p>You don't have any cards here.</p>";
-
+grid.innerHTML = search ? "<p>No cards match your search.</p>" : "<p>You don't have any cards here.</p>";
 return;
-
 }
-
 for(const name of names){
-
-const card=getCard(name);
-const copy=getFirstCopy(name);
-const fav=favorites.includes(name);
-const traded=copy?.traded===true;
-
-let border="";
-
-if(fav&&traded){
-
-border=
-card.rarity==="rare"
-?
-"rareTradedFavoriteCard"
-:
-"tradedFavoriteCard";
-
-}else if(fav){
-
-border=
-card.rarity==="rare"
-?
-"rareFavoriteCard"
-:
-"favoriteCard";
-
-}
-
-const div=document.createElement("div");
-
-div.className="card "+border;
-
-const count=counts[name];
-
-div.innerHTML=`
-
-<button
-class="starButton ${fav?"favorite":""}"
-onclick="toggleFavorite('${escapeHtml(name)}')">
-
-${fav?"★":"☆"}
-
-</button>
-
-<div class="cardCount">${count}</div>
-
-<img
-src="${escapeHtml(card.image)}"
-onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(name)}')">
-
-<div class="cardName">
-${escapeHtml(name)}
-</div>
-
-<div>
-${count}
-${count===1?"copy":"copies"}
-• Sell: ${card.price}
-</div>
-
-<button
-class="sellButton ${fav?"favoriteLocked":""}"
-${fav?"disabled":""}
-onclick="sellCard('${escapeHtml(name)}')">
-
-${fav?"FAVORITED":"SELL 1 COPY"}
-
-</button>
-
-`;
-
+const card = getCard(name); const copy = getFirstCopy(name); const fav = favorites.includes(name); const traded = copy?.traded === true;
+let border = "";
+if(fav && traded) border = card.rarity === "rare" ? "rareTradedFavoriteCard" : "tradedFavoriteCard";
+else if(fav) border = card.rarity === "rare" ? "rareFavoriteCard" : "favoriteCard";
+const div = document.createElement("div"); div.className = "card " + border;
+const count = counts[name];
+div.innerHTML = `<button class="starButton ${fav?"favorite":""}" onclick="toggleFavorite('${escapeHtml(name)}')">${fav?"★":"☆"}</button><div class="cardCount">${count}</div><img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(name)}')"><div class="cardName">${escapeHtml(name)}</div><div>${count} ${count===1?"copy":"copies"} • Sell: ${card.price}</div><button class="sellButton ${fav?"favoriteLocked":""}" ${fav?"disabled":""} onclick="sellCard('${escapeHtml(name)}')">${fav?"FAVORITED":"SELL 1 COPY"}</button>`;
 grid.appendChild(div);
-
 }
-
 }
+window.renderCollection = renderCollection;
 
-window.renderCollection=renderCollection;
-
-
-window.toggleFavorite=async name=>{
-
-if(favorites.includes(name)){
-
-favorites=favorites.filter(x=>x!==name);
-
-showMessage(
-name+" is no longer a favorite."
-);
-
-}else{
-
-favorites.push(name);
-
-showMessage(
-name+" is now a favorite."
-);
-
-}
-
-await savePlayerData();
-updateUI();
-
+window.toggleFavorite = async name => {
+if(favorites.includes(name)){ favorites = favorites.filter(x => x !== name); showMessage(name + " is no longer a favorite."); }
+else { favorites.push(name); showMessage(name + " is now a favorite."); }
+await savePlayerData(); updateUI();
 };
 
-
-window.sellCard=async name=>{
-
-if(favorites.includes(name)){
-
-showMessage("Favorite cards cannot be sold.");
-return;
-
-}
-
-const index=
-collection.findIndex(c=>c.name===name);
-
-if(index===-1)return;
-
-const card=getCard(name);
-
-if(!card)return;
-
-collection.splice(index,1);
-
-money+=card.price;
-
-await savePlayerData();
-
-updateUI();
-
-showMessage(
-name+
-" sold for "+
-card.price+
-" coins."
-);
-
+window.sellCard = async name => {
+if(favorites.includes(name)){ showMessage("Favorite cards cannot be sold."); return; }
+const index = collection.findIndex(c => c.name === name);
+if(index === -1) return;
+const card = getCard(name); if(!card) return;
+collection.splice(index, 1); money += card.price;
+await savePlayerData(); updateUI(); showMessage(name + " sold for " + card.price + " coins.");
 };
 
-
-/* =========================
-   DEX
-========================= */
-
-window.setDexTab=tab=>{
-
-dexTab=tab;
-
-document
-.getElementById("dexDollsButton")
-.classList.toggle("active",tab==="dolls");
-
-document
-.getElementById("dexRaresButton")
-.classList.toggle("active",tab==="rares");
-
+window.setDexTab = tab => {
+dexTab = tab;
+document.getElementById("dexDollsButton").classList.toggle("active", tab === "dolls");
+document.getElementById("dexRaresButton").classList.toggle("active", tab === "rares");
 renderDex();
-
 };
-
 
 function renderDex(){
-
-const grid=document.getElementById("dexGrid");
-
-if(!grid)return;
-
-grid.innerHTML="";
-
-if(dexTab==="rares"){
-
-for(let i=1;i<=6;i++){
-
-const div=document.createElement("div");
-
-div.className="dexCard comingSoon";
-
-div.innerHTML=`
-
-<div
-style="
-aspect-ratio:1/1.35;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:25px">
-
-?
-
-</div>
-
-<b>Rare ${i}</b>
-<p>Coming Soon</p>
-
-`;
-
+const grid = document.getElementById("dexGrid");
+if(!grid) return;
+grid.innerHTML = "";
+if(dexTab === "rares"){
+for(let i = 1; i <= 6; i++){
+const div = document.createElement("div"); div.className = "dexCard comingSoon";
+div.innerHTML = `<div style="aspect-ratio:1/1.35;display:flex;align-items:center;justify-content:center;font-size:25px">?</div><b>Rare ${i}</b><p>Coming Soon</p>`;
 grid.appendChild(div);
-
 }
-
 return;
-
 }
-
 for(const card of cards){
-
-const count=
-collection.filter(
-c=>c.name===card.name
-).length;
-
-const div=document.createElement("div");
-
-div.className=
-"dexCard "+
-(!count?"comingSoon":"");
-
-div.innerHTML=`
-
-<img
-src="${escapeHtml(card.image)}"
-onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
-
-<b>${escapeHtml(card.name)}</b>
-
-<p>
-${count?`Owned: ${count}`:"Not Owned"}
-</p>
-
-`;
-
+const count = collection.filter(c => c.name === card.name).length;
+const div = document.createElement("div"); div.className = "dexCard " + (!count ? "comingSoon" : "");
+div.innerHTML = `<img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')"><b>${escapeHtml(card.name)}</b><p>${count?`Owned: ${count}`:"Not Owned"}</p>`;
 grid.appendChild(div);
-
+}
 }
 
-}
-
-
-/* =========================
-   TRADE
-========================= */
-
-window.findPlayer=async()=>{
-
-const input=document.getElementById("tradePlayerInput");
-const result=document.getElementById("tradePlayerResult");
-
-const name=input.value.trim();
-
-if(!name){
-
-result.innerHTML="<p>Enter a username.</p>";
-return;
-
-}
-
-if(
-username &&
-name.toLowerCase()===username.toLowerCase()
-){
-
-result.innerHTML=
-'<div class="tradeNotice">You cannot trade with yourself.</div>';
-
-return;
-
-}
-
-result.innerHTML="<p>Searching...</p>";
-
-try{
-
-const snap=
-await getDoc(
-doc(
-db,
-"usernames",
-name.toLowerCase()
-)
-);
-
-if(!snap.exists()){
-
-result.innerHTML=
-'<div class="tradeNotice">Player not found.</div>';
-
-return;
-
-}
-
-const d=snap.data();
-
-if(d.uid===currentUser.uid){
-
-result.innerHTML=
-'<div class="tradeNotice">You cannot trade with yourself.</div>';
-
-return;
-
-}
-
-const ps=
-await getDoc(
-doc(db,"players",d.uid)
-);
-
-const pd=ps.exists()?ps.data():{};
-
-const pic=
-pd.profilePic||DEFAULT_PROFILE_PIC;
-
-const n=
-pd.username||d.username||name;
-
-result.innerHTML=`
-
-<div class="tradeNotice">
-
-<div class="playerResultBox">
-
-<img
-class="profilePicSmall"
-src="${escapeHtml(pic)}">
-
-<div class="playerResultInfo">
-
-<div class="profileUsername">
-${escapeHtml(n)}
-</div>
-
-<p>Player found.</p>
-
-</div>
-
-</div>
-
-<button
-class="tradeSearchButton"
-style="margin-top:15px"
-onclick="sendTradeRequest('${escapeHtml(d.uid)}')">
-
-SEND TRADE REQUEST
-
-</button>
-
-</div>
-
-`;
-
-}catch(e){
-
-console.error(e);
-
-result.innerHTML=`
-
-<div class="tradeNotice">
-Search error:<br>
-${escapeHtml(e.message)}
-</div>
-
-`;
-
-}
-
+window.findPlayer = async () => {
+const input = document.getElementById("tradePlayerInput");
+const result = document.getElementById("tradePlayerResult");
+const name = input.value.trim();
+if(!name){ result.innerHTML = "<p>Enter a username.</p>"; return; }
+if(username && name.toLowerCase() === username.toLowerCase()){ result.innerHTML = '<div class="tradeNotice">You cannot trade with yourself.</div>'; return; }
+result.innerHTML = "<p>Searching...</p>";
+try {
+const snap = await getDoc(doc(db, "usernames", name.toLowerCase()));
+if(!snap.exists()){ result.innerHTML = '<div class="tradeNotice">Player not found.</div>'; return; }
+const d = snap.data();
+if(d.uid === currentUser.uid){ result.innerHTML = '<div class="tradeNotice">You cannot trade with yourself.</div>'; return; }
+const ps = await getDoc(doc(db, "players", d.uid));
+const pd = ps.exists() ? ps.data() : {};
+const pic = pd.profilePic || DEFAULT_PROFILE_PIC;
+const n = pd.username || d.username || name;
+result.innerHTML = `<div class="tradeNotice"><div class="playerResultBox"><img class="profilePicSmall" src="${escapeHtml(pic)}"><div class="playerResultInfo"><div class="profileUsername">${escapeHtml(n)}</div><p>Player found.</p></div></div><button class="tradeSearchButton" style="margin-top:15px" onclick="sendTradeRequest('${escapeHtml(d.uid)}')">SEND TRADE REQUEST</button></div>`;
+} catch(e) { console.error(e); result.innerHTML = `<div class="tradeNotice">Search error:<br>${escapeHtml(e.message)}</div>`; }
 };
 
-
-window.sendTradeRequest=async receiverUid=>{
-
-if(!currentUser||receiverUid===currentUser.uid)return;
-
-try{
-
-const pending=
-tradeRequests.some(
-t=>
-t.status==="pending" &&
-(
-(
-t.senderUid===currentUser.uid &&
-t.receiverUid===receiverUid
-)
-||
-(
-t.receiverUid===currentUser.uid &&
-t.senderUid===receiverUid
-)
-)
-);
-
-if(pending){
-
-showMessage(
-"You already have a pending trade with this player."
-);
-
-return;
-
-}
-
-await setDoc(
-doc(db,"tradeRequests",createCardId()),
-{
-
-participants:[
-currentUser.uid,
-receiverUid
-],
-
-senderUid:currentUser.uid,
-receiverUid,
-
-senderUsername:username,
-receiverUsername:"",
-
-senderOffer:[],
-receiverOffer:[],
-
-senderConfirmed:false,
-receiverConfirmed:false,
-
-status:"pending",
-
-createdAt:serverTimestamp()
-
-}
-);
-
+window.sendTradeRequest = async receiverUid => {
+if(!currentUser || receiverUid === currentUser.uid) return;
+try {
+const pending = tradeRequests.some(t => t.status === "pending" && ((t.senderUid === currentUser.uid && t.receiverUid === receiverUid) || (t.receiverUid === currentUser.uid && t.senderUid === receiverUid)));
+if(pending){ showMessage("You already have a pending trade with this player."); return; }
+await setDoc(doc(db, "tradeRequests", createCardId()), {
+participants: [currentUser.uid, receiverUid],
+senderUid: currentUser.uid, receiverUid, senderUsername: username, receiverUsername: "",
+senderOffer: [], receiverOffer: [], senderConfirmed: false, receiverConfirmed: false,
+status: "pending", createdAt: serverTimestamp()
+});
 showMessage("Trade request sent!");
-
-}catch(e){
-
-console.error(e);
-
-showMessage(
-"Could not send trade request: "+e.message
-);
-
-}
-
+} catch(e) { console.error(e); showMessage("Could not send trade request: " + e.message); }
 };
-
 
 function stopTradeListener(){
-
-if(tradeListener){
-
-tradeListener();
-tradeListener=null;
-
+if(tradeListener){ tradeListener(); tradeListener = null; }
 }
-
-}
-
 
 function startTradeListener(){
-
 stopTradeListener();
-
-if(!currentUser)return;
-
-const q=
-query(
-firestoreCollection(db,"tradeRequests"),
-where(
-"participants",
-"array-contains",
-currentUser.uid
-)
-);
-
-tradeListener=
-onSnapshot(
-q,
-s=>{
-
-tradeRequests=
-s.docs.map(
-x=>({
-id:x.id,
-...x.data()
-})
-);
-
+if(!currentUser) return;
+const q = query(firestoreCollection(db, "tradeRequests"), where("participants", "array-contains", currentUser.uid));
+tradeListener = onSnapshot(q, s => {
+tradeRequests = s.docs.map(x => ({ id: x.id, ...x.data() }));
 for(const t of tradeRequests){
-
-if(
-t.status==="pending" &&
-t.senderConfirmed===true &&
-t.receiverConfirmed===true
-){
-
-tryFinalizeTrade(t);
-
+if(t.status === "pending" && t.senderConfirmed === true && t.receiverConfirmed === true){ tryFinalizeTrade(t); }
+if(t.status === "completed"){ applyCompletedTrade(t); }
 }
-
-if(t.status==="completed"){
-
-applyCompletedTrade(t);
-
-}
-
-}
-
 if(activeTrade){
-
-const fresh=
-tradeRequests.find(
-t=>t.id===activeTrade.id
-);
-
-if(fresh)activeTrade=fresh;
-
+const fresh = tradeRequests.find(t => t.id === activeTrade.id);
+if(fresh) activeTrade = fresh;
 }
-
-renderIncomingTrades();
-renderActiveTrade();
-
-},
-e=>{
-
-console.error(e);
-
-showMessage(
-"Trade connection error: "+e.message
-);
-
+renderIncomingTrades(); renderActiveTrade();
+}, e => { console.error(e); showMessage("Trade connection error: " + e.message); });
 }
-);
-
-}
-
 
 function renderIncomingTrades(){
-
-const c=document.getElementById("incomingTrades");
-
-if(!c)return;
-
-c.innerHTML="";
-
-const incoming=
-tradeRequests.filter(
-t=>
-t.receiverUid===currentUser?.uid &&
-t.status==="pending" &&
-(!activeTrade||t.id!==activeTrade.id)
-);
-
-incoming.forEach(t=>{
-
-const d=document.createElement("div");
-
-d.className="tradeRequest";
-
-d.innerHTML=`
-
-<b>Incoming Trade Request</b>
-
-<p>
-${escapeHtml(
-t.senderUsername||"Another player"
-)}
-wants to trade with you.
-</p>
-
-<button
-class="tradeSearchButton"
-onclick="acceptTrade('${escapeHtml(t.id)}')">
-
-ACCEPT TRADE
-
-</button>
-
-`;
-
+const c = document.getElementById("incomingTrades"); if(!c) return;
+c.innerHTML = "";
+const incoming = tradeRequests.filter(t => t.receiverUid === currentUser?.uid && t.status === "pending" && (!activeTrade || t.id !== activeTrade.id));
+incoming.forEach(t => {
+const d = document.createElement("div"); d.className = "tradeRequest";
+d.innerHTML = `<b>Incoming Trade Request</b><p>${escapeHtml(t.senderUsername||"Another player")} wants to trade with you.</p><button class="tradeSearchButton" onclick="acceptTrade('${escapeHtml(t.id)}')">ACCEPT TRADE</button>`;
 c.appendChild(d);
-
 });
-
 }
 
-
-window.acceptTrade=id=>{
-
-const t=tradeRequests.find(x=>x.id===id);
-
-if(
-!t||
-t.receiverUid!==currentUser.uid||
-t.status!=="pending"
-){
-
-showMessage("This trade cannot be accepted.");
-return;
-
-}
-
-activeTrade=t;
-
-selectedTradeCards=
-getMyOffer(t).map(c=>c.id);
-
-showPage("trade");
-renderActiveTrade();
-
+window.acceptTrade = id => {
+const t = tradeRequests.find(x => x.id === id);
+if(!t || t.receiverUid !== currentUser.uid || t.status !== "pending"){ showMessage("This trade cannot be accepted."); return; }
+activeTrade = t; selectedTradeCards = getMyOffer(t).map(c => c.id);
+showPage("trade"); renderActiveTrade();
 };
-
 
 function openOutgoingTradeIfNeeded(){
-
-if(activeTrade)return;
-
-const t=
-tradeRequests.find(
-x=>
-x.senderUid===currentUser?.uid &&
-x.status==="pending"
-);
-
-if(t){
-
-activeTrade=t;
-
-selectedTradeCards=
-getMyOffer(t).map(c=>c.id);
-
+if(activeTrade) return;
+const t = tradeRequests.find(x => x.senderUid === currentUser?.uid && x.status === "pending");
+if(t){ activeTrade = t; selectedTradeCards = getMyOffer(t).map(c => c.id); }
 }
 
+function getMyOffer(t){ return t.senderUid === currentUser.uid ? (t.senderOffer||[]) : (t.receiverOffer||[]); }
+function getTheirOffer(t){ return t.senderUid === currentUser.uid ? (t.receiverOffer||[]) : (t.senderOffer||[]); }
+function sameIds(a,b){ return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every(x => b.includes(x)); }
+
+function renderOfferCards(offer, selectable=false){
+if(!offer.length) return `<p style="text-align:center">No cards offered yet.</p>`;
+return `<div class="tradeCardGrid">${offer.map(copy => {
+const card = getCard(copy.name); if(!card) return "";
+const selected = selectable && selectedTradeCards.includes(copy.id);
+return `<div class="tradeCard ${selected?"selected":""}" ${selectable?`onclick="toggleTradeCard('${escapeHtml(copy.id)}')"`:""}><img src="${escapeHtml(card.image)}" onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')"><div>${escapeHtml(card.name)}</div></div>`;
+}).join("")}</div>`;
 }
-
-
-function getMyOffer(t){
-
-return t.senderUid===currentUser.uid
-?
-(t.senderOffer||[])
-:
-(t.receiverOffer||[]);
-
-}
-
-
-function getTheirOffer(t){
-
-return t.senderUid===currentUser.uid
-?
-(t.receiverOffer||[])
-:
-(t.senderOffer||[]);
-
-}
-
-
-function sameIds(a,b){
-
-return Array.isArray(a) &&
-Array.isArray(b) &&
-a.length===b.length &&
-a.every(x=>b.includes(x));
-
-}
-
-
-function renderOfferCards(offer,selectable=false){
-
-if(!offer.length){
-
-return`
-<p style="text-align:center">
-No cards offered yet.
-</p>
-`;
-
-}
-
-return`
-
-<div class="tradeCardGrid">
-
-${offer.map(copy=>{
-
-const card=getCard(copy.name);
-
-if(!card)return"";
-
-const selected=
-selectable&&
-selectedTradeCards.includes(copy.id);
-
-return`
-
-<div
-class="tradeCard ${selected?"selected":""}"
-${
-selectable
-?
-`onclick="toggleTradeCard('${escapeHtml(copy.id)}')"`
-:""
-}>
-
-<img
-src="${escapeHtml(card.image)}"
-onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
-
-<div>${escapeHtml(card.name)}</div>
-
-</div>
-
-`;
-
-}).join("")}
-
-</div>
-
-`;
-
-}
-
 
 function renderSelectableTradeCards(){
-
-if(!collection.length){
-
-return`
-<p style="text-align:center">
-You have no cards.
-</p>
-`;
-
+if(!collection.length) return `<p style="text-align:center">You have no cards.</p>`;
+return `<div class="tradeCardGrid">${collection.map(copy => {
+const card = getCard(copy.name); if(!card) return "";
+return `<div class="tradeCard ${selectedTradeCards.includes(copy.id)?"selected":""}" onclick="toggleTradeCard('${escapeHtml(copy.id)}')"><img src="${escapeHtml(card.image)}" onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')"><div>${escapeHtml(card.name)}</div></div>`;
+}).join("")}</div>`;
 }
-
-return`
-
-<div class="tradeCardGrid">
-
-${collection.map(copy=>{
-
-const card=getCard(copy.name);
-
-if(!card)return"";
-
-return`
-
-<div
-class="tradeCard ${
-selectedTradeCards.includes(copy.id)?"selected":""
-}"
-onclick="toggleTradeCard('${escapeHtml(copy.id)}')">
-
-<img
-src="${escapeHtml(card.image)}"
-onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
-
-<div>${escapeHtml(card.name)}</div>
-
-</div>
-
-`;
-
-}).join("")}
-
-</div>
-
-`;
-
-}
-
 
 function renderActiveTrade(){
-
-const c=document.getElementById("activeTrade");
-
-if(!c)return;
-
+const c = document.getElementById("activeTrade"); if(!c) return;
 openOutgoingTradeIfNeeded();
-
-if(!activeTrade){
-
-c.innerHTML="";
+if(!activeTrade){ c.innerHTML = ""; return; }
+if(activeTrade.status !== "pending"){
+c.innerHTML = activeTrade.status === "completed" ? '<div class="tradeArea"><h2>Trade Completed</h2><p>The cards were successfully swapped.</p></div>' : "";
 return;
+}
+const sender = activeTrade.senderUid === currentUser.uid;
+const my = getMyOffer(activeTrade); const their = getTheirOffer(activeTrade);
+const myConfirmed = sender ? activeTrade.senderConfirmed === true : activeTrade.receiverConfirmed === true;
+const theirConfirmed = sender ? activeTrade.receiverConfirmed === true : activeTrade.senderConfirmed === true;
+const matches = sameIds(my.map(c => c.id), selectedTradeCards);
 
+c.innerHTML = `<div class="tradeArea"><h2>Trading</h2><div class="tradeColumns"><div class="tradeSide"><h3>Your Offer</h3>${renderOfferCards(my)}<p>Current offer: ${my.length} card(s)</p><hr><h3>Choose Cards</h3>${renderSelectableTradeCards()}<p>${selectedTradeCards.length} card(s) selected</p><button class="changeOfferButton" onclick="submitTradeOffer()">UPDATE MY OFFER</button></div><div class="tradeSide"><h3>Their Offer</h3>${renderOfferCards(their)}<p>Their offer: ${their.length} card(s)</p></div></div><div class="tradeStatus">${myConfirmed?"You confirmed this trade.":"You have not confirmed."}<br>${theirConfirmed?"They confirmed this trade.":"They have not confirmed."}</div>${!matches?'<p style="text-align:center;color:#36b9ff">Update your offer before confirming.</p>':""}${!my.length?'<p style="text-align:center;color:#36b9ff">You must offer at least one card.</p>':""}${!their.length?'<p style="text-align:center;color:#36b9ff">Waiting for them to offer a card.</p>':""}<button class="confirmButton" onclick="confirmTrade()" ${myConfirmed||!matches||!my.length||!their.length?"disabled":""}>${myConfirmed?"CONFIRMED":"CONFIRM TRADE"}</button><button class="cancelButton" onclick="cancelTrade('${escapeHtml(activeTrade.id)}')">CANCEL TRADE</button></div>`;
 }
 
-if(activeTrade.status!=="pending"){
-
-c.innerHTML=
-activeTrade.status==="completed"
-?
-'<div class="tradeArea"><h2>Trade Completed</h2><p>The cards were successfully swapped.</p></div>'
-:"";
-
-return;
-
-}
-
-const sender=
-activeTrade.senderUid===currentUser.uid;
-
-const my=getMyOffer(activeTrade);
-const their=getTheirOffer(activeTrade);
-
-const myConfirmed=
-sender
-?
-activeTrade.senderConfirmed===true
-:
-activeTrade.receiverConfirmed===true;
-
-const theirConfirmed=
-sender
-?
-activeTrade.receiverConfirmed===true
-:
-activeTrade.senderConfirmed===true;
-
-const matches=
-sameIds(
-my.map(c=>c.id),
-selectedTradeCards
-);
-
-c.innerHTML=`
-
-<div class="tradeArea">
-
-<h2>Trading</h2>
-
-<div class="tradeColumns">
-
-<div class="tradeSide">
-
-<h3>Your Offer</h3>
-
-${renderOfferCards(my)}
-
-<p>
-Current offer:
-${my.length} card(s)
-</p>
-
-<hr>
-
-<h3>Choose Cards</h3>
-
-${renderSelectableTradeCards()}
-
-<p>
-${selectedTradeCards.length}
-card(s) selected
-</p>
-
-<button
-class="changeOfferButton"
-onclick="submitTradeOffer()">
-
-UPDATE MY OFFER
-
-</button>
-
-</div>
-
-<div class="tradeSide">
-
-<h3>Their Offer</h3>
-
-${renderOfferCards(their)}
-
-<p>
-Their offer:
-${their.length} card(s)
-</p>
-
-</div>
-
-</div>
-
-<div class="tradeStatus">
-
-${
-myConfirmed
-?
-"You confirmed this trade."
-:
-"You have not confirmed."
-}
-
-<br>
-
-${
-theirConfirmed
-?
-"They confirmed this trade."
-:
-"They have not confirmed."
-}
-
-</div>
-
-${
-!matches
-?
-'<p style="text-align:center;color:#36b9ff">Update your offer before confirming.</p>'
-:""
-}
-
-${
-!my.length
-?
-'<p style="text-align:center;color:#36b9ff">You must offer at least one card.</p>'
-:""
-}
-
-${
-!their.length
-?
-'<p style="text-align:center;color:#36b9ff">Waiting for them to offer a card.</p>'
-:""
-}
-
-<button
-class="confirmButton"
-onclick="confirmTrade()"
-${
-myConfirmed||
-!matches||
-!my.length||
-!their.length
-?
-"disabled"
-:""
-}>
-
-${myConfirmed?"CONFIRMED":"CONFIRM TRADE"}
-
-</button>
-
-<button
-class="cancelButton"
-onclick="cancelTrade('${escapeHtml(activeTrade.id)}')">
-
-CANCEL TRADE
-
-</button>
-
-</div>
-
-`;
-
-}
-
-
-window.toggleTradeCard=id=>{
-
-if(
-!activeTrade||
-activeTrade.status!=="pending"
-)return;
-
-if(!collection.some(c=>c.id===id))return;
-
-if(selectedTradeCards.includes(id)){
-
-selectedTradeCards=
-selectedTradeCards.filter(x=>x!==id);
-
-}else{
-
-selectedTradeCards.push(id);
-
-}
-
+window.toggleTradeCard = id => {
+if(!activeTrade || activeTrade.status !== "pending") return;
+if(!collection.some(c => c.id === id)) return;
+if(selectedTradeCards.includes(id)){ selectedTradeCards = selectedTradeCards.filter(x => x !== id); }
+else { selectedTradeCards.push(id); }
 renderActiveTrade();
-
 };
 
-
-window.submitTradeOffer=async()=>{
-
-if(!activeTrade||activeTrade.status!=="pending")return;
-
-selectedTradeCards=
-selectedTradeCards.filter(
-id=>collection.some(c=>c.id===id)
-);
-
-const offer=
-selectedTradeCards
-.map(id=>{
-
-const c=collection.find(x=>x.id===id);
-
-return c
-?
-{
-id:c.id,
-name:c.name,
-traded:c.traded===true,
-favorite:favorites.includes(c.name)
-}
-:null;
-
-})
-.filter(Boolean);
-
-const sender=
-activeTrade.senderUid===currentUser.uid;
-
-try{
-
-await updateDoc(
-doc(db,"tradeRequests",activeTrade.id),
-{
-
-[sender
-?"senderOffer"
-:"receiverOffer"]:
-offer,
-
-senderConfirmed:false,
-receiverConfirmed:false
-
-}
-);
-
-showMessage(
-"Offer updated. Both players must confirm again."
-);
-
-}catch(e){
-
-showMessage(
-"Could not update offer: "+e.message
-);
-
-}
-
-};
-
-
-window.confirmTrade=async()=>{
-
-if(!activeTrade||activeTrade.status!=="pending")return;
-
-try{
-
-const ref=doc(
-db,
-"tradeRequests",
-activeTrade.id
-);
-
-const snap=await getDoc(ref);
-
-if(!snap.exists()){
-
-showMessage("Trade no longer exists.");
-return;
-
-}
-
-const t={
-id:snap.id,
-...snap.data()
-};
-
-const my=getMyOffer(t);
-const their=getTheirOffer(t);
-
-if(!my.length){
-
-showMessage("You must offer at least one card.");
-return;
-
-}
-
-if(!their.length){
-
-showMessage(
-"Wait for the other player to offer a card."
-);
-return;
-
-}
-
-if(
-!sameIds(
-my.map(c=>c.id),
-selectedTradeCards
-)
-){
-
-showMessage("Update your offer before confirming.");
-return;
-
-}
-
-if(
-!my.every(
-o=>collection.some(c=>c.id===o.id)
-)
-){
-
-showMessage(
-"One of your offered cards is no longer in your collection."
-);
-
-return;
-
-}
-
-const sender=
-t.senderUid===currentUser.uid;
-
-const field=
-sender
-?
-"senderConfirmed"
-:
-"receiverConfirmed";
-
-await updateDoc(
-ref,
-{[field]:true}
-);
-
-activeTrade={
-...t,
-[field]:true
-};
-
-renderActiveTrade();
-
-showMessage(
-"Confirmed. Waiting for the other player."
-);
-
-await tryFinalizeTrade({
-...t,
-[field]:true
+window.submitTradeOffer = async () => {
+if(!activeTrade || activeTrade.status !== "pending") return;
+selectedTradeCards = selectedTradeCards.filter(id => collection.some(c => c.id === id));
+const offer = selectedTradeCards.map(id => {
+const c = collection.find(x => x.id === id);
+return c ? { id: c.id, name: c.name, traded: c.traded === true, favorite: favorites.includes(c.name) } : null;
+}).filter(Boolean);
+const sender = activeTrade.senderUid === currentUser.uid;
+try {
+await updateDoc(doc(db, "tradeRequests", activeTrade.id), {
+[sender ? "senderOffer" : "receiverOffer"]: offer,
+senderConfirmed: false, receiverConfirmed: false
 });
-
-}catch(e){
-
-console.error(e);
-
-showMessage(
-"Could not confirm trade: "+e.message
-);
-
-}
-
+showMessage("Offer updated. Both players must confirm again.");
+} catch(e) { showMessage("Could not update offer: " + e.message); }
 };
 
+window.confirmTrade = async () => {
+if(!activeTrade || activeTrade.status !== "pending") return;
+try {
+const ref = doc(db, "tradeRequests", activeTrade.id);
+const snap = await getDoc(ref);
+if(!snap.exists()){ showMessage("Trade no longer exists."); return; }
+const t = { id: snap.id, ...snap.data() };
+const my = getMyOffer(t); const their = getTheirOffer(t);
+if(!my.length){ showMessage("You must offer at least one card."); return; }
+if(!their.length){ showMessage("Wait for the other player to offer a card."); return; }
+if(!sameIds(my.map(c => c.id), selectedTradeCards)){ showMessage("Update your offer before confirming."); return; }
+if(!my.every(o => collection.some(c => c.id === o.id))){ showMessage("One of your offered cards is no longer in your collection."); return; }
+const sender = t.senderUid === currentUser.uid;
+const field = sender ? "senderConfirmed" : "receiverConfirmed";
+await updateDoc(ref, { [field]: true });
+activeTrade = { ...t, [field]: true };
+renderActiveTrade(); showMessage("Confirmed. Waiting for the other player.");
+await tryFinalizeTrade({ ...t, [field]: true });
+} catch(e) { console.error(e); showMessage("Could not confirm trade: " + e.message); }
+};
 
 async function tryFinalizeTrade(t){
-
-if(
-!t||
-t.status!=="pending"||
-t.senderConfirmed!==true||
-t.receiverConfirmed!==true
-)return;
-
-const sender=t.senderOffer||[];
-const receiver=t.receiverOffer||[];
-
-if(!sender.length||!receiver.length)return;
-
-try{
-
-const ref=doc(
-db,
-"tradeRequests",
-t.id
-);
-
-const snap=await getDoc(ref);
-
-if(!snap.exists())return;
-
-const fresh={
-id:snap.id,
-...snap.data()
-};
-
-if(
-fresh.status!=="pending"||
-fresh.senderConfirmed!==true||
-fresh.receiverConfirmed!==true
-)return;
-
-await updateDoc(
-ref,
-{
-status:"completed",
-completedAt:serverTimestamp()
+if(!t || t.status !== "pending" || t.senderConfirmed !== true || t.receiverConfirmed !== true) return;
+const sender = t.senderOffer || []; const receiver = t.receiverOffer || [];
+if(!sender.length || !receiver.length) return;
+try {
+const ref = doc(db, "tradeRequests", t.id);
+const snap = await getDoc(ref); if(!snap.exists()) return;
+const fresh = { id: snap.id, ...snap.data() };
+if(fresh.status !== "pending" || fresh.senderConfirmed !== true || fresh.receiverConfirmed !== true) return;
+await updateDoc(ref, { status: "completed", completedAt: serverTimestamp() });
+await applyCompletedTrade({ ...fresh, status: "completed" });
+} catch(e) { console.error(e); }
 }
-);
-
-await applyCompletedTrade({
-...fresh,
-status:"completed"
-});
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
 
 async function applyCompletedTrade(t){
-
-if(
-!currentUser||
-t.status!=="completed"
-)return;
-
-if(
-completedTradeIds.includes(t.id)||
-applyingTradeIds.has(t.id)
-)return;
-
+if(!currentUser || t.status !== "completed") return;
+if(completedTradeIds.includes(t.id) || applyingTradeIds.has(t.id)) return;
 applyingTradeIds.add(t.id);
-
-try{
-
-const sender=t.senderUid===currentUser.uid;
-
-const my=sender
-?
-(t.senderOffer||[])
-:
-(t.receiverOffer||[]);
-
-const incoming=sender
-?
-(t.receiverOffer||[])
-:
-(t.senderOffer||[]);
-
-if(!my.length||!incoming.length)return;
-
-const ref=doc(
-db,
-"players",
-currentUser.uid
-);
-
-const snap=await getDoc(ref);
-
-if(!snap.exists())return;
-
-let col=normalizeCollection(
-snap.data().collection
-);
-
-let favs=
-Array.isArray(snap.data().favorites)
-?
-[...snap.data().favorites]
-:
-[];
-
-let done=
-Array.isArray(snap.data().completedTradeIds)
-?
-snap.data().completedTradeIds
-:
-[];
-
-if(done.includes(t.id)){
-
-completedTradeIds=done;
-return;
-
-}
-
-const ids=new Set(my.map(c=>c.id));
-
-if(
-!my.every(
-o=>col.some(c=>c.id===o.id)
-)
-)return;
-
-col=col.filter(c=>!ids.has(c.id));
-
+try {
+const sender = t.senderUid === currentUser.uid;
+const my = sender ? (t.senderOffer||[]) : (t.receiverOffer||[]);
+const incoming = sender ? (t.receiverOffer||[]) : (t.senderOffer||[]);
+if(!my.length || !incoming.length) return;
+const ref = doc(db, "players", currentUser.uid);
+const snap = await getDoc(ref); if(!snap.exists()) return;
+let col = normalizeCollection(snap.data().collection);
+let favs = Array.isArray(snap.data().favorites) ? [...snap.data().favorites] : [];
+let done = Array.isArray(snap.data().completedTradeIds) ? snap.data().completedTradeIds : [];
+if(done.includes(t.id)){ completedTradeIds = done; return; }
+const ids = new Set(my.map(c => c.id));
+if(!my.every(o => col.some(c => c.id === o.id))) return;
+col = col.filter(c => !ids.has(c.id));
 for(const o of incoming){
-
-if(!col.some(c=>c.id===o.id)){
-
-col.push({
-id:o.id,
-name:o.name,
-traded:true
-});
-
-if(
-o.favorite&&!favs.includes(o.name)
-){
-
-favs.push(o.name);
-
+if(!col.some(c => c.id === o.id)){
+col.push({ id: o.id, name: o.name, traded: true });
+if(o.favorite && !favs.includes(o.name)) favs.push(o.name);
 }
-
 }
-
-}
-
 done.push(t.id);
-
-await setDoc(
-ref,
-{
-collection:col,
-favorites:favs,
-completedTradeIds:done
-},
-{merge:true}
-);
-
-collection=col;
-favorites=favs;
-completedTradeIds=done;
-
-updateUI();
-
-showMessage("Trade completed! Cards swapped.");
-
-}catch(e){
-
-console.error(e);
-
-}finally{
-
-applyingTradeIds.delete(t.id);
-
+await setDoc(ref, { collection: col, favorites: favs, completedTradeIds: done }, { merge: true });
+collection = col; favorites = favs; completedTradeIds = done;
+updateUI(); showMessage("Trade completed! Cards swapped.");
+} catch(e) { console.error(e); }
+finally { applyingTradeIds.delete(t.id); }
 }
 
-}
-
-
-window.cancelTrade=async id=>{
-
-try{
-
-await updateDoc(
-doc(db,"tradeRequests",id),
-{status:"cancelled"}
-);
-
-if(activeTrade?.id===id){
-
-activeTrade=null;
-
-}
-
-selectedTradeCards=[];
-
-renderActiveTrade();
-renderIncomingTrades();
-
+window.cancelTrade = async id => {
+try {
+await updateDoc(doc(db, "tradeRequests", id), { status: "cancelled" });
+if(activeTrade?.id === id) activeTrade = null;
+selectedTradeCards = []; renderActiveTrade(); renderIncomingTrades();
 showMessage("Trade cancelled.");
-
-}catch(e){
-
-showMessage(
-"Could not cancel trade: "+e.message
-);
-
-}
-
+} catch(e) { showMessage("Could not cancel trade: " + e.message); }
 };
 
-
-/* =========================
-   FRIENDS
-========================= */
-
-window.findFriend=async()=>{
-
-const input=
-document.getElementById("friendPlayerInput");
-
-const result=
-document.getElementById("friendSearchResult");
-
-const name=input.value.trim();
-
-if(!name){
-
-result.innerHTML="<p>Enter a username.</p>";
-return;
-
-}
-
-if(
-username &&
-name.toLowerCase()===username.toLowerCase()
-){
-
-result.innerHTML=
-'<div class="friendEmpty">You cannot add yourself.</div>';
-
-return;
-
-}
-
-result.innerHTML="<p>Searching...</p>";
-
-try{
-
-const snap=
-await getDoc(
-doc(
-db,
-"usernames",
-name.toLowerCase()
-)
-);
-
-if(!snap.exists()){
-
-result.innerHTML=
-'<div class="friendEmpty">Player not found.</div>';
-
-return;
-
-}
-
-const d=snap.data();
-const uid=d.uid;
-
-const ps=
-await getDoc(
-doc(db,"players",uid)
-);
-
-const pd=ps.exists()?ps.data():{};
-
-const n=pd.username||d.username||name;
-const pic=pd.profilePic||DEFAULT_PROFILE_PIC;
-
-const already=friends.includes(uid);
-
-const sent=
-friendRequests.some(
-r=>
-r.status==="pending" &&
-r.senderUid===currentUser.uid &&
-r.receiverUid===uid
-);
-
-const received=
-friendRequests.some(
-r=>
-r.status==="pending" &&
-r.senderUid===uid &&
-r.receiverUid===currentUser.uid
-);
+window.findFriend = async () => {
+const input = document.getElementById("friendPlayerInput");
+const result = document.getElementById("friendSearchResult");
+const name = input.value.trim();
+if(!name){ result.innerHTML = "<p>Enter a username.</p>"; return; }
+if(username && name.toLowerCase() === username.toLowerCase()){ result.innerHTML = '<div class="friendEmpty">You cannot add yourself.</div>'; return; }
+result.innerHTML = "<p>Searching...</p>";
+try {
+const snap = await getDoc(doc(db, "usernames", name.toLowerCase()));
+if(!snap.exists()){ result.innerHTML = '<div class="friendEmpty">Player not found.</div>'; return; }
+const d = snap.data(); const uid = d.uid;
+const ps = await getDoc(doc(db, "players", uid));
+const pd = ps.exists() ? ps.data() : {};
+const n = pd.username || d.username || name;
+const pic = pd.profilePic || DEFAULT_PROFILE_PIC;
+const already = friends.includes(uid);
+const sent = friendRequests.some(r => r.status === "pending" && r.senderUid === currentUser.uid && r.receiverUid === uid);
+const received = friendRequests.some(r => r.status === "pending" && r.senderUid === uid && r.receiverUid === currentUser.uid);
 
 let action;
+if(already) action = '<button class="friendActionButton" disabled>ALREADY FRIENDS</button>';
+else if(sent) action = '<button class="friendActionButton" disabled>REQUEST SENT</button>';
+else if(received) action = `<button class="friendActionButton friendAcceptButton" onclick="acceptFriendRequestByUser('${escapeHtml(uid)}')">ACCEPT FRIEND REQUEST</button>`;
+else action = `<button class="friendActionButton" onclick="sendFriendRequest('${escapeHtml(uid)}')">ADD FRIEND</button>`;
 
-if(already){
-
-action=
-'<button class="friendActionButton" disabled>ALREADY FRIENDS</button>';
-
-}else if(sent){
-
-action=
-'<button class="friendActionButton" disabled>REQUEST SENT</button>';
-
-}else if(received){
-
-action=`
-
-<button
-class="friendActionButton friendAcceptButton"
-onclick="acceptFriendRequestByUser('${escapeHtml(uid)}')">
-
-ACCEPT FRIEND REQUEST
-
-</button>
-
-`;
-
-}else{
-
-action=`
-
-<button
-class="friendActionButton"
-onclick="sendFriendRequest('${escapeHtml(uid)}')">
-
-ADD FRIEND
-
-</button>
-
-`;
-
-}
-
-result.innerHTML=`
-
-<div class="friendResultBox">
-
-<img
-class="profilePicSmall"
-src="${escapeHtml(pic)}">
-
-<div class="friendResultInfo">
-
-<div class="friendName">
-${escapeHtml(n)}
-</div>
-
-<div>Player found.</div>
-
-${action}
-
-</div>
-
-</div>
-
-`;
-
-}catch(e){
-
-console.error(e);
-
-result.innerHTML=`
-
-<div class="friendEmpty">
-Search error:<br>
-${escapeHtml(e.message)}
-</div>
-
-`;
-
-}
-
+result.innerHTML = `<div class="friendResultBox"><img class="profilePicSmall" src="${escapeHtml(pic)}"><div class="friendResultInfo"><div class="friendName">${escapeHtml(n)}</div><div>Player found.</div>${action}</div></div>`;
+} catch(e) { console.error(e); result.innerHTML = `<div class="friendEmpty">Search error:<br>${escapeHtml(e.message)}</div>`; }
 };
 
-
-window.sendFriendRequest=async receiverUid=>{
-
-if(
-!currentUser||
-receiverUid===currentUser.uid
-)return;
-
-try{
-
-if(friends.includes(receiverUid)){
-
-showMessage("You are already friends.");
-return;
-
-}
-
-const existing=
-friendRequests.some(
-r=>
-r.status==="pending" &&
-(
-(
-r.senderUid===currentUser.uid &&
-r.receiverUid===receiverUid
-)
-||
-(
-r.receiverUid===currentUser.uid &&
-r.senderUid===receiverUid
-)
-)
-);
-
-if(existing){
-
-showMessage("A friend request already exists.");
-return;
-
-}
-
-const snap=
-await getDoc(
-doc(db,"players",receiverUid)
-);
-
-const data=snap.exists()?snap.data():{};
-
-await setDoc(
-doc(db,"friendRequests",createCardId()),
-{
-
-participants:[
-currentUser.uid,
-receiverUid
-],
-
-senderUid:currentUser.uid,
-receiverUid,
-
-senderUsername:username,
-receiverUsername:data.username||"",
-
-status:"pending",
-
-createdAt:serverTimestamp()
-
-}
-);
-
+window.sendFriendRequest = async receiverUid => {
+if(!currentUser || receiverUid === currentUser.uid) return;
+try {
+if(friends.includes(receiverUid)){ showMessage("You are already friends."); return; }
+const existing = friendRequests.some(r => r.status === "pending" && ((r.senderUid === currentUser.uid && r.receiverUid === receiverUid) || (r.receiverUid === currentUser.uid && r.senderUid === receiverUid)));
+if(existing){ showMessage("A friend request already exists."); return; }
+const snap = await getDoc(doc(db, "players", receiverUid));
+const data = snap.exists() ? snap.data() : {};
+await setDoc(doc(db, "friendRequests", createCardId()), {
+participants: [currentUser.uid, receiverUid],
+senderUid: currentUser.uid, receiverUid,
+senderUsername: username, receiverUsername: data.username || "",
+status: "pending", createdAt: serverTimestamp()
+});
 showMessage("Friend request sent!");
-
-document.getElementById(
-"friendSearchResult"
-).innerHTML=
-'<div class="friendEmpty">Friend request sent!</div>';
-
-}catch(e){
-
-console.error(e);
-
-showMessage(
-"Could not send friend request: "+e.message
-);
-
-}
-
+document.getElementById("friendSearchResult").innerHTML = '<div class="friendEmpty">Friend request sent!</div>';
+} catch(e) { console.error(e); showMessage("Could not send friend request: " + e.message); }
 };
-
 
 function stopFriendListener(){
-
-if(friendListener){
-
-friendListener();
-friendListener=null;
-
+if(friendListener){ friendListener(); friendListener = null; }
 }
-
-}
-
 
 function startFriendListener(){
-
 stopFriendListener();
-
-if(!currentUser)return;
-
-const q=
-query(
-firestoreCollection(db,"friendRequests"),
-where(
-"participants",
-"array-contains",
-currentUser.uid
-)
-);
-
-friendListener=
-onSnapshot(
-q,
-s=>{
-
-friendRequests=
-s.docs.map(
-x=>({
-id:x.id,
-...x.data()
-})
-);
-
-renderFriendRequests();
-renderFriends();
-renderBattleRequests();
-
-},
-e=>{
-
-console.error(e);
-
-showMessage(
-"Friend connection error: "+e.message
-);
-
+if(!currentUser) return;
+const q = query(firestoreCollection(db, "friendRequests"), where("participants", "array-contains", currentUser.uid));
+friendListener = onSnapshot(q, s => {
+friendRequests = s.docs.map(x => ({ id: x.id, ...x.data() }));
+renderFriendRequests(); renderFriends(); renderBattleRequests();
+}, e => { console.error(e); showMessage("Friend connection error: " + e.message); });
 }
-);
-
-}
-
 
 function renderFriendRequests(){
-
-const c=
-document.getElementById("friendRequestsArea");
-
-if(!c)return;
-
-const incoming=
-friendRequests.filter(
-r=>
-r.receiverUid===currentUser?.uid &&
-r.status==="pending"
-);
-
-if(!incoming.length){
-
-c.innerHTML="";
-return;
-
-}
-
-c.innerHTML=
-"<h2 class='friendSection'>Friend Requests</h2>";
-
-incoming.forEach(r=>{
-
-const d=document.createElement("div");
-
-d.className="tradeRequest";
-
-d.innerHTML=`
-
-<div class="playerResultBox">
-
-<img
-class="profilePicTiny"
-id="fr_${escapeHtml(r.id)}"
-src="${DEFAULT_PROFILE_PIC}">
-
-<div class="playerResultInfo">
-
-<div class="friendName">
-${escapeHtml(
-r.senderUsername||"Another player"
-)}
-</div>
-
-<p>Wants to be your friend.</p>
-
-<button
-class="friendAcceptButton"
-onclick="acceptFriendRequest('${escapeHtml(r.id)}')">
-
-ACCEPT
-
-</button>
-
-<button
-class="friendDeclineButton"
-onclick="declineFriendRequest('${escapeHtml(r.id)}')">
-
-DECLINE
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
+const c = document.getElementById("friendRequestsArea"); if(!c) return;
+const incoming = friendRequests.filter(r => r.receiverUid === currentUser?.uid && r.status === "pending" && r.type !== "battle");
+if(!incoming.length){ c.innerHTML = ""; return; }
+c.innerHTML = "<h2 class='friendSection'>Friend Requests</h2>";
+incoming.forEach(r => {
+const d = document.createElement("div"); d.className = "tradeRequest";
+d.innerHTML = `<div class="playerResultBox"><img class="profilePicTiny" id="fr_${escapeHtml(r.id)}" src="${DEFAULT_PROFILE_PIC}"><div class="playerResultInfo"><div class="friendName">${escapeHtml(r.senderUsername||"Another player")}</div><p>Wants to be your friend.</p><button class="friendAcceptButton" onclick="acceptFriendRequest('${escapeHtml(r.id)}')">ACCEPT</button><button class="friendDeclineButton" onclick="declineFriendRequest('${escapeHtml(r.id)}')">DECLINE</button></div></div>`;
 c.appendChild(d);
-
-loadFriendRequestPicture(
-r.id,
-r.senderUid
-);
-
+loadFriendRequestPicture(r.id, r.senderUid);
 });
-
 }
 
-
-async function loadFriendRequestPicture(id,uid){
-
-try{
-
-const s=
-await getDoc(
-doc(db,"players",uid)
-);
-
-if(!s.exists())return;
-
-const img=
-document.getElementById("fr_"+id);
-
-if(img){
-
-img.src=
-s.data().profilePic||
-DEFAULT_PROFILE_PIC;
-
+async function loadFriendRequestPicture(id, uid){
+try {
+const s = await getDoc(doc(db, "players", uid)); if(!s.exists()) return;
+const img = document.getElementById("fr_" + id);
+if(img) img.src = s.data().profilePic || DEFAULT_PROFILE_PIC;
+} catch(e) { console.error(e); }
 }
 
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-
-window.acceptFriendRequest=async id=>{
-
-const r=
-friendRequests.find(x=>x.id===id);
-
-if(
-!r||
-r.receiverUid!==currentUser.uid||
-r.status!=="pending"
-){
-
-showMessage("This request cannot be accepted.");
-return;
-
-}
-
-try{
-
-await setDoc(
-doc(db,"players",currentUser.uid),
-{
-friends:arrayUnion(r.senderUid)
-},
-{merge:true}
-);
-
-await setDoc(
-doc(db,"players",r.senderUid),
-{
-friends:arrayUnion(currentUser.uid)
-},
-{merge:true}
-);
-
-await updateDoc(
-doc(db,"friendRequests",id),
-{
-status:"accepted"
-}
-);
-
-if(!friends.includes(r.senderUid)){
-
-friends.push(r.senderUid);
-
-}
-
-await savePlayerData();
-
-showMessage(
-"You are now friends with "+
-r.senderUsername+
-"!"
-);
-
+window.acceptFriendRequest = async id => {
+const r = friendRequests.find(x => x.id === id);
+if(!r || r.receiverUid !== currentUser.uid || r.status !== "pending"){ showMessage("This request cannot be accepted."); return; }
+try {
+await setDoc(doc(db, "players", currentUser.uid), { friends: arrayUnion(r.senderUid) }, { merge: true });
+await setDoc(doc(db, "players", r.senderUid), { friends: arrayUnion(currentUser.uid) }, { merge: true });
+await updateDoc(doc(db, "friendRequests", id), { status: "accepted" });
+if(!friends.includes(r.senderUid)) friends.push(r.senderUid);
+await savePlayerData(); showMessage("You are now friends with " + r.senderUsername + "!");
 renderFriends();
-
-}catch(e){
-
-console.error(e);
-
-showMessage(
-"Could not accept friend request: "+e.message
-);
-
-}
-
+} catch(e) { console.error(e); showMessage("Could not accept friend request: " + e.message); }
 };
 
-
-window.acceptFriendRequestByUser=async uid=>{
-
-const r=
-friendRequests.find(
-x=>
-x.senderUid===uid &&
-x.receiverUid===currentUser.uid &&
-x.status==="pending"
-);
-
-if(r){
-
-await acceptFriendRequest(r.id);
-
-}else{
-
-showMessage("Friend request not found.");
-
-}
-
+window.acceptFriendRequestByUser = async uid => {
+const r = friendRequests.find(x => x.senderUid === uid && x.receiverUid === currentUser.uid && x.status === "pending");
+if(r) await acceptFriendRequest(r.id);
+else showMessage("Friend request not found.");
 };
 
-
-window.declineFriendRequest=async id=>{
-
-const r=
-friendRequests.find(x=>x.id===id);
-
-if(!r)return;
-
-try{
-
-await updateDoc(
-doc(db,"friendRequests",id),
-{
-status:"declined"
-}
-);
-
+window.declineFriendRequest = async id => {
+const r = friendRequests.find(x => x.id === id); if(!r) return;
+try {
+await updateDoc(doc(db, "friendRequests", id), { status: "declined" });
 showMessage("Friend request declined.");
-
-}catch(e){
-
-showMessage(
-"Could not decline request: "+e.message
-);
-
-}
-
+} catch(e) { showMessage("Could not decline request: " + e.message); }
 };
-
 
 async function renderFriends(){
-
-const c=document.getElementById("friendsList");
-
-if(!c||!currentUser)return;
-
+const c = document.getElementById("friendsList"); if(!c || !currentUser) return;
 if(!friends.length){
-
-c.innerHTML=`
-
-<div class="friendEmpty">
-
-<h3>No friends yet</h3>
-
-<p>
-Search for a player above to add them.
-</p>
-
-</div>
-
-`;
-
-return;
-
+c.innerHTML = `<div class="friendEmpty"><h3>No friends yet</h3><p>Search for a player above to add them.</p></div>`; return;
 }
-
-c.innerHTML="<p>Loading friends...</p>";
-
-try{
-
-const profiles=[];
-
+c.innerHTML = "<p>Loading friends...</p>";
+try {
+const profiles = [];
 for(const id of friends){
-
-const s=
-await getDoc(
-doc(db,"players",id)
-);
-
+const s = await getDoc(doc(db, "players", id));
 if(s.exists()){
-
-const d=s.data();
-
-profiles.push({
-
-uid:id,
-
-username:
-d.username||
-"Unknown Player",
-
-profilePic:
-d.profilePic||
-DEFAULT_PROFILE_PIC
-
-});
-
+const d = s.data();
+profiles.push({ uid: id, username: d.username || "Unknown Player", profilePic: d.profilePic || DEFAULT_PROFILE_PIC });
 }
-
 }
-
-if(!profiles.length){
-
-c.innerHTML=
-'<div class="friendEmpty">No friends found.</div>';
-
-return;
-
-}
-
-c.innerHTML="";
-
-profiles.forEach(f=>{
-
-const d=document.createElement("div");
-
-d.className="friendBox";
-
-d.innerHTML=`
-
-<img
-class="profilePicSmall"
-src="${escapeHtml(f.profilePic)}">
-
-<div class="friendInfo">
-
-<div class="friendName">
-${escapeHtml(f.username)}
-</div>
-
-<div>Friend</div>
-
-</div>
-
-<button
-class="friendActionButton"
-onclick="openTradeWithFriend('${escapeHtml(f.username)}')">
-
-TRADE
-
-</button>
-
-<button
-class="friendBattleButton"
-onclick="challengeFriend('${escapeHtml(f.uid)}','${escapeHtml(f.username)}','${escapeHtml(f.profilePic)}')">
-
-BATTLE
-
-</button>
-
-`;
-
+if(!profiles.length){ c.innerHTML = '<div class="friendEmpty">No friends found.</div>'; return; }
+c.innerHTML = "";
+profiles.forEach(f => {
+const d = document.createElement("div"); d.className = "friendBox";
+d.innerHTML = `<img class="profilePicSmall" src="${escapeHtml(f.profilePic)}"><div class="friendInfo"><div class="friendName">${escapeHtml(f.username)}</div><div>Friend</div></div><button class="friendActionButton" onclick="openTradeWithFriend('${escapeHtml(f.username)}')">TRADE</button><button class="friendBattleButton" onclick="challengeFriend('${escapeHtml(f.uid)}','${escapeHtml(f.username)}','${escapeHtml(f.profilePic)}')">BATTLE</button>`;
 c.appendChild(d);
-
 });
-
-}catch(e){
-
-console.error(e);
-
-c.innerHTML=
-'<div class="friendEmpty">Could not load friends.</div>';
-
+} catch(e) { console.error(e); c.innerHTML = '<div class="friendEmpty">Could not load friends.</div>'; }
 }
 
-}
-
-
-window.openTradeWithFriend=name=>{
-
+window.openTradeWithFriend = name => {
 showPage("trade");
-
-const input=document.getElementById("tradePlayerInput");
-
-input.value=name;
-
+const input = document.getElementById("tradePlayerInput");
+input.value = name;
 findPlayer();
-
 };
 
+/* BATTLE ENGINE */
 
-/* =========================================================
-   BATTLE SYSTEM
-========================================================= */
-
-
-/*
-=========================================================
-TYPE EFFECTIVENESS
-=========================================================
-
-SUPER EFFECTIVE:
-
-Fire   -> Grass
-Grass  -> Water
-Water  -> Fire
-
-Flying -> Fighting
-Fighting -> Normal
-Rock   -> Flying
-Fairy  -> Fighting
-
-NOT VERY EFFECTIVE:
-
-The reverse of each matchup.
-
-Examples:
-
-Waffle (Fire)
-    -> Baby Pickels (Grass)
-    = 1.5x damage
-
-Baby Pickels (Grass)
-    -> Wily (Water)
-    = 1.5x damage
-
-Wily (Water)
-    -> Waffle (Fire)
-    = 1.5x damage
-
-Baby Pickels (Grass)
-    -> Waffle (Fire)
-    = 0.75x damage
-
-Neutral = 1x
-
-Dual types multiply together.
-
-=========================================================
-*/
-
-const typeAdvantages={
-
-Grass:["Water"],
-
-Water:["Fire"],
-
-Fire:["Grass"],
-
-Flying:["Fighting"],
-
-Fighting:["Normal"],
-
-Rock:["Flying"],
-
-Fairy:["Fighting"]
-
+const typeAdvantages = {
+Grass: ["Water"], Water: ["Fire"], Fire: ["Grass"],
+Flying: ["Fighting"], Fighting: ["Normal"], Rock: ["Flying"], Fairy: ["Fighting"]
 };
 
-
-/*
-Gets the damage multiplier for a move.
-
-For every defender type:
-
-1.5x if the move type beats it.
-0.75x if the defender type beats the move type.
-1x if neutral.
-
-Because defender types are looped individually,
-dual-type cards can have combined effects.
-*/
-
-function getTypeMultiplier(moveType,defenderTypes){
-
-if(!Array.isArray(defenderTypes)){
-
-defenderTypes=[defenderTypes];
-
-}
-
-let multiplier=1;
-
+function getTypeMultiplier(moveType, defenderTypes){
+if(!Array.isArray(defenderTypes)) defenderTypes = [defenderTypes];
+let multiplier = 1;
 for(const defenderType of defenderTypes){
-
-/* MOVE IS SUPER EFFECTIVE */
-
-if(
-typeAdvantages[moveType]?.includes(defenderType)
-){
-
-multiplier*=1.5;
-
+if(typeAdvantages[moveType]?.includes(defenderType)) multiplier *= 1.5;
+if(typeAdvantages[defenderType]?.includes(moveType)) multiplier *= 0.75;
 }
-
-/* MOVE IS WEAK AGAINST THIS TYPE */
-
-if(
-typeAdvantages[defenderType]?.includes(moveType)
-){
-
-multiplier*=0.75;
-
-}
-
-}
-
 return multiplier;
-
 }
 
-
-function getBattleCardById(id){
-
-return collection.find(c=>c.id===id);
-
-}
-
+function getBattleCardById(id){ return collection.find(c => c.id === id); }
 
 function getUniqueCollectionCards(){
-
-const seen=new Set();
-const result=[];
-
+const seen = new Set(); const result = [];
 for(const copy of collection){
-
-if(seen.has(copy.name))continue;
-
-const card=getCard(copy.name);
-
-if(!card)continue;
-
-seen.add(copy.name);
-result.push(copy);
-
+if(seen.has(copy.name)) continue;
+const card = getCard(copy.name); if(!card) continue;
+seen.add(copy.name); result.push(copy);
 }
-
 return result;
-
 }
-
 
 function renderBattleHome(){
-
-const main=document.getElementById("battleMain");
-
-if(!main)return;
-
-if(battleRoomId)return;
-
+const main = document.getElementById("battleMain"); if(!main) return;
+if(battleRoomId) return;
 main.classList.remove("hidden");
-
-const requestArea=
-document.getElementById("battleRequests");
-
-if(requestArea){
-
-renderBattleRequests();
-
+const requestArea = document.getElementById("battleRequests");
+if(requestArea) renderBattleRequests();
 }
-
-}
-
 
 function renderBattleRequests(){
-
-const c=document.getElementById("battleRequests");
-
-if(!c||!currentUser)return;
-
-const incoming=
-friendRequests.filter(
-r=>
-r.type==="battle" &&
-r.receiverUid===currentUser.uid &&
-r.status==="pending"
-);
-
-if(!incoming.length){
-
-c.innerHTML="";
-return;
-
-}
-
-c.innerHTML="<h2>Battle Requests</h2>";
-
-incoming.forEach(r=>{
-
-const d=document.createElement("div");
-
-d.className="battleRequestBox";
-
-d.innerHTML=`
-
-<div class="playerResultBox">
-
-<img
-class="profilePicSmall"
-id="battleReqPic_${escapeHtml(r.id)}"
-src="${DEFAULT_PROFILE_PIC}">
-
-<div class="playerResultInfo">
-
-<div class="friendName">
-${escapeHtml(r.senderUsername||"Player")}
-</div>
-
-<p>wants to battle you!</p>
-
-<div class="battleRequestButtons">
-
-<button
-class="friendAcceptButton"
-onclick="acceptBattleRequest('${escapeHtml(r.id)}')">
-
-ACCEPT
-
-</button>
-
-<button
-class="friendDeclineButton"
-onclick="declineBattleRequest('${escapeHtml(r.id)}')">
-
-DECLINE
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
+const c = document.getElementById("battleRequests"); if(!c || !currentUser) return;
+const incoming = friendRequests.filter(r => r.type === "battle" && r.receiverUid === currentUser.uid && r.status === "pending");
+if(!incoming.length){ c.innerHTML = ""; return; }
+c.innerHTML = "<h2>Battle Requests</h2>";
+incoming.forEach(r => {
+const d = document.createElement("div"); d.className = "battleRequestBox";
+d.innerHTML = `<div class="playerResultBox"><img class="profilePicSmall" id="battleReqPic_${escapeHtml(r.id)}" src="${DEFAULT_PROFILE_PIC}"><div class="playerResultInfo"><div class="friendName">${escapeHtml(r.senderUsername||"Player")}</div><p>wants to battle you!</p><div class="battleRequestButtons"><button class="friendAcceptButton" onclick="acceptBattleRequest('${escapeHtml(r.id)}')">ACCEPT</button><button class="friendDeclineButton" onclick="declineBattleRequest('${escapeHtml(r.id)}')">DECLINE</button></div></div></div>`;
 c.appendChild(d);
-
-loadBattleRequestPicture(
-r.id,
-r.senderUid
-);
-
+loadBattleRequestPicture(r.id, r.senderUid);
 });
-
 }
 
-
-async function loadBattleRequestPicture(id,uid){
-
-try{
-
-const s=
-await getDoc(
-doc(db,"players",uid)
-);
-
-if(!s.exists())return;
-
-const img=
-document.getElementById(
-"battleReqPic_"+id
-);
-
-if(img){
-
-img.src=
-s.data().profilePic||
-DEFAULT_PROFILE_PIC;
-
+async function loadBattleRequestPicture(id, uid){
+try {
+const s = await getDoc(doc(db, "players", uid)); if(!s.exists()) return;
+const img = document.getElementById("battleReqPic_" + id);
+if(img) img.src = s.data().profilePic || DEFAULT_PROFILE_PIC;
+} catch(e) { console.error(e); }
 }
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
 
 function renderBattleChoice(){
-
-const box=document.getElementById("battleChoice");
-const grid=document.getElementById("battleChoiceGrid");
-const title=document.getElementById("battleChoiceTitle");
-const description=document.getElementById("battleChoiceDescription");
-const start=document.getElementById("battleStartButton");
-
-if(!box||!grid)return;
-
+const box = document.getElementById("battleChoice");
+const grid = document.getElementById("battleChoiceGrid");
+const title = document.getElementById("battleChoiceTitle");
+const description = document.getElementById("battleChoiceDescription");
+const start = document.getElementById("battleStartButton");
+if(!box || !grid) return;
 box.classList.remove("hidden");
-
-if(battleMode==="bot"){
-
-title.textContent=
-"Choose Your Card";
-
-description.textContent=
-"Pick one card. The bot will choose its card after you choose.";
-
-}else{
-
-title.textContent=
-"Choose Your Card";
-
-description.textContent=
-"Pick one card to use against "+battleOpponentUsername+".";
-
+if(battleMode === "bot"){
+title.textContent = "Choose Your Card";
+description.textContent = "Pick one card. The bot will choose its card after you choose.";
+} else {
+title.textContent = "Choose Your Card";
+description.textContent = "Pick one card to use against " + battleOpponentUsername + ".";
 }
-
-const available=getUniqueCollectionCards();
-
-grid.innerHTML="";
-
+const available = getUniqueCollectionCards();
+grid.innerHTML = "";
 if(!available.length){
-
-grid.innerHTML=`
-
-<div class="friendEmpty">
-
-<h3>You need a card!</h3>
-
-<p>
-Open a pack first to get a battle card.
-</p>
-
-</div>
-
-`;
-
-start.disabled=true;
-return;
-
+grid.innerHTML = `<div class="friendEmpty"><h3>You need a card!</h3><p>Open a pack first to get a battle card.</p></div>`;
+start.disabled = true; return;
 }
-
-available.forEach(copy=>{
-
-const card=getCard(copy.name);
-
-const div=document.createElement("div");
-
-div.className=
-"battleChoiceCard"+
-(
-battleSelectedCardId===copy.id
-?
-" selected"
-:
-""
-);
-
-div.onclick=()=>{
-
-battleSelectedCardId=copy.id;
-
-renderBattleChoice();
-
-};
-
-div.innerHTML=`
-
-<img
-src="${escapeHtml(card.image)}"
-onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
-
-<div class="cardName">
-${escapeHtml(card.name)}
-</div>
-
-<div class="typeBadge">
-${card.type.join(" / ")}
-</div>
-
-<div class="signatureMove">
-${escapeHtml(card.move)}
-</div>
-
-`;
-
+available.forEach(copy => {
+const card = getCard(copy.name);
+const div = document.createElement("div");
+div.className = "battleChoiceCard" + (battleSelectedCardId === copy.id ? " selected" : "");
+div.onclick = () => { battleSelectedCardId = copy.id; renderBattleChoice(); };
+div.innerHTML = `<img src="${escapeHtml(card.image)}" onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')"><div class="cardName">${escapeHtml(card.name)}</div><div class="typeBadge">${card.type.join(" / ")}</div><div class="signatureMove">${escapeHtml(card.move)}</div>`;
 grid.appendChild(div);
-
 });
-
-start.disabled=!battleSelectedCardId;
-
+start.disabled = !battleSelectedCardId;
 }
 
+function hideBattleChoice(){ document.getElementById("battleChoice").classList.add("hidden"); }
 
-function hideBattleChoice(){
-
-document
-.getElementById("battleChoice")
-.classList.add("hidden");
-
-}
-
-
-window.startBotBattle=difficulty=>{
-
-if(!collection.length){
-
-showMessage(
-"You need at least one card to battle."
-);
-
-showPage("collection");
-return;
-
-}
-
-battleMode="bot";
-battleDifficulty=difficulty;
-battleOpponentUid=null;
-battleOpponentUsername=
-difficulty==="hard"
-?
-"Hard Bot"
-:
-"Easy Bot";
-
-battleOpponentPic=DEFAULT_PROFILE_PIC;
-battleSelectedCardId=null;
-battleChoiceSubmitted=false;
-battleRewardGiven=false;
-
+window.startBotBattle = difficulty => {
+if(!collection.length){ showMessage("You need at least one card to battle."); showPage("collection"); return; }
+battleMode = "bot"; battleDifficulty = difficulty; battleOpponentUid = null;
+battleOpponentUsername = difficulty === "hard" ? "Hard Bot" : "Easy Bot";
+battleOpponentPic = DEFAULT_PROFILE_PIC; battleSelectedCardId = null;
+battleChoiceSubmitted = false; battleRewardGiven = false;
 showPage("battle");
-
-document
-.getElementById("battleMain")
-.classList.add("hidden");
-
+document.getElementById("battleMain").classList.add("hidden");
 renderBattleChoice();
-
 };
 
-
-/* =========================
-   EASY BOT
-========================= */
-
-function chooseEasyBotCard(){
-
-const pool=cards;
-
-return pool[
-Math.floor(
-Math.random()*pool.length
-)
-];
-
-}
-
-
-/* =========================
-   HARD BOT
-========================= */
+function chooseEasyBotCard(){ return cards[Math.floor(Math.random() * cards.length)]; }
 
 function chooseHardBotCard(playerCard){
-
-const candidates=[];
-
+const candidates = [];
 for(const card of cards){
-
-const multiplier=
-getTypeMultiplier(
-card.moveType,
-playerCard.type
-);
-
-/*
-The hard bot prefers cards whose
-signature move is super effective.
-*/
-
-if(multiplier>1){
-
-candidates.push(card);
-
+if(getTypeMultiplier(card.moveType, playerCard.type) > 1) candidates.push(card);
+}
+return candidates.length ? candidates[Math.floor(Math.random() * candidates.length)] : chooseEasyBotCard();
 }
 
+function calculateBattleDamage(attacker, defender){
+const effectiveness = getTypeMultiplier(attacker.moveType, defender.type);
+const stab = attacker.type.includes(attacker.moveType) ? 1.15 : 1;
+const random = 0.9 + Math.random() * 0.15;
+const damage = Math.max(1, Math.round(attacker.power * effectiveness * stab * random));
+return { damage, effectiveness };
 }
-
-if(candidates.length){
-
-return candidates[
-Math.floor(
-Math.random()*candidates.length
-)
-];
-
-}
-
-return chooseEasyBotCard();
-
-}
-
-
-/* =========================
-   DAMAGE
-========================= */
-
-function calculateBattleDamage(attacker,defender){
-
-const effectiveness=
-getTypeMultiplier(
-attacker.moveType,
-defender.type
-);
-
-/*
-STAB:
-
-If the attacker's move has the same
-type as one of its own types, it gets
-a 1.15x bonus.
-*/
-
-const stab=
-attacker.type.includes(attacker.moveType)
-?
-1.15
-:
-1;
-
-/*
-Small random variation.
-*/
-
-const random=
-0.9+
-Math.random()*0.15;
-
-/*
-Final damage:
-
-Power
-× Type Effectiveness
-× STAB
-× Random Variation
-*/
-
-const damage=Math.max(
-1,
-Math.round(
-attacker.power*
-effectiveness*
-stab*
-random
-)
-);
-
-return{
-damage,
-effectiveness
-};
-
-}
-
-
-/* =========================
-   EFFECTIVENESS MESSAGE
-========================= */
 
 function battleEffectivenessText(multiplier){
-
-if(multiplier>=1.5){
-
-return"<b>Super effective!</b>";
-
+if(multiplier >= 1.5) return "<b>Super effective!</b>";
+if(multiplier < 1) return "<b>Not very effective...</b>";
+return "";
 }
 
-if(multiplier<1){
-
-return"<b>Not very effective...</b>";
-
+function battleCardHTML(card, hp, name, pic){
+const hpPercent = Math.max(0, Math.min(100, (hp / BATTLE_HP) * 100));
+return `<div class="battlePlayer"><div class="battlePlayerTop"><img class="profilePicSmall" src="${escapeHtml(pic||DEFAULT_PROFILE_PIC)}"><div><div class="friendName">${escapeHtml(name)}</div><div class="typeBadge">${card.type.join(" / ")}</div></div></div><div style="text-align:center;margin:12px"><img class="battleCardImage" src="${escapeHtml(card.image)}" alt="${escapeHtml(card.name)}"><div class="cardName">${escapeHtml(card.name)}</div><div class="signatureMove">${escapeHtml(card.move)}</div></div><div class="hpBar"><div class="hpFill" style="width:${hpPercent}%"></div></div><div class="hpText">HP: ${Math.max(0,hp)} / ${BATTLE_HP}</div></div>`;
 }
 
-return"";
+window.confirmBattleCard = () => {
+if(!battleSelectedCardId) return;
+hideBattleChoice();
+if(battleMode === "bot") executeBotBattle();
+else if(battleMode === "pvp") executePvPSetup();
+};
 
-}
+window.cancelBattleSetup = () => {
+hideBattleChoice();
+document.getElementById("battleArena").classList.add("hidden");
+document.getElementById("battleMain").classList.remove("hidden");
+};
 
+function executeBotBattle(){
+const pCopy = getBattleCardById(battleSelectedCardId);
+const pCard = getCard(pCopy.name);
+const oCard = battleDifficulty === "hard" ? chooseHardBotCard(pCard) : chooseEasyBotCard();
 
-/* =========================
-   BATTLE CARD HTML
-========================= */
-
-function battleCardHTML(card,hp,name,pic,flip=false){
-
-const hpPercent=
-Math.max(
-0,
-Math.min(
-100,
-(hp/BATTLE_HP)*100
-)
-);
-
-return`
-
-<div class="battlePlayer">
-
-<div class="battlePlayerTop">
-
-<img
-class="profilePicSmall"
-src="${escapeHtml(pic||DEFAULT_PROFILE_PIC)}">
-
-<div>
-
-<div class="friendName">
-${escapeHtml(name)}
-</div>
-
-<div class="typeBadge">
-${card.type.join(" / ")}
-</div>
-
-</div>
-
-</div>
-
-<div style="text-align:center;margin:12px">
-
-<img
-class="battleCardImage"
-src="${escapeHtml(card.image)}"
-alt="${escapeHtml(card.name)}">
-
-<div class="cardName">
-${escapeHtml(card.name)}
-</div>
-
-<div class="signatureMove">
-${escapeHtml(card.move)}
-</div>
-
-</div>
-
-<div class="hpBar">
-
-<div
-class="hpFill"
-style="width:${hpPercent}%">
-
-</div>
-
-</div>
-
-<div class="hpText">
-HP: ${Math.max(0,hp)} / ${BATTLE_HP}
-</div>
-
-</div>
-
-`;
-
-}
-
-
-/* =========================
-   BOT BATTLE
-========================= */
-
-function showLocalBotBattle(playerCard,botCard){
-
-let playerHP=BATTLE_HP;
-let botHP=BATTLE_HP;
-
-const arena=document.getElementById("battleArena");
-
+let pHp = BATTLE_HP; let oHp = BATTLE_HP;
+const arena = document.getElementById("battleArena");
 arena.classList.remove("hidden");
 
-document
-.getElementById("battleMain")
-.classList.add("hidden");
+const pDmg = calculateBattleDamage(pCard, oCard);
+const oDmg = calculateBattleDamage(oCard, pCard);
 
-hideBattleChoice();
+oHp -= pDmg.damage; pHp -= oDmg.damage;
+const win = pHp >= oHp;
 
-let playerTurn=true;
-
-function render(){
-
-arena.innerHTML=`
-
-<h2 style="text-align:center">
-${
-battleDifficulty==="hard"
-?
-"Hard Bot Battle"
-:
-"Easy Bot Battle"
-}
-</h2>
-
-<div class="battleHeader">
-
-${battleCardHTML(
-botCard,
-botHP,
-battleOpponentUsername,
-DEFAULT_PROFILE_PIC
-)}
-
-<div class="battleVs">VS</div>
-
-${battleCardHTML(
-playerCard,
-playerHP,
-username,
-profilePic
-)}
-
-</div>
-
-<div class="battleMove">
-
-<div class="moveName">
-${escapeHtml(playerCard.move)}
-</div>
-
-<div class="moveType">
-${escapeHtml(playerCard.moveType)} Type Move
-</div>
-
-<button
-class="battleStartButton"
-id="useMoveButton">
-
-USE ${escapeHtml(playerCard.move).toUpperCase()}
-
-</button>
-
-</div>
-
-<div class="battleLog" id="battleLog">
-Your turn!
-</div>
-
-`;
-
-const btn=document.getElementById("useMoveButton");
-
-btn.onclick=()=>{
-
-if(!playerTurn)return;
-
-playerTurn=false;
-btn.disabled=true;
-
-const result=
-calculateBattleDamage(
-playerCard,
-botCard
-);
-
-botHP=Math.max(
-0,
-botHP-result.damage
-);
-
-const log=
-document.getElementById("battleLog");
-
-log.innerHTML=
-`You used <b>${escapeHtml(playerCard.move)}</b>!<br>
-You dealt <b>${result.damage}</b> damage.
-${battleEffectivenessText(result.effectiveness)}`;
-
-render();
-
-if(botHP<=0){
-
-finishBotBattle(true);
-
-return;
-
+if(win && !battleRewardGiven){
+money += BATTLE_WIN_REWARD;
+battleRewardGiven = true;
+savePlayerData();
 }
 
-setTimeout(()=>{
-
-const result2=
-calculateBattleDamage(
-botCard,
-playerCard
-);
-
-playerHP=Math.max(
-0,
-playerHP-result2.damage
-);
-
-render();
-
-const log2=document.getElementById("battleLog");
-
-log2.innerHTML=
-`${escapeHtml(botCard.name)} used <b>${escapeHtml(botCard.move)}</b>!<br>
-It dealt <b>${result2.damage}</b> damage.
-${battleEffectivenessText(result2.effectiveness)}`;
-
-if(playerHP<=0){
-
-finishBotBattle(false);
-
-return;
-
+arena.innerHTML = `<div class="battleHeader">${battleCardHTML(pCard, Math.max(0,pHp), username, profilePic)}<div class="battleVs">VS</div>${battleCardHTML(oCard, Math.max(0,oHp), battleOpponentUsername, battleOpponentPic)}</div><div class="battleMove"><div class="moveName">${escapeHtml(pCard.move)}</div><div class="moveType">${pCard.moveType} Move</div>${battleEffectivenessText(pDmg.effectiveness)}</div><div class="battleLog">You dealt ${pDmg.damage} damage to ${escapeHtml(battleOpponentUsername)}!<br>${escapeHtml(battleOpponentUsername)} used ${escapeHtml(oCard.move)} and dealt ${oDmg.damage} damage!</div><div class="battleResult"><div class="winText" style="color:${win?"#25b864":"#9b2929"}">${win?"YOU WIN!":"YOU LOSE!"}</div>${win?`<div class="rewardText">+${BATTLE_WIN_REWARD} Coins!</div>`:""}<button class="battleStartButton" onclick="cancelBattleSetup()">FINISH BATTLE</button></div>`;
 }
 
-setTimeout(()=>{
-
-playerTurn=true;
-
-render();
-
-const log3=document.getElementById("battleLog");
-
-log3.textContent="Your turn!";
-
-},650);
-
-},650);
-
+window.challengeFriend = async (uid, name, pic) => {
+try {
+await setDoc(doc(db, "friendRequests", createCardId()), {
+participants: [currentUser.uid, uid],
+senderUid: currentUser.uid, receiverUid: uid,
+senderUsername: username, receiverUsername: name,
+type: "battle", status: "pending", createdAt: serverTimestamp()
+});
+showMessage("Battle challenge sent to " + name + "!");
+} catch(e) { showMessage("Could not send challenge: " + e.message); }
 };
 
-}
-
-render();
-
-}
-
-
-async function finishBotBattle(won){
-
-const arena=document.getElementById("battleArena");
-
-if(won){
-
-money+=BATTLE_WIN_REWARD;
-
-await savePlayerData();
-
-updateUI();
-
-arena.innerHTML=`
-
-<div class="battleResult">
-
-<div class="winText">
-YOU WIN!
-</div>
-
-<div class="rewardText">
-+${BATTLE_WIN_REWARD} COINS
-</div>
-
-<p>
-You defeated ${escapeHtml(battleOpponentUsername)}!
-</p>
-
-<button
-class="battleStartButton"
-onclick="exitBattle()">
-
-BACK TO BATTLE
-
-</button>
-
-</div>
-
-`;
-
-}else{
-
-arena.innerHTML=`
-
-<div class="battleResult">
-
-<div class="winText">
-YOU LOST
-</div>
-
-<p>
-${escapeHtml(battleOpponentUsername)}
-won this battle.
-</p>
-
-<button
-class="battleStartButton"
-onclick="exitBattle()">
-
-BACK TO BATTLE
-
-</button>
-
-</div>
-
-`;
-
-}
-
-}
-
-
-/* =========================
-   CONFIRM BATTLE CARD
-========================= */
-
-window.confirmBattleCard=async()=>{
-
-if(!battleSelectedCardId)return;
-
-const selected=getBattleCardById(
-battleSelectedCardId
-);
-
-if(!selected){
-
-showMessage(
-"That card is no longer in your collection."
-);
-
-return;
-
-}
-
-const playerCard=getCard(selected.name);
-
-if(!playerCard)return;
-
-if(battleMode==="bot"){
-
-const botCard=
-battleDifficulty==="hard"
-?
-chooseHardBotCard(playerCard)
-:
-chooseEasyBotCard();
-
-showLocalBotBattle(
-playerCard,
-botCard
-);
-
-return;
-
-}
-
-if(battleMode==="friend"){
-
-await submitFriendBattleCard();
-
-}
-
-};
-
-
-/* =========================
-   CANCEL BATTLE
-========================= */
-
-function cancelBattleSetup(){
-
-battleSelectedCardId=null;
-battleMode=null;
-battleRoomId=null;
-
-hideBattleChoice();
-
-document
-.getElementById("battleArena")
-.classList.add("hidden");
-
-document
-.getElementById("battleMain")
-.classList.remove("hidden");
-
-renderBattleHome();
-
-}
-
-
-window.exitBattle=()=>{
-
-stopBattleListener();
-
-battleMode=null;
-battleDifficulty="easy";
-battleOpponentUid=null;
-battleOpponentUsername="";
-battleOpponentPic=DEFAULT_PROFILE_PIC;
-battleSelectedCardId=null;
-battleRoomId=null;
-battleChoiceSubmitted=false;
-battleRewardGiven=false;
-
-document
-.getElementById("battleArena")
-.classList.add("hidden");
-
-document
-.getElementById("battleMain")
-.classList.remove("hidden");
-
-hideBattleChoice();
-
-renderBattleHome();
-
+window.acceptBattleRequest = async id => {
+const r = friendRequests.find(x => x.id === id); if(!r) return;
+battleMode = "pvp"; battleOpponentUid = r.senderUid;
+battleOpponentUsername = r.senderUsername; battleRoomId = r.id;
 showPage("battle");
-
-};
-
-
-/* =========================
-   FRIEND BATTLE REQUESTS
-========================= */
-
-window.challengeFriend=async(uid,name,pic)=>{
-
-if(!currentUser)return;
-
-if(!friends.includes(uid)){
-
-showMessage("You can only battle your friends.");
-return;
-
-}
-
-if(!collection.length){
-
-showMessage(
-"You need at least one card to battle."
-);
-
-return;
-
-}
-
-const already=
-friendRequests.some(
-r=>
-r.type==="battle" &&
-r.status==="pending" &&
-(
-(
-r.senderUid===currentUser.uid &&
-r.receiverUid===uid
-)
-||
-(
-r.receiverUid===currentUser.uid &&
-r.senderUid===uid
-)
-)
-);
-
-if(already){
-
-showMessage(
-"You already have a battle request with this friend."
-);
-
-return;
-
-}
-
-try{
-
-await setDoc(
-doc(db,"friendRequests",createCardId()),
-{
-
-type:"battle",
-
-participants:[
-currentUser.uid,
-uid
-],
-
-senderUid:currentUser.uid,
-receiverUid:uid,
-
-senderUsername:username,
-receiverUsername:name,
-
-senderProfilePic:profilePic,
-receiverProfilePic:pic||DEFAULT_PROFILE_PIC,
-
-status:"pending",
-
-createdAt:serverTimestamp()
-
-}
-);
-
-showMessage(
-"Battle request sent to "+name+"!"
-);
-
-}catch(e){
-
-console.error(e);
-
-showMessage(
-"Could not send battle request: "+e.message
-);
-
-}
-
-};
-
-
-window.acceptBattleRequest=async requestId=>{
-
-const r=
-friendRequests.find(
-x=>
-x.id===requestId &&
-x.type==="battle"
-);
-
-if(
-!r||
-r.receiverUid!==currentUser.uid||
-r.status!=="pending"
-){
-
-showMessage(
-"This battle request is no longer available."
-);
-
-return;
-
-}
-
-try{
-
-const roomId=createCardId();
-
-await setDoc(
-doc(db,"battleRooms",roomId),
-{
-
-participants:[
-r.senderUid,
-r.receiverUid
-],
-
-player1Uid:r.senderUid,
-player2Uid:r.receiverUid,
-
-player1Username:r.senderUsername,
-player2Username:username,
-
-player1ProfilePic:
-r.senderProfilePic||
-DEFAULT_PROFILE_PIC,
-
-player2ProfilePic:
-profilePic||
-DEFAULT_PROFILE_PIC,
-
-player1Card:null,
-player2Card:null,
-
-player1Ready:false,
-player2Ready:false,
-
-status:"choosing",
-
-winnerUid:"",
-rewardedUids:[],
-
-createdAt:serverTimestamp()
-
-}
-);
-
-await updateDoc(
-doc(db,"friendRequests",requestId),
-{
-status:"accepted",
-battleRoomId:roomId
-}
-);
-
-battleMode="friend";
-battleRoomId=roomId;
-battleOpponentUid=r.senderUid;
-battleOpponentUsername=r.senderUsername;
-battleOpponentPic=
-r.senderProfilePic||
-DEFAULT_PROFILE_PIC;
-
-battleSelectedCardId=null;
-battleChoiceSubmitted=false;
-
-showPage("battle");
-
-document
-.getElementById("battleMain")
-.classList.add("hidden");
-
+document.getElementById("battleMain").classList.add("hidden");
 renderBattleChoice();
-
-startBattleListener();
-
-showMessage(
-"Battle accepted! Choose your card."
-);
-
-}catch(e){
-
-console.error(e);
-
-showMessage(
-"Could not start battle: "+e.message
-);
-
-}
-
 };
 
-
-window.declineBattleRequest=async requestId=>{
-
-try{
-
-await updateDoc(
-doc(db,"friendRequests",requestId),
-{
-status:"declined"
-}
-);
-
+window.declineBattleRequest = async id => {
+try {
+await updateDoc(doc(db, "friendRequests", id), { status: "declined" });
 showMessage("Battle request declined.");
-
-}catch(e){
-
-showMessage(
-"Could not decline request: "+e.message
-);
-
-}
-
+} catch(e) { showMessage("Could not decline: " + e.message); }
 };
 
-
-async function submitFriendBattleCard(){
-
-if(!battleRoomId||!battleSelectedCardId)return;
-
-const selected=getBattleCardById(
-battleSelectedCardId
-);
-
-if(!selected)return;
-
-const roomRef=doc(
-db,
-"battleRooms",
-battleRoomId
-);
-
-const snap=await getDoc(roomRef);
-
-if(!snap.exists()){
-
-showMessage(
-"Battle room no longer exists."
-);
-
-return;
-
+function executePvPSetup(){
+showMessage("PvP Battle starting against " + battleOpponentUsername + "!");
 }
 
-const room=snap.data();
-
-if(
-!room.participants?.includes(currentUser.uid)
-){
-
-showMessage(
-"You are not part of this battle."
-);
-
-return;
-
-}
-
-const playerField=
-room.player1Uid===currentUser.uid
-?
-"player1Card"
-:
-"player2Card";
-
-const readyField=
-room.player1Uid===currentUser.uid
-?
-"player1Ready"
-:
-"player2Ready";
-
-await updateDoc(
-roomRef,
-{
-
-[playerField]:{
-id:selected.id,
-name:selected.name
-},
-
-[readyField]:true
-
-}
-);
-
-battleChoiceSubmitted=true;
-
-showMessage(
-"Card locked in! Waiting for your friend."
-);
-
-renderWaitingForBattle();
-
-}
-
-
-function renderWaitingForBattle(){
-
-const box=document.getElementById("battleChoice");
-
-if(!box)return;
-
-box.classList.remove("hidden");
-
-box.innerHTML=`
-
-<div class="battleHome">
-
-<h2>
-Waiting for ${escapeHtml(battleOpponentUsername)}
-</h2>
-
-<p>
-Your card is locked in.
-</p>
-
-<div style="text-align:center">
-
-<img
-class="battleCardImage"
-src="${escapeHtml(
-getCard(
-getBattleCardById(
-battleSelectedCardId
-)?.name
-)?.image||""
-)}">
-
-<h3>
-${escapeHtml(
-getBattleCardById(
-battleSelectedCardId
-)?.name||""
-)}
-</h3>
-
-</div>
-
-<div class="battleLog">
-Waiting for your opponent to choose their card...
-</div>
-
-<button
-class="battleCancelButton"
-onclick="leaveFriendBattle()">
-
-LEAVE BATTLE
-
-</button>
-
-</div>
-
-`;
-
-}
-
-
-/* =========================
-   FRIEND BATTLE LISTENER
-========================= */
-
-function stopBattleListener(){
-
-if(battleListener){
-
-battleListener();
-battleListener=null;
-
-}
-
-}
-
-
-function startBattleListener(){
-
-stopBattleListener();
-
-if(!battleRoomId)return;
-
-const ref=doc(
-db,
-"battleRooms",
-battleRoomId
-);
-
-battleListener=
-onSnapshot(
-ref,
-snapshot=>{
-
-if(!snapshot.exists()){
-
-showMessage(
-"Battle room closed."
-);
-
-exitBattle();
-return;
-
-}
-
-const room={
-id:snapshot.id,
-...snapshot.data()
-};
-
-if(room.status==="finished"){
-
-renderFinishedFriendBattle(room);
-return;
-
-}
-
-if(
-room.player1Card &&
-room.player2Card &&
-room.player1Ready &&
-room.player2Ready
-){
-
-runFriendBattle(room);
-
-}
-
-},
-error=>{
-
-console.error(error);
-
-showMessage(
-"Battle connection error: "+error.message
-);
-
-}
-);
-
-}
-
-
-let friendBattleRunning=false;
-
-
-/* =========================
-   FRIEND BATTLE CALCULATION
-========================= */
-
-async function runFriendBattle(room){
-
-if(friendBattleRunning)return;
-
-friendBattleRunning=true;
-
-const p1=getCard(room.player1Card.name);
-const p2=getCard(room.player2Card.name);
-
-if(!p1||!p2){
-
-friendBattleRunning=false;
-return;
-
-}
-
-/*
-Both players calculate the same battle.
-
-The random generator is seeded from
-the battle room so both clients get
-the exact same damage.
-*/
-
-const seedBase=
-room.id+
-p1.name+
-p2.name;
-
-let seed=0;
-
-for(let i=0;i<seedBase.length;i++){
-
-seed=
-(seed*31+
-seedBase.charCodeAt(i))>>>0;
-
-}
-
-function random(){
-
-seed=
-(seed*1664525+1013904223)>>>0;
-
-return seed/4294967296;
-
-}
-
-let hp1=BATTLE_HP;
-let hp2=BATTLE_HP;
-
-const logs=[];
-
-let turn=
-random()<.5
-?
-1
-:
-2;
-
-while(hp1>0&&hp2>0){
-
-if(turn===1){
-
-const result=
-calculateDeterministicDamage(
-p1,
-p2,
-random
-);
-
-hp2=Math.max(
-0,
-hp2-result.damage
-);
-
-logs.push(
-`${p1.name} used ${p1.move} and dealt ${result.damage} damage.${battleEffectivenessText(result.effectiveness)}`
-);
-
-turn=2;
-
-}else{
-
-const result=
-calculateDeterministicDamage(
-p2,
-p1,
-random
-);
-
-hp1=Math.max(
-0,
-hp1-result.damage
-);
-
-logs.push(
-`${p2.name} used ${p2.move} and dealt ${result.damage} damage.${battleEffectivenessText(result.effectiveness)}`
-);
-
-turn=1;
-
-}
-
-}
-
-const winnerUid=
-hp1>0
-?
-room.player1Uid
-:
-room.player2Uid;
-
-const winnerName=
-hp1>0
-?
-room.player1Username
-:
-room.player2Username;
-
-const resultData={
-
-status:"finished",
-
-winnerUid,
-
-winnerName,
-
-player1FinalHP:hp1,
-player2FinalHP:hp2,
-
-battleLogs:logs,
-
-finishedAt:serverTimestamp()
-
-};
-
-try{
-
-await updateDoc(
-doc(db,"battleRooms",room.id),
-resultData
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-friendBattleRunning=false;
-
-}
-
-
-/* =========================
-   DETERMINISTIC DAMAGE
-========================= */
-
-function calculateDeterministicDamage(
-attacker,
-defender,
-random
-){
-
-const effectiveness=
-getTypeMultiplier(
-attacker.moveType,
-defender.type
-);
-
-const stab=
-attacker.type.includes(attacker.moveType)
-?
-1.15
-:
-1;
-
-const randomValue=
-0.9+
-random()*0.15;
-
-const damage=Math.max(
-1,
-Math.round(
-attacker.power*
-effectiveness*
-stab*
-randomValue
-)
-);
-
-return{
-damage,
-effectiveness
-};
-
-}
-
-
-/* =========================
-   FINISHED FRIEND BATTLE
-========================= */
-
-async function renderFinishedFriendBattle(room){
-
-const arena=
-document.getElementById("battleArena");
-
-arena.classList.remove("hidden");
-
-document
-.getElementById("battleMain")
-.classList.add("hidden");
-
-hideBattleChoice();
-
-const player1=getCard(
-room.player1Card.name
-);
-
-const player2=getCard(
-room.player2Card.name
-);
-
-const meWon=
-room.winnerUid===currentUser.uid;
-
-if(
-meWon &&
-!room.rewardedUids?.includes(currentUser.uid)
-){
-
-try{
-
-const rewardRef=
-doc(db,"battleRooms",room.id);
-
-const fresh=await getDoc(rewardRef);
-
-if(fresh.exists()){
-
-const freshData=fresh.data();
-
-const rewarded=
-Array.isArray(freshData.rewardedUids)
-?
-freshData.rewardedUids
-:
-[];
-
-if(!rewarded.includes(currentUser.uid)){
-
-money+=BATTLE_WIN_REWARD;
-
-await savePlayerData();
-
-await updateDoc(
-rewardRef,
-{
-rewardedUids:
-arrayUnion(currentUser.uid)
-}
-);
-
-updateUI();
-
-}
-
-}
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-const myHP=
-room.player1Uid===currentUser.uid
-?
-room.player1FinalHP
-:
-room.player2FinalHP;
-
-const opponentHP=
-room.player1Uid===currentUser.uid
-?
-room.player2FinalHP
-:
-room.player1FinalHP;
-
-const myCard=
-room.player1Uid===currentUser.uid
-?
-player1
-:
-player2;
-
-const opponentCard=
-room.player1Uid===currentUser.uid
-?
-player2
-:
-player1;
-
-const logs=
-Array.isArray(room.battleLogs)
-?
-room.battleLogs
-:
-[];
-
-arena.innerHTML=`
-
-<h2 style="text-align:center">
-Friend Battle
-</h2>
-
-<div class="battleHeader">
-
-${battleCardHTML(
-opponentCard,
-opponentHP,
-battleOpponentUsername,
-battleOpponentPic
-)}
-
-<div class="battleVs">
-VS
-</div>
-
-${battleCardHTML(
-myCard,
-myHP,
-username,
-profilePic
-)}
-
-</div>
-
-<div class="battleLog">
-
-${logs
-.slice(-8)
-.map(x=>escapeHtml(x))
-.join("<br>")}
-
-</div>
-
-<div class="battleResult">
-
-<div class="winText">
-
-${
-meWon
-?
-"YOU WIN!"
-:
-"YOU LOST"
-}
-
-</div>
-
-${
-meWon
-?
-`<div class="rewardText">
-+${BATTLE_WIN_REWARD} COINS
-</div>`
-:
-""
-}
-
-<p>
-Winner:
-<b>
-${escapeHtml(room.winnerName||"")}
-</b>
-</p>
-
-<button
-class="battleStartButton"
-onclick="exitBattle()">
-
-BACK TO BATTLE
-
-</button>
-
-</div>
-
-`;
-
-}
-
-
-window.leaveFriendBattle=async()=>{
-
-if(!battleRoomId){
-
-cancelBattleSetup();
-return;
-
-}
-
-try{
-
-await updateDoc(
-doc(db,"battleRooms",battleRoomId),
-{
-status:"cancelled"
-}
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-exitBattle();
-
-};
-
-
-/* =========================
-   SETTINGS
-========================= */
-
-window.openSettings=()=>{
-
-document
-.getElementById("settingsOverlay")
-.classList.remove("hidden");
-
-};
-
-
-window.closeSettings=()=>{
-
-document
-.getElementById("settingsOverlay")
-.classList.add("hidden");
-
-};
-
-
-window.resetAccount=async()=>{
-
-if(
-!confirm(
-"Are you sure you want to reset your account? This deletes your coins and collection."
-)
-)return;
-
-money=STARTING_COINS;
-dolb=STARTING_DOLB;
-collection=[];
-favorites=[];
-completedTradeIds=[];
-
-await savePlayerData();
-
-updateUI();
-
-closeSettings();
-
-showMessage(
-"Account reset. You now have 50 coins and 0 Dolb."
-);
-
-};
-
-
-/* =========================
-   SEARCH BAR FIXES
-========================= */
-
-/*
-ENTER now searches Trade and Friends.
-Collection searches live while typing.
-*/
-
-document.addEventListener(
-"keydown",
-event=>{
-
-if(event.key!=="Enter")return;
-
-const target=event.target;
-
-if(target?.id==="tradePlayerInput"){
-
-event.preventDefault();
-findPlayer();
-
-}
-
-if(target?.id==="friendPlayerInput"){
-
-event.preventDefault();
-findFriend();
-
-}
-
-}
-);
-
+function stopBattleListener(){ if(battleListener){ battleListener(); battleListener = null; } }
 </script>
-
 </body>
 </html>
