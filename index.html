@@ -1,34 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Doll Ball Collector Cards</title>
-
-<style>
-*{box-sizing:border-box}
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#071525;
-color:white
-}
-
-button{
+<!DOCTYPE html>  <html lang="en">    <head>      <meta charset="UTF-8">        <meta name="viewport" content="width=device-width,initial-scale=1.0">          <title>Doll Ball Collector Cards</title>  <style>            *{box-sizing:border-box}    body{  margin:0;  font-family:Arial,sans-serif;  background:#071525;  color:white
+}  button{
 border:none;
 border-radius:10px;
 padding:12px 16px;
 font-weight:bold;
 cursor:pointer
-}
-
-button:disabled{
+}  button:disabled{
 opacity:.45;
 cursor:not-allowed
-}
-
-.hidden{display:none!important}
+}  .hidden{display:none!important}
 
 #loginScreen{
 min-height:100vh;
@@ -1041,490 +1021,184 @@ height:140px
 }
 
 }
-</style>
-</head>
+</style>  </head>  <body>  <div id="loginScreen">
+
+<div class="loginBox">                    
+<h1>Doll Ball Collector Cards</h1>                    
+<p>Log in to play.</p>                    
+<button class="googleButton" onclick="loginGoogle()">Sign in with Google</button>                    
+</div>                    
+</div>  <div id="gameScreen" class="hidden">  <div class="topBar">  <div class="moneyBox">                    
+Coins: <span id="money">0</span>                    
+</div>  <div class="dolbBox">                    
+Dolb: <span id="dolb">0</span>                    
+</div>  <button onclick="showPage('battle')">BATTLE</button>                  
+<button onclick="showPage('home')">HOME</button>                  
+<button onclick="showPage('shop')">SHOP</button>                  
+<button onclick="showPage('collection')">COLLECTION</button>                  
+<button onclick="showPage('dex')">DEX</button>                  
+<button onclick="showPage('trade')">TRADE</button>                  
+<button onclick="showPage('friends')">FRIENDS</button>                  
+<button onclick="openSettings()">SETTINGS</button>                  
+<button class="logoutButton" onclick="logout()">LOG OUT</button>  </div>  <div id="homePage" class="page">  <div class="homeBox">  <div class="profileBox">  <img id="homeProfilePic" class="profilePic" src="basic_p.png">  <div class="profileInfo">  <div class="profileUsername" id="homeUsername"></div>  <div>Doll Ball Collector Cards</div>  </div>  </div>  <h1>Welcome!</h1>  <p>                    
+Google Account:                    
+<span id="accountEmail"></span>                    
+</p>  <p>                    
+Username:                    
+<span class="username" id="usernameDisplay"></span>                    
+</p>  <hr>  <h2>Open a Pack</h2>  <p>                    
+Cost: 15 coins<br>                    
+Cards: 3                    
+</p>  <button class="packButton" onclick="openPack()">                    
+OPEN PACK - 15 COINS                    
+</button>  </div>                    
+</div>  <div id="battlePage" class="page hidden">  <h1>Battle</h1>  <div id="battleRankInfo"></div>  <div id="battleMain">  <div class="battleHome">  <h2>Choose a Battle</h2>  <p>                    
+Pick one specific copy of a doll and battle!                    
+Every copy has its own level.                    
+</p>  <div class="battleModes">  <div class="battleMode">  <h3>Easy Bot</h3>  <p>                    
+A simple bot with random choices.                    
+</p>  <button onclick="startBotBattle('easy')">                    
+BATTLE EASY BOT                    
+</button>  </div>  <div class="battleMode hard">  <h3>Hard Bot</h3>  <p>                    
+The hard bot chooses cards that counter your type.                    
+</p>  <button onclick="startBotBattle('hard')">                    
+BATTLE HARD BOT                    
+</button>  </div>  <div class="battleMode friend">  <h3>Friend Battle</h3>  <p>                    
+Challenge one of your friends.                    
+</p>  <button onclick="showPage('friends')">                    
+CHOOSE FRIEND                    
+</button>  </div>  </div>                    
+</div>  <div id="battleRequests"></div>                    
+<div id="battleFriendsList"></div>  </div>  <div id="battleChoice" class="battleHome hidden">  <h2 id="battleChoiceTitle">Choose Your Doll</h2>  <p id="battleChoiceDescription">                    
+Choose one specific copy to use in battle.                    
+</p>  <div id="battleChoiceGrid" class="battleChoiceGrid"></div>  <button                    
+id="battleStartButton"                    
+class="battleStartButton"                    
+onclick="confirmBattleCard()"                    
+disabled>                  
+BATTLE!                  
+</button>  <button                    
+class="battleCancelButton"                    
+onclick="cancelBattleSetup()">                
+CANCEL                
+</button>  </div>  <div id="battleArena" class="battleArena hidden"></div>  </div>  <!-- SHOP -->  <div id="shopPage" class="page hidden">  <div class="shopHeader">  <h1>Shop</h1>  <p>                    
+Buy special daily dolls with Dolb.                    
+</p>  <div class="shopDate">                    
+Daily shop changes every day.                    
+<span id="shopDate"></span>                    
+</div>  </div>  <h2 class="shopSection">Daily Doll</h2>  <div id="dailyShop"></div>  <h2 class="shopSection">Coins → Dolb</h2>  <div id="dolbDeals" class="dealGrid"></div>  <h2 class="shopSection">Event Shop</h2>  <div class="eventShopBox">  <h3>No Event Right Now</h3>  <p>                    
+Event shops will appear here when an event is active.                    
+</p>  </div>  </div>  <!-- COLLECTION -->  <div id="collectionPage" class="page hidden">  <h1>Collection</h1>  <div class="tabs">  <button                    
+id="collectionAllButton"                    
+class="active"                    
+onclick="setCollectionTab('all')">                  
+ALL                  
+</button>  <button                    
+id="collectionFavoritesButton"                    
+onclick="setCollectionTab('favorites')">                
+FAVORITES                
+</button>  </div>  <input                    
+id="collectionSearch"                    
+class="searchBox"                    
+type="search"                    
+autocomplete="off"                    
+placeholder="Search cards..."                    
+oninput="renderCollection">  <div id="collectionGrid" class="cardGrid"></div>  </div>  <!-- DEX -->  <div id="dexPage" class="page hidden">  <h1>DEX</h1>  <div class="tabs">  <button                    
+id="dexDollsButton"                    
+class="active"                    
+onclick="setDexTab('dolls')">                  
+DOLLS                  
+</button>  <button                    
+id="dexRaresButton"                    
+onclick="setDexTab('rares')">                
+RARES                
+</button>  </div>  <div id="dexGrid" class="cardGrid"></div>  </div>  <!-- TRADE -->  <div id="tradePage" class="page hidden">  <h1>Trading</h1>  <div class="tradeNotice">  <b>Find a player</b>  <p>                    
+Search using their username.                    
+</p>  <div class="tradeSearchArea">  <input                    
+id="tradePlayerInput"                    
+type="search"                    
+autocomplete="off"                    
+placeholder="Username">  <button                    
+class="tradeSearchButton"                    
+onclick="findPlayer()">                
+SEARCH                
+</button>  </div>  <div id="tradePlayerResult"></div>  </div>  <div id="incomingTrades"></div>                    
+<div id="activeTrade"></div>  </div>  <!-- FRIENDS -->  <div id="friendsPage" class="page hidden">  <h1>Friends</h1>  <div class="friendSearchBox">  <h2>Find a Friend</h2>  <p>                    
+Search for another player using their username.                    
+</p>  <div class="friendSearchArea">  <input                    
+id="friendPlayerInput"                    
+type="search"                    
+autocomplete="off"                    
+placeholder="Username">  <button                    
+class="friendSearchButton"                    
+onclick="findFriend()">                
+SEARCH                
+</button>  </div>  <div id="friendSearchResult"></div>  </div>  <div id="friendRequestsArea"></div>  <h2 class="friendSection">                    
+Your Friends                    
+</h2>  <div id="friendsList"></div>  </div>  <!-- SETTINGS -->  <div id="settingsOverlay" class="settingsOverlay hidden">  <div class="settingsBox">  <h2>Settings</h2>  <p>                    
+Username:                    
+<b id="settingsUsername"></b>                    
+</p>  <div style="text-align:center;margin:20px 0">  <img                    
+id="settingsProfilePic"                    
+class="profilePic"                    
+src="basic_p.png">  <p>Profile Picture</p>  </div>  <button                    
+class="settingsButton resetButton"                    
+onclick="resetAccount()">                  
+RESET ACCOUNT                  
+</button>  <button                    
+class="settingsButton"                    
+onclick="closeSettings()">                
+CLOSE                
+</button>  </div>                    
+</div>  <div                    
+id="cardViewer"                    
+class="cardViewer hidden"                    
+onclick="closeCardViewer()">  <button                    
+class="cardViewerClose"                    
+onclick="closeCardViewer(event)">                  
+X                  
+</button>  <img                    
+id="cardViewerImage"                    
+class="cardViewerImage"                    
+src=""                    
+onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script type="module">    import {                
+initializeApp                
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";  import {              
+getAuth,              
+GoogleAuthProvider,              
+signInWithPopup,              
+signOut,              
+onAuthStateChanged              
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";  import {            
+getFirestore,            
+doc,            
+getDoc,            
+setDoc,            
+updateDoc,            
+onSnapshot,            
+collection as firestoreCollection,            
+query,            
+where,            
+serverTimestamp,            
+arrayUnion            
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";  const firebaseConfig={          
+apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",          
+authDomain:"dbcc-login.firebaseapp.com",          
+databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",          
+projectId:"dbcc-login",          
+storageBucket:"dbcc-login.firebasestorage.app",          
+messagingSenderId:"878902780767",          
+appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",          
+measurementId:"G-PT9S1K4E2K"          
+};  const app=initializeApp(firebaseConfig);        
+const auth=getAuth(app);        
+const db=getFirestore(app);  const DEFAULT_PROFILE_PIC="basic_p.png";      
+const BUZZY_PROFILE_PIC="buzzy_p.png";  const PACK_PRICE=15;    
+const STARTING_COINS=75;    
+const STARTING_DOLB=0;  const BATTLE_HP=100;  /*
 
-<body>
-
-<div id="loginScreen">
-<div class="loginBox">
-<h1>Doll Ball Collector Cards</h1>
-<p>Log in to play.</p>
-<button class="googleButton" onclick="loginGoogle()">Sign in with Google</button>
-</div>
-</div>
-
-<div id="gameScreen" class="hidden">
-
-<div class="topBar">
-
-<div class="moneyBox">
-Coins: <span id="money">0</span>
-</div>
-
-<div class="dolbBox">
-Dolb: <span id="dolb">0</span>
-</div>
-
-<button onclick="showPage('battle')">BATTLE</button>
-<button onclick="showPage('home')">HOME</button>
-<button onclick="showPage('shop')">SHOP</button>
-<button onclick="showPage('collection')">COLLECTION</button>
-<button onclick="showPage('dex')">DEX</button>
-<button onclick="showPage('trade')">TRADE</button>
-<button onclick="showPage('friends')">FRIENDS</button>
-<button onclick="openSettings()">SETTINGS</button>
-<button class="logoutButton" onclick="logout()">LOG OUT</button>
-
-</div>
-
-<div id="homePage" class="page">
-
-<div class="homeBox">
-
-<div class="profileBox">
-
-<img id="homeProfilePic" class="profilePic" src="basic_p.png">
-
-<div class="profileInfo">
-
-<div class="profileUsername" id="homeUsername"></div>
-
-<div>Doll Ball Collector Cards</div>
-
-</div>
-
-</div>
-
-<h1>Welcome!</h1>
-
-<p>
-Google Account:
-<span id="accountEmail"></span>
-</p>
-
-<p>
-Username:
-<span class="username" id="usernameDisplay"></span>
-</p>
-
-<hr>
-
-<h2>Open a Pack</h2>
-
-<p>
-Cost: 15 coins<br>
-Cards: 3
-</p>
-
-<button class="packButton" onclick="openPack()">
-OPEN PACK - 15 COINS
-</button>
-
-</div>
-</div>
-
-<div id="battlePage" class="page hidden">
-
-<h1>Battle</h1>
-
-<div id="battleRankInfo"></div>
-
-<div id="battleMain">
-
-<div class="battleHome">
-
-<h2>Choose a Battle</h2>
-
-<p>
-Pick one specific copy of a doll and battle!
-Every copy has its own level.
-</p>
-
-<div class="battleModes">
-
-<div class="battleMode">
-
-<h3>Easy Bot</h3>
-
-<p>
-A simple bot with random choices.
-</p>
-
-<button onclick="startBotBattle('easy')">
-BATTLE EASY BOT
-</button>
-
-</div>
-
-<div class="battleMode hard">
-
-<h3>Hard Bot</h3>
-
-<p>
-The hard bot chooses cards that counter your type.
-</p>
-
-<button onclick="startBotBattle('hard')">
-BATTLE HARD BOT
-</button>
-
-</div>
-
-<div class="battleMode friend">
-
-<h3>Friend Battle</h3>
-
-<p>
-Challenge one of your friends.
-</p>
-
-<button onclick="showPage('friends')">
-CHOOSE FRIEND
-</button>
-
-</div>
-
-</div>
-</div>
-
-<div id="battleRequests"></div>
-<div id="battleFriendsList"></div>
-
-</div>
-
-<div id="battleChoice" class="battleHome hidden">
-
-<h2 id="battleChoiceTitle">Choose Your Doll</h2>
-
-<p id="battleChoiceDescription">
-Choose one specific copy to use in battle.
-</p>
-
-<div id="battleChoiceGrid" class="battleChoiceGrid"></div>
-
-<button
-id="battleStartButton"
-class="battleStartButton"
-onclick="confirmBattleCard()"
-disabled>
-BATTLE!
-</button>
-
-<button
-class="battleCancelButton"
-onclick="cancelBattleSetup()">
-CANCEL
-</button>
-
-</div>
-
-<div id="battleArena" class="battleArena hidden"></div>
-
-</div>
-
-<!-- SHOP -->
-
-<div id="shopPage" class="page hidden">
-
-<div class="shopHeader">
-
-<h1>Shop</h1>
-
-<p>
-Buy special daily dolls with Dolb.
-</p>
-
-<div class="shopDate">
-Daily shop changes every day.
-<span id="shopDate"></span>
-</div>
-
-</div>
-
-<h2 class="shopSection">Daily Doll</h2>
-
-<div id="dailyShop"></div>
-
-<h2 class="shopSection">Coins → Dolb</h2>
-
-<div id="dolbDeals" class="dealGrid"></div>
-
-<h2 class="shopSection">Event Shop</h2>
-
-<div class="eventShopBox">
-
-<h3>No Event Right Now</h3>
-
-<p>
-Event shops will appear here when an event is active.
-</p>
-
-</div>
-
-</div>
-
-<!-- COLLECTION -->
-
-<div id="collectionPage" class="page hidden">
-
-<h1>Collection</h1>
-
-<div class="tabs">
-
-<button
-id="collectionAllButton"
-class="active"
-onclick="setCollectionTab('all')">
-ALL
-</button>
-
-<button
-id="collectionFavoritesButton"
-onclick="setCollectionTab('favorites')">
-FAVORITES
-</button>
-
-</div>
-
-<input
-id="collectionSearch"
-class="searchBox"
-type="search"
-autocomplete="off"
-placeholder="Search cards..."
-oninput="renderCollection">
-
-<div id="collectionGrid" class="cardGrid"></div>
-
-</div>
-
-<!-- DEX -->
-
-<div id="dexPage" class="page hidden">
-
-<h1>DEX</h1>
-
-<div class="tabs">
-
-<button
-id="dexDollsButton"
-class="active"
-onclick="setDexTab('dolls')">
-DOLLS
-</button>
-
-<button
-id="dexRaresButton"
-onclick="setDexTab('rares')">
-RARES
-</button>
-
-</div>
-
-<div id="dexGrid" class="cardGrid"></div>
-
-</div>
-
-<!-- TRADE -->
-
-<div id="tradePage" class="page hidden">
-
-<h1>Trading</h1>
-
-<div class="tradeNotice">
-
-<b>Find a player</b>
-
-<p>
-Search using their username.
-</p>
-
-<div class="tradeSearchArea">
-
-<input
-id="tradePlayerInput"
-type="search"
-autocomplete="off"
-placeholder="Username">
-
-<button
-class="tradeSearchButton"
-onclick="findPlayer()">
-SEARCH
-</button>
-
-</div>
-
-<div id="tradePlayerResult"></div>
-
-</div>
-
-<div id="incomingTrades"></div>
-<div id="activeTrade"></div>
-
-</div>
-
-<!-- FRIENDS -->
-
-<div id="friendsPage" class="page hidden">
-
-<h1>Friends</h1>
-
-<div class="friendSearchBox">
-
-<h2>Find a Friend</h2>
-
-<p>
-Search for another player using their username.
-</p>
-
-<div class="friendSearchArea">
-
-<input
-id="friendPlayerInput"
-type="search"
-autocomplete="off"
-placeholder="Username">
-
-<button
-class="friendSearchButton"
-onclick="findFriend()">
-SEARCH
-</button>
-
-</div>
-
-<div id="friendSearchResult"></div>
-
-</div>
-
-<div id="friendRequestsArea"></div>
-
-<h2 class="friendSection">
-Your Friends
-</h2>
-
-<div id="friendsList"></div>
-
-</div>
-
-<!-- SETTINGS -->
-
-<div id="settingsOverlay" class="settingsOverlay hidden">
-
-<div class="settingsBox">
-
-<h2>Settings</h2>
-
-<p>
-Username:
-<b id="settingsUsername"></b>
-</p>
-
-<div style="text-align:center;margin:20px 0">
-
-<img
-id="settingsProfilePic"
-class="profilePic"
-src="basic_p.png">
-
-<p>Profile Picture</p>
-
-</div>
-
-<button
-class="settingsButton resetButton"
-onclick="resetAccount()">
-RESET ACCOUNT
-</button>
-
-<button
-class="settingsButton"
-onclick="closeSettings()">
-CLOSE
-</button>
-
-</div>
-</div>
-
-<div
-id="cardViewer"
-class="cardViewer hidden"
-onclick="closeCardViewer()">
-
-<button
-class="cardViewerClose"
-onclick="closeCardViewer(event)">
-X
-</button>
-
-<img
-id="cardViewerImage"
-class="cardViewerImage"
-src=""
-onclick="event.stopPropagation()">
-
-</div>
-
-<div id="message"></div>
-
-<script type="module">
-
-import {
-initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
-import {
-getAuth,
-GoogleAuthProvider,
-signInWithPopup,
-signOut,
-onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-import {
-getFirestore,
-doc,
-getDoc,
-setDoc,
-updateDoc,
-onSnapshot,
-collection as firestoreCollection,
-query,
-where,
-serverTimestamp,
-arrayUnion
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-const firebaseConfig={
-apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
-authDomain:"dbcc-login.firebaseapp.com",
-databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
-projectId:"dbcc-login",
-storageBucket:"dbcc-login.firebasestorage.app",
-messagingSenderId:"878902780767",
-appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
-measurementId:"G-PT9S1K4E2K"
-};
-
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
-
-const DEFAULT_PROFILE_PIC="basic_p.png";
-const BUZZY_PROFILE_PIC="buzzy_p.png";
-
-const PACK_PRICE=15;
-const STARTING_COINS=75;
-const STARTING_DOLB=0;
-
-const BATTLE_HP=100;
-
-/*
-========================================
 NEW LEVEL / RANK SYSTEM
-========================================
+
 */
 
 const NORMAL_RANK_COINS=100;
@@ -2718,43 +2392,25 @@ dailyShopOffer.type==="profilePic"
 
 imageHtml=`
 
-<img
-class="shopProfile"
-src="${escapeHtml(dailyShopOffer.image)}"
-onclick="openEncodedCardViewer(
-'${encoded(dailyShopOffer.image)}',
-'Buzzy Profile Picture'
+<img                    
+class="shopProfile"                    
+src="${escapeHtml(dailyShopOffer.image)}"                    
+onclick="openEncodedCardViewer(                    
+'${encoded(dailyShopOffer.image)}',                    
+'Buzzy Profile Picture'                    
 )">
 
-<div class="profileShopLabel">
-Buzzy Profile Picture
-</div>
-`;
-
-}else{
-
-imageHtml=`
-
-<img
-class="dailyShopImage"
-src="${escapeHtml(dailyShopOffer.image)}"
-onclick="openEncodedCardViewer(
-'${encoded(dailyShopOffer.image)}',
-'${encoded(dailyShopOffer.name)}'
-)">
-
-`;
-
-}
-
-let button;
-
-if(dailyShopBought){
-
-button=
-'<button class="shopOwned" disabled>PURCHASED TODAY</button>';
-
-}else if(
+<div class="profileShopLabel">                    
+Buzzy Profile Picture                    
+</div>                    
+`;    }else{  imageHtml=`  <img                    
+class="dailyShopImage"                    
+src="${escapeHtml(dailyShopOffer.image)}"                    
+onclick="openEncodedCardViewer(                    
+'${encoded(dailyShopOffer.image)}',                    
+'${encoded(dailyShopOffer.name)}'                    
+)">  `;  }  let button;  if(dailyShopBought){  button=  
+'<button class="shopOwned" disabled>PURCHASED TODAY</button>';  }else if(
 dailyShopOffer.type==="profilePic" &&
 ownedProfilePics.includes(
 BUZZY_PROFILE_PIC
@@ -2775,139 +2431,59 @@ button=
 
 button=`
 
-<button
-class="shopBuyButton"
+<button                    
+class="shopBuyButton"                    
 onclick="buyDailyShopOffer()">
 
 BUY FOR
 ${dailyShopOffer.price}
 DOLB
 
-</button>
-`;
-
-}
-
-daily.innerHTML=`
-
-<div class="dailyShopCard">
-
-${imageHtml}
-
-${
-dailyShopOffer.type==="doll"
-?
-`
-<div class="dailyShopName">
-${escapeHtml(dailyShopOffer.name)}
-</div>
-`
-:
-""
-}
-
-<div class="shopPrice">
-${dailyShopOffer.price} Dolb
-</div>
-
-${
-dailyShopOffer.price!==
-dailyShopOffer.normalPrice
-?
-`
-<div
-style="text-decoration:line-through;opacity:.55">
-
-Normal price:
-${dailyShopOffer.normalPrice} Dolb
-
-</div>
-
-<div
-style="color:#7ee7a7;font-weight:bold;margin:10px">
-
-TODAY'S DEAL!
-
-</div>
-`
-:
-""
-}
-
-${
-dailyShopOffer.type==="doll"
-?
-"<p>You can own multiple copies of this doll.</p>"
-:
-"<p>You can own only one copy of this profile picture.</p>"
-}
-
-${button}
-
-</div>
-`;
-
-}
-
-deals.innerHTML="";
-
-dolbDeals.forEach(deal=>{
-
-const div=document.createElement("div");
-
-div.className="dealBox";
-
-div.innerHTML=`
-
-<div class="dealTitle">
-${deal.coins} Coins
-</div>
-
-<div class="dealArrow">↓</div>
-
-<div
-style="font-size:20px;font-weight:bold;color:#d0b5ff">
-
-${deal.dolb} Dolb
-
-</div>
-
-<p>
-Spend ${deal.coins} Coins
-to receive ${deal.dolb} Dolb.
-</p>
-
-<button
-class="dealButton"
-onclick="buyDolbDeal(
-${deal.coins},
-${deal.dolb}
-)">
-
-BUY FOR ${deal.coins} COINS
-
-</button>
-`;
-
-deals.appendChild(div);
-
-});
-
-}
-
-window.buyDailyShopOffer=async()=>{
-
-if(!currentUser||!dailyShopOffer)return;
-
-if(dailyShopBought){
-
-showMessage(
-"You already bought today's shop offer."
-);
-
-return;
-
-}
+</button>                    
+`;    }  daily.innerHTML=`  <div class="dailyShopCard">    ${imageHtml}  ${              
+dailyShopOffer.type==="doll"              
+?              
+`  <div class="dailyShopName">                    
+${escapeHtml(dailyShopOffer.name)}                    
+</div>                    
+`                    
+:                    
+""                    
+}    <div class="shopPrice">                    
+${dailyShopOffer.price} Dolb                    
+</div>    ${                
+dailyShopOffer.price!==                
+dailyShopOffer.normalPrice                
+?                
+`  <div                    
+style="text-decoration:line-through;opacity:.55">    Normal price:                
+${dailyShopOffer.normalPrice} Dolb  </div>    <div                    
+style="color:#7ee7a7;font-weight:bold;margin:10px">    TODAY'S DEAL!  </div>                    
+`                    
+:                    
+""                    
+}    ${                
+dailyShopOffer.type==="doll"                
+?                
+"<p>You can own multiple copies of this doll.</p>"                
+:                
+"<p>You can own only one copy of this profile picture.</p>"                
+}  ${button}  </div>                    
+`;    }  deals.innerHTML="";  dolbDeals.forEach(deal=>{  const div=document.createElement("div");  div.className="dealBox";  div.innerHTML=`  <div class="dealTitle">                    
+${deal.coins} Coins                    
+</div>    <div class="dealArrow">↓</div>    <div                    
+style="font-size:20px;font-weight:bold;color:#d0b5ff">    ${deal.dolb} Dolb  </div>    <p>                    
+Spend ${deal.coins} Coins                    
+to receive ${deal.dolb} Dolb.                    
+</p>    <button                    
+class="dealButton"                    
+onclick="buyDolbDeal(                    
+${deal.coins},                    
+${deal.dolb}                    
+)">  BUY FOR ${deal.coins} COINS  </button>                    
+`;    deals.appendChild(div);  });  }  window.buyDailyShopOffer=async()=>{  if(!currentUser||!dailyShopOffer)return;  if(dailyShopBought){  showMessage(    
+"You already bought today's shop offer."    
+);  return;  }
 
 const price=dailyShopOffer.price;
 
@@ -3360,66 +2936,35 @@ onclick="toggleFavorite(
 
 ${fav?"★":"☆"}
 
-</button>
-
-<div class="cardCount">
+</button>    <div class="cardCount">
 ${count}
-</div>
 
-<img
-src="${escapeHtml(card.image)}"
-onclick="openEncodedCardViewer(
-'${encoded(card.image)}',
-'${encoded(name)}'
-)">
-
-<div class="cardName">
-${escapeHtml(name)}
-</div>
-
-<div>
-${count}
-${count===1?"copy":"copies"}
-• Sell: ${card.price}
-</div>
-
-<button
-class="sellButton ${
-fav?"favoriteLocked":""
-}"
-${fav?"disabled":""}
-onclick="sellCard(
-'${encoded(name)}'
-)">
-
-${fav?"FAVORITED":"SELL 1 COPY"}
-
-</button>
-`;
-
-grid.appendChild(div);
-
-}
-
-}
-
-window.toggleFavorite=async encodedName=>{
-
-const name=decodeURIComponent(
-encodedName
-);
-
-if(favorites.includes(name)){
-
-favorites=favorites.filter(
-x=>x!==name
-);
-
-showMessage(
-name+" is no longer a favorite."
-);
-
-}else{
+</div>    <img                    
+src="${escapeHtml(card.image)}"                    
+onclick="openEncodedCardViewer(                    
+'${encoded(card.image)}',                    
+'${encoded(name)}'                    
+)">  <div class="cardName">                    
+${escapeHtml(name)}                    
+</div>    <div>                    
+${count}                    
+${count===1?"copy":"copies"}                    
+• Sell: ${card.price}                    
+</div>    <button                
+class="sellButton ${                
+fav?"favoriteLocked":""                
+}"                
+${fav?"disabled":""}                
+onclick="sellCard(                
+'${encoded(name)}'                
+)">  ${fav?"FAVORITED":"SELL 1 COPY"}  </button>                    
+`;    grid.appendChild(div);  }  }  window.toggleFavorite=async encodedName=>{  const name=decodeURIComponent(        
+encodedName        
+);  if(favorites.includes(name)){  favorites=favorites.filter(    
+x=>x!==name    
+);  showMessage(  
+name+" is no longer a favorite."  
+);  }else{
 
 favorites.push(name);
 
@@ -3525,81 +3070,37 @@ div.className=
 
 div.innerHTML=`
 
-<div
-style="
-aspect-ratio:1/1.35;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:25px">
+<div                    
+style="                    
+aspect-ratio:1/1.35;                    
+display:flex;                    
+align-items:center;                    
+justify-content:center;                    
+font-size:25px">    ?  </div>    <b>Rare ${i}</b>  <p>Coming Soon</p>                    
+`;    grid.appendChild(div);  }  return;  }  for(const card of cards){  const count=collection.filter(      
+c=>c.name===card.name      
+).length;  const div=document.createElement("div");  div.className=  
+"dexCard "+(!count?"comingSoon":"");  div.innerHTML=`
 
-?
-
-</div>
-
-<b>Rare ${i}</b>
-
-<p>Coming Soon</p>
-`;
-
-grid.appendChild(div);
-
-}
-
-return;
-
-}
-
-for(const card of cards){
-
-const count=collection.filter(
-c=>c.name===card.name
-).length;
-
-const div=document.createElement("div");
-
-div.className=
-"dexCard "+(!count?"comingSoon":"");
-
-div.innerHTML=`
-
-<img
-src="${escapeHtml(card.image)}"
-onclick="openEncodedCardViewer(
-'${encoded(card.image)}',
-'${encoded(card.name)}'
+<img                    
+src="${escapeHtml(card.image)}"                    
+onclick="openEncodedCardViewer(                    
+'${encoded(card.image)}',                    
+'${encoded(card.name)}'                    
 )">
 
 <b>${escapeHtml(card.name)}</b>
 
-<p>
-${count?`Owned: ${count}`:"Not Owned"}
-</p>
-`;
-
-grid.appendChild(div);
-
-}
-
-}
-
-/* =========================
-TRADE
-========================= */
-
-window.findPlayer=async()=>{
-
-const input=document.getElementById(
-"tradePlayerInput"
-);
-
-const result=document.getElementById(
-"tradePlayerResult"
-);
-
-const name=input.value.trim();
-
-if(!name){
+<p>                    
+${count?`Owned: ${count}`:"Not Owned"}                    
+</p>                    
+`;    grid.appendChild(div);  }  }  /* =========================          
+TRADE          
+========================= */  window.findPlayer=async()=>{  const input=document.getElementById(      
+"tradePlayerInput"      
+);  const result=document.getElementById(    
+"tradePlayerResult"    
+);  const name=input.value.trim();  if(!name){
 
 result.innerHTML=
 "<p>Enter a username.</p>";
@@ -3670,88 +3171,40 @@ name;
 
 result.innerHTML=`
 
-<div class="tradeNotice">
-
-<div class="playerResultBox">
-
-<img
-class="profilePicSmall"
-src="${escapeHtml(pic)}">
-
-<div class="playerResultInfo">
-
-<div class="profileUsername">
-${escapeHtml(n)}
-</div>
-
-<p>Player found.</p>
-
-</div>
-
-</div>
-
-<button
-class="tradeSearchButton"
-style="margin-top:15px"
-onclick="sendTradeRequest(
-'${escapeHtml(d.uid)}'
-)">
-
-SEND TRADE REQUEST
-
-</button>
-
-</div>
-`;
-
-}catch(e){
-
-console.error(e);
-
-result.innerHTML=`
-
-<div class="tradeNotice">
-Search error:<br>
-${escapeHtml(e.message)}
-</div>
-`;
-
-}
-
-};
-
-window.sendTradeRequest=async receiverUid=>{
-
-if(
-!currentUser||
-receiverUid===currentUser.uid
-)return;
-
-try{
-
-const pending=tradeRequests.some(
-t=>
-t.status==="pending" &&
-(
-(
-t.senderUid===currentUser.uid &&
-t.receiverUid===receiverUid
-)
-||
-(
-t.receiverUid===currentUser.uid &&
-t.senderUid===receiverUid
-)
-)
-);
-
-if(pending){
-
-showMessage(
-"You already have a pending trade with this player."
-);
-
-return;
+<div class="tradeNotice">    <div class="playerResultBox">    <img                    
+class="profilePicSmall"                    
+src="${escapeHtml(pic)}">  <div class="playerResultInfo">    <div class="profileUsername">                    
+${escapeHtml(n)}                    
+</div>    <p>Player found.</p>    </div>    </div>    <button                    
+class="tradeSearchButton"                    
+style="margin-top:15px"                    
+onclick="sendTradeRequest(                    
+'${escapeHtml(d.uid)}'                    
+)">  SEND TRADE REQUEST  </button>    </div>            
+`;    }catch(e){  console.error(e);  result.innerHTML=`  <div class="tradeNotice">                    
+Search error:<br>                    
+${escapeHtml(e.message)}                    
+</div>                    
+`;    }  };  window.sendTradeRequest=async receiverUid=>{  if(          
+!currentUser||          
+receiverUid===currentUser.uid          
+)return;  try{  const pending=tradeRequests.some(      
+t=>      
+t.status==="pending" &&      
+(      
+(      
+t.senderUid===currentUser.uid &&      
+t.receiverUid===receiverUid      
+)      
+||      
+(      
+t.receiverUid===currentUser.uid &&      
+t.senderUid===receiverUid      
+)      
+)      
+);  if(pending){  showMessage(  
+"You already have a pending trade with this player."  
+);  return;
 
 }
 
@@ -3917,50 +3370,26 @@ d.innerHTML=`
 
 <b>Incoming Trade Request</b>
 
-<p>
-${escapeHtml(
-t.senderUsername||
-"Another player"
-)}
-wants to trade with you.
-</p>
-
-<button
-class="tradeSearchButton"
-onclick="acceptTrade(
-'${escapeHtml(t.id)}'
-)">
-
-ACCEPT TRADE
-
-</button>
-`;
-
-c.appendChild(d);
-
-});
-
-}
-
-window.acceptTrade=id=>{
-
-const t=tradeRequests.find(
-x=>x.id===id
-);
-
-if(
-!t||
-t.receiverUid!==currentUser.uid||
-t.status!=="pending"
-){
-
-showMessage(
-"This trade cannot be accepted."
-);
-
-return;
-
-}
+<p>                    
+${escapeHtml(                    
+t.senderUsername||                    
+"Another player"                    
+)}                    
+wants to trade with you.                    
+</p>    <button                    
+class="tradeSearchButton"                    
+onclick="acceptTrade(                    
+'${escapeHtml(t.id)}'                    
+)">  ACCEPT TRADE  </button>                    
+`;    c.appendChild(d);  });  }  window.acceptTrade=id=>{  const t=tradeRequests.find(        
+x=>x.id===id        
+);  if(      
+!t||      
+t.receiverUid!==currentUser.uid||      
+t.status!=="pending"      
+){  showMessage(    
+"This trade cannot be accepted."    
+);  return;  }
 
 activeTrade=t;
 
@@ -4031,335 +3460,158 @@ selectable=false
 if(!offer.length){
 
 return`
-<p style="text-align:center">
-No cards offered yet.
-</p>
-`;
 
-}
-
-return`
-
-<div class="tradeCardGrid">
-
-${offer.map(copy=>{
-
-const card=getCard(copy.name);
-
-if(!card)return"";
-
-const selected=
-selectable&&
-selectedTradeCards.includes(copy.id);
-
-return`
-
-<div
-class="tradeCard ${
-selected?"selected":""
-}"
-${
-selectable
-?
-`onclick="toggleTradeCard(
-'${escapeHtml(copy.id)}'
-)"`
-:
-""
-}>
-
-<img
-src="${escapeHtml(card.image)}"
-onclick="
-event.stopPropagation();
-openEncodedCardViewer(
-'${encoded(card.image)}',
-'${encoded(card.name)}'
-)">
-
-<div>
-${escapeHtml(card.name)}
-</div>
-
-<div style="font-size:11px">
-Lv. ${getCopyLevel(copy)}
-</div>
-
-</div>
-`;
-
-}).join("")}
-
-</div>
-`;
-
-}
-
-function renderSelectableTradeCards(){
-
-if(!collection.length){
-
-return`
-<p style="text-align:center">
-You have no cards.
-</p>
-`;
-
-}
-
-return`
-
-<div class="tradeCardGrid">
-
-${collection.map(copy=>{
-
-const card=getCard(copy.name);
-
-if(!card)return"";
-
-return`
-
-<div
-class="tradeCard ${
-selectedTradeCards.includes(copy.id)
-?
-"selected"
-:
-""
-}"
-onclick="
-toggleTradeCard(
-'${escapeHtml(copy.id)}'
-)">
-
-<img
-src="${escapeHtml(card.image)}"
-onclick="
-event.stopPropagation();
-openEncodedCardViewer(
-'${encoded(card.image)}',
-'${encoded(card.name)}'
-)">
-
-<div>
-${escapeHtml(card.name)}
-</div>
-
-<div style="font-size:11px">
-Lv. ${getCopyLevel(copy)}
-</div>
-
-</div>
-`;
-
-}).join("")}
-
-</div>
-`;
-
-}
-
-function renderActiveTrade(){
-
-const c=document.getElementById(
-"activeTrade"
-);
-
-if(!c)return;
-
-openOutgoingTradeIfNeeded();
-
-if(!activeTrade){
-
-c.innerHTML="";
-return;
-
-}
-
-if(activeTrade.status!=="pending"){
+<p style="text-align:center">                    
+No cards offered yet.                    
+</p>                    
+`;    }  return`  <div class="tradeCardGrid">    ${offer.map(copy=>{  const card=getCard(copy.name);  if(!card)return"";  const selected=          
+selectable&&          
+selectedTradeCards.includes(copy.id);  return`  <div                    
+class="tradeCard ${                    
+selected?"selected":""                    
+}"                    
+${                    
+selectable                    
+?                    
+`onclick="toggleTradeCard(                    
+'${escapeHtml(copy.id)}'                    
+)"`                    
+:                    
+""                    
+}>    <img                    
+src="${escapeHtml(card.image)}"                    
+onclick="                    
+event.stopPropagation();                    
+openEncodedCardViewer(                    
+'${encoded(card.image)}',                    
+'${encoded(card.name)}'                    
+)">  <div>                    
+${escapeHtml(card.name)}                    
+</div>    <div style="font-size:11px">                    
+Lv. ${getCopyLevel(copy)}                    
+</div>    </div>                    
+`;    }).join("")}  </div>                    
+`;    }  function renderSelectableTradeCards(){  if(!collection.length){  return`  <p style="text-align:center">                    
+You have no cards.                    
+</p>                    
+`;    }  return`  <div class="tradeCardGrid">    ${collection.map(copy=>{  const card=getCard(copy.name);  if(!card)return"";  return`  <div                    
+class="tradeCard ${                    
+selectedTradeCards.includes(copy.id)                    
+?                    
+"selected"                    
+:                    
+""                    
+}"                    
+onclick="                    
+toggleTradeCard(                    
+'${escapeHtml(copy.id)}'                    
+)">    <img                    
+src="${escapeHtml(card.image)}"                    
+onclick="                    
+event.stopPropagation();                    
+openEncodedCardViewer(                    
+'${encoded(card.image)}',                    
+'${encoded(card.name)}'                    
+)">  <div>                    
+${escapeHtml(card.name)}                    
+</div>    <div style="font-size:11px">                    
+Lv. ${getCopyLevel(copy)}                    
+</div>    </div>                    
+`;    }).join("")}  </div>                    
+`;    }  function renderActiveTrade(){  const c=document.getElementById(            
+"activeTrade"            
+);  if(!c)return;  openOutgoingTradeIfNeeded();  if(!activeTrade){  c.innerHTML="";    
+return;  }  if(activeTrade.status!=="pending"){
 
 c.innerHTML=
 activeTrade.status==="completed"
 ?
 `
-<div class="tradeArea">
-<h2>Trade Completed</h2>
-<p>
-The cards were successfully swapped.
-Their individual levels stayed with them.
-</p>
-</div>
-`
-:
-"";
 
-return;
-
-}
-
-const sender=
-activeTrade.senderUid===
-currentUser.uid;
-
-const my=getMyOffer(activeTrade);
-const their=getTheirOffer(activeTrade);
-
-const myConfirmed=
-sender
-?
-activeTrade.senderConfirmed===true
-:
-activeTrade.receiverConfirmed===true;
-
-const theirConfirmed=
-sender
-?
-activeTrade.receiverConfirmed===true
-:
-activeTrade.senderConfirmed===true;
-
-const matches=sameIds(
-my.map(c=>c.id),
-selectedTradeCards
-);
-
-c.innerHTML=`
-
-<div class="tradeArea">
-
-<h2>Trading</h2>
-
-<p>
-A traded doll keeps its level.
-Rank-up rewards never transfer.
-</p>
-
-<div class="tradeColumns">
-
-<div class="tradeSide">
-
-<h3>Your Offer</h3>
-
-${renderOfferCards(my)}
-
-<p>
-Current offer:
-${my.length} card(s)
-</p>
-
-<hr>
-
-<h3>Choose Cards</h3>
-
-${renderSelectableTradeCards()}
-
-<p>
-${selectedTradeCards.length}
-card(s) selected
-</p>
-
-<button
-class="changeOfferButton"
-onclick="submitTradeOffer()">
-
-UPDATE MY OFFER
-
-</button>
-
-</div>
-
-<div class="tradeSide">
-
-<h3>Their Offer</h3>
-
-${renderOfferCards(their)}
-
-<p>
-Their offer:
-${their.length} card(s)
-</p>
-
-</div>
-
-</div>
-
-<div class="tradeStatus">
-
-${myConfirmed
-?
-"You confirmed this trade."
-:
-"You have not confirmed."}
-
-<br>
-
-${theirConfirmed
-?
-"They confirmed this trade."
-:
-"They have not confirmed."}
-
-</div>
-
-${
-!matches
-?
-'<p style="text-align:center;color:#36b9ff">Update your offer before confirming.</p>'
-:
-""
-}
-
-${
-!my.length
-?
-'<p style="text-align:center;color:#36b9ff">You must offer at least one card.</p>'
-:
-""
-}
-
-${
-!their.length
-?
-'<p style="text-align:center;color:#36b9ff">Waiting for them to offer a card.</p>'
-:
-""
-}
-
-<button
-class="confirmButton"
-onclick="confirmTrade()"
-${
-myConfirmed||
-!matches||
-!my.length||
-!their.length
-?
-"disabled"
-:
-""
-}>
-
-${myConfirmed?"CONFIRMED":"CONFIRM TRADE"}
-
-</button>
-
-<button
-class="cancelButton"
-onclick="
-cancelTrade(
-'${escapeHtml(activeTrade.id)}'
-)">
-
-CANCEL TRADE
-
-</button>
-
-</div>
-`;
-
-}
-
-window.toggleTradeCard=id=>{
+<div class="tradeArea">                    
+<h2>Trade Completed</h2>                    
+<p>                    
+The cards were successfully swapped.                    
+Their individual levels stayed with them.                    
+</p>                    
+</div>                    
+`                    
+:                    
+"";    return;  }  const sender=            
+activeTrade.senderUid===            
+currentUser.uid;  const my=getMyOffer(activeTrade);          
+const their=getTheirOffer(activeTrade);  const myConfirmed=        
+sender        
+?        
+activeTrade.senderConfirmed===true        
+:        
+activeTrade.receiverConfirmed===true;  const theirConfirmed=      
+sender      
+?      
+activeTrade.receiverConfirmed===true      
+:      
+activeTrade.senderConfirmed===true;  const matches=sameIds(    
+my.map(c=>c.id),    
+selectedTradeCards    
+);  c.innerHTML=`  <div class="tradeArea">    <h2>Trading</h2>    <p>                    
+A traded doll keeps its level.                    
+Rank-up rewards never transfer.                    
+</p>    <div class="tradeColumns">    <div class="tradeSide">    <h3>Your Offer</h3>    ${renderOfferCards(my)}  <p>                    
+Current offer:                    
+${my.length} card(s)                    
+</p>    <hr>    <h3>Choose Cards</h3>    ${renderSelectableTradeCards()}  <p>                    
+${selectedTradeCards.length}                    
+card(s) selected                    
+</p>    <button                    
+class="changeOfferButton"                    
+onclick="submitTradeOffer()">  UPDATE MY OFFER  </button>    </div>    <div class="tradeSide">    <h3>Their Offer</h3>    ${renderOfferCards(their)}  <p>                    
+Their offer:                    
+${their.length} card(s)                    
+</p>    </div>    </div>    <div class="tradeStatus">    ${myConfirmed                
+?                
+"You confirmed this trade."                
+:                
+"You have not confirmed."}  <br>    ${theirConfirmed              
+?              
+"They confirmed this trade."              
+:              
+"They have not confirmed."}  </div>    ${                
+!matches                
+?                
+'<p style="text-align:center;color:#36b9ff">Update your offer before confirming.</p>'                
+:                
+""                
+}  ${              
+!my.length              
+?              
+'<p style="text-align:center;color:#36b9ff">You must offer at least one card.</p>'              
+:              
+""              
+}  ${            
+!their.length            
+?            
+'<p style="text-align:center;color:#36b9ff">Waiting for them to offer a card.</p>'            
+:            
+""            
+}  <button          
+class="confirmButton"          
+onclick="confirmTrade()"          
+${          
+myConfirmed||          
+!matches||          
+!my.length||          
+!their.length          
+?          
+"disabled"          
+:          
+""          
+}>  ${myConfirmed?"CONFIRMED":"CONFIRM TRADE"}  </button>    <button                    
+class="cancelButton"                    
+onclick="                    
+cancelTrade(                    
+'${escapeHtml(activeTrade.id)}'                    
+)">  CANCEL TRADE  </button>    </div>  
+`;    }  window.toggleTradeCard=id=>{
 
 if(
 !activeTrade||
@@ -4448,8 +3700,6 @@ db,
 activeTrade.id
 ),
 {
-
-[offerField]:offer,
 
 senderConfirmed:false,
 receiverConfirmed:false
@@ -4983,93 +4233,37 @@ action=
 
 action=`
 
-<button
-class="friendActionButton friendAcceptButton"
-onclick="
-acceptFriendRequestByUser(
-'${escapeHtml(uid)}'
+<button                    
+class="friendActionButton friendAcceptButton"                    
+onclick="                    
+acceptFriendRequestByUser(                    
+'${escapeHtml(uid)}'                    
 )">
 
 ACCEPT FRIEND REQUEST
 
-</button>
-`;
-
-}else{
-
-action=`
-
-<button
-class="friendActionButton"
-onclick="
-sendFriendRequest(
-'${escapeHtml(uid)}'
-)">
-
-ADD FRIEND
-
-</button>
-`;
-
-}
-
-result.innerHTML=`
-
-<div class="friendResultBox">
-
-<img
-class="profilePicSmall"
-src="${escapeHtml(pic)}">
-
-<div class="friendResultInfo">
-
-<div class="friendName">
-${escapeHtml(n)}
-</div>
-
-<div>Player found.</div>
-
-${action}
-
-</div>
-
-</div>
-`;
-
-}catch(e){
-
-console.error(e);
-
-result.innerHTML=`
-
-<div class="friendEmpty">
-Search error:<br>
-${escapeHtml(e.message)}
-</div>
-`;
-
-}
-
-};
-
-window.sendFriendRequest=async receiverUid=>{
-
-if(
-!currentUser||
-receiverUid===currentUser.uid
-)return;
-
-try{
-
-if(friends.includes(receiverUid)){
-
-showMessage(
-"You are already friends."
-);
-
-return;
-
-}
+</button>                    
+`;    }else{  action=`  <button                    
+class="friendActionButton"                    
+onclick="                    
+sendFriendRequest(                    
+'${escapeHtml(uid)}'                    
+)">  ADD FRIEND  </button>                    
+`;    }  result.innerHTML=`  <div class="friendResultBox">    <img                    
+class="profilePicSmall"                    
+src="${escapeHtml(pic)}">  <div class="friendResultInfo">    <div class="friendName">                    
+${escapeHtml(n)}                    
+</div>    <div>Player found.</div>    ${action}  </div>    </div>                    
+`;    }catch(e){  console.error(e);  result.innerHTML=`  <div class="friendEmpty">                    
+Search error:<br>                    
+${escapeHtml(e.message)}                    
+</div>                    
+`;    }  };  window.sendFriendRequest=async receiverUid=>{  if(          
+!currentUser||          
+receiverUid===currentUser.uid          
+)return;  try{  if(friends.includes(receiverUid)){  showMessage(    
+"You are already friends."    
+);  return;  }
 
 const existing=friendRequests.some(
 r=>
@@ -5250,63 +4444,29 @@ d.className="tradeRequest";
 
 d.innerHTML=`
 
-<div class="playerResultBox">
-
-<img
-class="profilePicTiny"
-id="fr_${escapeHtml(r.id)}"
-src="${DEFAULT_PROFILE_PIC}">
-
-<div class="playerResultInfo">
-
-<div class="friendName">
-${escapeHtml(
-r.senderUsername||
-"Another player"
-)}
-</div>
-
-<p>Wants to be your friend.</p>
-
-<button
-class="friendAcceptButton"
-onclick="
-acceptFriendRequest(
-'${escapeHtml(r.id)}'
-)">
-
-ACCEPT
-
-</button>
-
-<button
-class="friendDeclineButton"
-onclick="
-declineFriendRequest(
-'${escapeHtml(r.id)}'
-)">
-
-DECLINE
-
-</button>
-
-</div>
-
-</div>
-`;
-
-c.appendChild(d);
-
-loadFriendRequestPicture(
-r.id,
-r.senderUid
-);
-
-});
-
-}
-
-async function loadFriendRequestPicture(
+<div class="playerResultBox">    <img                    
+class="profilePicTiny"                    
+id="fr_${escapeHtml(r.id)}"                    
+src="${DEFAULT_PROFILE_PIC}">  <div class="playerResultInfo">    <div class="friendName">                    
+${escapeHtml(                    
+r.senderUsername||                    
+"Another player"                    
+)}                    
+</div>    <p>Wants to be your friend.</p>    <button                    
+class="friendAcceptButton"                    
+onclick="                    
+acceptFriendRequest(                    
+'${escapeHtml(r.id)}'                    
+)">  ACCEPT  </button>    <button                    
+class="friendDeclineButton"                    
+onclick="                    
+declineFriendRequest(                    
+'${escapeHtml(r.id)}'                    
+)">  DECLINE  </button>    </div>    </div>        
+`;    c.appendChild(d);  loadFriendRequestPicture(      
+r.id,      
+r.senderUid      
+);  });  }  async function loadFriendRequestPicture(
 id,
 uid
 ){
@@ -5496,36 +4656,12 @@ if(!friends.length){
 
 c.innerHTML=`
 
-<div class="friendEmpty">
-
-<h3>No friends yet</h3>
-
-<p>
-Search for a player above to add them.
-</p>
-
-</div>
-`;
-
-return;
-
-}
-
-c.innerHTML="<p>Loading friends...</p>";
-
-try{
-
-const profiles=[];
-
-for(const id of friends){
-
-const s=await getDoc(
-doc(db,"players",id)
-);
-
-if(s.exists()){
-
-const d=s.data();
+<div class="friendEmpty">    <h3>No friends yet</h3>    <p>                    
+Search for a player above to add them.                    
+</p>    </div>                    
+`;    return;  }  c.innerHTML="<p>Loading friends...</p>";  try{  const profiles=[];  for(const id of friends){  const s=await getDoc(    
+doc(db,"players",id)    
+);  if(s.exists()){  const d=s.data();
 
 profiles.push({
 
@@ -5564,53 +4700,25 @@ d.className="friendBox";
 
 d.innerHTML=`
 
-<img
-class="profilePicSmall"
+<img                    
+class="profilePicSmall"                    
 src="${escapeHtml(f.profilePic)}">
 
-<div class="friendInfo">
-
-<div class="friendName">
-${escapeHtml(f.username)}
-</div>
-
-<div>Friend</div>
-
-</div>
-
-<button
-class="friendActionButton"
-onclick="
-openTradeWithFriend(
-'${escapeHtml(f.username)}'
-)">
-
-TRADE
-
-</button>
-
-<button
-class="friendBattleButton"
-onclick="
-challengeFriend(
-'${escapeHtml(f.uid)}',
-'${escapeHtml(f.username)}',
-'${escapeHtml(f.profilePic)}'
-)">
-
-BATTLE
-
-</button>
-
-`;
-
-c.appendChild(d);
-
-});
-
-}catch(e){
-
-console.error(e);
+<div class="friendInfo">    <div class="friendName">                    
+${escapeHtml(f.username)}                    
+</div>    <div>Friend</div>    </div>    <button                    
+class="friendActionButton"                    
+onclick="                    
+openTradeWithFriend(                    
+'${escapeHtml(f.username)}'                    
+)">  TRADE  </button>    <button                    
+class="friendBattleButton"                    
+onclick="                    
+challengeFriend(                    
+'${escapeHtml(f.uid)}',                    
+'${escapeHtml(f.username)}',                    
+'${escapeHtml(f.profilePic)}'                    
+)">  BATTLE  </button>    `;  c.appendChild(d);  });  }catch(e){  console.error(e);
 
 c.innerHTML=
 '<div class="friendEmpty">Could not load friends.</div>';
@@ -5704,9 +4812,9 @@ return multiplier;
 }
 
 /*
-==================================================
+
 INDIVIDUAL DOLL LEVEL STATS
-==================================================
+
 */
 
 function getBattleMaxHP(copy){
@@ -5768,14 +4876,24 @@ getCopyLevel(a);
 }
 
 /*
-========================================
+
 PLAYER RANK PROGRESSION
-========================================
+
 */
 
-function addPlayerWin(){
+/*
+IMPORTANT:
+addPlayerWin now takes how much win progress
+to add. Easy bot battles only add 1/3 of a
+win, hard bot battles and friend battles add
+a full 1. The wins needed per level (1 win
+for levels 0-9, 2 for 10-19, and so on) is
+unchanged.
+*/
 
-playerLevelWins++;
+function addPlayerWin(amount=1){
+
+playerLevelWins+=amount;
 
 let levelUps=0;
 
@@ -5927,9 +5045,9 @@ levelWins:0
 }
 
 /*
-========================================
+
 RANK UI
-========================================
+
 */
 
 function renderBattleRankInfo(){
@@ -5974,110 +5092,52 @@ nextText=
 
 box.innerHTML=`
 
-<div class="rankBox">
-
-<div style="opacity:.8">
-YOUR BATTLE LEVEL
-</div>
-
-<div class="rankNumber">
-Lv. ${playerLevel}
-</div>
-
-<div>
-${playerLevelWins}
-/
-${needed}
-wins toward next level
-</div>
-
-<div class="rankProgressBar">
-
-<div
-class="rankProgressFill"
-style="width:${percent}%">
-
-</div>
-
-</div>
-
-<p>
-${nextText}
-</p>
-
-</div>
-`;
-
-}
-
-function showLevelUpMessage(
-oldLevel,
-newLevel,
-rewards
-){
-
-const box=document.createElement("div");
-
-box.className="levelUpBox";
-
-box.innerHTML=`
-
-<h2>LEVEL UP!</h2>
-
-<p>
-Battle Level
-<b>${oldLevel}</b>
-→
-<b>${newLevel}</b>
-</p>
-
-<p>
-+100 coins +5 Dolb per level
-</p>
-
-${
-newLevel>=15&&oldLevel<15
-?
-"<p><b>LEVEL 15 BONUS: +250 COINS!</b></p>"
-:
-""
-}
-
-${
-newLevel>=20&&oldLevel<20
-?
-"<p><b>LEVEL 20 BONUS: +30 DOLB!</b></p>"
-:
-""
-}
-
-<p>
-Rewards:
-<b>+${rewards.coins} Coins</b>
-and
-<b>+${rewards.dolbs} Dolb</b>
-</p>
-`;
-
-const arena=document.getElementById(
-"battleArena"
-);
-
-if(arena){
-
-arena.prepend(box);
-
-}
-
-}
-
-/*
-========================================
-BATTLE HOME
-========================================
-*/
-
-function renderBattleHome(){
+<div class="rankBox">    <div style="opacity:.8">                    
+YOUR BATTLE LEVEL                    
+</div>    <div class="rankNumber">                    
+Lv. ${playerLevel}                    
+</div>    <div>                    
+${playerLevelWins}                    
+/                    
+${needed}                    
+wins toward next level                    
+</div>    <div class="rankProgressBar">    <div                    
+class="rankProgressFill"                    
+style="width:${percent}%">    </div>    </div>    <p>                    
+${nextText}                    
+</p>    </div>                    
+`;    }  function showLevelUpMessage(              
+oldLevel,              
+newLevel,              
+rewards              
+){  const box=document.createElement("div");  box.className="levelUpBox";  box.innerHTML=`  <h2>LEVEL UP!</h2>    <p>                    
+Battle Level                    
+<b>${oldLevel}</b>                    
+→                    
+<b>${newLevel}</b>                    
+</p>    <p>                    
++100 coins +5 Dolb per level                    
+</p>    ${                
+newLevel>=15&&oldLevel<15                
+?                
+"<p><b>LEVEL 15 BONUS: +250 COINS!</b></p>"                
+:                
+""                
+}  ${              
+newLevel>=20&&oldLevel<20              
+?              
+"<p><b>LEVEL 20 BONUS: +30 DOLB!</b></p>"              
+:              
+""              
+}  <p>                    
+Rewards:                    
+<b>+${rewards.coins} Coins</b>                    
+and                    
+<b>+${rewards.dolbs} Dolb</b>                    
+</p>                    
+`;    const arena=document.getElementById(                
+"battleArena"                
+);  if(arena){  arena.prepend(box);  }  }  /*  BATTLE HOME  */  function renderBattleHome(){
 
 const main=document.getElementById(
 "battleMain"
@@ -6105,9 +5165,9 @@ renderBattleRequests();
 }
 
 /*
-========================================
+
 BATTLE SELECTION
-========================================
+
 */
 
 function renderBattleChoice(){
@@ -6162,41 +5222,17 @@ if(!available.length){
 
 grid.innerHTML=`
 
-<div class="friendEmpty">
-
-<h3>You need a card!</h3>
-
-<p>
-Open a pack first to get a battle doll.
-</p>
-
-</div>
-`;
-
-start.disabled=true;
-
-return;
-
-}
-
-available.forEach(copy=>{
-
-const card=getCard(copy.name);
-
-const level=getCopyLevel(copy);
-const wins=getCopyWins(copy);
-
-const hp=getBattleMaxHP(copy);
-const power=getBattlePower(
-card,
-copy
-);
-
-const fav=favorites.includes(
-copy.name
-);
-
-const div=document.createElement("div");
+<div class="friendEmpty">    <h3>You need a card!</h3>    <p>                    
+Open a pack first to get a battle doll.                    
+</p>    </div>                    
+`;    start.disabled=true;  return;  }  available.forEach(copy=>{  const card=getCard(copy.name);  const level=getCopyLevel(copy);      
+const wins=getCopyWins(copy);  const hp=getBattleMaxHP(copy);    
+const power=getBattlePower(    
+card,    
+copy    
+);  const fav=favorites.includes(  
+copy.name  
+);  const div=document.createElement("div");
 
 div.className=
 "battleChoiceCard"+
@@ -6233,59 +5269,31 @@ fav
 ""
 }
 
-<img
-src="${escapeHtml(card.image)}"
-onclick="
-event.stopPropagation();
-openEncodedCardViewer(
-'${encoded(card.image)}',
-'${encoded(card.name)}'
+<img                    
+src="${escapeHtml(card.image)}"                    
+onclick="                    
+event.stopPropagation();                    
+openEncodedCardViewer(                    
+'${encoded(card.image)}',                    
+'${encoded(card.name)}'                    
 )">
 
-<div class="cardName">
-${escapeHtml(card.name)}
-</div>
+<div class="cardName">                    
+${escapeHtml(card.name)}                    
+</div>    <div class="typeBadge">                    
+${card.type.join(" / ")}                    
+</div>    <div class="battleLevelBadge">                    
+LEVEL ${level}                    
+</div>    <div class="battleStats">    HP: ${hp}<br>                
+${escapeHtml(card.move)} Power: ${power}<br>                
+Wins: ${wins}/                
+${winsNeededForLevel(level)}  </div>    `;  grid.appendChild(div);  });  start.disabled=          
+!battleSelectedCardId;  }  function hideBattleChoice(){  document    
+.getElementById("battleChoice")    
+.classList.add("hidden");  }  /*
 
-<div class="typeBadge">
-${card.type.join(" / ")}
-</div>
-
-<div class="battleLevelBadge">
-LEVEL ${level}
-</div>
-
-<div class="battleStats">
-
-HP: ${hp}<br>
-${escapeHtml(card.move)} Power: ${power}<br>
-Wins: ${wins}/
-${winsNeededForLevel(level)}
-
-</div>
-
-`;
-
-grid.appendChild(div);
-
-});
-
-start.disabled=
-!battleSelectedCardId;
-
-}
-
-function hideBattleChoice(){
-
-document
-.getElementById("battleChoice")
-.classList.add("hidden");
-
-}
-
-/*
-========================================
 START BOT BATTLE
-========================================
+
 */
 
 window.startBotBattle=difficulty=>{
@@ -6334,9 +5342,9 @@ renderBattleChoice();
 };
 
 /*
-========================================
+
 BOT CHOICE
-========================================
+
 */
 
 function chooseEasyBotCard(){
@@ -6386,9 +5394,9 @@ return chooseEasyBotCard();
 }
 
 /*
-========================================
+
 DAMAGE
-========================================
+
 */
 
 function calculateBattleDamage(
@@ -6510,9 +5518,9 @@ return"";
 }
 
 /*
-========================================
+
 BATTLE CARD HTML
-========================================
+
 */
 
 function battleCardHTML(
@@ -6546,103 +5554,39 @@ copy
 
 return`
 
-<div class="battlePlayer">
-
-<div class="battlePlayerTop">
-
-<img
-class="profilePicSmall"
-src="${escapeHtml(
-pic||DEFAULT_PROFILE_PIC
-)}">
-
-<div>
-
-<div class="friendName">
-${escapeHtml(name)}
-</div>
-
-<div class="typeBadge">
-${card.type.join(" / ")}
-</div>
-
-<div
-class="battleLevelBadge">
-
-LEVEL ${level}
-
-</div>
-
-</div>
-
-</div>
-
-<div
-style="
-text-align:center;
-margin:12px">
-
-<img
-class="battleCardImage"
-src="${escapeHtml(card.image)}"
-alt="${escapeHtml(card.name)}">
-
-<div class="cardName">
-${escapeHtml(card.name)}
-</div>
-
-<div class="signatureMove">
-${escapeHtml(card.move)}
-• Power ${power}
-</div>
-
-</div>
-
-<div class="hpBar">
-
-<div
-class="hpFill"
-style="width:${hpPercent}%">
-
-</div>
-
-</div>
-
-<div class="hpText">
-
-HP:
-${Math.max(0,hp)}
-/
-${maxHP}
-
-</div>
-
-</div>
-`;
-
-}
-
-/*
-========================================
-LOCAL BOT BATTLE
-========================================
-*/
-
-function showLocalBotBattle(
-playerCopy,
-botCard
-){
-
-const playerCard=
-getCard(playerCopy.name);
-
-const botCopy=
-makeBotCopy(botCard);
-
-let playerHP=
-getBattleMaxHP(playerCopy);
-
-let botHP=
+<div class="battlePlayer">    <div class="battlePlayerTop">    <img                    
+class="profilePicSmall"                    
+src="${escapeHtml(                    
+pic||DEFAULT_PROFILE_PIC                    
+)}">  <div>    <div class="friendName">                    
+${escapeHtml(name)}                    
+</div>    <div class="typeBadge">                    
+${card.type.join(" / ")}                    
+</div>    <div                    
+class="battleLevelBadge">    LEVEL ${level}  </div>    </div>    </div>    <div                    
+style="                    
+text-align:center;                    
+margin:12px">    <img                    
+class="battleCardImage"                    
+src="${escapeHtml(card.image)}"                    
+alt="${escapeHtml(card.name)}">  <div class="cardName">                    
+${escapeHtml(card.name)}                    
+</div>    <div class="signatureMove">                    
+${escapeHtml(card.move)}                    
+• Power ${power}                    
+</div>    </div>    <div class="hpBar">    <div                    
+class="hpFill"                    
+style="width:${hpPercent}%">    </div>    </div>    <div class="hpText">    HP:                
+${Math.max(0,hp)}                
+/                
+${maxHP}  </div>    </div>                    
+`;    }  /*  LOCAL BOT BATTLE  */  function showLocalBotBattle(        
+playerCopy,        
+botCard        
+){  const playerCard=      
+getCard(playerCopy.name);  const botCopy=    
+makeBotCopy(botCard);  let playerHP=  
+getBattleMaxHP(playerCopy);  let botHP=
 getBattleMaxHP(botCopy);
 
 const arena=document.getElementById(
@@ -6663,122 +5607,64 @@ function render(){
 
 arena.innerHTML=`
 
-<h2 style="text-align:center">
-
-${
-battleDifficulty==="hard"
-?
-"Hard Bot Battle"
-:
-"Easy Bot Battle"
-}
-
-</h2>
-
-<div
-style="
-text-align:center;
-opacity:.8;
-margin-bottom:12px">
-
-Your Battle Level:
-<b>${playerLevel}</b>
-&nbsp; • &nbsp;
-Bot Level:
-<b>${getBotLevel(
-battleDifficulty
-)}</b>
-
-</div>
-
-<div class="battleHeader">
-
-${battleCardHTML(
-botCard,
-botCopy,
-botHP,
-battleOpponentUsername,
-DEFAULT_PROFILE_PIC
-)}
-
-<div class="battleVs">
-VS
-</div>
-
-${battleCardHTML(
-playerCard,
-playerCopy,
-playerHP,
-username,
-profilePic
-)}
-
-</div>
-
-<div class="battleMove">
-
-<div class="moveName">
-${escapeHtml(playerCard.move)}
-</div>
-
-<div class="moveType">
-${escapeHtml(
-playerCard.moveType
-)}
-Type Move
-</div>
-
-<button
-class="battleStartButton"
-id="useMoveButton">
-
-USE
-${escapeHtml(
-playerCard.move
-).toUpperCase()}
-
-</button>
-
-</div>
-
-<div
-class="battleLog"
-id="battleLog">
-
-Your turn!
-
-</div>
-`;
-
-const btn=
-document.getElementById(
-"useMoveButton"
-);
-
-btn.onclick=()=>{
-
-if(!playerTurn)return;
-
-playerTurn=false;
-
-btn.disabled=true;
-
-const result=
-calculateBattleDamage(
-playerCard,
-playerCopy,
-botCard,
-botCopy
-);
-
-botHP=Math.max(
-0,
-botHP-result.damage
-);
-
-if(botHP<=0){
-
-render();
+<h2 style="text-align:center">    ${                
+battleDifficulty==="hard"                
+?                
+"Hard Bot Battle"                
+:                
+"Easy Bot Battle"                
+}  </h2>    <div                    
+style="                    
+text-align:center;                    
+opacity:.8;                    
+margin-bottom:12px">    Your Battle Level:                
+<b>${playerLevel}</b>                
+  •                  
+Bot Level:                
+<b>${getBotLevel(                
+battleDifficulty                
+)}</b>  </div>    <div class="battleHeader">    ${battleCardHTML(                
+botCard,                
+botCopy,                
+botHP,                
+battleOpponentUsername,                
+DEFAULT_PROFILE_PIC                
+)}  <div class="battleVs">                    
+VS                    
+</div>    ${battleCardHTML(                
+playerCard,                
+playerCopy,                
+playerHP,                
+username,                
+profilePic                
+)}  </div>    <div class="battleMove">    <div class="moveName">                    
+${escapeHtml(playerCard.move)}                    
+</div>    <div class="moveType">                    
+${escapeHtml(                    
+playerCard.moveType                    
+)}                    
+Type Move                    
+</div>    <button                    
+class="battleStartButton"                    
+id="useMoveButton">  USE              
+${escapeHtml(              
+playerCard.move              
+).toUpperCase()}  </button>    </div>    <div                    
+class="battleLog"                    
+id="battleLog">    Your turn!  </div>                    
+`;    const btn=                
+document.getElementById(                
+"useMoveButton"                
+);  btn.onclick=()=>{  if(!playerTurn)return;  playerTurn=false;  btn.disabled=true;  const result=      
+calculateBattleDamage(      
+playerCard,      
+playerCopy,      
+botCard,      
+botCopy      
+);  botHP=Math.max(    
+0,    
+botHP-result.damage    
+);  if(botHP<=0){  render();
 
 finishBotBattle(
 true,
@@ -6806,9 +5692,7 @@ playerCard.move
 )}
 </b>!
 
-<br>
-
-You dealt
+<br>    You dealt
 <b>
 ${result.damage}
 </b>
@@ -6854,9 +5738,7 @@ botCard.move
 )}
 </b>!
 
-<br>
-
-It dealt
+<br>    It dealt
 <b>
 ${result2.damage}
 </b>
@@ -6907,9 +5789,9 @@ render();
 }
 
 /*
-========================================
+
 WINNING A BATTLE
-========================================
+
 */
 
 async function finishBotBattle(
@@ -6926,8 +5808,22 @@ if(won){
 
 /*
 The selected individual doll gains
-one win toward its next personal level.
+win progress toward its next personal level.
+
+IMPORTANT:
+On Easy Bot battles, a win is only worth
+1/3 of a normal win. Hard Bot battles still
+give a full win. The wins needed per level
+(1 win for levels 0-9, 2 for 10-19, and so on)
+stays the same either way.
 */
+
+const winIncrement=
+battleDifficulty==="easy"
+?
+1/3
+:
+1;
 
 const actualCopy=
 collection.find(
@@ -6943,7 +5839,8 @@ oldDollLevel=
 getCopyLevel(actualCopy);
 
 actualCopy.levelWins=
-getCopyWins(actualCopy)+1;
+getCopyWins(actualCopy)+
+winIncrement;
 
 while(
 actualCopy.levelWins>=
@@ -6967,14 +5864,15 @@ dollLevelUp=true;
 }
 
 /*
-Player global battle rank also progresses.
+Player global battle rank also progresses,
+using the same win increment as above.
 */
 
 const oldPlayerLevel=
 playerLevel;
 
 const levelUps=
-addPlayerWin();
+addPlayerWin(winIncrement);
 
 const rewards=
 await giveRankRewards(
@@ -6995,215 +5893,127 @@ updateUI();
 
 arena.innerHTML=`
 
-<div class="battleResult">
-
-<div class="winText">
-YOU WIN!
-</div>
-
-<div class="rewardText">
-BATTLE WON!
-</div>
-
-<p>
-You defeated
-${escapeHtml(
-battleOpponentUsername
-)}!
-</p>
-
-${
-dollLevelUp
-?
-`
-<div class="levelUpBox">
-
-<h2>
-${escapeHtml(
-playerCopy.name
-)}
-LEVEL UP!
-</h2>
-
-<p>
-Level
-<b>${oldDollLevel}</b>
-→
-<b>${getCopyLevel(actualCopy)}</b>
-</p>
-
-<p>
-+10 HP
-</p>
-
-<p>
-+1 Signature Move Power
-</p>
-
-</div>
-`
-:
-`
-<p>
-Your doll:
-<b>
-Lv. ${getCopyLevel(actualCopy)}
-</b>
-</p>
-
-<p>
-Doll wins:
-${getCopyWins(actualCopy)}
-/
-${winsNeededForLevel(
-getCopyLevel(actualCopy)
-)}
-</p>
-`
-}
-
-${
-levelUps
-?
-`
-<div class="levelUpBox">
-
-<h2>
-BATTLE LEVEL UP!
-</h2>
-
-<p>
-Battle Level
-<b>${oldPlayerLevel}</b>
-→
-<b>${playerLevel}</b>
-</p>
-
-<p>
-Rewards:
-<b>
-+${rewards.coins} Coins
-</b>
-and
-<b>
-+${rewards.dolbs} Dolb
-</b>
-</p>
-
-${
-playerLevel>=15 &&
-oldPlayerLevel<15
-?
-"<p><b>Level 15 Bonus: +250 Coins!</b></p>"
-:
-""
-}
-
-${
-playerLevel>=20 &&
-oldPlayerLevel<20
-?
-"<p><b>Level 20 Bonus: +30 Dolb!</b></p>"
-:
-""
-}
-
-</div>
-`
-:
-`
-<p>
-Battle Level:
-<b>${playerLevel}</b>
-</p>
-
-<p>
-${playerLevelWins}
-/
-${winsNeededForLevel(playerLevel)}
-wins toward your next battle level.
-</p>
-`
-}
-
-<button
-class="battleStartButton"
-onclick="exitBattle()">
-
-BACK TO BATTLE
-
-</button>
-
-</div>
-`;
-
-}else{
-
-/*
-A loss does not give the player a rank win.
-The bot gets its own win progress.
-*/
-
-addBotWin(
-battleDifficulty
-);
-
-await savePlayerData();
-
-updateUI();
-
-arena.innerHTML=`
-
-<div class="battleResult">
-
-<div class="winText">
-YOU LOST
-</div>
-
-<p>
-${escapeHtml(
-battleOpponentUsername
-)}
-won this battle.
-</p>
-
-<p>
-Your doll stayed at
-<b>
-Level ${getCopyLevel(
-playerCopy
-)}
-</b>.
-</p>
-
-<button
-class="battleStartButton"
-onclick="exitBattle()">
-
-BACK TO BATTLE
-
-</button>
-
-</div>
-`;
-
-}
-
-}
-
-/*
-========================================
-FRIEND BATTLE REQUESTS
-========================================
-*/
-
-window.challengeFriend=async(
-uid,
-name,
-pic
-)=>{
-
-if(!currentUser)return;
+<div class="battleResult">    <div class="winText">                    
+YOU WIN!                    
+</div>    <div class="rewardText">                    
+BATTLE WON!                    
+</div>    <p>                    
+You defeated                    
+${escapeHtml(                    
+battleOpponentUsername                    
+)}!                    
+</p>    ${                
+dollLevelUp                
+?                
+`  <div class="levelUpBox">    <h2>                    
+${escapeHtml(                    
+playerCopy.name                    
+)}                    
+LEVEL UP!                    
+</h2>    <p>                    
+Level                    
+<b>${oldDollLevel}</b>                    
+→                    
+<b>${getCopyLevel(actualCopy)}</b>                    
+</p>    <p>                    
++10 HP                    
+</p>    <p>                    
++1 Signature Move Power                    
+</p>    </div>                    
+`                    
+:                    
+`                    
+<p>                    
+Your doll:                    
+<b>                    
+Lv. ${getCopyLevel(actualCopy)}                    
+</b>                    
+</p>    <p>                    
+Doll wins:                    
+${getCopyWins(actualCopy)}                    
+/                    
+${winsNeededForLevel(                    
+getCopyLevel(actualCopy)                    
+)}                    
+</p>                    
+`                    
+}    ${                
+levelUps                
+?                
+`  <div class="levelUpBox">    <h2>                    
+BATTLE LEVEL UP!                    
+</h2>    <p>                    
+Battle Level                    
+<b>${oldPlayerLevel}</b>                    
+→                    
+<b>${playerLevel}</b>                    
+</p>    <p>                    
+Rewards:                    
+<b>                    
++${rewards.coins} Coins                    
+</b>                    
+and                    
+<b>                    
++${rewards.dolbs} Dolb                    
+</b>                    
+</p>    ${                
+playerLevel>=15 &&                
+oldPlayerLevel<15                
+?                
+"<p><b>Level 15 Bonus: +250 Coins!</b></p>"                
+:                
+""                
+}  ${              
+playerLevel>=20 &&              
+oldPlayerLevel<20              
+?              
+"<p><b>Level 20 Bonus: +30 Dolb!</b></p>"              
+:              
+""              
+}  </div>                    
+`                    
+:                    
+`                    
+<p>                    
+Battle Level:                    
+<b>${playerLevel}</b>                    
+</p>    <p>                    
+${playerLevelWins}                    
+/                    
+${winsNeededForLevel(playerLevel)}                    
+wins toward your next battle level.                    
+</p>                    
+`                    
+}    <button                    
+class="battleStartButton"                    
+onclick="exitBattle()">  BACK TO BATTLE  </button>    </div>            
+`;    }else{  /*          
+A loss does not give the player a rank win.          
+The bot gets its own win progress.          
+*/  addBotWin(        
+battleDifficulty        
+);  await savePlayerData();  updateUI();  arena.innerHTML=`  <div class="battleResult">    <div class="winText">                    
+YOU LOST                    
+</div>    <p>                    
+${escapeHtml(                    
+battleOpponentUsername                    
+)}                    
+won this battle.                    
+</p>    <p>                    
+Your doll stayed at                    
+<b>                    
+Level ${getCopyLevel(                    
+playerCopy                    
+)}                    
+</b>.                    
+</p>    <button                    
+class="battleStartButton"                    
+onclick="exitBattle()">  BACK TO BATTLE  </button>    </div>            
+`;    }  }  /*  FRIEND BATTLE REQUESTS  */  window.challengeFriend=async(  
+uid,  
+name,  
+pic  
+)=>{  if(!currentUser)return;
 
 if(!friends.includes(uid)){
 
@@ -7339,1459 +6149,18 @@ d.className="battleRequestBox";
 
 d.innerHTML=`
 
-<div class="playerResultBox">
-
-<img
-class="profilePicSmall"
-id="battleReqPic_${escapeHtml(r.id)}"
-src="${DEFAULT_PROFILE_PIC}">
-
-<div class="playerResultInfo">
-
-<div class="friendName">
-${escapeHtml(
-r.senderUsername||
-"Player"
-)}
-</div>
-
-<p>
-wants to battle you!
-</p>
-
-<div class="battleRequestButtons">
-
-<button
-class="friendAcceptButton"
-onclick="
-acceptBattleRequest(
-'${escapeHtml(r.id)}'
-)">
-
-ACCEPT
-
-</button>
-
-<button
-class="friendDeclineButton"
-onclick="
-declineBattleRequest(
-'${escapeHtml(r.id)}'
-)">
-
-DECLINE
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-`;
-
-c.appendChild(d);
-
-loadBattleRequestPicture(
-r.id,
-r.senderUid
-);
-
-});
-
-}
-
-async function loadBattleRequestPicture(
-id,
-uid
-){
-
-try{
-
-const s=await getDoc(
-doc(db,"players",uid)
-);
-
-if(!s.exists())return;
-
-const img=document.getElementById(
-"battleReqPic_"+id
-);
-
-if(img){
-
-img.src=
-s.data().profilePic||
-DEFAULT_PROFILE_PIC;
-
-}
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-window.acceptBattleRequest=
-async requestId=>{
-
-const r=friendRequests.find(
-x=>
-x.id===requestId &&
-x.type==="battle"
-);
-
-if(
-!r||
-r.receiverUid!==currentUser.uid||
-r.status!=="pending"
-){
-
-showMessage(
-"This battle request is no longer available."
-);
-
-return;
-
-}
-
-try{
-
-const roomId=createCardId();
-
-await setDoc(
-doc(
-db,
-"battleRooms",
-roomId
-),
-{
-
-participants:[
-r.senderUid,
-r.receiverUid
-],
-
-player1Uid:r.senderUid,
-player2Uid:r.receiverUid,
-
-player1Username:r.senderUsername,
-player2Username:username,
-
-player1ProfilePic:
-r.senderProfilePic||
-DEFAULT_PROFILE_PIC,
-
-player2ProfilePic:
-profilePic||
-DEFAULT_PROFILE_PIC,
-
-player1Card:null,
-player2Card:null,
-
-player1Ready:false,
-player2Ready:false,
-
-status:"choosing",
-
-winnerUid:"",
-
-rewardedUids:[],
-
-createdAt:serverTimestamp()
-
-}
-);
-
-await updateDoc(
-doc(
-db,
-"friendRequests",
-requestId
-),
-{
-status:"accepted",
-battleRoomId:roomId
-}
-);
-
-battleMode="friend";
-
-battleRoomId=roomId;
-
-battleOpponentUid=
-r.senderUid;
-
-battleOpponentUsername=
-r.senderUsername;
-
-battleOpponentPic=
-r.senderProfilePic||
-DEFAULT_PROFILE_PIC;
-
-battleSelectedCardId=null;
-
-battleChoiceSubmitted=false;
-
-showPage("battle");
-
-document
-.getElementById("battleMain")
-.classList.add("hidden");
-
-renderBattleChoice();
-
-startBattleListener();
-
-showMessage(
-"Battle accepted! Choose your doll copy."
-);
-
-}catch(e){
-
-console.error(e);
-
-showMessage(
-"Could not start battle: "+
-e.message
-);
-
-}
-
-};
-
-window.declineBattleRequest=
-async requestId=>{
-
-try{
-
-await updateDoc(
-doc(
-db,
-"friendRequests",
-requestId
-),
-{
-status:"declined"
-}
-);
-
-showMessage(
-"Battle request declined."
-);
-
-}catch(e){
-
-showMessage(
-"Could not decline request: "+
-e.message
-);
-
-}
-
-};
-
-/*
-========================================
-FRIEND BATTLE COPY SAVE
-========================================
-*/
-
-async function submitFriendBattleCard(){
-
-if(
-!battleRoomId||
-!battleSelectedCardId
-)return;
-
-const selected=
-getBattleCardById(
-battleSelectedCardId
-);
-
-if(!selected)return;
-
-const roomRef=doc(
-db,
-"battleRooms",
-battleRoomId
-);
-
-const snap=await getDoc(
-roomRef
-);
-
-if(!snap.exists()){
-
-showMessage(
-"Battle room no longer exists."
-);
-
-return;
-
-}
-
-const room=snap.data();
-
-if(
-!room.participants?.includes(
-currentUser.uid
-)
-){
-
-showMessage(
-"You are not part of this battle."
-);
-
-return;
-
-}
-
-const playerField=
-room.player1Uid===
-currentUser.uid
-?
-"player1Card"
-:
-"player2Card";
-
-const readyField=
-room.player1Uid===
-currentUser.uid
-?
-"player1Ready"
-:
-"player2Ready";
-
-/*
-IMPORTANT:
-Send level + levelWins too.
-*/
-
-await updateDoc(
-roomRef,
-{
-
-[playerField]:{
-
-id:selected.id,
-
-name:selected.name,
-
-level:getCopyLevel(
-selected
-),
-
-levelWins:getCopyWins(
-selected
-)
-
-},
-
-[readyField]:true
-
-}
-);
-
-battleChoiceSubmitted=true;
-
-showMessage(
-"Card locked in! Waiting for your friend."
-);
-
-renderWaitingForBattle();
-
-}
-
-function renderWaitingForBattle(){
-
-const box=document.getElementById(
-"battleChoice"
-);
-
-if(!box)return;
-
-box.classList.remove("hidden");
-
-const selected=
-getBattleCardById(
-battleSelectedCardId
-);
-
-const card=selected
-?
-getCard(selected.name)
-:
-null;
-
-box.innerHTML=`
-
-<div class="battleHome">
-
-<h2>
-Waiting for
-${escapeHtml(
-battleOpponentUsername
-)}
-</h2>
-
-<p>
-Your doll copy is locked in.
-</p>
-
-<div style="text-align:center">
-
-<img
-class="battleCardImage"
-src="${escapeHtml(
-card?.image||""
-)}">
-
-<h3>
-${escapeHtml(
-selected?.name||""
-)}
-</h3>
-
-<div class="battleLevelBadge">
-
-LEVEL
-${getCopyLevel(selected||{})}
-
-</div>
-
-<p>
-HP:
-${selected
-?
-getBattleMaxHP(selected)
-:
-100
-}
-
-<br>
-
-Move Power:
-${card&&selected
-?
-getBattlePower(
-card,
-selected
-)
-:
-0}
-
-</p>
-
-</div>
-
-<div class="battleLog">
-
-Waiting for your opponent to choose their card...
-
-</div>
-
-<button
-class="battleCancelButton"
-onclick="leaveFriendBattle()">
-
-LEAVE BATTLE
-
-</button>
-
-</div>
-`;
-
-}
-
-/*
-========================================
-FRIEND BATTLE LISTENER
-========================================
-*/
-
-function stopBattleListener(){
-
-if(battleListener){
-
-battleListener();
-battleListener=null;
-
-}
-
-}
-
-function startBattleListener(){
-
-stopBattleListener();
-
-if(!battleRoomId)return;
-
-const ref=doc(
-db,
-"battleRooms",
-battleRoomId
-);
-
-battleListener=onSnapshot(
-ref,
-snapshot=>{
-
-if(!snapshot.exists()){
-
-showMessage(
-"Battle room closed."
-);
-
-exitBattle();
-
-return;
-
-}
-
-const room={
-id:snapshot.id,
-...snapshot.data()
-};
-
-if(room.status==="finished"){
-
-renderFinishedFriendBattle(room);
-
-return;
-
-}
-
-if(
-room.player1Card &&
-room.player2Card &&
-room.player1Ready &&
-room.player2Ready
-){
-
-runFriendBattle(room);
-
-}
-
-},
-error=>{
-
-console.error(error);
-
-showMessage(
-"Battle connection error: "+
-error.message
-);
-
-}
-);
-
-}
-
-let friendBattleRunning=false;
-
-/*
-========================================
-FRIEND BATTLE
-========================================
-*/
-
-async function runFriendBattle(room){
-
-if(friendBattleRunning)return;
-
-friendBattleRunning=true;
-
-const p1=getCard(
-room.player1Card.name
-);
-
-const p2=getCard(
-room.player2Card.name
-);
-
-if(!p1||!p2){
-
-friendBattleRunning=false;
-return;
-
-}
-
-/*
-Reconstruct the exact copies from the
-data submitted by each player.
-*/
-
-const p1Copy={
-
-id:room.player1Card.id,
-
-name:room.player1Card.name,
-
-level:
-Number.isFinite(
-room.player1Card.level
-)
-?
-room.player1Card.level
-:
-0,
-
-levelWins:
-Number.isFinite(
-room.player1Card.levelWins
-)
-?
-room.player1Card.levelWins
-:
-0
-
-};
-
-const p2Copy={
-
-id:room.player2Card.id,
-
-name:room.player2Card.name,
-
-level:
-Number.isFinite(
-room.player2Card.level
-)
-?
-room.player2Card.level
-:
-0,
-
-levelWins:
-Number.isFinite(
-room.player2Card.levelWins
-)
-?
-room.player2Card.levelWins
-:
-0
-
-};
-
-const seedBase=
-room.id+
-p1.name+
-p2.name+
-p1Copy.level+
-p2Copy.level;
-
-let seed=0;
-
-for(
-let i=0;
-i<seedBase.length;
-i++
-){
-
-seed=
-(
-seed*31+
-seedBase.charCodeAt(i)
-)>>>0;
-
-}
-
-function random(){
-
-seed=
-(
-seed*1664525+
-1013904223
-)>>>0;
-
-return seed/4294967296;
-
-}
-
-let hp1=
-getBattleMaxHP(p1Copy);
-
-let hp2=
-getBattleMaxHP(p2Copy);
-
-const logs=[];
-
-let turn=
-random()<.5
-?
-1
-:
-2;
-
-while(
-hp1>0&&hp2>0
-){
-
-if(turn===1){
-
-const result=
-calculateDeterministicDamage(
-p1,
-p1Copy,
-p2,
-p2Copy,
-random
-);
-
-hp2=Math.max(
-0,
-hp2-result.damage
-);
-
-logs.push(
-`${p1.name} Lv.${p1Copy.level} used ${p1.move} and dealt ${result.damage} damage.`
-);
-
-turn=2;
-
-}else{
-
-const result=
-calculateDeterministicDamage(
-p2,
-p2Copy,
-p1,
-p1Copy,
-random
-);
-
-hp1=Math.max(
-0,
-hp1-result.damage
-);
-
-logs.push(
-`${p2.name} Lv.${p2Copy.level} used ${p2.move} and dealt ${result.damage} damage.`
-);
-
-turn=1;
-
-}
-
-}
-
-const winnerUid=
-hp1>0
-?
-room.player1Uid
-:
-room.player2Uid;
-
-const winnerName=
-hp1>0
-?
-room.player1Username
-:
-room.player2Username;
-
-const winnerCardId=
-hp1>0
-?
-p1Copy.id
-:
-p2Copy.id;
-
-const resultData={
-
-status:"finished",
-
-winnerUid,
-
-winnerName,
-
-winnerCardId,
-
-player1FinalHP:hp1,
-
-player2FinalHP:hp2,
-
-battleLogs:logs,
-
-finishedAt:serverTimestamp()
-
-};
-
-try{
-
-await updateDoc(
-doc(
-db,
-"battleRooms",
-room.id
-),
-resultData
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-friendBattleRunning=false;
-
-}
-
-async function renderFinishedFriendBattle(
-room
-){
-
-const arena=document.getElementById(
-"battleArena"
-);
-
-arena.classList.remove("hidden");
-
-document
-.getElementById("battleMain")
-.classList.add("hidden");
-
-hideBattleChoice();
-
-const player1=
-getCard(
-room.player1Card.name
-);
-
-const player2=
-getCard(
-room.player2Card.name
-);
-
-if(!player1||!player2)return;
-
-const p1Copy={
-
-id:room.player1Card.id,
-
-name:room.player1Card.name,
-
-level:
-room.player1Card.level||0,
-
-levelWins:
-room.player1Card.levelWins||0
-
-};
-
-const p2Copy={
-
-id:room.player2Card.id,
-
-name:room.player2Card.name,
-
-level:
-room.player2Card.level||0,
-
-levelWins:
-room.player2Card.levelWins||0
-
-};
-
-const meWon=
-room.winnerUid===
-currentUser.uid;
-
-const winnerCopy=
-room.winnerUid===
-room.player1Uid
-?
-p1Copy
-:
-p2Copy;
-
-/*
-The winner's own copy levels up.
-*/
-
-if(
-meWon &&
-!room.rewardedUids?.includes(
-currentUser.uid
-)
-){
-
-try{
-
-const rewardRef=
-doc(
-db,
-"battleRooms",
-room.id
-);
-
-const fresh=
-await getDoc(
-rewardRef
-);
-
-if(fresh.exists()){
-
-const freshData=fresh.data();
-
-const rewarded=
-Array.isArray(
-freshData.rewardedUids
-)
-?
-freshData.rewardedUids
-:
-[];
-
-if(
-!rewarded.includes(
-currentUser.uid
-)
-){
-
-/*
-Find the actual local copy.
-*/
-
-const actualCopy=
-collection.find(
-c=>
-c.id===
-winnerCopy.id
-);
-
-let dollLeveled=false;
-
-if(actualCopy){
-
-actualCopy.levelWins=
-getCopyWins(
-actualCopy
-)+1;
-
-while(
-actualCopy.levelWins>=
-winsNeededForLevel(
-getCopyLevel(
-actualCopy
-)
-)
-){
-
-actualCopy.levelWins-=
-winsNeededForLevel(
-getCopyLevel(
-actualCopy
-)
-);
-
-actualCopy.level=
-getCopyLevel(
-actualCopy
-)+1;
-
-dollLeveled=true;
-
-}
-
-}
-
-/*
-Global player rank also increases.
-*/
-
-const oldPlayerLevel=
-playerLevel;
-
-const levelUps=
-addPlayerWin();
-
-const rewards=
-await giveRankRewards(
-levelUps
-);
-
-await savePlayerData();
-
-await updateDoc(
-rewardRef,
-{
-rewardedUids:
-arrayUnion(
-currentUser.uid
-)
-}
-);
-
-updateUI();
-
-/*
-Store the reward information in the
-temporary object for display.
-*/
-
-room._dollLeveled=
-dollLeveled;
-
-room._oldPlayerLevel=
-oldPlayerLevel;
-
-room._levelUps=
-levelUps;
-
-room._rewards=
-rewards;
-
-}
-
-}
-
-}catch(e){
-
-console.error(e);
-
-}
-
-}
-
-const myHP=
-room.player1Uid===
-currentUser.uid
-?
-room.player1FinalHP
-:
-room.player2FinalHP;
-
-const opponentHP=
-room.player1Uid===
-currentUser.uid
-?
-room.player2FinalHP
-:
-room.player1FinalHP;
-
-const myCard=
-room.player1Uid===
-currentUser.uid
-?
-player1
-:
-player2;
-
-const opponentCard=
-room.player1Uid===
-currentUser.uid
-?
-player2
-:
-player1;
-
-const myCopy=
-room.player1Uid===
-currentUser.uid
-?
-p1Copy
-:
-p2Copy;
-
-const opponentCopy=
-room.player1Uid===
-currentUser.uid
-?
-p2Copy
-:
-p1Copy;
-
-const opponentName=
-room.player1Uid===
-currentUser.uid
-?
-room.player2Username
-:
-room.player1Username;
-
-const opponentPic=
-room.player1Uid===
-currentUser.uid
-?
-room.player2ProfilePic
-:
-room.player1ProfilePic;
-
-const logs=
-Array.isArray(room.battleLogs)
-?
-room.battleLogs
-:
-[];
-
-arena.innerHTML=`
-
-<h2 style="text-align:center">
-Friend Battle
-</h2>
-
-<div class="battleHeader">
-
-${battleCardHTML(
-opponentCard,
-opponentCopy,
-opponentHP,
-opponentName,
-opponentPic
-)}
-
-<div class="battleVs">
-VS
-</div>
-
-${battleCardHTML(
-myCard,
-myCopy,
-myHP,
-username,
-profilePic
-)}
-
-</div>
-
-<div class="battleLog">
-
-${logs
-.slice(-8)
-.map(x=>escapeHtml(x))
-.join("<br>")}
-
-</div>
-
-<div class="battleResult">
-
-<div class="winText">
-
-${meWon
-?
-"YOU WIN!"
-:
-"YOU LOST"}
-
-</div>
-
-${
-meWon
-?
-`
-<div class="rewardText">
-BATTLE WON!
-</div>
-
-<p>
-+100 coins +5 Dolb per battle level-up.
-</p>
-`
-:
-""
-}
-
-<p>
-Winner:
-<b>
-${escapeHtml(
-room.winnerName||""
-)}
-</b>
-</p>
-
-<button
-class="battleStartButton"
-onclick="exitBattle()">
-
-BACK TO BATTLE
-
-</button>
-
-</div>
-`;
-
-}
-
-/*
-========================================
-LEAVE FRIEND BATTLE
-========================================
-*/
-
-window.leaveFriendBattle=async()=>{
-
-if(!battleRoomId){
-
-cancelBattleSetup();
-
-return;
-
-}
-
-try{
-
-await updateDoc(
-doc(
-db,
-"battleRooms",
-battleRoomId
-),
-{
-status:"cancelled"
-}
-);
-
-}catch(e){
-
-console.error(e);
-
-}
-
-exitBattle();
-
-};
-
-/*
-========================================
-CONFIRM BATTLE CARD
-========================================
-*/
-
-window.confirmBattleCard=async()=>{
-
-if(!battleSelectedCardId)return;
-
-const selected=
-getBattleCardById(
-battleSelectedCardId
-);
-
-if(!selected){
-
-showMessage(
-"That card is no longer in your collection."
-);
-
-return;
-
-}
-
-const playerCard=
-getCard(selected.name);
-
-if(!playerCard)return;
-
-if(battleMode==="bot"){
-
-const botCard=
-battleDifficulty==="hard"
-?
-chooseHardBotCard(playerCard)
-:
-chooseEasyBotCard();
-
-showLocalBotBattle(
-selected,
-botCard
-);
-
-return;
-
-}
-
-if(battleMode==="friend"){
-
-await submitFriendBattleCard();
-
-}
-
-};
-
-/*
-========================================
-CANCEL / EXIT
-========================================
-*/
-
-function cancelBattleSetup(){
-
-battleSelectedCardId=null;
-
-battleMode=null;
-
-battleRoomId=null;
-
-hideBattleChoice();
-
-document
-.getElementById("battleArena")
-.classList.add("hidden");
-
-document
-.getElementById("battleMain")
-.classList.remove("hidden");
-
-renderBattleHome();
-
-}
-
-window.exitBattle=()=>{
-
-stopBattleListener();
-
-battleMode=null;
-
-battleDifficulty="easy";
-
-battleOpponentUid=null;
-
-battleOpponentUsername="";
-
-battleOpponentPic=
-DEFAULT_PROFILE_PIC;
-
-battleSelectedCardId=null;
-
-battleRoomId=null;
-
-battleChoiceSubmitted=false;
-
-battleRewardGiven=false;
-
-friendBattleRunning=false;
-
-document
-.getElementById("battleArena")
-.classList.add("hidden");
-
-document
-.getElementById("battleMain")
-.classList.remove("hidden");
-
-hideBattleChoice();
-
-renderBattleHome();
-
-showPage("battle");
-
-};
-
-/* =========================
-SETTINGS
-========================= */
-
-window.openSettings=()=>{
-
-document
-.getElementById("settingsOverlay")
-.classList.remove("hidden");
-
-};
-
-window.closeSettings=()=>{
-
-document
-.getElementById("settingsOverlay")
-.classList.add("hidden");
-
-};
-
-window.resetAccount=async()=>{
-
-if(
-!confirm(
-"Are you sure you want to reset your account? This deletes your coins, collection and battle levels."
-)
-)return;
-
-money=STARTING_COINS;
-
-dolb=STARTING_DOLB;
-
-collection=[];
-
-favorites=[];
-
-completedTradeIds=[];
-
-playerLevel=0;
-
-playerLevelWins=0;
-
-easyBotLevel=0;
-
-easyBotWins=0;
-
-hardBotLevel=0;
-
-hardBotWins=0;
-
-await savePlayerData();
-
-updateUI();
-
-closeSettings();
-
-showMessage(
-"Account reset. You now have 75 coins and Battle Level 0."
-);
-
-};
-
-/* =========================
-ENTER SEARCH
-========================= */
-
-document.addEventListener(
-"keydown",
-event=>{
-
-if(event.key!=="Enter")return;
-
-const target=event.target;
-
-if(
-target?.id===
-"tradePlayerInput"
-){
-
-event.preventDefault();
-
-findPlayer();
-
-}
-
-if(
-target?.id===
-"friendPlayerInput"
-){
-
-event.preventDefault();
-
-findFriend();
-
-}
-
-}
-);
-
-/*
-Fix collection live search.
-*/
-
-document
-.getElementById("collectionSearch")
-.addEventListener(
-"input",
-renderCollection
-);
-
-</script>
-
-</body>
-</html>
+<div class="playerResultBox">    <img                    
+class="profilePicSmall"                    
+id="battleReqPic_${escapeHtml(r.id)}"                    
+src="${DEFAULT_PROFILE_PIC}">  <div class="playerResultInfo">    <div class="friendName">                    
+${escapeHtml(                    
+r.senderUsername||                    
+"Player"                    
+)}                    
+</div>    <p>                    
+wants to battle you!                    
+</p>    <div class="battleRequestButtons">    <button                    
+class="friendAcceptButton"                    
+onclick="                    
+acceptBattleRequest(                    
+'${escapeHtml(r.id)}'                  
