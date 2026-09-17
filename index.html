@@ -2205,10 +2205,13 @@ window.confirmBattleCard = () => {
 if(!battleSelectedCardId) return;
 hideBattleChoice();
 if(battleMode === "bot") executeBotBattle();
-else if(battleMode === "pvp") executePvPSetup();
+else if(battleMode === "pvp") submitPvPCardSelection();
 };
 
 window.cancelBattleSetup = () => {
+stopBattleListener();
+battleRoomId = null;
+battleMode = null;
 hideBattleChoice();
 document.getElementById("battleArena").classList.add("hidden");
 document.getElementById("battleMain").classList.remove("hidden");
@@ -2239,24 +2242,49 @@ arena.innerHTML = `<div class="battleHeader">${battleCardHTML(pCard, Math.max(0,
 }
 
 window.challengeFriend = async (uid, name, pic) => {
+if(!collection.length){ showMessage("You need at least one card to battle."); showPage("collection"); return; }
 try {
-await setDoc(doc(db, "friendRequests", createCardId()), {
+const roomId = createCardId();
+await setDoc(doc(db, "friendRequests", roomId), {
 participants: [currentUser.uid, uid],
 senderUid: currentUser.uid, receiverUid: uid,
 senderUsername: username, receiverUsername: name,
 type: "battle", status: "pending", createdAt: serverTimestamp()
 });
+battleMode = "pvp";
+battleRoomId = roomId;
+battleOpponentUid = uid;
+battleOpponentUsername = name;
+battleOpponentPic = pic;
+battleSelectedCardId = null;
+battleChoiceSubmitted = false;
+battleRewardGiven = false;
+showPage("battle");
+document.getElementById("battleMain").classList.add("hidden");
+renderBattleChoice();
+listenToBattleRoom(roomId);
 showMessage("Battle challenge sent to " + name + "!");
 } catch(e) { showMessage("Could not send challenge: " + e.message); }
 };
 
 window.acceptBattleRequest = async id => {
+if(!collection.length){ showMessage("You need at least one card to battle."); showPage("collection"); return; }
 const r = friendRequests.find(x => x.id === id); if(!r) return;
-battleMode = "pvp"; battleOpponentUid = r.senderUid;
-battleOpponentUsername = r.senderUsername; battleRoomId = r.id;
+battleMode = "pvp";
+battleRoomId = id;
+battleOpponentUid = r.senderUid;
+battleOpponentUsername = r.senderUsername;
+battleOpponentPic = DEFAULT_PROFILE_PIC;
+battleSelectedCardId = null;
+battleChoiceSubmitted = false;
+battleRewardGiven = false;
+try {
+await updateDoc(doc(db, "friendRequests", id), { status: "accepted" });
 showPage("battle");
 document.getElementById("battleMain").classList.add("hidden");
 renderBattleChoice();
+listenToBattleRoom(id);
+} catch(e) { showMessage("Could not accept battle: " + e.message); }
 };
 
 window.declineBattleRequest = async id => {
@@ -2266,8 +2294,69 @@ showMessage("Battle request declined.");
 } catch(e) { showMessage("Could not decline: " + e.message); }
 };
 
-function executePvPSetup(){
-showMessage("PvP Battle starting against " + battleOpponentUsername + "!");
+async function submitPvPCardSelection(){
+if(!battleRoomId || !battleSelectedCardId) return;
+const copy = getBattleCardById(battleSelectedCardId);
+const card = getCard(copy.name);
+const sender = battleOpponentUid !== currentUser.uid;
+const arena = document.getElementById("battleArena");
+arena.classList.remove("hidden");
+arena.innerHTML = `<div class="tradeArea" style="text-align:center"><h2>Waiting for opponent...</h2><p>Your card selection has been saved. Waiting for ${escapeHtml(battleOpponentUsername)} to choose a card.</p></div>`;
+try {
+const field = currentUser.uid === battleOpponentUid ? "receiverCard" : (sender ? "senderCard" : "receiverCard");
+const ref = doc(db, "friendRequests", battleRoomId);
+const snap = await getDoc(ref);
+if(snap.exists()){
+const data = snap.data();
+const isSender = data.senderUid === currentUser.uid;
+await updateDoc(ref, {
+[isSender ? "senderCard" : "receiverCard"]: card.name
+});
+battleChoiceSubmitted = true;
+}
+} catch(e) { showMessage("Could not submit card: " + e.message); }
+}
+
+function listenToBattleRoom(roomId){
+stopBattleListener();
+battleListener = onSnapshot(doc(db, "friendRequests", roomId), snap => {
+if(!snap.exists()) return;
+const data = snap.data();
+if(data.status === "declined"){
+showMessage("Battle challenge was declined.");
+cancelBattleSetup();
+return;
+}
+const isSender = data.senderUid === currentUser.uid;
+const myCardName = isSender ? data.senderCard : data.receiverCard;
+const opponentCardName = isSender ? data.receiverCard : data.senderCard;
+
+if(myCardName && opponentCardName){
+const pCard = getCard(myCardName);
+const oCard = getCard(opponentCardName);
+renderPvPBattleResult(pCard, oCard);
+}
+});
+}
+
+function renderPvPBattleResult(pCard, oCard){
+let pHp = BATTLE_HP; let oHp = BATTLE_HP;
+const arena = document.getElementById("battleArena");
+arena.classList.remove("hidden");
+
+const pDmg = calculateBattleDamage(pCard, oCard);
+const oDmg = calculateBattleDamage(oCard, pCard);
+
+oHp -= pDmg.damage; pHp -= oDmg.damage;
+const win = pHp >= oHp;
+
+if(win && !battleRewardGiven){
+money += BATTLE_WIN_REWARD;
+battleRewardGiven = true;
+savePlayerData();
+}
+
+arena.innerHTML = `<div class="battleHeader">${battleCardHTML(pCard, Math.max(0,pHp), username, profilePic)}<div class="battleVs">VS</div>${battleCardHTML(oCard, Math.max(0,oHp), battleOpponentUsername, battleOpponentPic)}</div><div class="battleMove"><div class="moveName">${escapeHtml(pCard.move)}</div><div class="moveType">${pCard.moveType} Move</div>${battleEffectivenessText(pDmg.effectiveness)}</div><div class="battleLog">You dealt ${pDmg.damage} damage to ${escapeHtml(battleOpponentUsername)}!<br>${escapeHtml(battleOpponentUsername)} used ${escapeHtml(oCard.move)} and dealt ${oDmg.damage} damage!</div><div class="battleResult"><div class="winText" style="color:${win?"#25b864":"#9b2929"}">${win?"YOU WIN!":"YOU LOSE!"}</div>${win?`<div class="rewardText">+${BATTLE_WIN_REWARD} Coins!</div>`:""}<button class="battleStartButton" onclick="cancelBattleSetup()">FINISH BATTLE</button></div>`;
 }
 
 function stopBattleListener(){ if(battleListener){ battleListener(); battleListener = null; } }
