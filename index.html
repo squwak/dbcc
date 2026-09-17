@@ -9,23 +9,23 @@
 *{box-sizing:border-box}
 
 body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#071525;
-color:white
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#071525;
+    color:white;
 }
 
 button{
-border:none;
-border-radius:10px;
-padding:12px 16px;
-font-weight:bold;
-cursor:pointer
+    border:none;
+    border-radius:10px;
+    padding:12px 16px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
 button:disabled{
-opacity:.45;
-cursor:not-allowed
+    opacity:.45;
+    cursor:not-allowed;
 }
 
 .hidden{display:none!important}
@@ -33,87 +33,64 @@ cursor:not-allowed
 /* LOGIN */
 
 #loginScreen{
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
 }
 
 .loginBox{
-background:#10243d;
-padding:35px;
-border-radius:20px;
-width:min(90%,420px)
+    background:#10243d;
+    padding:35px;
+    border-radius:20px;
+    width:min(90%,420px);
 }
 
 .loginBox h1{margin-top:0}
 
 .googleButton{
-background:white;
-color:#222;
-width:100%;
-font-size:16px
+    background:white;
+    color:#222;
+    width:100%;
+    font-size:16px;
 }
 
-/* GAME */
+/* TOP BAR */
 
 #gameScreen{min-height:100vh}
 
 .topBar{
-background:#10243d;
-padding:10px;
-display:flex;
-gap:7px;
-overflow-x:auto;
-align-items:center
+    background:#10243d;
+    padding:10px;
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    align-items:center;
 }
 
 .topBar button{
-background:#183653;
-color:white;
-white-space:nowrap
+    background:#183653;
+    color:white;
+    white-space:nowrap;
 }
 
 .topBar button:hover{background:#234b70}
 
 .moneyBox{
-background:#183653;
-padding:10px 14px;
-border-radius:10px;
-white-space:nowrap;
-order:-1
+    background:#183653;
+    padding:10px 14px;
+    border-radius:10px;
+    white-space:nowrap;
+    order:-1;
 }
 
-.dolbBox{
-background:#183653;
-padding:10px 14px;
-border-radius:10px;
-white-space:nowrap
-}
-
-.profileTop{
-display:flex;
-align-items:center;
-gap:7px;
-background:#183653;
-padding:6px 10px;
-border-radius:10px;
-white-space:nowrap
-}
-
-.profileTop img{
-width:32px;
-height:32px;
-border-radius:50%;
-object-fit:cover;
-background:#091a2d
-}
+/* PAGES */
 
 .page{
-padding:20px;
-max-width:1200px;
-margin:auto
+    padding:20px;
+    max-width:1200px;
+    margin:auto;
 }
 
 h1,h2,h3{margin-top:0}
@@ -121,37 +98,83 @@ h1,h2,h3{margin-top:0}
 /* HOME */
 
 .homeBox{
-background:#10243d;
-padding:25px;
-border-radius:18px
+    background:#10243d;
+    padding:25px;
+    border-radius:18px;
 }
 
 .username{
-font-size:20px;
-font-weight:bold
+    font-size:20px;
+    font-weight:bold;
 }
 
-/* PACK */
-
 .packButton{
-background:#2674d9;
-color:white;
-font-size:18px;
-margin-top:15px
+    background:#2674d9;
+    color:white;
+    font-size:18px;
+    margin-top:15px;
+}
+
+/* PROFILE */
+
+.profilePic{
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    object-fit:cover;
+    background:#091a2d;
+    border:3px solid #2674d9;
+}
+
+.profilePicSmall{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    object-fit:cover;
+    background:#091a2d;
+    border:2px solid #2674d9;
+    flex-shrink:0;
+}
+
+.profilePicTiny{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    object-fit:cover;
+    background:#091a2d;
+    border:2px solid #2674d9;
+    flex-shrink:0;
+}
+
+.profileBox{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.profileInfo{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.profileUsername{
+    font-size:21px;
+    font-weight:bold;
 }
 
 /* TABS */
 
 .tabs{
-display:flex;
-gap:8px;
-margin-bottom:18px;
-flex-wrap:wrap
+    display:flex;
+    gap:8px;
+    margin-bottom:18px;
 }
 
 .tabs button{
-background:#183653;
-color:white
+    background:#183653;
+    color:white;
 }
 
 .tabs button.active{background:#2674d9}
@@ -159,126 +182,124 @@ color:white
 /* SEARCH */
 
 .searchBox{
-width:100%;
-padding:13px;
-border-radius:10px;
-border:none;
-margin-bottom:20px;
-font-size:16px
+    width:100%;
+    padding:13px;
+    border-radius:10px;
+    border:none;
+    margin-bottom:20px;
+    font-size:16px;
 }
 
 /* CARDS */
 
 .cardGrid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
-gap:18px
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
+    gap:18px;
 }
 
 .card{
-background:#10243d;
-border-radius:15px;
-padding:10px;
-position:relative;
-text-align:center;
-border:3px solid transparent
+    background:#10243d;
+    border-radius:15px;
+    padding:10px;
+    position:relative;
+    text-align:center;
+    border:3px solid transparent;
 }
 
 .card img{
-width:100%;
-aspect-ratio:1/1.35;
-object-fit:contain;
-border-radius:10px;
-background:#091a2d;
-cursor:pointer
+    width:100%;
+    aspect-ratio:1/1.35;
+    object-fit:contain;
+    border-radius:10px;
+    background:#091a2d;
+    cursor:pointer;
 }
 
 .cardName{
-font-weight:bold;
-margin-top:8px
+    font-weight:bold;
+    margin-top:8px;
 }
 
 .cardCount{
-position:absolute;
-top:7px;
-right:7px;
-background:#2674d9;
-min-width:28px;
-height:28px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold
+    position:absolute;
+    top:7px;
+    right:7px;
+    background:#2674d9;
+    min-width:28px;
+    height:28px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
 }
 
 .starButton{
-position:absolute;
-top:7px;
-left:7px;
-width:31px;
-height:31px;
-padding:0;
-border-radius:50%;
-background:#172b43;
-color:white;
-font-size:17px;
-z-index:10
+    position:absolute;
+    top:7px;
+    left:7px;
+    width:31px;
+    height:31px;
+    padding:0;
+    border-radius:50%;
+    background:#172b43;
+    color:white;
+    font-size:17px;
+    z-index:10;
 }
 
 .starButton.favorite{color:#36b9ff}
 
 .favoriteCard{
-border:4px solid #36b9ff;
-box-shadow:0 0 0 2px #8ee0ff,0 0 12px #36b9ff
+    border:4px solid #36b9ff;
+    box-shadow:0 0 0 2px #8ee0ff,0 0 12px #36b9ff;
 }
 
 .tradedFavoriteCard{
-border:4px solid #36b9ff;
-box-shadow:0 0 0 2px #8ee0ff,0 0 8px #36b9ff,0 0 18px white
+    border:4px solid #36b9ff;
+    box-shadow:0 0 0 2px #8ee0ff,0 0 8px #36b9ff,0 0 18px white;
 }
 
 .tradedFavoriteCard::before{
-content:"✦ ✧ ✦";
-position:absolute;
-top:-15px;
-left:50%;
-transform:translateX(-50%);
-color:#36b9ff;
-font-size:17px;
-white-space:nowrap;
-z-index:102
+    content:"✦ ✧ ✦";
+    position:absolute;
+    top:-15px;
+    left:50%;
+    transform:translateX(-50%);
+    color:#36b9ff;
+    font-size:17px;
+    white-space:nowrap;
+    z-index:102;
 }
 
 .rareFavoriteCard{
-border:4px solid gold;
-box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700
+    border:4px solid gold;
+    box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700;
 }
 
 .rareTradedFavoriteCard{
-border:4px solid gold;
-box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700,0 0 32px white
+    border:4px solid gold;
+    box-shadow:0 0 0 2px #fff0a3,0 0 10px gold,0 0 22px #ffd700,0 0 32px white;
 }
 
 .rareTradedFavoriteCard::before{
-content:"✦ ◆ ✧ ◆ ✦";
-position:absolute;
-top:-16px;
-left:50%;
-transform:translateX(-50%);
-color:gold;
-font-size:17px;
-white-space:nowrap;
-z-index:102
+    content:"✦ ◆ ✧ ◆ ✦";
+    position:absolute;
+    top:-16px;
+    left:50%;
+    transform:translateX(-50%);
+    color:gold;
+    font-size:17px;
+    white-space:nowrap;
+    z-index:102;
 }
 
-/* SELL */
-
 .sellButton{
-width:100%;
-margin-top:8px;
-background:#176f46;
-color:white
+    width:100%;
+    margin-top:8px;
+    background:#176f46;
+    color:white;
 }
 
 .sellButton.favoriteLocked{background:#555}
@@ -286,323 +307,446 @@ color:white
 /* DEX */
 
 .dexCard{
-background:#10243d;
-border-radius:15px;
-padding:10px;
-text-align:center
+    background:#10243d;
+    border-radius:15px;
+    padding:10px;
+    text-align:center;
 }
 
 .dexCard img{
-width:100%;
-aspect-ratio:1/1.35;
-object-fit:contain;
-background:#091a2d;
-border-radius:10px;
-cursor:pointer
+    width:100%;
+    aspect-ratio:1/1.35;
+    object-fit:contain;
+    background:#091a2d;
+    border-radius:10px;
+    cursor:pointer;
 }
 
 .comingSoon{opacity:.5}
 
+/* =========================
+   BATTLE
+   ========================= */
+
+.battleIntro{
+    background:#10243d;
+    padding:22px;
+    border-radius:18px;
+    margin-bottom:20px;
+}
+
+.battleDifficulty{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-top:20px;
+}
+
+.difficultyButton{
+    color:white;
+    padding:20px;
+    font-size:18px;
+}
+
+.easyButton{
+    background:#198754;
+}
+
+.hardButton{
+    background:#9b2929;
+}
+
+.battleSelectGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
+    gap:15px;
+}
+
+.battleSelectCard{
+    background:#10243d;
+    border-radius:15px;
+    padding:10px;
+    text-align:center;
+    border:3px solid transparent;
+    cursor:pointer;
+}
+
+.battleSelectCard:hover{
+    border-color:#2674d9;
+}
+
+.battleSelectCard img{
+    width:100%;
+    aspect-ratio:1/1.35;
+    object-fit:contain;
+    background:#091a2d;
+    border-radius:10px;
+}
+
+.battleSelectCard h3{
+    margin:8px 0 5px;
+}
+
+.typeBadge{
+    display:inline-block;
+    background:#183653;
+    border-radius:8px;
+    padding:5px 8px;
+    margin:2px;
+    font-size:12px;
+}
+
+.battleArena{
+    background:#10243d;
+    border-radius:20px;
+    padding:20px;
+}
+
+.battleTop{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.battleFighter{
+    background:#091a2d;
+    border-radius:18px;
+    padding:15px;
+    text-align:center;
+}
+
+.battleFighter img{
+    width:min(100%,220px);
+    height:260px;
+    object-fit:contain;
+    background:#071525;
+    border-radius:15px;
+}
+
+.battleName{
+    font-size:22px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.battleTypes{
+    margin:8px 0;
+}
+
+.hpBarOuter{
+    height:22px;
+    background:#26384a;
+    border-radius:20px;
+    overflow:hidden;
+    margin:12px 0;
+}
+
+.hpBar{
+    height:100%;
+    width:100%;
+    background:#198754;
+    transition:width .5s;
+}
+
+.battleLog{
+    background:#071525;
+    border-radius:15px;
+    padding:18px;
+    min-height:70px;
+    margin:20px 0;
+    text-align:center;
+    font-size:18px;
+}
+
+.moveArea{
+    background:#091a2d;
+    border-radius:15px;
+    padding:18px;
+}
+
+.signatureMove{
+    width:100%;
+    background:#2674d9;
+    color:white;
+    font-size:20px;
+    padding:18px;
+}
+
+.signatureMove:hover{
+    background:#3285ed;
+}
+
+.signatureMoveName{
+    font-size:21px;
+}
+
+.signatureMoveType{
+    opacity:.8;
+    font-size:14px;
+    margin-top:5px;
+}
+
+.battleBackButton{
+    background:#183653;
+    color:white;
+    margin-top:15px;
+    width:100%;
+}
+
+.battleResult{
+    text-align:center;
+    padding:20px;
+    border-radius:15px;
+    background:#183653;
+    margin-top:20px;
+}
+
+.battleWin{
+    font-size:30px;
+    font-weight:bold;
+}
+
+.rewardText{
+    font-size:20px;
+    margin:15px;
+}
+
 /* TRADE */
 
 .tradeNotice{
-background:#10243d;
-border-radius:15px;
-padding:18px;
-margin-bottom:18px
+    background:#10243d;
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:18px;
 }
 
 .tradeSearchArea{
-display:flex;
-gap:8px
+    display:flex;
+    gap:8px;
 }
 
 .tradeSearchArea input{
-flex:1;
-min-width:0;
-padding:13px;
-border:none;
-border-radius:10px;
-font-size:16px
+    flex:1;
+    min-width:0;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
 }
 
 .tradeSearchButton{
-background:#2674d9;
-color:white
+    background:#2674d9;
+    color:white;
 }
 
 .tradePlayerResult{margin-top:15px}
 
+.playerResultBox{
+    background:#183653;
+    padding:15px;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.playerResultInfo{flex:1}
+
 .tradeRequest{
-background:#183653;
-padding:15px;
-border-radius:12px;
-margin-top:10px
+    background:#183653;
+    padding:15px;
+    border-radius:12px;
+    margin-top:10px;
 }
 
 .tradeArea{
-background:#10243d;
-padding:18px;
-border-radius:18px;
-margin-top:20px
+    background:#10243d;
+    padding:18px;
+    border-radius:18px;
+    margin-top:20px;
 }
 
 .tradeColumns{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
 }
 
 .tradeSide{
-background:#091a2d;
-padding:15px;
-border-radius:15px
+    background:#091a2d;
+    padding:15px;
+    border-radius:15px;
 }
 
 .tradeSide h3{text-align:center}
 
 .tradeCardGrid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
 }
 
 .tradeCard{
-background:#10243d;
-border-radius:10px;
-padding:7px;
-text-align:center;
-border:2px solid transparent;
-cursor:pointer
+    background:#10243d;
+    border-radius:10px;
+    padding:7px;
+    text-align:center;
+    border:2px solid transparent;
+    cursor:pointer;
 }
 
 .tradeCard.selected{
-border-color:#36b9ff;
-box-shadow:0 0 10px #36b9ff
+    border-color:#36b9ff;
+    box-shadow:0 0 10px #36b9ff;
 }
 
 .tradeCard img{
-width:100%;
-aspect-ratio:1/1.25;
-object-fit:contain
+    width:100%;
+    aspect-ratio:1/1.25;
+    object-fit:contain;
 }
 
 .tradeStatus{
-text-align:center;
-margin:15px 0;
-font-size:18px;
-font-weight:bold
+    text-align:center;
+    margin:15px 0;
+    font-size:18px;
+    font-weight:bold;
 }
 
 .confirmButton{
-background:#198754;
-color:white;
-width:100%
+    background:#198754;
+    color:white;
+    width:100%;
 }
 
 .cancelButton{
-background:#9b2929;
-color:white;
-width:100%;
-margin-top:8px
+    background:#9b2929;
+    color:white;
+    width:100%;
+    margin-top:8px;
 }
 
 .changeOfferButton{
-background:#2674d9;
-color:white;
-width:100%;
-margin-top:8px
-}
-
-/* SHOP */
-
-.shopGrid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-gap:18px
-}
-
-.shopItem{
-background:#10243d;
-border-radius:15px;
-padding:15px;
-text-align:center
-}
-
-.shopItem img{
-width:100%;
-max-height:220px;
-object-fit:contain;
-background:#091a2d;
-border-radius:10px
-}
-
-.shopButton{
-background:#2674d9;
-color:white;
-width:100%;
-margin-top:10px
-}
-
-.shopPrice{
-font-weight:bold;
-margin-top:8px
-}
-
-/* PROFILE */
-
-.profileCard{
-background:#10243d;
-border-radius:18px;
-padding:20px;
-text-align:center
-}
-
-.profileBig{
-width:120px;
-height:120px;
-border-radius:50%;
-object-fit:cover;
-background:#091a2d
+    background:#2674d9;
+    color:white;
+    width:100%;
+    margin-top:8px;
 }
 
 /* FRIENDS */
 
+.friendSearchBox{
+    background:#10243d;
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:20px;
+}
+
+.friendSearchArea{
+    display:flex;
+    gap:8px;
+}
+
+.friendSearchArea input{
+    flex:1;
+    min-width:0;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+}
+
+.friendSearchButton{
+    background:#2674d9;
+    color:white;
+}
+
+.friendResult{
+    margin-top:15px;
+}
+
+.friendResultBox{
+    background:#183653;
+    border-radius:15px;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.friendResultInfo{
+    flex:1;
+}
+
+.friendName{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.friendActionButton{
+    background:#2674d9;
+    color:white;
+    margin-top:8px;
+}
+
+.friendAcceptButton{
+    background:#198754;
+    color:white;
+}
+
+.friendDeclineButton{
+    background:#9b2929;
+    color:white;
+}
+
 .friendBox{
-background:#10243d;
-border-radius:15px;
-padding:18px;
-margin-bottom:15px
+    background:#10243d;
+    border-radius:15px;
+    padding:15px;
+    margin-bottom:12px;
+    display:flex;
+    align-items:center;
+    gap:14px;
 }
 
-.friendRow{
-background:#183653;
-padding:12px;
-border-radius:12px;
-margin-top:8px;
-display:flex;
-align-items:center;
-gap:10px
+.friendInfo{flex:1}
+
+.friendEmpty{
+    background:#10243d;
+    border-radius:15px;
+    padding:25px;
+    text-align:center;
 }
 
-.friendRow img{
-width:45px;
-height:45px;
-border-radius:50%;
-object-fit:cover
-}
-
-.online{
-color:#4cff86;
-font-weight:bold
-}
-
-.offline{
-color:#aaa
-}
-
-.friendActions{
-margin-left:auto;
-display:flex;
-gap:6px;
-flex-wrap:wrap
-}
-
-/* BATTLES */
-
-.battleBox{
-background:#10243d;
-padding:20px;
-border-radius:18px;
-margin-bottom:18px
-}
-
-.battleButton{
-background:#2674d9;
-color:white;
-width:100%;
-margin-top:8px
-}
-
-.battleArena{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px
-}
-
-.battlePlayer{
-background:#091a2d;
-border-radius:15px;
-padding:15px;
-text-align:center
-}
-
-.battlePlayer img{
-width:80px;
-height:80px;
-border-radius:50%;
-object-fit:cover
-}
-
-.hpBar{
-height:22px;
-background:#26384b;
-border-radius:12px;
-overflow:hidden;
-margin:10px 0
-}
-
-.hpFill{
-height:100%;
-background:#31b66f;
-transition:.25s
-}
-
-.battleCard{
-background:#10243d;
-border-radius:12px;
-padding:8px;
-margin-top:8px;
-cursor:pointer
-}
-
-.battleCard img{
-width:100%;
-max-height:180px;
-object-fit:contain
-}
-
-.moveButton{
-background:#2674d9;
-color:white;
-width:100%;
-margin-top:7px
+.friendSection{
+    margin-top:20px;
+    margin-bottom:10px;
 }
 
 /* SETTINGS */
 
 .settingsOverlay{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.8);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:999
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.8);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:999;
 }
 
 .settingsBox{
-background:#10243d;
-padding:25px;
-width:min(90%,450px);
-border-radius:20px
+    background:#10243d;
+    padding:25px;
+    width:min(90%,450px);
+    border-radius:20px;
 }
 
 .settingsButton{
-width:100%;
-background:#183653;
-color:white;
-margin-top:10px
+    width:100%;
+    background:#183653;
+    color:white;
+    margin-top:10px;
 }
 
 .resetButton{background:#8d2525}
@@ -612,3790 +756,5531 @@ margin-top:10px
 /* MESSAGE */
 
 #message{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:#183653;
-padding:13px 18px;
-border-radius:12px;
-z-index:6000;
-display:none;
-text-align:center;
-max-width:90%
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#183653;
+    padding:13px 18px;
+    border-radius:12px;
+    z-index:2000;
+    display:none;
+    text-align:center;
 }
 
-/* FULLSCREEN */
+/* CARD VIEWER */
 
 .cardViewer{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.94);
-z-index:5000;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:20px
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.94);
+    z-index:5000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
 }
 
 .cardViewerImage{
-max-width:95vw;
-max-height:90vh;
-width:auto;
-height:auto;
-object-fit:contain;
-border-radius:12px
+    max-width:95vw;
+    max-height:90vh;
+    width:auto;
+    height:auto;
+    object-fit:contain;
+    border-radius:12px;
 }
 
 .cardViewerClose{
-position:fixed;
-top:15px;
-right:15px;
-background:#183653;
-color:white;
-font-size:24px;
-width:48px;
-height:48px;
-padding:0;
-z-index:5001
+    position:fixed;
+    top:15px;
+    right:15px;
+    background:#183653;
+    color:white;
+    font-size:24px;
+    width:48px;
+    height:48px;
+    padding:0;
+    z-index:5001;
 }
 
 @media(max-width:650px){
-.tradeColumns,
-.battleArena{
-grid-template-columns:1fr
-}
 
-.topBar{flex-wrap:nowrap}
+    .tradeColumns{
+        grid-template-columns:1fr
+    }
 
-.moneyBox{margin-left:0}
+    .battleTop{
+        grid-template-columns:1fr
+    }
 
-.friendActions{
-margin-left:0
-}
+    .battleDifficulty{
+        grid-template-columns:1fr
+    }
+
+    .topBar{
+        flex-wrap:nowrap
+    }
+
+    .moneyBox{
+        margin-left:0
+    }
+
+    .playerResultBox{
+        align-items:flex-start
+    }
+
+    .friendResultBox{
+        align-items:flex-start
+    }
+
+    .friendSearchArea{
+        flex-direction:column
+    }
+
 }
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
+
 <div id="loginScreen">
-<div class="loginBox">
-<h1>Doll Ball Collector Cards</h1>
-<p>Log in to play.</p>
-<button class="googleButton" onclick="loginGoogle()">
-Sign in with Google
-</button>
+
+    <div class="loginBox">
+
+        <h1>Doll Ball Collector Cards</h1>
+
+        <p>Log in to play.</p>
+
+        <button
+            class="googleButton"
+            onclick="loginGoogle()">
+
+            Sign in with Google
+
+        </button>
+
+    </div>
+
 </div>
-</div>
+
+
+<!-- GAME -->
 
 <div id="gameScreen" class="hidden">
 
-<div class="topBar">
+    <div class="topBar">
 
-<div class="moneyBox">
-Coins: <span id="money">0</span>
+        <div class="moneyBox">
+            Coins: <span id="money">0</span>
+        </div>
+
+        <button onclick="showPage('battle')">
+            MOVE BATTLE
+        </button>
+
+        <button onclick="showPage('home')">
+            HOME
+        </button>
+
+        <button onclick="showPage('collection')">
+            COLLECTION
+        </button>
+
+        <button onclick="showPage('dex')">
+            DEX
+        </button>
+
+        <button onclick="showPage('trade')">
+            TRADE
+        </button>
+
+        <button onclick="showPage('friends')">
+            FRIENDS
+        </button>
+
+        <button onclick="openSettings()">
+            SETTINGS
+        </button>
+
+        <button
+            class="logoutButton"
+            onclick="logout()">
+
+            LOG OUT
+
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         MOVE BATTLE
+         ========================= -->
+
+    <div id="battlePage" class="page hidden">
+
+        <div id="battleContent">
+
+            <div class="battleIntro">
+
+                <h1>Move Battle</h1>
+
+                <p>
+                    Choose a Doll and battle an opponent!
+                </p>
+
+                <p>
+                    Your Doll's signature move is your attack.
+                    <b>You choose when to use it.</b>
+                </p>
+
+                <div class="battleDifficulty">
+
+                    <button
+                        class="difficultyButton easyButton"
+                        onclick="startBattle('easy')">
+
+                        EASY
+                        <br>
+                        <small>Win: 15 coins</small>
+
+                    </button>
+
+                    <button
+                        class="difficultyButton hardButton"
+                        onclick="startBattle('hard')">
+
+                        HARD
+                        <br>
+                        <small>Win: 50 coins</small>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- HOME -->
+
+    <div id="homePage" class="page">
+
+        <div class="homeBox">
+
+            <div class="profileBox">
+
+                <img
+                    id="homeProfilePic"
+                    class="profilePic"
+                    src="basic_p.png"
+                    alt="Profile Picture">
+
+                <div class="profileInfo">
+
+                    <div
+                        class="profileUsername"
+                        id="homeUsername">
+                    </div>
+
+                    <div>
+                        Doll Ball Collector Cards
+                    </div>
+
+                </div>
+
+            </div>
+
+            <h1>Welcome!</h1>
+
+            <p>
+                Google Account:
+                <span id="accountEmail"></span>
+            </p>
+
+            <p>
+                Username:
+                <span
+                    class="username"
+                    id="usernameDisplay">
+                </span>
+            </p>
+
+            <hr>
+
+            <h2>Open a Pack</h2>
+
+            <p>
+                Cost: 10 coins<br>
+                Cards: 3
+            </p>
+
+            <button
+                class="packButton"
+                onclick="openPack()">
+
+                OPEN PACK - 10 COINS
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- COLLECTION -->
+
+    <div id="collectionPage" class="page hidden">
+
+        <h1>Collection</h1>
+
+        <div class="tabs">
+
+            <button
+                id="collectionAllButton"
+                class="active"
+                onclick="setCollectionTab('all')">
+
+                ALL
+
+            </button>
+
+            <button
+                id="collectionFavoritesButton"
+                onclick="setCollectionTab('favorites')">
+
+                FAVORITES
+
+            </button>
+
+        </div>
+
+        <input
+            id="collectionSearch"
+            class="searchBox"
+            placeholder="Search cards..."
+            oninput="renderCollection()">
+
+        <div
+            id="collectionGrid"
+            class="cardGrid">
+        </div>
+
+    </div>
+
+
+    <!-- DEX -->
+
+    <div id="dexPage" class="page hidden">
+
+        <h1>DEX</h1>
+
+        <div class="tabs">
+
+            <button
+                id="dexDollsButton"
+                class="active"
+                onclick="setDexTab('dolls')">
+
+                DOLLS
+
+            </button>
+
+            <button
+                id="dexRaresButton"
+                onclick="setDexTab('rares')">
+
+                RARES
+
+            </button>
+
+        </div>
+
+        <div
+            id="dexGrid"
+            class="cardGrid">
+        </div>
+
+    </div>
+
+
+    <!-- TRADE -->
+
+    <div id="tradePage" class="page hidden">
+
+        <h1>Trading</h1>
+
+        <div class="tradeNotice">
+
+            <b>Find a player</b>
+
+            <p>
+                Search using their username.
+            </p>
+
+            <div class="tradeSearchArea">
+
+                <input
+                    id="tradePlayerInput"
+                    placeholder="Username">
+
+                <button
+                    class="tradeSearchButton"
+                    onclick="findPlayer()">
+
+                    SEARCH
+
+                </button>
+
+            </div>
+
+            <div id="tradePlayerResult"></div>
+
+        </div>
+
+        <div id="incomingTrades"></div>
+
+        <div id="activeTrade"></div>
+
+    </div>
+
+
+    <!-- FRIENDS -->
+
+    <div id="friendsPage" class="page hidden">
+
+        <h1>Friends</h1>
+
+        <div class="friendSearchBox">
+
+            <h2>Find a Friend</h2>
+
+            <p>
+                Search for another player using their username.
+            </p>
+
+            <div class="friendSearchArea">
+
+                <input
+                    id="friendPlayerInput"
+                    placeholder="Username">
+
+                <button
+                    class="friendSearchButton"
+                    onclick="findFriend()">
+
+                    SEARCH
+
+                </button>
+
+            </div>
+
+            <div id="friendSearchResult"></div>
+
+        </div>
+
+        <div id="friendRequestsArea"></div>
+
+        <h2 class="friendSection">
+            Your Friends
+        </h2>
+
+        <div id="friendsList"></div>
+
+    </div>
+
 </div>
 
-<div class="dolbBox">
-Dolb: <span id="dolb">0</span>
-</div>
-
-<div class="profileTop">
-<img id="topProfilePic" src="basic_p.png" alt="">
-<span id="topUsername"></span>
-</div>
-
-<button onclick="showPage('home')">HOME</button>
-<button onclick="showPage('collection')">COLLECTION</button>
-<button onclick="showPage('dex')">DEX</button>
-<button onclick="showPage('shop')">SHOP</button>
-<button onclick="showPage('friends')">FRIENDS</button>
-<button onclick="showPage('battle')">BATTLES</button>
-<button onclick="showPage('trade')">TRADE</button>
-<button onclick="openSettings()">SETTINGS</button>
-<button class="logoutButton" onclick="logout()">LOG OUT</button>
-
-</div>
-
-<!-- HOME -->
-
-<div id="homePage" class="page">
-
-<div class="homeBox">
-
-<h1>Welcome!</h1>
-
-<p>
-Google Account:
-<span id="accountEmail"></span>
-</p>
-
-<p>
-Username:
-<span class="username" id="usernameDisplay"></span>
-</p>
-
-<hr>
-
-<h2>Open a Pack</h2>
-
-<p>
-Cost: 10 coins<br>
-Cards: 3
-</p>
-
-<button class="packButton" onclick="openPack()">
-OPEN PACK
-</button>
-
-</div>
-</div>
-
-<!-- COLLECTION -->
-
-<div id="collectionPage" class="page hidden">
-
-<h1>Collection</h1>
-
-<div class="tabs">
-
-<button id="collectionAllButton"
-class="active"
-onclick="setCollectionTab('all')">
-ALL
-</button>
-
-<button id="collectionFavoritesButton"
-onclick="setCollectionTab('favorites')">
-FAVORITES
-</button>
-
-</div>
-
-<input id="collectionSearch"
-class="searchBox"
-placeholder="Search cards..."
-oninput="renderCollection()">
-
-<div id="collectionGrid" class="cardGrid"></div>
-
-</div>
-
-<!-- DEX -->
-
-<div id="dexPage" class="page hidden">
-
-<h1>DEX</h1>
-
-<div class="tabs">
-
-<button id="dexDollsButton"
-class="active"
-onclick="setDexTab('dolls')">
-DOLLS
-</button>
-
-<button id="dexRaresButton"
-onclick="setDexTab('rares')">
-RARES
-</button>
-
-</div>
-
-<div id="dexGrid" class="cardGrid"></div>
-
-</div>
-
-<!-- SHOP -->
-
-<div id="shopPage" class="page hidden">
-
-<h1>Shop</h1>
-
-<div class="tabs">
-
-<button id="shopDollsButton"
-class="active"
-onclick="setShopTab('dolls')">
-DOLLS
-</button>
-
-<button id="shopProfileButton"
-onclick="setShopTab('profile')">
-PROFILE PICTURES
-</button>
-
-<button id="shopDolbButton"
-onclick="setShopTab('dolb')">
-DOLB DEALS
-</button>
-
-<button id="shopEventButton"
-onclick="setShopTab('event')">
-EVENT
-</button>
-
-</div>
-
-<div id="shopGrid" class="shopGrid"></div>
-
-</div>
-
-<!-- FRIENDS -->
-
-<div id="friendsPage" class="page hidden">
-
-<h1>Friends</h1>
-
-<div class="friendBox">
-
-<h3>Find Player</h3>
-
-<div class="tradeSearchArea">
-
-<input id="friendSearchInput"
-placeholder="Username">
-
-<button class="tradeSearchButton"
-onclick="findFriend()">
-SEARCH
-</button>
-
-</div>
-
-<div id="friendSearchResult"></div>
-
-</div>
-
-<div class="friendBox">
-
-<h2>Friend Requests</h2>
-
-<div id="friendRequestsList"></div>
-
-</div>
-
-<div class="friendBox">
-
-<h2>Your Friends</h2>
-
-<div id="friendsList"></div>
-
-</div>
-
-</div>
-
-<!-- BATTLES -->
-
-<div id="battlePage" class="page hidden">
-
-<h1>Battles</h1>
-
-<div id="battleMenu">
-
-<div class="battleBox">
-
-<h2>Battle Bots</h2>
-
-<button class="battleButton"
-onclick="startBotBattle('easy')">
-EASY BOT
-</button>
-
-<button class="battleButton"
-onclick="startBotBattle('hard')">
-HARD BOT
-</button>
-
-</div>
-
-<div class="battleBox">
-
-<h2>Friend Battle</h2>
-
-<p>Search for a friend and send them a battle request.</p>
-
-<div class="tradeSearchArea">
-
-<input id="battlePlayerInput"
-placeholder="Username">
-
-<button class="tradeSearchButton"
-onclick="findBattlePlayer()">
-SEARCH
-</button>
-
-</div>
-
-<div id="battlePlayerResult"></div>
-
-</div>
-
-<div id="incomingBattles"></div>
-
-</div>
-
-<div id="battleArenaContainer"></div>
-
-</div>
-
-<!-- TRADE -->
-
-<div id="tradePage" class="page hidden">
-
-<h1>Trading</h1>
-
-<div id="tradeSearchBox">
-
-<div class="tradeNotice">
-
-<b>Find a player</b>
-
-<p>Search using their username.</p>
-
-<div class="tradeSearchArea">
-
-<input id="tradePlayerInput"
-placeholder="Username">
-
-<button class="tradeSearchButton"
-onclick="findPlayer()">
-SEARCH
-</button>
-
-</div>
-
-<div id="tradePlayerResult"></div>
-
-</div>
-
-</div>
-
-<div id="incomingTrades"></div>
-<div id="activeTrade"></div>
-
-</div>
 
 <!-- SETTINGS -->
 
-<div id="settingsOverlay"
-class="settingsOverlay hidden">
+<div
+    id="settingsOverlay"
+    class="settingsOverlay hidden">
 
-<div class="settingsBox">
+    <div class="settingsBox">
 
-<h2>Settings</h2>
+        <h2>Settings</h2>
 
-<p>
-Username:
-<b id="settingsUsername"></b>
-</p>
+        <p>
+            Username:
+            <b id="settingsUsername"></b>
+        </p>
 
-<button class="settingsButton"
-onclick="openProfileSettings()">
-PROFILE PICTURE
-</button>
+        <div style="text-align:center;margin:20px 0;">
 
-<button class="settingsButton resetButton"
-onclick="resetAccount()">
-RESET ACCOUNT
-</button>
+            <img
+                id="settingsProfilePic"
+                class="profilePic"
+                src="basic_p.png"
+                alt="Profile Picture">
 
-<button class="settingsButton"
-onclick="closeSettings()">
-CLOSE
-</button>
+            <p>Profile Picture</p>
 
-</div>
-</div>
+        </div>
 
-<!-- PROFILE SETTINGS -->
+        <button
+            class="settingsButton resetButton"
+            onclick="resetAccount()">
 
-<div id="profileOverlay"
-class="settingsOverlay hidden">
+            RESET ACCOUNT
 
-<div class="settingsBox">
+        </button>
 
-<h2>Profile Picture</h2>
+        <button
+            class="settingsButton"
+            onclick="closeSettings()">
 
-<div style="text-align:center">
+            CLOSE
 
-<img id="profileSettingsImage"
-class="profileBig"
-src="basic_p.png">
+        </button>
 
-<p>Choose one you own.</p>
-
-<div id="profileChoices"></div>
+    </div>
 
 </div>
 
-<button class="settingsButton"
-onclick="closeProfileSettings()">
-CLOSE
-</button>
-
-</div>
-</div>
 
 <!-- CARD VIEWER -->
 
-<div id="cardViewer"
-class="cardViewer hidden"
-onclick="closeCardViewer()">
+<div
+    id="cardViewer"
+    class="cardViewer hidden"
+    onclick="closeCardViewer()">
 
-<button class="cardViewerClose"
-onclick="closeCardViewer(event)">
-X
-</button>
+    <button
+        class="cardViewerClose"
+        onclick="closeCardViewer(event)">
 
-<img id="cardViewerImage"
-class="cardViewerImage"
-src=""
-alt=""
-onclick="event.stopPropagation()">
+        X
+
+    </button>
+
+    <img
+        id="cardViewerImage"
+        class="cardViewerImage"
+        src=""
+        alt=""
+        onclick="event.stopPropagation()">
 
 </div>
 
+
 <div id="message"></div>
+
 
 <script type="module">
 
 import {
-initializeApp
+    initializeApp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 import {
-getAuth,
-GoogleAuthProvider,
-signInWithPopup,
-signOut,
-onAuthStateChanged
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 import {
-getFirestore,
-doc,
-getDoc,
-setDoc,
-updateDoc,
-onSnapshot,
-collection as firestoreCollection,
-query,
-where,
-serverTimestamp
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    onSnapshot,
+    collection as firestoreCollection,
+    query,
+    where,
+    serverTimestamp,
+    arrayUnion,
+    arrayRemove
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-const firebaseConfig={
-apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
-authDomain:"dbcc-login.firebaseapp.com",
-databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
-projectId:"dbcc-login",
-storageBucket:"dbcc-login.firebasestorage.app",
-messagingSenderId:"878902780767",
-appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
-measurementId:"G-PT9S1K4E2K"
+
+/* FIREBASE */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",
+
+    authDomain:
+        "dbcc-login.firebaseapp.com",
+
+    databaseURL:
+        "https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+    projectId:
+        "dbcc-login",
+
+    storageBucket:
+        "dbcc-login.firebasestorage.app",
+
+    messagingSenderId:
+        "878902780767",
+
+    appId:
+        "1:878902780767:web:4020d11730e5d9c0ee0cea",
+
+    measurementId:
+        "G-PT9S1K4E2K"
 };
 
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
 
-/* SETTINGS */
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-const STARTING_COINS=50;
-const STARTING_DOLB=0;
-const PACK_PRICE=10;
-const BATTLE_WIN_REWARD=30;
-const BATTLE_HP=100;
+
+/* PROFILE */
+
+const DEFAULT_PROFILE_PIC = "basic_p.png";
+
+
+/* ECONOMY */
+
+const PACK_PRICE = 10;
+const STARTING_COINS = 50;
+
+
+/* =========================
+   DOLL BATTLE DATA
+   ========================= */
+
+const dollBattleData = {
+
+    "Baby Pickels":{
+        types:["Grass"],
+        move:"Baby Food",
+        moveType:"Grass"
+    },
+
+    "Mr. Pickels":{
+        types:["Grass"],
+        move:"Fancy Food",
+        moveType:"Grass"
+    },
+
+    "Wily":{
+        types:["Water"],
+        move:"Small Splash",
+        moveType:"Water"
+    },
+
+    "Will":{
+        types:["Water"],
+        move:"Big Splash",
+        moveType:"Water"
+    },
+
+    "Waffle":{
+        types:["Fire"],
+        move:"Tasty",
+        moveType:"Fire"
+    },
+
+    "Cute Cake":{
+        types:["Fire"],
+        move:"Delicuse",
+        moveType:"Fire"
+    },
+
+    "Buttyr":{
+        types:["Flying","Rock"],
+        move:"Hard Wing",
+        moveType:"Flying"
+    },
+
+    "Blossem":{
+        types:["Flying","Fairy"],
+        move:"Flying Cuteness",
+        moveType:"Flying"
+    },
+
+    "Buzzy":{
+        types:["Flying","Fairy"],
+        move:"Flying Hat",
+        moveType:"Flying"
+    },
+
+    "Nico":{
+        types:["Flying"],
+        move:"Beak Attack",
+        moveType:"Flying"
+    },
+
+    "Choper":{
+        types:["Normal","Fighting"],
+        move:"Hand Combat",
+        moveType:"Fighting"
+    },
+
+    "Bullet":{
+        types:["Normal","Fighting"],
+        move:"Tail Combat",
+        moveType:"Fighting"
+    }
+
+};
+
+
+/*
+    Pokémon-style type effectiveness.
+
+    2 = super effective
+    1 = normal
+    0.5 = not very effective
+    0 = no effect
+*/
+
+const typeChart = {
+
+    Normal:{
+        Rock:0.5,
+        Ghost:0,
+        Steel:0.5
+    },
+
+    Fire:{
+        Grass:2,
+        Ice:2,
+        Bug:2,
+        Steel:2,
+        Fire:0.5,
+        Water:0.5,
+        Rock:0.5,
+        Dragon:0.5
+    },
+
+    Water:{
+        Fire:2,
+        Ground:2,
+        Rock:2,
+        Water:0.5,
+        Grass:0.5,
+        Dragon:0.5
+    },
+
+    Grass:{
+        Water:2,
+        Ground:2,
+        Rock:2,
+        Fire:0.5,
+        Grass:0.5,
+        Poison:0.5,
+        Flying:0.5,
+        Bug:0.5,
+        Dragon:0.5,
+        Steel:0.5
+    },
+
+    Flying:{
+        Grass:2,
+        Fighting:2,
+        Bug:2,
+        Electric:0.5,
+        Rock:0.5,
+        Steel:0.5
+    },
+
+    Fighting:{
+        Normal:2,
+        Rock:2,
+        Steel:2,
+        Ice:2,
+        Dark:2,
+        Flying:0.5,
+        Poison:0.5,
+        Bug:0.5,
+        Psychic:0.5,
+        Fairy:0.5,
+        Ghost:0
+    },
+
+    Fairy:{
+        Fighting:2,
+        Dragon:2,
+        Dark:2,
+        Fire:0.5,
+        Poison:0.5,
+        Steel:0.5
+    },
+
+    Rock:{
+        Fire:2,
+        Ice:2,
+        Flying:2,
+        Bug:2,
+        Fighting:0.5,
+        Ground:0.5,
+        Steel:0.5
+    }
+
+};
+
 
 /* CARDS */
 
-const cards=[
+const cards = [
 
-{name:"Baby Pickels",image:"baby pikels.png",weight:14,price:5,rarity:"doll"},
-{name:"Mr. Pickels",image:"mr. pickels.png",weight:9,price:7,rarity:"doll"},
-{name:"Wily",image:"wily.png",weight:14,price:5,rarity:"doll"},
-{name:"Will",image:"will.png",weight:9,price:7,rarity:"doll"},
-{name:"Waffle",image:"waffle.png",weight:14,price:5,rarity:"doll"},
-{name:"Cute Cake",image:"cute cake.png",weight:9,price:7,rarity:"doll"},
-{name:"Buttyr",image:"buttyr.png",weight:20,price:7,rarity:"doll"},
-{name:"Blossem",image:"blossem.png",weight:20,price:7,rarity:"doll"},
-{name:"Buzzy",image:"buzzy.png",weight:5,price:12,rarity:"doll"},
-{name:"Nico",image:"nico.png",weight:20,price:3,rarity:"doll"},
-{name:"Choper",image:"choper.png",weight:10,price:5,rarity:"doll"},
-{name:"Bullet",image:"bullet.png",weight:10,price:5,rarity:"doll"}
+    {
+        name:"Baby Pickels",
+        image:"baby pikels.png",
+        weight:14,
+        price:5,
+        rarity:"doll"
+    },
+
+    {
+        name:"Mr. Pickels",
+        image:"mr. pickels.png",
+        weight:9,
+        price:7,
+        rarity:"doll"
+    },
+
+    {
+        name:"Wily",
+        image:"wily.png",
+        weight:14,
+        price:5,
+        rarity:"doll"
+    },
+
+    {
+        name:"Will",
+        image:"will.png",
+        weight:9,
+        price:7,
+        rarity:"doll"
+    },
+
+    {
+        name:"Waffle",
+        image:"waffle.png",
+        weight:14,
+        price:5,
+        rarity:"doll"
+    },
+
+    {
+        name:"Cute Cake",
+        image:"cute cake.png",
+        weight:9,
+        price:7,
+        rarity:"doll"
+    },
+
+    {
+        name:"Buttyr",
+        image:"buttyr.png",
+        weight:20,
+        price:7,
+        rarity:"doll"
+    },
+
+    {
+        name:"Blossem",
+        image:"blossem.png",
+        weight:20,
+        price:7,
+        rarity:"doll"
+    },
+
+    {
+        name:"Buzzy",
+        image:"buzzy.png",
+        weight:5,
+        price:12,
+        rarity:"doll"
+    },
+
+    {
+        name:"Nico",
+        image:"nico.png",
+        weight:20,
+        price:3,
+        rarity:"doll"
+    },
+
+    {
+        name:"Choper",
+        image:"choper.png",
+        weight:10,
+        price:5,
+        rarity:"doll"
+    },
+
+    {
+        name:"Bullet",
+        image:"bullet.png",
+        weight:10,
+        price:5,
+        rarity:"doll"
+    }
 
 ];
 
-/* PROFILE PICTURES */
 
-const profilePictures=[
+/* PLAYER STATE */
 
-{
-id:"basic",
-name:"Basic",
-image:"basic_p.png",
-price:0
-},
+let currentUser = null;
+let money = STARTING_COINS;
+let username = "";
+let profilePic = DEFAULT_PROFILE_PIC;
+let collection = [];
+let favorites = [];
+let completedTradeIds = [];
+let friends = [];
+let collectionTab = "all";
+let dexTab = "dolls";
+let activeTrade = null;
+let selectedTradeCards = [];
+let tradeRequests = [];
+let tradeListener = null;
+let friendRequests = [];
+let friendListener = null;
+let applyingTradeIds = new Set();
 
-{
-id:"buzzy",
-name:"Buzzy",
-image:"buzzy_p.png",
-price:100
-}
 
-];
+/* =========================
+   BATTLE STATE
+   ========================= */
 
-/* STATE */
+let battle = null;
 
-let currentUser=null;
-let money=STARTING_COINS;
-let dolb=STARTING_DOLB;
-let username="";
-let profilePic="basic_p.png";
-let ownedProfilePics=["basic_p.png"];
-
-let collection=[];
-let favorites=[];
-let completedTradeIds=[];
-
-let friends=[];
-let friendRequests=[];
-
-let collectionTab="all";
-let dexTab="dolls";
-let shopTab="dolls";
-
-let activeTrade=null;
-let selectedTradeCards=[];
-let tradeRequests=[];
-let tradeListener=null;
-let applyingTradeIds=new Set();
-
-let friendListener=null;
-let battleListener=null;
-
-let battleRequests=[];
-let activeBattle=null;
 
 /* HELPERS */
 
-function createId(){
-return Date.now().toString(36)+Math.random().toString(36).slice(2);
+function createCardId(){
+
+    return Date.now().toString(36) +
+        Math.random().toString(36).slice(2);
+
 }
+
 
 function createCardCopy(name,traded=false){
-return{
-id:createId(),
-name:name,
-traded:traded
-};
+
+    return {
+        id:createCardId(),
+        name:name,
+        traded:traded
+    };
+
 }
+
 
 function getCard(name){
-return cards.find(card=>card.name===name);
+
+    return cards.find(
+        card => card.name === name
+    );
+
 }
+
 
 function escapeHtml(value){
-return String(value)
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
 }
+
 
 function encoded(value){
-return encodeURIComponent(String(value));
+
+    return encodeURIComponent(String(value));
+
 }
 
-window.openEncodedCardViewer=function(image,name){
-openCardViewer(
-decodeURIComponent(image),
-decodeURIComponent(name)
-);
-};
+
+/* MESSAGE */
 
 function showMessage(text){
-const el=document.getElementById("message");
-el.textContent=text;
-el.style.display="block";
-setTimeout(()=>{
-el.style.display="none";
-},2500);
-}
 
-window.openCardViewer=function(image,name){
-const viewer=document.getElementById("cardViewer");
-const imageEl=document.getElementById("cardViewerImage");
+    const el =
+        document.getElementById("message");
 
-imageEl.src=image;
-imageEl.alt=name;
-viewer.classList.remove("hidden");
-};
+    el.textContent = text;
+    el.style.display = "block";
 
-window.closeCardViewer=function(event){
-if(event)event.stopPropagation();
-document.getElementById("cardViewer").classList.add("hidden");
-};
-
-/* AUTH */
-
-window.loginGoogle=async function(){
-
-try{
-
-const provider=new GoogleAuthProvider();
-
-await signInWithPopup(auth,provider);
-
-}catch(error){
-
-console.error(error);
-showMessage(error.message);
+    setTimeout(()=>{
+        el.style.display = "none";
+    },2500);
 
 }
 
-};
 
-window.logout=async function(){
+/* CARD VIEWER */
 
-try{
+window.openEncodedCardViewer =
+function(image,name){
 
-stopTradeListener();
-stopFriendListener();
-stopBattleListener();
-
-await signOut(auth);
-
-}catch(error){
-
-console.error(error);
-
-}
+    openCardViewer(
+        decodeURIComponent(image),
+        decodeURIComponent(name)
+    );
 
 };
+
+
+window.openCardViewer =
+function(image,name){
+
+    const viewer =
+        document.getElementById("cardViewer");
+
+    const imageEl =
+        document.getElementById("cardViewerImage");
+
+    imageEl.src = image;
+    imageEl.alt = name;
+
+    viewer.classList.remove("hidden");
+
+};
+
+
+window.closeCardViewer =
+function(event){
+
+    if(event){
+        event.stopPropagation();
+    }
+
+    document
+        .getElementById("cardViewer")
+        .classList.add("hidden");
+
+};
+
+
+/* LOGIN */
+
+window.loginGoogle =
+async function(){
+
+    try{
+
+        const provider =
+            new GoogleAuthProvider();
+
+        await signInWithPopup(
+            auth,
+            provider
+        );
+
+    }catch(error){
+
+        console.error(error);
+        showMessage(error.message);
+
+    }
+
+};
+
+
+/* LOGOUT */
+
+window.logout =
+async function(){
+
+    try{
+
+        await savePlayerData();
+        await signOut(auth);
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+};
+
 
 /* USERNAME */
 
 async function askForUsername(){
 
-while(!username){
+    while(!username){
 
-let chosen=prompt("Choose your unique username:");
+        let chosen =
+            prompt("Choose your unique username:");
 
-if(chosen===null)chosen="";
+        if(chosen === null){
+            chosen = "";
+        }
 
-chosen=chosen.trim();
+        chosen = chosen.trim();
 
-if(chosen.length<3){
-alert("Username must be at least 3 characters.");
-continue;
+        if(chosen.length < 3){
+            alert("Username must be at least 3 characters.");
+            continue;
+        }
+
+        if(chosen.length > 20){
+            alert("Username must be 20 characters or less.");
+            continue;
+        }
+
+        if(!/^[a-zA-Z0-9_]+$/.test(chosen)){
+            alert("Only letters, numbers and _ are allowed.");
+            continue;
+        }
+
+        const normalized =
+            chosen.toLowerCase();
+
+        const usernameRef =
+            doc(
+                db,
+                "usernames",
+                normalized
+            );
+
+        const usernameSnap =
+            await getDoc(usernameRef);
+
+        if(
+            usernameSnap.exists() &&
+            usernameSnap.data().uid !== currentUser.uid
+        ){
+
+            alert("That username is already taken.");
+            continue;
+
+        }
+
+        await setDoc(
+            usernameRef,
+            {
+                uid:currentUser.uid,
+                username:chosen
+            },
+            {merge:true}
+        );
+
+        username = chosen;
+
+    }
+
 }
 
-if(chosen.length>20){
-alert("Username must be 20 characters or less.");
-continue;
-}
-
-if(!/^[a-zA-Z0-9_]+$/.test(chosen)){
-alert("Only letters, numbers and _ are allowed.");
-continue;
-}
-
-const normalized=chosen.toLowerCase();
-
-const usernameRef=doc(db,"usernames",normalized);
-const usernameSnap=await getDoc(usernameRef);
-
-if(usernameSnap.exists() &&
-usernameSnap.data().uid!==currentUser.uid){
-
-alert("That username is already taken.");
-continue;
-
-}
-
-await setDoc(usernameRef,{
-uid:currentUser.uid,
-username:chosen
-},{merge:true});
-
-username=chosen;
-
-break;
-
-}
-
-}
 
 async function ensureUsernameDocument(){
 
-if(!currentUser||!username)return;
+    if(!currentUser || !username){
+        return;
+    }
 
-await setDoc(
-doc(db,"usernames",username.toLowerCase()),
-{
-uid:currentUser.uid,
-username:username
-},
-{merge:true}
-);
+    await setDoc(
+        doc(
+            db,
+            "usernames",
+            username.toLowerCase()
+        ),
+        {
+            uid:currentUser.uid,
+            username:username
+        },
+        {merge:true}
+    );
 
 }
 
-/* COLLECTION */
+
+/* COLLECTION NORMALIZATION */
 
 function normalizeCollection(data){
 
-if(!Array.isArray(data))return[];
+    if(!Array.isArray(data)){
+        return [];
+    }
 
-return data.map(item=>{
+    return data
+        .map(item=>{
 
-if(typeof item==="string"){
-return createCardCopy(item);
+            if(typeof item === "string"){
+                return createCardCopy(item);
+            }
+
+            return {
+                id:item.id || createCardId(),
+                name:item.name,
+                traded:item.traded === true
+            };
+
+        })
+        .filter(item=>getCard(item.name));
+
 }
 
-return{
-id:item.id||createId(),
-name:item.name,
-traded:item.traded===true
-};
 
-}).filter(item=>getCard(item.name));
-
-}
-
-/* PLAYER DATA */
+/* LOAD PLAYER */
 
 async function loadPlayerData(){
 
-const ref=doc(db,"players",currentUser.uid);
-const snap=await getDoc(ref);
+    const ref =
+        doc(
+            db,
+            "players",
+            currentUser.uid
+        );
 
-if(!snap.exists()){
+    const snap =
+        await getDoc(ref);
 
-money=STARTING_COINS;
-dolb=STARTING_DOLB;
-collection=[];
-favorites=[];
-completedTradeIds=[];
-friends=[];
-friendRequests=[];
-username="";
-profilePic="basic_p.png";
-ownedProfilePics=["basic_p.png"];
+    if(!snap.exists()){
 
-await setDoc(ref,{
-money,
-dolb,
-collection,
-favorites,
-completedTradeIds,
-friends,
-friendRequests,
-username,
-profilePic,
-ownedProfilePics
-});
+        money = STARTING_COINS;
+        collection = [];
+        favorites = [];
+        completedTradeIds = [];
+        friends = [];
+        username = "";
+        profilePic = DEFAULT_PROFILE_PIC;
 
-}else{
+        await setDoc(
+            ref,
+            {
+                money:money,
+                collection:collection,
+                favorites:favorites,
+                completedTradeIds:completedTradeIds,
+                friends:friends,
+                username:username,
+                profilePic:profilePic
+            }
+        );
 
-const data=snap.data();
+    }else{
 
-money=typeof data.money==="number"
-?data.money:STARTING_COINS;
+        const data = snap.data();
 
-dolb=typeof data.dolb==="number"
-?data.dolb:STARTING_DOLB;
+        money =
+            typeof data.money === "number"
+                ? data.money
+                : STARTING_COINS;
 
-collection=normalizeCollection(data.collection);
+        collection =
+            normalizeCollection(data.collection);
 
-favorites=Array.isArray(data.favorites)
-?data.favorites:[];
+        favorites =
+            Array.isArray(data.favorites)
+                ? data.favorites
+                : [];
 
-completedTradeIds=Array.isArray(data.completedTradeIds)
-?data.completedTradeIds:[];
+        completedTradeIds =
+            Array.isArray(data.completedTradeIds)
+                ? data.completedTradeIds
+                : [];
 
-friends=Array.isArray(data.friends)
-?data.friends:[];
+        friends =
+            Array.isArray(data.friends)
+                ? data.friends
+                : [];
 
-friendRequests=Array.isArray(data.friendRequests)
-?data.friendRequests:[];
+        username =
+            data.username || "";
 
-username=data.username||"";
+        profilePic =
+            data.profilePic ||
+            DEFAULT_PROFILE_PIC;
 
-profilePic=data.profilePic||"basic_p.png";
+    }
 
-ownedProfilePics=Array.isArray(data.ownedProfilePics)
-?data.ownedProfilePics:["basic_p.png"];
+    if(!username){
+        await askForUsername();
+    }
 
-if(!ownedProfilePics.includes("basic_p.png"))
-ownedProfilePics.push("basic_p.png");
+    await ensureUsernameDocument();
+
+    await savePlayerData();
 
 }
 
-if(!username){
-await askForUsername();
-}
 
-await ensureUsernameDocument();
-await savePlayerData();
-
-}
+/* SAVE PLAYER */
 
 async function savePlayerData(){
 
-if(!currentUser)return;
+    if(!currentUser){
+        return;
+    }
 
-await setDoc(
-doc(db,"players",currentUser.uid),
-{
-money,
-dolb,
-collection,
-favorites,
-completedTradeIds,
-friends,
-friendRequests,
-username,
-profilePic,
-ownedProfilePics
-},
-{merge:true}
+    await setDoc(
+        doc(
+            db,
+            "players",
+            currentUser.uid
+        ),
+        {
+            money:money,
+            collection:collection,
+            favorites:favorites,
+            completedTradeIds:completedTradeIds,
+            friends:friends,
+            username:username,
+            profilePic:profilePic
+        },
+        {merge:true}
+    );
+
+}
+
+
+/* AUTH */
+
+onAuthStateChanged(
+    auth,
+    async user=>{
+
+        if(!user){
+
+            currentUser = null;
+
+            stopTradeListener();
+            stopFriendListener();
+
+            activeTrade = null;
+            tradeRequests = [];
+            friendRequests = [];
+
+            document
+                .getElementById("loginScreen")
+                .classList.remove("hidden");
+
+            document
+                .getElementById("gameScreen")
+                .classList.add("hidden");
+
+            return;
+
+        }
+
+        currentUser = user;
+
+        try{
+
+            await loadPlayerData();
+
+            document
+                .getElementById("loginScreen")
+                .classList.add("hidden");
+
+            document
+                .getElementById("gameScreen")
+                .classList.remove("hidden");
+
+            document
+                .getElementById("accountEmail")
+                .textContent =
+                user.email || "";
+
+            updateUI();
+
+            startTradeListener();
+            startFriendListener();
+
+        }catch(error){
+
+            console.error(error);
+
+            alert(
+                "Could not load your account:\n" +
+                error.message
+            );
+
+        }
+
+    }
 );
 
-}
-
-/* AUTH STATE */
-
-onAuthStateChanged(auth,async user=>{
-
-if(!user){
-
-currentUser=null;
-
-stopTradeListener();
-stopFriendListener();
-stopBattleListener();
-
-activeTrade=null;
-tradeRequests=[];
-friendRequests=[];
-battleRequests=[];
-
-document.getElementById("loginScreen")
-.classList.remove("hidden");
-
-document.getElementById("gameScreen")
-.classList.add("hidden");
-
-return;
-
-}
-
-currentUser=user;
-
-try{
-
-await loadPlayerData();
-
-document.getElementById("loginScreen")
-.classList.add("hidden");
-
-document.getElementById("gameScreen")
-.classList.remove("hidden");
-
-document.getElementById("accountEmail").textContent=
-user.email||"";
-
-updateUI();
-
-startTradeListener();
-startFriendListener();
-startBattleListener();
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"Could not load your account:\n"+
-error.message
-);
-
-}
-
-});
 
 /* UI */
 
 function updateUI(){
 
-document.getElementById("money").textContent=money;
-document.getElementById("dolb").textContent=dolb;
+    document.getElementById("money").textContent =
+        money;
 
-document.getElementById("usernameDisplay").textContent=username;
-document.getElementById("settingsUsername").textContent=username;
-document.getElementById("topUsername").textContent=username;
+    document.getElementById("usernameDisplay").textContent =
+        username;
 
-document.getElementById("topProfilePic").src=profilePic;
+    document.getElementById("settingsUsername").textContent =
+        username;
 
-renderCollection();
-renderDex();
-renderShop();
-renderFriends();
-renderFriendRequests();
-renderIncomingBattles();
+    document.getElementById("homeUsername").textContent =
+        username;
 
-if(activeBattle)renderBattleArena();
+    document.getElementById("homeProfilePic").src =
+        profilePic;
+
+    document.getElementById("settingsProfilePic").src =
+        profilePic;
+
+    renderCollection();
+    renderDex();
+    renderFriends();
 
 }
 
-window.showPage=function(page){
 
-document.querySelectorAll(".page")
-.forEach(el=>el.classList.add("hidden"));
+/* PAGE SWITCHING */
 
-const target=document.getElementById(page+"Page");
+window.showPage =
+function(page){
 
-if(target)target.classList.remove("hidden");
+    document
+        .querySelectorAll(".page")
+        .forEach(el=>{
+            el.classList.add("hidden");
+        });
 
-if(page==="collection")renderCollection();
-if(page==="dex")renderDex();
-if(page==="shop")renderShop();
+    const target =
+        document.getElementById(page+"Page");
 
-if(page==="friends"){
-renderFriends();
-renderFriendRequests();
-}
+    if(target){
+        target.classList.remove("hidden");
+    }
 
-if(page==="battle"){
-renderIncomingBattles();
-if(activeBattle)renderBattleArena();
-}
+    if(page === "battle"){
 
-if(page==="trade"){
-renderIncomingTrades();
-renderActiveTrade();
-}
+        renderBattlePage();
+
+    }
+
+    if(page === "collection"){
+        renderCollection();
+    }
+
+    if(page === "dex"){
+        renderDex();
+    }
+
+    if(page === "trade"){
+        renderIncomingTrades();
+        renderActiveTrade();
+    }
+
+    if(page === "friends"){
+        renderFriendRequests();
+        renderFriends();
+    }
 
 };
+
+
+/* =========================
+   MOVE BATTLE
+   ========================= */
+
+function getOwnedBattleDolls(){
+
+    const names = [];
+
+    for(const copy of collection){
+
+        if(
+            dollBattleData[copy.name] &&
+            !names.includes(copy.name)
+        ){
+
+            names.push(copy.name);
+
+        }
+
+    }
+
+    return cards.filter(
+        card=>names.includes(card.name)
+    );
+
+}
+
+
+function renderBattlePage(){
+
+    const container =
+        document.getElementById("battleContent");
+
+    if(!container){
+        return;
+    }
+
+    if(battle){
+
+        renderBattleArena();
+        return;
+
+    }
+
+    const owned =
+        getOwnedBattleDolls();
+
+    container.innerHTML = `
+
+        <div class="battleIntro">
+
+            <h1>Move Battle</h1>
+
+            <p>
+                Pick a Doll and choose its signature move
+                yourself during battle.
+            </p>
+
+            <p>
+                <b>Easy:</b> Win 15 coins
+                &nbsp; | &nbsp;
+                <b>Hard:</b> Win 50 coins
+            </p>
+
+            <h2>Choose Your Doll</h2>
+
+            ${
+                owned.length
+                ?
+                `<div class="battleSelectGrid">
+
+                    ${
+                        owned.map(card=>{
+
+                            const data =
+                                dollBattleData[card.name];
+
+                            return `
+
+                                <div
+                                    class="battleSelectCard"
+                                    onclick="chooseBattleDoll('${escapeHtml(card.name)}')">
+
+                                    <img
+                                        src="${escapeHtml(card.image)}"
+                                        alt="${escapeHtml(card.name)}">
+
+                                    <h3>
+                                        ${escapeHtml(card.name)}
+                                    </h3>
+
+                                    <div>
+
+                                        ${
+                                            data.types.map(type=>
+                                                `<span class="typeBadge">
+                                                    ${escapeHtml(type)}
+                                                </span>`
+                                            ).join("")
+                                        }
+
+                                    </div>
+
+                                    <p>
+                                        Signature:
+                                        <b>${escapeHtml(data.move)}</b>
+                                    </p>
+
+                                </div>
+
+                            `;
+
+                        }).join("")
+
+                    }
+
+                </div>`
+                :
+                `
+                    <div class="tradeNotice">
+
+                        <h2>No Battle Dolls Yet</h2>
+
+                        <p>
+                            Open packs and collect a Doll before
+                            entering a battle.
+                        </p>
+
+                    </div>
+                `
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+window.chooseBattleDoll =
+function(name){
+
+    if(!dollBattleData[name]){
+        return;
+    }
+
+    battle = {
+        selectedName:name,
+        difficulty:null,
+        opponentName:null,
+        playerHP:100,
+        opponentHP:100,
+        log:"Choose a difficulty to begin.",
+        typing:false,
+        finished:false,
+        moveUsed:false
+    };
+
+    renderBattleDifficulty();
+
+};
+
+
+function renderBattleDifficulty(){
+
+    const container =
+        document.getElementById("battleContent");
+
+    const data =
+        dollBattleData[battle.selectedName];
+
+    const card =
+        getCard(battle.selectedName);
+
+    container.innerHTML = `
+
+        <div class="battleIntro">
+
+            <h1>
+                ${escapeHtml(battle.selectedName)}
+            </h1>
+
+            <p>
+                Type:
+                ${
+                    data.types.map(type=>
+                        `<span class="typeBadge">
+                            ${escapeHtml(type)}
+                        </span>`
+                    ).join("")
+                }
+            </p>
+
+            <p>
+                Signature Move:
+                <b>${escapeHtml(data.move)}</b>
+                (${escapeHtml(data.moveType)})
+            </p>
+
+            <img
+                src="${escapeHtml(card.image)}"
+                style="
+                    width:min(100%,250px);
+                    height:250px;
+                    object-fit:contain;
+                    display:block;
+                    margin:10px auto;
+                    background:#091a2d;
+                    border-radius:15px;
+                ">
+
+            <h2>Choose Difficulty</h2>
+
+            <div class="battleDifficulty">
+
+                <button
+                    class="difficultyButton easyButton"
+                    onclick="beginBattle('easy')">
+
+                    EASY
+                    <br>
+                    <small>Win 15 coins</small>
+
+                </button>
+
+                <button
+                    class="difficultyButton hardButton"
+                    onclick="beginBattle('hard')">
+
+                    HARD
+                    <br>
+                    <small>Win 50 coins</small>
+
+                </button>
+
+            </div>
+
+            <button
+                class="battleBackButton"
+                onclick="cancelBattle()">
+
+                BACK
+
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+window.startBattle =
+function(difficulty){
+
+    const owned =
+        getOwnedBattleDolls();
+
+    if(!owned.length){
+
+        showMessage(
+            "You need a Doll to battle."
+        );
+
+        return;
+
+    }
+
+    /*
+        If the user presses Easy/Hard on the first
+        screen, we first make them choose a Doll.
+    */
+
+    battle = null;
+
+    const container =
+        document.getElementById("battleContent");
+
+    container.innerHTML = `
+
+        <div class="battleIntro">
+
+            <h1>Choose Your Doll</h1>
+
+            <p>
+                You selected
+                <b>${difficulty.toUpperCase()}</b>
+                difficulty.
+            </p>
+
+            <div class="battleSelectGrid">
+
+                ${
+                    owned.map(card=>{
+
+                        const data =
+                            dollBattleData[card.name];
+
+                        return `
+
+                            <div
+                                class="battleSelectCard"
+                                onclick="chooseBattleForDifficulty(
+                                    '${escapeHtml(card.name)}',
+                                    '${difficulty}'
+                                )">
+
+                                <img
+                                    src="${escapeHtml(card.image)}"
+                                    alt="${escapeHtml(card.name)}">
+
+                                <h3>
+                                    ${escapeHtml(card.name)}
+                                </h3>
+
+                                <div>
+
+                                    ${
+                                        data.types.map(type=>
+                                            `<span class="typeBadge">
+                                                ${escapeHtml(type)}
+                                            </span>`
+                                        ).join("")
+                                    }
+
+                                </div>
+
+                                <p>
+                                    ${escapeHtml(data.move)}
+                                </p>
+
+                            </div>
+
+                        `;
+
+                    }).join("")
+
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+};
+
+
+window.chooseBattleForDifficulty =
+function(name,difficulty){
+
+    const opponents =
+        cards
+            .filter(card=>
+                card.name !== name &&
+                dollBattleData[card.name]
+            );
+
+    const opponent =
+        opponents[
+            Math.floor(
+                Math.random()*opponents.length
+            )
+        ];
+
+    battle = {
+
+        selectedName:name,
+
+        difficulty:difficulty,
+
+        opponentName:opponent.name,
+
+        playerHP:100,
+
+        opponentHP:100,
+
+        log:"The battle is about to begin...",
+
+        typing:true,
+
+        finished:false,
+
+        moveUsed:false
+
+    };
+
+    renderBattleArena();
+
+    /*
+        Typing animation.
+    */
+
+    setTimeout(()=>{
+
+        if(!battle || battle.finished){
+            return;
+        }
+
+        battle.typing = false;
+
+        battle.log =
+            battle.selectedName +
+            " is ready! Choose your signature move.";
+
+        renderBattleArena();
+
+    },1800);
+
+};
+
+
+window.beginBattle =
+function(difficulty){
+
+    const name =
+        battle?.selectedName;
+
+    if(!name){
+        return;
+    }
+
+    chooseBattleForDifficulty(
+        name,
+        difficulty
+    );
+
+};
+
+
+function renderBattleArena(){
+
+    const container =
+        document.getElementById("battleContent");
+
+    if(!battle){
+        renderBattlePage();
+        return;
+    }
+
+    const playerCard =
+        getCard(battle.selectedName);
+
+    const opponentCard =
+        getCard(battle.opponentName);
+
+    const playerData =
+        dollBattleData[battle.selectedName];
+
+    const opponentData =
+        dollBattleData[battle.opponentName];
+
+    const reward =
+        battle.difficulty === "hard"
+            ? 50
+            : 15;
+
+    const playerHP =
+        Math.max(0,battle.playerHP);
+
+    const opponentHP =
+        Math.max(0,battle.opponentHP);
+
+    container.innerHTML = `
+
+        <div class="battleArena">
+
+            <h1>Move Battle</h1>
+
+            <p style="text-align:center">
+                ${
+                    battle.difficulty === "hard"
+                        ? "HARD BATTLE — Win 50 coins"
+                        : "EASY BATTLE — Win 15 coins"
+                }
+            </p>
+
+            <div class="battleTop">
+
+                <div class="battleFighter">
+
+                    <h2>YOU</h2>
+
+                    <img
+                        src="${escapeHtml(playerCard.image)}"
+                        alt="${escapeHtml(battle.selectedName)}">
+
+                    <div class="battleName">
+                        ${escapeHtml(battle.selectedName)}
+                    </div>
+
+                    <div class="battleTypes">
+
+                        ${
+                            playerData.types.map(type=>
+                                `<span class="typeBadge">
+                                    ${escapeHtml(type)}
+                                </span>`
+                            ).join("")
+                        }
+
+                    </div>
+
+                    <div>
+                        HP: ${playerHP}/100
+                    </div>
+
+                    <div class="hpBarOuter">
+
+                        <div
+                            class="hpBar"
+                            style="width:${playerHP}%">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="battleFighter">
+
+                    <h2>OPPONENT</h2>
+
+                    <img
+                        src="${escapeHtml(opponentCard.image)}"
+                        alt="${escapeHtml(battle.opponentName)}">
+
+                    <div class="battleName">
+                        ${escapeHtml(battle.opponentName)}
+                    </div>
+
+                    <div class="battleTypes">
+
+                        ${
+                            opponentData.types.map(type=>
+                                `<span class="typeBadge">
+                                    ${escapeHtml(type)}
+                                </span>`
+                            ).join("")
+                        }
+
+                    </div>
+
+                    <div>
+                        HP: ${opponentHP}/100
+                    </div>
+
+                    <div class="hpBarOuter">
+
+                        <div
+                            class="hpBar"
+                            style="width:${opponentHP}%">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="battleLog">
+
+                ${
+                    battle.typing
+                        ? `
+                            <span id="battleTyping">
+                                ${escapeHtml(battle.log)}
+                            </span>
+                        `
+                        : escapeHtml(battle.log)
+                }
+
+            </div>
+
+
+            ${
+                battle.finished
+                    ? renderBattleResult(reward)
+                    :
+                    `
+                        <div class="moveArea">
+
+                            <h2 style="text-align:center">
+                                Signature Move
+                            </h2>
+
+                            <p style="text-align:center">
+                                Choose when to attack!
+                            </p>
+
+                            <button
+                                class="signatureMove"
+                                onclick="useSignatureMove()"
+                                ${
+                                    battle.typing ||
+                                    battle.moveUsed
+                                        ? "disabled"
+                                        : ""
+                                }>
+
+                                <div class="signatureMoveName">
+                                    ${escapeHtml(playerData.move)}
+                                </div>
+
+                                <div class="signatureMoveType">
+                                    ${escapeHtml(playerData.moveType)}
+                                    TYPE MOVE
+                                </div>
+
+                            </button>
+
+                            ${
+                                battle.moveUsed
+                                    ? `
+                                        <p style="
+                                            text-align:center;
+                                            margin-bottom:0;
+                                        ">
+                                            You already used your move.
+                                        </p>
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+                    `
+            }
+
+
+            ${
+                !battle.finished
+                    ? `
+                        <button
+                            class="battleBackButton"
+                            onclick="cancelBattle()">
+
+                            LEAVE BATTLE
+
+                        </button>
+                    `
+                    : ""
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/*
+    Calculate Pokémon-style effectiveness
+    against every defending type.
+
+    Example:
+    Flying vs Blossem(Flying/Fairy)
+    = 0.5 against Flying × 1 against Fairy
+    = 0.5
+*/
+
+function getTypeEffectiveness(
+    moveType,
+    defenderTypes
+){
+
+    let multiplier = 1;
+
+    for(const defenderType of defenderTypes){
+
+        const row =
+            typeChart[moveType];
+
+        if(row && row[defenderType] !== undefined){
+
+            multiplier *= row[defenderType];
+
+        }
+
+    }
+
+    return multiplier;
+
+}
+
+
+function effectivenessText(multiplier){
+
+    if(multiplier === 0){
+        return "It has no effect!";
+
+    }
+
+    if(multiplier > 1){
+        return "It's SUPER EFFECTIVE!";
+
+    }
+
+    if(multiplier < 1){
+        return "It's NOT VERY EFFECTIVE...";
+
+    }
+
+    return "It's a normal hit!";
+
+}
+
+
+function calculateBattleDamage(
+    moveType,
+    defenderTypes,
+    difficulty
+){
+
+    const effectiveness =
+        getTypeEffectiveness(
+            moveType,
+            defenderTypes
+        );
+
+    /*
+        Base damage is higher on Hard.
+
+        Easy:
+        25 base
+
+        Hard:
+        30 base
+
+        Pokémon-style effectiveness then
+        multiplies the damage.
+    */
+
+    const base =
+        difficulty === "hard"
+            ? 30
+            : 25;
+
+    return {
+        damage:Math.max(
+            0,
+            Math.round(base * effectiveness)
+        ),
+        effectiveness:effectiveness
+    };
+
+}
+
+
+window.useSignatureMove =
+function(){
+
+    if(
+        !battle ||
+        battle.finished ||
+        battle.typing ||
+        battle.moveUsed
+    ){
+        return;
+    }
+
+    const playerData =
+        dollBattleData[battle.selectedName];
+
+    const opponentData =
+        dollBattleData[battle.opponentName];
+
+    battle.moveUsed = true;
+
+    const result =
+        calculateBattleDamage(
+            playerData.moveType,
+            opponentData.types,
+            battle.difficulty
+        );
+
+    battle.opponentHP =
+        Math.max(
+            0,
+            battle.opponentHP - result.damage
+        );
+
+    battle.log =
+        battle.selectedName +
+        " uses " +
+        playerData.move +
+        "!";
+
+    renderBattleArena();
+
+    /*
+        Give the attack a short delay,
+        then let the opponent respond.
+    */
+
+    setTimeout(()=>{
+
+        if(!battle || battle.finished){
+            return;
+        }
+
+        if(battle.opponentHP <= 0){
+
+            finishBattle(true);
+            return;
+
+        }
+
+        opponentAttack();
+
+    },1200);
+
+};
+
+
+function opponentAttack(){
+
+    if(!battle || battle.finished){
+        return;
+    }
+
+    const opponentData =
+        dollBattleData[battle.opponentName];
+
+    const playerData =
+        dollBattleData[battle.selectedName];
+
+    /*
+        Opponent uses its signature move
+        after the player attacks.
+    */
+
+    const result =
+        calculateBattleDamage(
+            opponentData.moveType,
+            playerData.types,
+            battle.difficulty
+        );
+
+    battle.playerHP =
+        Math.max(
+            0,
+            battle.playerHP - result.damage
+        );
+
+    battle.log =
+        battle.opponentName +
+        " uses " +
+        opponentData.move +
+        "! " +
+        effectivenessText(
+            result.effectiveness
+        );
+
+    renderBattleArena();
+
+    setTimeout(()=>{
+
+        if(!battle || battle.finished){
+            return;
+        }
+
+        if(battle.playerHP <= 0){
+
+            finishBattle(false);
+            return;
+
+        }
+
+        /*
+            After the opponent attacks,
+            your signature move becomes available again.
+        */
+
+        battle.moveUsed = false;
+
+        battle.log =
+            battle.selectedName +
+            " is ready. Choose your signature move!";
+
+        renderBattleArena();
+
+    },1200);
+
+}
+
+
+async function finishBattle(playerWon){
+
+    if(!battle){
+        return;
+    }
+
+    battle.finished = true;
+
+    const reward =
+        battle.difficulty === "hard"
+            ? 50
+            : 15;
+
+    if(playerWon){
+
+        money += reward;
+
+        battle.log =
+            battle.selectedName +
+            " won the battle!";
+
+        await savePlayerData();
+        updateUI();
+
+    }else{
+
+        battle.log =
+            battle.selectedName +
+            " lost the battle.";
+
+    }
+
+    renderBattleArena();
+
+}
+
+
+function renderBattleResult(reward){
+
+    if(
+        battle.playerHP > 0 &&
+        battle.opponentHP <= 0
+    ){
+
+        return `
+
+            <div class="battleResult">
+
+                <div class="battleWin">
+                    YOU WIN!
+                </div>
+
+                <div class="rewardText">
+                    +${reward} coins
+                </div>
+
+                <button
+                    class="signatureMove"
+                    onclick="endBattle()">
+
+                    BATTLE AGAIN
+
+                </button>
+
+            </div>
+
+        `;
+
+    }
+
+    return `
+
+        <div class="battleResult">
+
+            <div class="battleWin">
+                YOU LOST
+            </div>
+
+            <p>
+                Better luck next time!
+            </p>
+
+            <button
+                class="signatureMove"
+                onclick="endBattle()">
+
+                TRY AGAIN
+
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+window.endBattle =
+function(){
+
+    battle = null;
+
+    renderBattlePage();
+
+};
+
+
+window.cancelBattle =
+function(){
+
+    battle = null;
+
+    renderBattlePage();
+
+};
+
 
 /* PACK */
 
 function weightedRandomCard(){
 
-const totalWeight=cards.reduce(
-(sum,card)=>sum+card.weight,0
-);
+    const totalWeight =
+        cards.reduce(
+            (sum,card)=>sum+card.weight,
+            0
+        );
 
-let random=Math.random()*totalWeight;
+    let random =
+        Math.random()*totalWeight;
 
-for(const card of cards){
+    for(const card of cards){
 
-random-=card.weight;
+        random -= card.weight;
 
-if(random<=0)return card;
+        if(random <= 0){
+            return card;
+        }
 
-}
+    }
 
-return cards[cards.length-1];
-
-}
-
-window.openPack=async function(){
-
-if(money<PACK_PRICE){
-
-showMessage("Not enough coins.");
-return;
+    return cards[cards.length-1];
 
 }
 
-money-=PACK_PRICE;
 
-const newCards=[];
+window.openPack =
+async function(){
 
-for(let i=0;i<3;i++){
+    if(money < PACK_PRICE){
 
-const card=weightedRandomCard();
+        showMessage("Not enough coins.");
+        return;
 
-collection.push(createCardCopy(card.name));
+    }
 
-newCards.push(card);
+    money -= PACK_PRICE;
 
-}
+    const newCards = [];
 
-await savePlayerData();
-updateUI();
-showPackResults(newCards);
+    for(let i=0;i<3;i++){
+
+        const card =
+            weightedRandomCard();
+
+        collection.push(
+            createCardCopy(card.name)
+        );
+
+        newCards.push(card);
+
+    }
+
+    await savePlayerData();
+
+    updateUI();
+
+    showPackResults(newCards);
 
 };
+
+
+/* PACK RESULTS */
 
 function showPackResults(pulledCards){
 
-const overlay=document.createElement("div");
+    const overlay =
+        document.createElement("div");
 
-overlay.style.position="fixed";
-overlay.style.inset="0";
-overlay.style.background="rgba(0,0,0,.94)";
-overlay.style.zIndex="4000";
-overlay.style.display="flex";
-overlay.style.flexDirection="column";
-overlay.style.alignItems="center";
-overlay.style.justifyContent="center";
-overlay.style.padding="20px";
-overlay.style.overflowY="auto";
+    Object.assign(
+        overlay.style,
+        {
+            position:"fixed",
+            inset:"0",
+            background:"rgba(0,0,0,.94)",
+            zIndex:"4000",
+            display:"flex",
+            flexDirection:"column",
+            alignItems:"center",
+            justifyContent:"center",
+            padding:"20px",
+            overflowY:"auto"
+        }
+    );
 
-const title=document.createElement("h2");
-title.textContent="You got:";
-overlay.appendChild(title);
+    const title =
+        document.createElement("h2");
 
-const grid=document.createElement("div");
+    title.textContent = "You got:";
 
-grid.style.display="grid";
-grid.style.gridTemplateColumns="repeat(3,minmax(0,1fr))";
-grid.style.gap="15px";
-grid.style.width="min(100%,900px)";
+    overlay.appendChild(title);
 
-pulledCards.forEach(card=>{
+    const grid =
+        document.createElement("div");
 
-const box=document.createElement("div");
+    Object.assign(
+        grid.style,
+        {
+            display:"grid",
+            gridTemplateColumns:"repeat(3,minmax(0,1fr))",
+            gap:"15px",
+            width:"min(100%,900px)"
+        }
+    );
 
-box.style.background="#10243d";
-box.style.borderRadius="15px";
-box.style.padding="10px";
-box.style.textAlign="center";
+    pulledCards.forEach(card=>{
 
-const image=document.createElement("img");
+        const box =
+            document.createElement("div");
 
-image.src=card.image;
-image.alt=card.name;
-image.style.width="100%";
-image.style.maxHeight="55vh";
-image.style.objectFit="contain";
-image.style.borderRadius="10px";
-image.style.cursor="pointer";
+        Object.assign(
+            box.style,
+            {
+                background:"#10243d",
+                borderRadius:"15px",
+                padding:"10px",
+                textAlign:"center"
+            }
+        );
 
-image.onclick=event=>{
-event.stopPropagation();
-openCardViewer(card.image,card.name);
-};
+        const image =
+            document.createElement("img");
 
-box.appendChild(image);
-grid.appendChild(box);
+        image.src = card.image;
+        image.alt = card.name;
 
-});
+        Object.assign(
+            image.style,
+            {
+                width:"100%",
+                maxHeight:"55vh",
+                objectFit:"contain",
+                borderRadius:"10px",
+                cursor:"pointer"
+            }
+        );
 
-overlay.appendChild(grid);
+        image.onclick = event=>{
 
-const close=document.createElement("button");
+            event.stopPropagation();
 
-close.textContent="CONTINUE";
-close.style.marginTop="20px";
-close.style.background="#2674d9";
-close.style.color="white";
+            openCardViewer(
+                card.image,
+                card.name
+            );
 
-close.onclick=()=>overlay.remove();
+        };
 
-overlay.appendChild(close);
+        box.appendChild(image);
+        grid.appendChild(box);
 
-overlay.onclick=event=>{
-if(event.target===overlay)overlay.remove();
-};
+    });
 
-document.body.appendChild(overlay);
+    overlay.appendChild(grid);
+
+    const closeButton =
+        document.createElement("button");
+
+    closeButton.textContent = "CONTINUE";
+
+    Object.assign(
+        closeButton.style,
+        {
+            marginTop:"20px",
+            background:"#2674d9",
+            color:"white"
+        }
+    );
+
+    closeButton.onclick =
+        ()=>overlay.remove();
+
+    overlay.appendChild(closeButton);
+
+    overlay.onclick = event=>{
+
+        if(event.target === overlay){
+            overlay.remove();
+        }
+
+    };
+
+    document.body.appendChild(overlay);
 
 }
+
 
 /* COLLECTION */
 
-window.setCollectionTab=function(tab){
+window.setCollectionTab =
+function(tab){
 
-collectionTab=tab;
+    collectionTab = tab;
 
-document.getElementById("collectionAllButton")
-.classList.toggle("active",tab==="all");
+    document
+        .getElementById("collectionAllButton")
+        .classList.toggle(
+            "active",
+            tab === "all"
+        );
 
-document.getElementById("collectionFavoritesButton")
-.classList.toggle("active",tab==="favorites");
+    document
+        .getElementById("collectionFavoritesButton")
+        .classList.toggle(
+            "active",
+            tab === "favorites"
+        );
 
-renderCollection();
+    renderCollection();
 
 };
+
 
 function getCollectionCounts(){
 
-const counts={};
+    const counts = {};
 
-for(const copy of collection){
-counts[copy.name]=(counts[copy.name]||0)+1;
+    for(const copy of collection){
+
+        counts[copy.name] =
+            (counts[copy.name] || 0) + 1;
+
+    }
+
+    return counts;
+
 }
 
-return counts;
-
-}
 
 function getFirstCopy(name){
-return collection.find(copy=>copy.name===name);
+
+    return collection.find(
+        copy=>copy.name === name
+    );
+
 }
+
 
 function renderCollection(){
 
-const grid=document.getElementById("collectionGrid");
+    const grid =
+        document.getElementById("collectionGrid");
 
-if(!grid)return;
+    if(!grid){
+        return;
+    }
 
-const search=
-(document.getElementById("collectionSearch")?.value||"")
-.toLowerCase();
+    const search =
+        (
+            document.getElementById("collectionSearch")?.value ||
+            ""
+        ).toLowerCase();
 
-const counts=getCollectionCounts();
+    const counts =
+        getCollectionCounts();
 
-let names=cards
-.filter(card=>counts[card.name])
-.map(card=>card.name);
+    let names =
+        cards
+            .filter(card=>counts[card.name])
+            .map(card=>card.name);
 
-if(collectionTab==="favorites"){
-names=names.filter(name=>favorites.includes(name));
+    if(collectionTab === "favorites"){
+
+        names =
+            names.filter(
+                name=>favorites.includes(name)
+            );
+
+    }
+
+    if(search){
+
+        names =
+            names.filter(
+                name =>
+                    name.toLowerCase().includes(search)
+            );
+
+    }
+
+    grid.innerHTML = "";
+
+    if(!names.length){
+
+        grid.innerHTML =
+            "<p>You don't have any cards here.</p>";
+
+        return;
+
+    }
+
+    for(const name of names){
+
+        const card = getCard(name);
+        const copy = getFirstCopy(name);
+
+        if(!card){
+            continue;
+        }
+
+        const isFavorite =
+            favorites.includes(name);
+
+        const traded =
+            copy?.traded === true;
+
+        let borderClass = "";
+
+        if(isFavorite && traded){
+
+            borderClass =
+                card.rarity === "rare"
+                    ? "rareTradedFavoriteCard"
+                    : "tradedFavoriteCard";
+
+        }else if(isFavorite){
+
+            borderClass =
+                card.rarity === "rare"
+                    ? "rareFavoriteCard"
+                    : "favoriteCard";
+
+        }
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "card " + borderClass;
+
+        div.innerHTML = `
+
+            <button
+                class="starButton ${
+                    isFavorite ? "favorite" : ""
+                }"
+                onclick="toggleFavorite('${escapeHtml(name)}')">
+
+                ${isFavorite ? "★" : "☆"}
+
+            </button>
+
+            <div class="cardCount">
+                ${counts[name]}
+            </div>
+
+            <img
+                src="${escapeHtml(card.image)}"
+                alt="${escapeHtml(name)}"
+                onclick="openEncodedCardViewer(
+                    '${encoded(card.image)}',
+                    '${encoded(name)}'
+                )">
+
+            <div class="cardName">
+                ${escapeHtml(name)}
+            </div>
+
+            <div>
+                Sell: ${card.price}
+            </div>
+
+            <button
+                class="sellButton ${
+                    isFavorite ? "favoriteLocked" : ""
+                }"
+                ${isFavorite ? "disabled" : ""}
+                onclick="sellCard('${escapeHtml(name)}')">
+
+                ${isFavorite ? "FAVORITED" : "SELL"}
+
+            </button>
+        `;
+
+        grid.appendChild(div);
+
+    }
+
 }
 
-if(search){
-names=names.filter(name=>
-name.toLowerCase().includes(search)
-);
-}
 
-grid.innerHTML="";
+window.toggleFavorite =
+async function(name){
 
-if(!names.length){
+    if(favorites.includes(name)){
 
-grid.innerHTML="<p>You don't have any cards here.</p>";
-return;
+        favorites =
+            favorites.filter(
+                item=>item !== name
+            );
 
-}
+        showMessage(
+            name + " is no longer a favorite."
+        );
 
-for(const name of names){
+    }else{
 
-const card=getCard(name);
-const copy=getFirstCopy(name);
+        favorites.push(name);
 
-const isFavorite=favorites.includes(name);
-const traded=copy?.traded===true;
+        showMessage(
+            name + " is now a favorite."
+        );
 
-let borderClass="";
+    }
 
-if(isFavorite&&traded){
-
-borderClass=
-card.rarity==="rare"
-?"rareTradedFavoriteCard"
-:"tradedFavoriteCard";
-
-}else if(isFavorite){
-
-borderClass=
-card.rarity==="rare"
-?"rareFavoriteCard"
-:"favoriteCard";
-
-}
-
-const div=document.createElement("div");
-
-div.className="card "+borderClass;
-
-div.innerHTML=`
-
-<button class="starButton ${isFavorite?"favorite":""}"
-onclick="toggleFavorite('${escapeHtml(name)}')">
-${isFavorite?"★":"☆"}
-</button>
-
-<div class="cardCount">${counts[name]}</div>
-
-<img src="${escapeHtml(card.image)}"
-alt="${escapeHtml(name)}"
-onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(name)}')">
-
-<div class="cardName">
-${escapeHtml(name)}
-</div>
-
-<div>Sell: ${card.price}</div>
-
-<button
-class="sellButton ${isFavorite?"favoriteLocked":""}"
-${isFavorite?"disabled":""}
-onclick="sellCard('${escapeHtml(name)}')">
-
-${isFavorite?"FAVORITED":"SELL"}
-
-</button>
-
-`;
-
-grid.appendChild(div);
-
-}
-
-}
-
-window.toggleFavorite=async function(name){
-
-if(favorites.includes(name)){
-
-favorites=favorites.filter(item=>item!==name);
-
-showMessage(name+" is no longer a favorite.");
-
-}else{
-
-favorites.push(name);
-
-showMessage(name+" is now a favorite!");
-
-}
-
-await savePlayerData();
-updateUI();
+    await savePlayerData();
+    updateUI();
 
 };
 
-window.sellCard=async function(name){
 
-if(favorites.includes(name)){
+window.sellCard =
+async function(name){
 
-showMessage("Favorite cards cannot be sold.");
-return;
+    if(favorites.includes(name)){
 
-}
+        showMessage(
+            "Favorite cards cannot be sold."
+        );
 
-const index=collection.findIndex(
-copy=>copy.name===name
-);
+        return;
 
-if(index===-1)return;
+    }
 
-const card=getCard(name);
-if(!card)return;
+    const index =
+        collection.findIndex(
+            copy=>copy.name === name
+        );
 
-collection.splice(index,1);
-money+=card.price;
+    if(index === -1){
+        return;
+    }
 
-await savePlayerData();
-updateUI();
+    const card = getCard(name);
 
-showMessage(
-name+" sold for "+card.price+" coins."
-);
+    if(!card){
+        return;
+    }
+
+    collection.splice(index,1);
+
+    money += card.price;
+
+    await savePlayerData();
+    updateUI();
+
+    showMessage(
+        name +
+        " sold for " +
+        card.price +
+        " coins."
+    );
 
 };
+
 
 /* DEX */
 
-window.setDexTab=function(tab){
+window.setDexTab =
+function(tab){
 
-dexTab=tab;
+    dexTab = tab;
 
-document.getElementById("dexDollsButton")
-.classList.toggle("active",tab==="dolls");
+    document
+        .getElementById("dexDollsButton")
+        .classList.toggle(
+            "active",
+            tab === "dolls"
+        );
 
-document.getElementById("dexRaresButton")
-.classList.toggle("active",tab==="rares");
+    document
+        .getElementById("dexRaresButton")
+        .classList.toggle(
+            "active",
+            tab === "rares"
+        );
 
-renderDex();
+    renderDex();
 
 };
+
 
 function renderDex(){
 
-const grid=document.getElementById("dexGrid");
-if(!grid)return;
+    const grid =
+        document.getElementById("dexGrid");
 
-grid.innerHTML="";
+    if(!grid){
+        return;
+    }
 
-if(dexTab==="rares"){
+    grid.innerHTML = "";
 
-for(let i=1;i<=6;i++){
+    if(dexTab === "rares"){
 
-const div=document.createElement("div");
+        for(let i=1;i<=6;i++){
 
-div.className="dexCard comingSoon";
+            const div =
+                document.createElement("div");
 
-div.innerHTML=`
+            div.className =
+                "dexCard comingSoon";
 
-<div style="
-aspect-ratio:1/1.35;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:25px;">
-?
-</div>
+            div.innerHTML = `
 
-<b>Rare ${i}</b>
+                <div style="
+                    aspect-ratio:1/1.35;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    font-size:25px;
+                ">
+                    ?
+                </div>
 
-<p>Coming Soon</p>
+                <b>Rare ${i}</b>
 
-`;
+                <p>Coming Soon</p>
 
-grid.appendChild(div);
+            `;
+
+            grid.appendChild(div);
+
+        }
+
+        return;
+
+    }
+
+    for(const card of cards){
+
+        const owned =
+            collection.some(
+                copy=>copy.name === card.name
+            );
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "dexCard " +
+            (!owned ? "comingSoon" : "");
+
+        div.innerHTML = `
+
+            <img
+                src="${escapeHtml(card.image)}"
+                alt="${escapeHtml(card.name)}"
+                onclick="openEncodedCardViewer(
+                    '${encoded(card.image)}',
+                    '${encoded(card.name)}'
+                )">
+
+            <b>
+                ${escapeHtml(card.name)}
+            </b>
+
+            <p>
+                ${owned ? "Owned" : "Not Owned"}
+            </p>
+
+        `;
+
+        grid.appendChild(div);
+
+    }
 
 }
 
-return;
 
-}
+/* =========================================================
+   TRADE PLAYER SEARCH
+   ========================================================= */
 
-for(const card of cards){
+window.findPlayer =
+async function(){
 
-const owned=collection.some(
-copy=>copy.name===card.name
-);
+    const input =
+        document.getElementById("tradePlayerInput");
 
-const div=document.createElement("div");
+    const result =
+        document.getElementById("tradePlayerResult");
 
-div.className=
-"dexCard "+(!owned?"comingSoon":"");
+    const name =
+        input.value.trim();
 
-div.innerHTML=`
+    if(!name){
 
-<img src="${escapeHtml(card.image)}"
-alt="${escapeHtml(card.name)}"
-onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
+        result.innerHTML =
+            "<p>Enter a username.</p>";
 
-<b>${escapeHtml(card.name)}</b>
+        return;
 
-<p>${owned?"Owned":"Not Owned"}</p>
+    }
 
-`;
+    if(
+        username &&
+        name.toLowerCase() === username.toLowerCase()
+    ){
 
-grid.appendChild(div);
+        result.innerHTML = `
+            <div class="tradeNotice">
+                You cannot trade with yourself.
+            </div>
+        `;
 
-}
+        return;
 
-}
+    }
 
-/* SHOP */
+    result.innerHTML =
+        "<p>Searching...</p>";
 
-window.setShopTab=function(tab){
+    try{
 
-shopTab=tab;
+        const ref =
+            doc(
+                db,
+                "usernames",
+                name.toLowerCase()
+            );
 
-document.getElementById("shopDollsButton")
-.classList.toggle("active",tab==="dolls");
+        const snap =
+            await getDoc(ref);
 
-document.getElementById("shopProfileButton")
-.classList.toggle("active",tab==="profile");
+        if(!snap.exists()){
 
-document.getElementById("shopDolbButton")
-.classList.toggle("active",tab==="dolb");
+            result.innerHTML = `
+                <div class="tradeNotice">
+                    Player not found.
+                </div>
+            `;
 
-document.getElementById("shopEventButton")
-.classList.toggle("active",tab==="event");
+            return;
 
-renderShop();
+        }
+
+        const usernameData =
+            snap.data();
+
+        if(usernameData.uid === currentUser.uid){
+
+            result.innerHTML = `
+                <div class="tradeNotice">
+                    You cannot trade with yourself.
+                </div>
+            `;
+
+            return;
+
+        }
+
+        const playerSnap =
+            await getDoc(
+                doc(
+                    db,
+                    "players",
+                    usernameData.uid
+                )
+            );
+
+        const playerData =
+            playerSnap.exists()
+                ? playerSnap.data()
+                : {};
+
+        const otherProfilePic =
+            playerData.profilePic ||
+            DEFAULT_PROFILE_PIC;
+
+        const otherUsername =
+            playerData.username ||
+            usernameData.username ||
+            name;
+
+        result.innerHTML = `
+
+            <div class="tradeNotice">
+
+                <div class="playerResultBox">
+
+                    <img
+                        class="profilePicSmall"
+                        src="${escapeHtml(otherProfilePic)}"
+                        alt="Profile Picture">
+
+                    <div class="playerResultInfo">
+
+                        <div class="profileUsername">
+                            ${escapeHtml(otherUsername)}
+                        </div>
+
+                        <p>
+                            Player found.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="tradeSearchButton"
+                    style="margin-top:15px"
+                    onclick="sendTradeRequest('${escapeHtml(usernameData.uid)}')">
+
+                    SEND TRADE REQUEST
+
+                </button>
+
+            </div>
+
+        `;
+
+    }catch(error){
+
+        console.error(error);
+
+        result.innerHTML = `
+            <div class="tradeNotice">
+                Search error:<br>
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+
+    }
 
 };
 
-function renderShop(){
 
-const grid=document.getElementById("shopGrid");
-if(!grid)return;
+/* SEND TRADE */
 
-grid.innerHTML="";
+window.sendTradeRequest =
+async function(receiverUid){
 
-if(shopTab==="dolls"){
+    if(!currentUser){
+        return;
+    }
 
-const shopCards=cards.slice(0,6);
+    if(receiverUid === currentUser.uid){
 
-for(const card of shopCards){
+        showMessage(
+            "You cannot trade with yourself."
+        );
 
-const div=document.createElement("div");
-div.className="shopItem";
+        return;
 
-div.innerHTML=`
+    }
 
-<img src="${escapeHtml(card.image)}">
+    try{
 
-<h3>${escapeHtml(card.name)}</h3>
+        const alreadyPending =
+            tradeRequests.some(
+                trade =>
+                    trade.status === "pending" &&
+                    (
+                        (
+                            trade.senderUid === currentUser.uid &&
+                            trade.receiverUid === receiverUid
+                        ) ||
+                        (
+                            trade.receiverUid === currentUser.uid &&
+                            trade.senderUid === receiverUid
+                        )
+                    )
+            );
 
-<div class="shopPrice">
-100 coins
-</div>
+        if(alreadyPending){
 
-<button class="shopButton"
-onclick="buyShopDoll('${escapeHtml(card.name)}')">
-BUY DOLL
-</button>
+            showMessage(
+                "You already have a pending trade with this player."
+            );
 
-`;
+            return;
 
-grid.appendChild(div);
+        }
 
-}
+        const tradeId = createCardId();
 
-return;
+        await setDoc(
+            doc(
+                db,
+                "tradeRequests",
+                tradeId
+            ),
+            {
+                participants:[
+                    currentUser.uid,
+                    receiverUid
+                ],
+                senderUid:currentUser.uid,
+                receiverUid:receiverUid,
+                senderUsername:username,
+                receiverUsername:"",
+                senderOffer:[],
+                receiverOffer:[],
+                senderConfirmed:false,
+                receiverConfirmed:false,
+                status:"pending",
+                createdAt:serverTimestamp()
+            }
+        );
 
-}
+        showPage("trade");
 
-if(shopTab==="profile"){
+        showMessage(
+            "Trade request sent."
+        );
 
-for(const pic of profilePictures){
+    }catch(error){
 
-const owned=ownedProfilePics.includes(pic.image);
+        console.error(error);
 
-const div=document.createElement("div");
-div.className="shopItem";
+        showMessage(
+            "Could not send trade request: " +
+            error.message
+        );
 
-div.innerHTML=`
-
-<img src="${escapeHtml(pic.image)}">
-
-<h3>${escapeHtml(pic.name)}</h3>
-
-<div class="shopPrice">
-${pic.price===0?"FREE":pic.price+" coins"}
-</div>
-
-<button class="shopButton"
-${owned?"disabled":""}
-onclick="buyProfilePic('${escapeHtml(pic.id)}')">
-
-${owned?"OWNED":"BUY"}
-
-</button>
-
-`;
-
-grid.appendChild(div);
-
-}
-
-return;
-
-}
-
-if(shopTab==="dolb"){
-
-const deals=[
-{dolb:30,coins:10},
-{dolb:50,coins:25},
-{dolb:100,coins:75},
-{dolb:150,coins:150}
-];
-
-for(const deal of deals){
-
-const div=document.createElement("div");
-div.className="shopItem";
-
-div.innerHTML=`
-
-<h2>${deal.dolb} Dolb</h2>
-
-<p>Get ${deal.coins} coins.</p>
-
-<button class="shopButton"
-onclick="buyDolbDeal(${deal.dolb},${deal.coins})">
-BUY WITH DOLB
-</button>
-
-`;
-
-grid.appendChild(div);
-
-}
-
-return;
-
-}
-
-grid.innerHTML=`
-
-<div class="shopItem">
-
-<h2>Event Shop</h2>
-
-<p>Coming Soon</p>
-
-</div>
-
-`;
-
-}
-
-window.buyShopDoll=async function(name){
-
-if(money<100){
-
-showMessage("Not enough coins.");
-return;
-
-}
-
-money-=100;
-collection.push(createCardCopy(name));
-
-await savePlayerData();
-updateUI();
-
-showMessage("You bought "+name+"!");
+    }
 
 };
 
-window.buyProfilePic=async function(id){
 
-const pic=profilePictures.find(p=>p.id===id);
-
-if(!pic)return;
-
-if(ownedProfilePics.includes(pic.image)){
-
-showMessage("You already own this profile picture.");
-return;
-
-}
-
-if(money<pic.price){
-
-showMessage("Not enough coins.");
-return;
-
-}
-
-money-=pic.price;
-ownedProfilePics.push(pic.image);
-profilePic=pic.image;
-
-await savePlayerData();
-updateUI();
-
-showMessage("Profile picture unlocked!");
-
-};
-
-window.buyDolbDeal=async function(cost,coinsReceived){
-
-if(dolb<cost){
-
-showMessage("Not enough Dolb.");
-return;
-
-}
-
-dolb-=cost;
-money+=coinsReceived;
-
-await savePlayerData();
-updateUI();
-
-showMessage(
-"Received "+coinsReceived+" coins!"
-);
-
-};
-
-/* PROFILE SETTINGS */
-
-window.openProfileSettings=function(){
-
-document.getElementById("profileOverlay")
-.classList.remove("hidden");
-
-renderProfileChoices();
-
-};
-
-window.closeProfileSettings=function(){
-
-document.getElementById("profileOverlay")
-.classList.add("hidden");
-
-};
-
-function renderProfileChoices(){
-
-const box=document.getElementById("profileChoices");
-
-box.innerHTML="";
-
-for(const image of ownedProfilePics){
-
-const pic=profilePictures.find(
-p=>p.image===image
-);
-
-if(!pic)continue;
-
-const button=document.createElement("button");
-
-button.style.background="#183653";
-button.style.color="white";
-button.style.margin="5px";
-button.style.padding="8px";
-
-button.innerHTML=`
-
-<img src="${escapeHtml(image)}"
-style="width:55px;height:55px;border-radius:50%;object-fit:cover;display:block">
-
-${escapeHtml(pic.name)}
-
-`;
-
-button.onclick=()=>selectProfilePic(image);
-
-box.appendChild(button);
-
-}
-
-}
-
-window.selectProfilePic=async function(image){
-
-if(!ownedProfilePics.includes(image))return;
-
-profilePic=image;
-
-await savePlayerData();
-updateUI();
-
-showMessage("Profile picture changed.");
-
-};
-
-/* FRIENDS */
-
-window.findFriend=async function(){
-
-const input=document.getElementById("friendSearchInput");
-const result=document.getElementById("friendSearchResult");
-
-const name=input.value.trim();
-
-if(!name){
-
-result.innerHTML="<p>Enter a username.</p>";
-return;
-
-}
-
-if(name.toLowerCase()===username.toLowerCase()){
-
-result.innerHTML=
-"<div class='tradeNotice'>You cannot add yourself.</div>";
-return;
-
-}
-
-result.innerHTML="<p>Searching...</p>";
-
-try{
-
-const snap=await getDoc(
-doc(db,"usernames",name.toLowerCase())
-);
-
-if(!snap.exists()){
-
-result.innerHTML=
-"<div class='tradeNotice'>Player not found.</div>";
-
-return;
-
-}
-
-const data=snap.data();
-
-if(friends.includes(data.uid)){
-
-result.innerHTML=
-"<div class='tradeNotice'>Already friends.</div>";
-
-return;
-
-}
-
-result.innerHTML=`
-
-<div class="friendBox">
-
-<b>${escapeHtml(data.username)}</b>
-
-<p>Player found.</p>
-
-<button class="tradeSearchButton"
-onclick="sendFriendRequest('${escapeHtml(data.uid)}')">
-
-SEND FRIEND REQUEST
-
-</button>
-
-</div>
-
-`;
-
-}catch(error){
-
-console.error(error);
-
-result.innerHTML=
-"<p>"+escapeHtml(error.message)+"</p>";
-
-}
-
-};
-
-window.sendFriendRequest=async function(receiverUid){
-
-if(!currentUser||receiverUid===currentUser.uid)return;
-
-try{
-
-const ref=doc(
-db,
-"friendRequests",
-createId()
-);
-
-await setDoc(ref,{
-
-senderUid:currentUser.uid,
-receiverUid:receiverUid,
-senderUsername:username,
-participants:[
-currentUser.uid,
-receiverUid
-],
-status:"pending",
-createdAt:serverTimestamp()
-
-});
-
-showMessage("Friend request sent.");
-
-}catch(error){
-
-console.error(error);
-showMessage("Could not send request.");
-
-}
-
-};
-
-function startFriendListener(){
-
-stopFriendListener();
-
-if(!currentUser)return;
-
-const q=query(
-firestoreCollection(db,"friendRequests"),
-where(
-"participants",
-"array-contains",
-currentUser.uid
-)
-);
-
-friendListener=onSnapshot(
-q,
-snapshot=>{
-
-friendRequests=snapshot.docs.map(
-s=>({
-id:s.id,
-...s.data()
-})
-);
-
-renderFriendRequests();
-renderFriends();
-
-},
-error=>console.error(error)
-);
-
-}
-
-function stopFriendListener(){
-
-if(friendListener){
-friendListener();
-friendListener=null;
-}
-
-}
-
-function renderFriendRequests(){
-
-const box=document.getElementById("friendRequestsList");
-
-if(!box)return;
-
-const incoming=friendRequests.filter(
-r=>r.receiverUid===currentUser?.uid &&
-r.status==="pending"
-);
-
-if(!incoming.length){
-
-box.innerHTML="<p>No friend requests.</p>";
-return;
-
-}
-
-box.innerHTML="";
-
-for(const request of incoming){
-
-const div=document.createElement("div");
-
-div.className="friendRow";
-
-div.innerHTML=`
-
-<div>
-
-<b>${escapeHtml(request.senderUsername||"Player")}</b>
-
-</div>
-
-<div class="friendActions">
-
-<button class="tradeSearchButton"
-onclick="acceptFriend('${escapeHtml(request.id)}')">
-ACCEPT
-</button>
-
-<button class="cancelButton"
-onclick="declineFriend('${escapeHtml(request.id)}')">
-DECLINE
-</button>
-
-</div>
-
-`;
-
-box.appendChild(div);
-
-}
-
-}
-
-window.acceptFriend=async function(requestId){
-
-const request=friendRequests.find(
-r=>r.id===requestId
-);
-
-if(!request)return;
-
-if(request.receiverUid!==currentUser.uid)return;
-
-const senderRef=doc(
-db,
-"players",
-request.senderUid
-);
-
-const receiverRef=doc(
-db,
-"players",
-currentUser.uid
-);
-
-try{
-
-const senderSnap=await getDoc(senderRef);
-const receiverSnap=await getDoc(receiverRef);
-
-const senderData=senderSnap.exists()
-?senderSnap.data():{};
-
-const receiverData=receiverSnap.exists()
-?receiverSnap.data():{};
-
-const senderFriends=
-Array.isArray(senderData.friends)
-?[...senderData.friends]:[];
-
-const receiverFriends=
-Array.isArray(receiverData.friends)
-?[...receiverData.friends]:[];
-
-if(!senderFriends.includes(currentUser.uid))
-senderFriends.push(currentUser.uid);
-
-if(!receiverFriends.includes(request.senderUid))
-receiverFriends.push(request.senderUid);
-
-await updateDoc(senderRef,{
-friends:senderFriends
-});
-
-await updateDoc(receiverRef,{
-friends:receiverFriends
-});
-
-await updateDoc(
-doc(db,"friendRequests",requestId),
-{status:"accepted"}
-);
-
-friends=receiverFriends;
-
-updateUI();
-
-showMessage("Friend added!");
-
-}catch(error){
-
-console.error(error);
-showMessage("Could not accept request.");
-
-}
-
-};
-
-window.declineFriend=async function(requestId){
-
-try{
-
-await updateDoc(
-doc(db,"friendRequests",requestId),
-{status:"declined"}
-);
-
-showMessage("Friend request declined.");
-
-}catch(error){
-
-console.error(error);
-
-}
-
-};
-
-async function getPlayerInfo(uid){
-
-try{
-
-const snap=await getDoc(doc(db,"players",uid));
-
-if(!snap.exists())return null;
-
-return{
-uid,
-username:snap.data().username||"Player",
-profilePic:snap.data().profilePic||"basic_p.png"
-};
-
-}catch(error){
-
-return null;
-
-}
-
-}
-
-async function renderFriends(){
-
-const box=document.getElementById("friendsList");
-
-if(!box||!currentUser)return;
-
-if(!friends.length){
-
-box.innerHTML="<p>You don't have any friends yet.</p>";
-return;
-
-}
-
-box.innerHTML="<p>Loading friends...</p>";
-
-const people=[];
-
-for(const uid of friends){
-
-const info=await getPlayerInfo(uid);
-
-if(info)people.push(info);
-
-}
-
-if(!people.length){
-
-box.innerHTML="<p>You don't have any friends yet.</p>";
-return;
-
-}
-
-box.innerHTML="";
-
-for(const friend of people){
-
-const row=document.createElement("div");
-
-row.className="friendRow";
-
-row.innerHTML=`
-
-<img src="${escapeHtml(friend.profilePic)}">
-
-<div>
-
-<b>${escapeHtml(friend.username)}</b>
-
-<br>
-
-<span class="offline">Offline</span>
-
-</div>
-
-<div class="friendActions">
-
-<button class="tradeSearchButton"
-onclick="sendBattleRequest('${escapeHtml(friend.uid)}')">
-BATTLE
-</button>
-
-</div>
-
-`;
-
-box.appendChild(row);
-
-}
-
-}
-
-/* BATTLES */
-
-window.findBattlePlayer=async function(){
-
-const input=document.getElementById("battlePlayerInput");
-const result=document.getElementById("battlePlayerResult");
-
-const name=input.value.trim();
-
-if(!name){
-
-result.innerHTML="<p>Enter a username.</p>";
-return;
-
-}
-
-const snap=await getDoc(
-doc(db,"usernames",name.toLowerCase())
-);
-
-if(!snap.exists()){
-
-result.innerHTML=
-"<div class='tradeNotice'>Player not found.</div>";
-return;
-
-}
-
-const data=snap.data();
-
-if(data.uid===currentUser.uid){
-
-result.innerHTML=
-"<div class='tradeNotice'>You cannot battle yourself.</div>";
-return;
-
-}
-
-result.innerHTML=`
-
-<div class="tradeNotice">
-
-<b>${escapeHtml(data.username)}</b>
-
-<p>Player found.</p>
-
-<button class="tradeSearchButton"
-onclick="sendBattleRequest('${escapeHtml(data.uid)}')">
-SEND BATTLE REQUEST
-</button>
-
-</div>
-
-`;
-
-};
-
-window.sendBattleRequest=async function(receiverUid){
-
-if(!currentUser||receiverUid===currentUser.uid)return;
-
-const battleId=createId();
-
-try{
-
-await setDoc(
-doc(db,"battleRooms",battleId),
-{
-
-participants:[
-currentUser.uid,
-receiverUid
-],
-
-player1:currentUser.uid,
-player2:receiverUid,
-
-player1Username:username,
-player2Username:"",
-
-player1Ready:false,
-player2Ready:false,
-
-player1Hp:BATTLE_HP,
-player2Hp:BATTLE_HP,
-
-turn:currentUser.uid,
-
-status:"pending",
-
-createdAt:serverTimestamp()
-
-}
-);
-
-showMessage("Battle request sent.");
-
-}catch(error){
-
-console.error(error);
-showMessage("Could not send battle request.");
-
-}
-
-};
-
-function startBattleListener(){
-
-stopBattleListener();
-
-if(!currentUser)return;
-
-const q=query(
-firestoreCollection(db,"battleRooms"),
-where(
-"participants",
-"array-contains",
-currentUser.uid
-)
-);
-
-battleListener=onSnapshot(
-q,
-snapshot=>{
-
-battleRequests=snapshot.docs.map(
-s=>({
-id:s.id,
-...s.data()
-})
-);
-
-renderIncomingBattles();
-
-},
-
-error=>console.error(error)
-);
-
-}
-
-function stopBattleListener(){
-
-if(battleListener){
-battleListener();
-battleListener=null;
-}
-
-}
-
-function renderIncomingBattles(){
-
-const box=document.getElementById("incomingBattles");
-
-if(!box)return;
-
-const incoming=battleRequests.filter(
-b=>
-b.player2===currentUser?.uid &&
-b.status==="pending"
-);
-
-if(!incoming.length){
-
-box.innerHTML="";
-return;
-
-}
-
-box.innerHTML="";
-
-for(const battle of incoming){
-
-const div=document.createElement("div");
-
-div.className="battleBox";
-
-div.innerHTML=`
-
-<h3>Incoming Battle</h3>
-
-<p>
-${escapeHtml(battle.player1Username||"Player")}
-wants to battle you.
-</p>
-
-<button class="battleButton"
-onclick="acceptBattle('${escapeHtml(battle.id)}')">
-ACCEPT BATTLE
-</button>
-
-<button class="cancelButton"
-onclick="declineBattle('${escapeHtml(battle.id)}')">
-DECLINE
-</button>
-
-`;
-
-box.appendChild(div);
-
-}
-
-}
-
-window.acceptBattle=async function(battleId){
-
-const battle=battleRequests.find(
-b=>b.id===battleId
-);
-
-if(!battle)return;
-
-if(battle.player2!==currentUser.uid)return;
-
-activeBattle={
-...battle,
-status:"active"
-};
-
-await updateDoc(
-doc(db,"battleRooms",battleId),
-{
-status:"active",
-player2Username:username
-}
-);
-
-renderBattleArena();
-
-};
-
-window.declineBattle=async function(battleId){
-
-try{
-
-await updateDoc(
-doc(db,"battleRooms",battleId),
-{
-status:"declined"
-}
-);
-
-}catch(error){
-
-console.error(error);
-
-}
-
-};
-
-window.startBotBattle=function(difficulty){
-
-activeBattle={
-
-id:"bot_"+createId(),
-
-bot:true,
-
-difficulty:difficulty,
-
-player1Hp:BATTLE_HP,
-player2Hp:BATTLE_HP,
-
-turn:"player",
-
-status:"active",
-
-player1Username:username,
-
-player2Username:
-difficulty==="hard"
-?"Hard Bot"
-:"Easy Bot"
-
-};
-
-showPage("battle");
-renderBattleArena();
-
-};
-
-function getPlayableCards(){
-
-if(!collection.length)return[];
-
-const result=[];
-
-for(const copy of collection){
-
-const card=getCard(copy.name);
-
-if(card&&!result.some(c=>c.name===card.name)){
-result.push(card);
-}
-
-}
-
-return result;
-
-}
-
-function cardPower(card){
-
-const index=cards.indexOf(card);
-
-return 20+(index%5)*8;
-
-}
-
-function renderBattleArena(){
-
-const box=document.getElementById("battleArenaContainer");
-
-if(!box)return;
-
-if(!activeBattle){
-
-box.innerHTML="";
-return;
-
-}
-
-const isBot=activeBattle.bot===true;
-
-const opponentName=isBot
-?activeBattle.player2Username
-:"Friend";
-
-const playerHp=isBot
-?activeBattle.player1Hp
-:activeBattle.player1Hp;
-
-const opponentHp=activeBattle.player2Hp;
-
-const playable=getPlayableCards();
-
-box.innerHTML=`
-
-<div class="battleBox">
-
-<h2>Battle</h2>
-
-<div class="battleArena">
-
-<div class="battlePlayer">
-
-<img src="${escapeHtml(profilePic)}">
-
-<h3>${escapeHtml(username)}</h3>
-
-<div class="hpBar">
-
-<div class="hpFill"
-style="width:${Math.max(0,playerHp)}%">
-</div>
-
-</div>
-
-<p>HP: ${Math.max(0,playerHp)}/100</p>
-
-</div>
-
-<div class="battlePlayer">
-
-<img src="${
-isBot
-?"basic_p.png"
-:"basic_p.png"
-}">
-
-<h3>${escapeHtml(opponentName)}</h3>
-
-<div class="hpBar">
-
-<div class="hpFill"
-style="width:${Math.max(0,opponentHp)}%">
-</div>
-
-</div>
-
-<p>HP: ${Math.max(0,opponentHp)}/100</p>
-
-</div>
-
-</div>
-
-<hr>
-
-<h3>Choose a Card</h3>
-
-${
-playable.length
-?playable.map(card=>`
-
-<div class="battleCard"
-onclick="useBattleCard('${escapeHtml(card.name)}')">
-
-<img src="${escapeHtml(card.image)}">
-
-<b>${escapeHtml(card.name)}</b>
-
-<p>
-Power: ${cardPower(card)}
-</p>
-
-</div>
-
-`).join("")
-:"<p>You need cards to battle.</p>"
-}
-
-<button class="cancelButton"
-onclick="endBattle()">
-END BATTLE
-</button>
-
-</div>
-
-`;
-
-}
-
-window.useBattleCard=async function(name){
-
-if(!activeBattle||activeBattle.status!=="active")return;
-
-const card=getCard(name);
-if(!card)return;
-
-const damage=cardPower(card);
-
-if(activeBattle.bot){
-
-activeBattle.player2Hp-=damage;
-
-if(activeBattle.player2Hp<=0){
-
-activeBattle.player2Hp=0;
-
-renderBattleArena();
-
-await finishBotBattle(true);
-
-return;
-
-}
-
-renderBattleArena();
-
-setTimeout(()=>botAttack(),700);
-
-return;
-
-}
-
-if(!currentUser)return;
-
-const battleRef=doc(
-db,"battleRooms",activeBattle.id
-);
-
-const snap=await getDoc(battleRef);
-
-if(!snap.exists())return;
-
-const battle=snap.data();
-
-if(battle.status!=="active")return;
-
-const isPlayer1=
-battle.player1===currentUser.uid;
-
-if(
-(isPlayer1&&battle.turn!==currentUser.uid)||
-(!isPlayer1&&battle.turn!==currentUser.uid)
-){
-
-showMessage("Wait for your turn.");
-return;
-
-}
-
-const targetField=isPlayer1
-?"player2Hp"
-:"player1Hp";
-
-const targetHp=
-typeof battle[targetField]==="number"
-?battle[targetField]
-:BATTLE_HP;
-
-const newHp=Math.max(
-0,
-targetHp-damage
-);
-
-const opponentUid=isPlayer1
-?battle.player2
-:battle.player1;
-
-await updateDoc(
-battleRef,
-{
-
-[targetField]:newHp,
-
-turn:opponentUid,
-
-status:newHp<=0
-?"finished"
-:"active",
-
-winner:newHp<=0
-?currentUser.uid
-:null
-
-}
-);
-
-activeBattle={
-...battle,
-[targetField]:newHp,
-turn:opponentUid,
-status:newHp<=0?"finished":"active",
-winner:newHp<=0?currentUser.uid:null
-};
-
-renderBattleArena();
-
-if(newHp<=0){
-
-await awardBattleWin();
-
-}
-
-};
-
-function botAttack(){
-
-if(!activeBattle||!activeBattle.bot)return;
-if(activeBattle.status!=="active")return;
-
-const damage=
-activeBattle.difficulty==="hard"
-?28
-:18;
-
-activeBattle.player1Hp=
-Math.max(
-0,
-activeBattle.player1Hp-damage
-);
-
-if(activeBattle.player1Hp<=0){
-
-finishBotBattle(false);
-return;
-
-}
-
-renderBattleArena();
-
-}
-
-async function finishBotBattle(won){
-
-if(!activeBattle)return;
-
-activeBattle.status="finished";
-
-renderBattleArena();
-
-if(won){
-
-money+=BATTLE_WIN_REWARD;
-
-await savePlayerData();
-updateUI();
-
-showMessage(
-"You won! +"+BATTLE_WIN_REWARD+" coins."
-);
-
-}else{
-
-showMessage("You lost the battle.");
-
-}
-
-}
-
-async function awardBattleWin(){
-
-if(activeBattle?.rewardGiven)return;
-
-if(activeBattle)activeBattle.rewardGiven=true;
-
-money+=BATTLE_WIN_REWARD;
-
-await savePlayerData();
-updateUI();
-
-showMessage(
-"You won! +"+BATTLE_WIN_REWARD+" coins."
-);
-
-}
-
-window.endBattle=function(){
-
-activeBattle=null;
-renderBattleArena();
-
-};
-
- /* TRADE SEARCH */
-
-window.findPlayer=async function(){
-
-const input=document.getElementById("tradePlayerInput");
-const result=document.getElementById("tradePlayerResult");
-
-const name=input.value.trim();
-
-if(!name){
-
-result.innerHTML="<p>Enter a username.</p>";
-return;
-
-}
-
-if(
-username &&
-name.toLowerCase()===username.toLowerCase()
-){
-
-result.innerHTML=`
-
-<div class="tradeNotice">
-You cannot trade with yourself.
-</div>
-
-`;
-
-return;
-
-}
-
-result.innerHTML="<p>Searching...</p>";
-
-try{
-
-const snap=await getDoc(
-doc(db,"usernames",name.toLowerCase())
-);
-
-if(!snap.exists()){
-
-result.innerHTML=`
-
-<div class="tradeNotice">
-Player not found.
-</div>
-
-`;
-
-return;
-
-}
-
-const data=snap.data();
-
-result.innerHTML=`
-
-<div class="tradeNotice">
-
-<b>${escapeHtml(data.username||name)}</b>
-
-<p>Player found!</p>
-
-<button class="tradeSearchButton"
-onclick="sendTradeRequest('${escapeHtml(data.uid)}')">
-
-SEND TRADE REQUEST
-
-</button>
-
-</div>
-
-`;
-
-}catch(error){
-
-console.error(error);
-
-result.innerHTML=
-"<p>"+escapeHtml(error.message)+"</p>";
-
-}
-
-};
-
-/* TRADES */
-
-window.sendTradeRequest=async function(receiverUid){
-
-if(!currentUser)return;
-
-if(receiverUid===currentUser.uid){
-
-showMessage("You cannot trade with yourself.");
-return;
-
-}
-
-try{
-
-const tradeId=createId();
-
-await setDoc(
-doc(db,"tradeRequests",tradeId),
-{
-
-participants:[
-currentUser.uid,
-receiverUid
-],
-
-senderUid:currentUser.uid,
-receiverUid:receiverUid,
-
-senderUsername:username,
-receiverUsername:"",
-
-senderOffer:[],
-receiverOffer:[],
-
-senderConfirmed:false,
-receiverConfirmed:false,
-
-status:"pending",
-
-createdAt:serverTimestamp()
-
-}
-);
-
-showPage("trade");
-
-showMessage("Trade request sent.");
-
-}catch(error){
-
-console.error(error);
-
-showMessage(
-"Could not send trade request: "+error.message
-);
-
-}
-
-};
+/* TRADE LISTENER */
 
 function stopTradeListener(){
 
-if(tradeListener){
+    if(tradeListener){
 
-tradeListener();
-tradeListener=null;
+        tradeListener();
+        tradeListener = null;
+
+    }
 
 }
 
-}
 
 function startTradeListener(){
 
-stopTradeListener();
+    stopTradeListener();
 
-if(!currentUser)return;
+    if(!currentUser){
+        return;
+    }
 
-const q=query(
-firestoreCollection(db,"tradeRequests"),
-where(
-"participants",
-"array-contains",
-currentUser.uid
-)
-);
+    const tradeCollection =
+        firestoreCollection(
+            db,
+            "tradeRequests"
+        );
 
-tradeListener=onSnapshot(
-q,
-snapshot=>{
+    const tradeQuery =
+        query(
+            tradeCollection,
+            where(
+                "participants",
+                "array-contains",
+                currentUser.uid
+            )
+        );
 
-tradeRequests=snapshot.docs.map(
-snap=>({
-id:snap.id,
-...snap.data()
-})
-);
+    tradeListener =
+        onSnapshot(
+            tradeQuery,
+            snapshot=>{
 
-for(const trade of tradeRequests){
+                tradeRequests =
+                    snapshot.docs.map(
+                        snap=>({
+                            id:snap.id,
+                            ...snap.data()
+                        })
+                    );
 
-if(
-trade.status==="pending" &&
-trade.senderConfirmed===true &&
-trade.receiverConfirmed===true
-){
+                for(const trade of tradeRequests){
 
-tryFinalizeTrade(trade);
+                    if(
+                        trade.status === "pending" &&
+                        trade.senderConfirmed === true &&
+                        trade.receiverConfirmed === true
+                    ){
+
+                        tryFinalizeTrade(trade);
+
+                    }
+
+                    if(trade.status === "completed"){
+
+                        applyCompletedTrade(trade);
+
+                    }
+
+                }
+
+                if(activeTrade){
+
+                    const fresh =
+                        tradeRequests.find(
+                            trade =>
+                                trade.id === activeTrade.id
+                        );
+
+                    if(fresh){
+                        activeTrade = fresh;
+                    }
+
+                }
+
+                renderIncomingTrades();
+                renderActiveTrade();
+
+            },
+            error=>{
+
+                console.error(error);
+
+                showMessage(
+                    "Trade connection error: " +
+                    error.message
+                );
+
+            }
+        );
 
 }
 
-if(trade.status==="completed"){
 
-applyCompletedTrade(trade);
-
-}
-
-}
-
-if(activeTrade){
-
-const fresh=tradeRequests.find(
-trade=>trade.id===activeTrade.id
-);
-
-if(fresh){
-
-activeTrade=fresh;
-
-const savedOffer=getMyOffer(fresh);
-
-if(
-savedOffer.length>0 &&
-selectedTradeCards.length===0
-){
-
-selectedTradeCards=savedOffer.map(
-card=>card.id
-);
-
-}
-
-}
-
-}
-
-renderIncomingTrades();
-renderActiveTrade();
-
-},
-error=>{
-
-console.error(error);
-
-showMessage(
-"Trade connection error: "+error.message
-);
-
-}
-);
-
-}
+/* INCOMING TRADES */
 
 function renderIncomingTrades(){
 
-const container=
-document.getElementById("incomingTrades");
+    const container =
+        document.getElementById("incomingTrades");
 
-if(!container)return;
+    if(!container){
+        return;
+    }
 
-container.innerHTML="";
+    container.innerHTML = "";
 
-const incoming=tradeRequests.filter(
-trade=>
-trade.receiverUid===currentUser?.uid &&
-trade.status==="pending" &&
-(!activeTrade||trade.id!==activeTrade.id)
-);
+    const incoming =
+        tradeRequests.filter(
+            trade =>
+                trade.receiverUid === currentUser?.uid &&
+                trade.status === "pending" &&
+                (
+                    !activeTrade ||
+                    trade.id !== activeTrade.id
+                )
+        );
 
-for(const trade of incoming){
+    for(const trade of incoming){
 
-const div=document.createElement("div");
+        const div =
+            document.createElement("div");
 
-div.className="tradeRequest";
+        div.className = "tradeRequest";
 
-div.innerHTML=`
+        div.innerHTML = `
 
-<b>Incoming Trade Request</b>
+            <b>Incoming Trade Request</b>
 
-<p>
-${escapeHtml(trade.senderUsername||"Another player")}
-wants to trade with you.
-</p>
+            <p>
+                ${escapeHtml(
+                    trade.senderUsername ||
+                    "Another player"
+                )}
+                wants to trade with you.
+            </p>
 
-<button class="tradeSearchButton"
-onclick="acceptTrade('${escapeHtml(trade.id)}')">
-ACCEPT TRADE
-</button>
+            <button
+                class="tradeSearchButton"
+                onclick="acceptTrade('${escapeHtml(trade.id)}')">
 
-`;
+                ACCEPT TRADE
 
-container.appendChild(div);
+            </button>
+
+        `;
+
+        container.appendChild(div);
+
+    }
 
 }
 
-}
 
-window.acceptTrade=function(tradeId){
+/* ACCEPT */
 
-const trade=tradeRequests.find(
-item=>item.id===tradeId
-);
+window.acceptTrade =
+function(tradeId){
 
-if(!trade)return;
+    const trade =
+        tradeRequests.find(
+            item=>item.id === tradeId
+        );
 
-activeTrade=trade;
+    if(!trade){
 
-selectedTradeCards=getMyOffer(trade)
-.map(card=>card.id);
+        showMessage(
+            "Trade request not found."
+        );
 
-showPage("trade");
+        return;
 
-renderIncomingTrades();
-renderActiveTrade();
+    }
+
+    if(trade.receiverUid !== currentUser.uid){
+
+        showMessage(
+            "You cannot accept this trade."
+        );
+
+        return;
+
+    }
+
+    if(trade.status !== "pending"){
+
+        showMessage(
+            "This trade is no longer pending."
+        );
+
+        return;
+
+    }
+
+    activeTrade = trade;
+
+    selectedTradeCards =
+        getMyOffer(trade).map(
+            card=>card.id
+        );
+
+    showPage("trade");
+
+    renderIncomingTrades();
+    renderActiveTrade();
 
 };
+
+
+/* OUTGOING */
 
 function openOutgoingTradeIfNeeded(){
 
-if(activeTrade)return;
+    if(activeTrade){
+        return;
+    }
 
-const outgoing=tradeRequests.find(
-trade=>
-trade.senderUid===currentUser?.uid &&
-trade.status==="pending"
-);
+    const outgoing =
+        tradeRequests.find(
+            trade =>
+                trade.senderUid === currentUser?.uid &&
+                trade.status === "pending"
+        );
 
-if(outgoing){
+    if(outgoing){
 
-activeTrade=outgoing;
+        activeTrade = outgoing;
 
-selectedTradeCards=getMyOffer(outgoing)
-.map(card=>card.id);
+        selectedTradeCards =
+            getMyOffer(outgoing).map(
+                card=>card.id
+            );
+
+    }
 
 }
 
-}
+
+/* OFFERS */
 
 function getMyOffer(trade){
 
-if(trade.senderUid===currentUser.uid){
+    if(trade.senderUid === currentUser.uid){
 
-return Array.isArray(trade.senderOffer)
-?trade.senderOffer:[];
+        return Array.isArray(trade.senderOffer)
+            ? trade.senderOffer
+            : [];
+
+    }
+
+    return Array.isArray(trade.receiverOffer)
+        ? trade.receiverOffer
+        : [];
 
 }
 
-return Array.isArray(trade.receiverOffer)
-?trade.receiverOffer:[];
-
-}
 
 function getTheirOffer(trade){
 
-if(trade.senderUid===currentUser.uid){
+    if(trade.senderUid === currentUser.uid){
 
-return Array.isArray(trade.receiverOffer)
-?trade.receiverOffer:[];
+        return Array.isArray(trade.receiverOffer)
+            ? trade.receiverOffer
+            : [];
+
+    }
+
+    return Array.isArray(trade.senderOffer)
+        ? trade.senderOffer
+        : [];
 
 }
 
-return Array.isArray(trade.senderOffer)
-?trade.senderOffer:[];
 
-}
+/* SAME IDS */
 
 function sameIds(a,b){
 
-if(!Array.isArray(a)||!Array.isArray(b))
-return false;
+    if(!Array.isArray(a) || !Array.isArray(b)){
+        return false;
+    }
 
-if(a.length!==b.length)return false;
+    if(a.length !== b.length){
+        return false;
+    }
 
-for(let i=0;i<a.length;i++){
+    for(let i=0;i<a.length;i++){
 
-if(a[i]!==b[i])return false;
+        if(a[i] !== b[i]){
+            return false;
+        }
+
+    }
+
+    return true;
 
 }
 
-return true;
 
-}
+/* RENDER OFFER */
 
 function renderOfferCards(offer,selectable=false){
 
-if(!Array.isArray(offer)||!offer.length){
+    if(!Array.isArray(offer) || !offer.length){
 
-return `<p style="text-align:center">
-No cards offered yet.
-</p>`;
+        return `
+            <p style="text-align:center">
+                No cards offered yet.
+            </p>
+        `;
+
+    }
+
+    return `
+
+        <div class="tradeCardGrid">
+
+            ${
+                offer.map(copy=>{
+
+                    const card =
+                        getCard(copy.name);
+
+                    if(!card){
+                        return "";
+                    }
+
+                    const selected =
+                        selectable &&
+                        selectedTradeCards.includes(copy.id);
+
+                    return `
+
+                        <div
+                            class="tradeCard ${
+                                selected ? "selected" : ""
+                            }"
+                            ${
+                                selectable
+                                    ? `onclick="toggleTradeCard('${escapeHtml(copy.id)}')"`
+                                    : ""
+                            }>
+
+                            <img
+                                src="${escapeHtml(card.image)}"
+                                alt="${escapeHtml(card.name)}"
+                                onclick="
+                                    event.stopPropagation();
+                                    openEncodedCardViewer(
+                                        '${encoded(card.image)}',
+                                        '${encoded(card.name)}'
+                                    )
+                                ">
+
+                            <div>
+                                ${escapeHtml(card.name)}
+                            </div>
+
+                            ${
+                                copy.traded
+                                    ? "<small>Traded</small>"
+                                    : ""
+                            }
+
+                        </div>
+
+                    `;
+
+                }).join("")
+            }
+
+        </div>
+
+    `;
 
 }
 
-return `
 
-<div class="tradeCardGrid">
-
-${offer.map(copy=>{
-
-const card=getCard(copy.name);
-
-if(!card)return"";
-
-const selected=
-selectable &&
-selectedTradeCards.includes(copy.id);
-
-return`
-
-<div class="tradeCard ${selected?"selected":""}"
-${selectable?
-`onclick="toggleTradeCard('${escapeHtml(copy.id)}')"`:""}>
-
-<img
-src="${escapeHtml(card.image)}"
-alt="${escapeHtml(card.name)}"
-onclick="event.stopPropagation();
-openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
-
-<div>${escapeHtml(card.name)}</div>
-
-${copy.traded?"<small>Traded</small>":""}
-
-</div>
-
-`;
-
-}).join("")}
-
-</div>
-
-`;
-
-}
+/* SELECTABLE TRADE CARDS */
 
 function renderSelectableTradeCards(){
 
-if(!collection.length){
+    if(!collection.length){
 
-return `<p style="text-align:center">
-You have no cards.
-</p>`;
+        return `
+            <p style="text-align:center">
+                You have no cards.
+            </p>
+        `;
+
+    }
+
+    return `
+
+        <div class="tradeCardGrid">
+
+            ${
+                collection.map(copy=>{
+
+                    const card =
+                        getCard(copy.name);
+
+                    if(!card){
+                        return "";
+                    }
+
+                    const selected =
+                        selectedTradeCards.includes(copy.id);
+
+                    return `
+
+                        <div
+                            class="tradeCard ${
+                                selected ? "selected" : ""
+                            }"
+                            onclick="toggleTradeCard('${escapeHtml(copy.id)}')">
+
+                            <img
+                                src="${escapeHtml(card.image)}"
+                                alt="${escapeHtml(card.name)}"
+                                onclick="
+                                    event.stopPropagation();
+                                    openEncodedCardViewer(
+                                        '${encoded(card.image)}',
+                                        '${encoded(card.name)}'
+                                    )
+                                ">
+
+                            <div>
+                                ${escapeHtml(card.name)}
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }).join("")
+            }
+
+        </div>
+
+    `;
 
 }
 
-return `
 
-<div class="tradeCardGrid">
-
-${collection.map(copy=>{
-
-const card=getCard(copy.name);
-
-if(!card)return"";
-
-const selected=
-selectedTradeCards.includes(copy.id);
-
-return`
-
-<div class="tradeCard ${selected?"selected":""}"
-onclick="toggleTradeCard('${escapeHtml(copy.id)}')">
-
-<img
-src="${escapeHtml(card.image)}"
-alt="${escapeHtml(card.name)}"
-onclick="event.stopPropagation();
-openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
-
-<div>${escapeHtml(card.name)}</div>
-
-${copy.traded?"<small>Traded</small>":""}
-
-</div>
-
-`;
-
-}).join("")}
-
-</div>
-
-`;
-
-}
+/* ACTIVE TRADE */
 
 function renderActiveTrade(){
 
-const container=document.getElementById("activeTrade");
+    const container =
+        document.getElementById("activeTrade");
 
-if(!container)return;
+    if(!container){
+        return;
+    }
 
-openOutgoingTradeIfNeeded();
+    openOutgoingTradeIfNeeded();
 
-if(!activeTrade){
+    if(!activeTrade){
 
-container.innerHTML="";
-return;
+        container.innerHTML = "";
+        return;
+
+    }
+
+    if(activeTrade.status !== "pending"){
+
+        if(activeTrade.status === "completed"){
+
+            container.innerHTML = `
+
+                <div class="tradeArea">
+
+                    <h2>Trade Completed</h2>
+
+                    <p style="text-align:center">
+                        The cards were successfully swapped.
+                    </p>
+
+                </div>
+
+            `;
+
+        }else{
+
+            container.innerHTML = "";
+
+        }
+
+        return;
+
+    }
+
+    const isSender =
+        activeTrade.senderUid === currentUser.uid;
+
+    const myOffer =
+        getMyOffer(activeTrade);
+
+    const theirOffer =
+        getTheirOffer(activeTrade);
+
+    const myConfirmed =
+        isSender
+            ? activeTrade.senderConfirmed === true
+            : activeTrade.receiverConfirmed === true;
+
+    const theirConfirmed =
+        isSender
+            ? activeTrade.receiverConfirmed === true
+            : activeTrade.senderConfirmed === true;
+
+    const offerMatches =
+        sameIds(
+            myOffer.map(card=>card.id),
+            selectedTradeCards
+        );
+
+    container.innerHTML = `
+
+        <div class="tradeArea">
+
+            <h2>Trading</h2>
+
+            <div class="tradeColumns">
+
+                <div class="tradeSide">
+
+                    <h3>Your Offer</h3>
+
+                    ${renderOfferCards(myOffer)}
+
+                    <p style="text-align:center">
+                        Current offer:
+                        ${myOffer.length}
+                        card(s)
+                    </p>
+
+                    <hr>
+
+                    <h3>Choose Cards</h3>
+
+                    ${renderSelectableTradeCards()}
+
+                    <p style="text-align:center">
+                        ${selectedTradeCards.length}
+                        card(s) selected
+                    </p>
+
+                    <button
+                        class="changeOfferButton"
+                        onclick="submitTradeOffer()">
+
+                        UPDATE MY OFFER
+
+                    </button>
+
+                </div>
+
+
+                <div class="tradeSide">
+
+                    <h3>Their Offer</h3>
+
+                    ${renderOfferCards(theirOffer)}
+
+                    <p style="text-align:center">
+                        Their offer:
+                        ${theirOffer.length}
+                        card(s)
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="tradeStatus">
+
+                ${
+                    myConfirmed
+                        ? "You confirmed this trade."
+                        : "You have not confirmed."
+                }
+
+                <br>
+
+                ${
+                    theirConfirmed
+                        ? "They confirmed this trade."
+                        : "They have not confirmed."
+                }
+
+            </div>
+
+
+            ${
+                !offerMatches
+                    ? `
+                        <p style="
+                            text-align:center;
+                            color:#36b9ff;
+                        ">
+                            Update your offer before confirming.
+                        </p>
+                    `
+                    : ""
+            }
+
+
+            ${
+                myOffer.length === 0
+                    ? `
+                        <p style="
+                            text-align:center;
+                            color:#36b9ff;
+                        ">
+                            You must offer at least one card.
+                        </p>
+                    `
+                    : ""
+            }
+
+
+            ${
+                theirOffer.length === 0
+                    ? `
+                        <p style="
+                            text-align:center;
+                            color:#36b9ff;
+                        ">
+                            Waiting for them to offer a card.
+                        </p>
+                    `
+                    : ""
+            }
+
+
+            <button
+                class="confirmButton"
+                onclick="confirmTrade()"
+                ${
+                    myConfirmed ||
+                    !offerMatches ||
+                    myOffer.length === 0 ||
+                    theirOffer.length === 0
+                        ? "disabled"
+                        : ""
+                }>
+
+                ${
+                    myConfirmed
+                        ? "CONFIRMED"
+                        : "CONFIRM TRADE"
+                }
+
+            </button>
+
+
+            <button
+                class="cancelButton"
+                onclick="cancelTrade('${escapeHtml(activeTrade.id)}')">
+
+                CANCEL TRADE
+
+            </button>
+
+        </div>
+
+    `;
 
 }
 
-if(activeTrade.status!=="pending"){
 
-if(activeTrade.status==="completed"){
+/* SELECT TRADE CARD */
 
-container.innerHTML=`
+window.toggleTradeCard =
+function(cardId){
 
-<div class="tradeArea">
+    if(
+        !activeTrade ||
+        activeTrade.status !== "pending"
+    ){
+        return;
+    }
 
-<h2>Trade Completed</h2>
+    const copy =
+        collection.find(
+            card=>card.id === cardId
+        );
 
-<p style="text-align:center">
-The cards were successfully swapped.
-</p>
+    if(!copy){
+        return;
+    }
 
-</div>
+    if(selectedTradeCards.includes(cardId)){
 
-`;
+        selectedTradeCards =
+            selectedTradeCards.filter(
+                id=>id !== cardId
+            );
 
-}else{
+    }else{
 
-container.innerHTML="";
+        selectedTradeCards.push(cardId);
 
-}
+    }
 
-return;
-
-}
-
-const isSender=
-activeTrade.senderUid===currentUser.uid;
-
-const myOffer=getMyOffer(activeTrade);
-const theirOffer=getTheirOffer(activeTrade);
-
-const myConfirmed=isSender
-?activeTrade.senderConfirmed===true
-:activeTrade.receiverConfirmed===true;
-
-const theirConfirmed=isSender
-?activeTrade.receiverConfirmed===true
-:activeTrade.senderConfirmed===true;
-
-const offerMatches=sameIds(
-myOffer.map(card=>card.id),
-selectedTradeCards
-);
-
-container.innerHTML=`
-
-<div class="tradeArea">
-
-<h2>Trading</h2>
-
-<div class="tradeColumns">
-
-<div class="tradeSide">
-
-<h3>Your Offer</h3>
-
-${renderOfferCards(myOffer)}
-
-<p style="text-align:center">
-Current offer: ${myOffer.length} card(s)
-</p>
-
-<hr>
-
-<h3>Choose Cards</h3>
-
-${renderSelectableTradeCards()}
-
-<p style="text-align:center">
-${selectedTradeCards.length} card(s) selected
-</p>
-
-<button class="changeOfferButton"
-onclick="submitTradeOffer()">
-UPDATE MY OFFER
-</button>
-
-</div>
-
-<div class="tradeSide">
-
-<h3>Their Offer</h3>
-
-${renderOfferCards(theirOffer)}
-
-<p style="text-align:center">
-Their offer: ${theirOffer.length} card(s)
-</p>
-
-</div>
-
-</div>
-
-<div class="tradeStatus">
-
-${myConfirmed
-?"You confirmed this trade."
-:"You have not confirmed."}
-
-<br>
-
-${theirConfirmed
-?"They confirmed this trade."
-:"They have not confirmed."}
-
-</div>
-
-${!offerMatches?
-`<p style="text-align:center;color:#36b9ff">
-Update your offer before confirming.
-</p>`:""}
-
-${myOffer.length===0?
-`<p style="text-align:center;color:#36b9ff">
-You must offer at least one card.
-</p>`:""}
-
-${theirOffer.length===0?
-`<p style="text-align:center;color:#36b9ff">
-Waiting for them to offer a card.
-</p>`:""}
-
-<button
-class="confirmButton"
-onclick="confirmTrade()"
-${myConfirmed||
-!offerMatches||
-myOffer.length===0||
-theirOffer.length===0
-?"disabled":""}>
-
-${myConfirmed?"CONFIRMED":"CONFIRM TRADE"}
-
-</button>
-
-<button
-class="cancelButton"
-onclick="cancelTrade('${escapeHtml(activeTrade.id)}')">
-
-CANCEL TRADE
-
-</button>
-
-</div>
-
-`;
-
-}
-
-window.toggleTradeCard=function(cardId){
-
-if(!activeTrade||
-activeTrade.status!=="pending")return;
-
-const copy=collection.find(
-card=>card.id===cardId
-);
-
-if(!copy)return;
-
-if(selectedTradeCards.includes(cardId)){
-
-selectedTradeCards=
-selectedTradeCards.filter(id=>id!==cardId);
-
-}else{
-
-selectedTradeCards.push(cardId);
-
-}
-
-renderActiveTrade();
+    renderActiveTrade();
 
 };
 
-window.submitTradeOffer=async function(){
 
-if(!activeTrade||
-activeTrade.status!=="pending")return;
+/* SUBMIT OFFER */
 
-selectedTradeCards=
-selectedTradeCards.filter(id=>
-collection.some(copy=>copy.id===id)
-);
+window.submitTradeOffer =
+async function(){
 
-const offer=selectedTradeCards.map(id=>{
+    if(
+        !activeTrade ||
+        activeTrade.status !== "pending"
+    ){
+        return;
+    }
 
-const copy=collection.find(
-item=>item.id===id
-);
+    selectedTradeCards =
+        selectedTradeCards.filter(
+            id =>
+                collection.some(
+                    copy=>copy.id === id
+                )
+        );
 
-if(!copy)return null;
+    const offer =
+        selectedTradeCards
+            .map(id=>{
 
-return{
+                const copy =
+                    collection.find(
+                        item=>item.id === id
+                    );
 
-id:copy.id,
-name:copy.name,
-traded:copy.traded===true,
-favorite:favorites.includes(copy.name)
+                if(!copy){
+                    return null;
+                }
+
+                return {
+                    id:copy.id,
+                    name:copy.name,
+                    traded:copy.traded === true,
+                    favorite:favorites.includes(copy.name)
+                };
+
+            })
+            .filter(Boolean);
+
+    const isSender =
+        activeTrade.senderUid === currentUser.uid;
+
+    const field =
+        isSender
+            ? "senderOffer"
+            : "receiverOffer";
+
+    try{
+
+        await updateDoc(
+            doc(
+                db,
+                "tradeRequests",
+                activeTrade.id
+            ),
+            {
+                [field]:offer,
+                senderConfirmed:false,
+                receiverConfirmed:false
+            }
+        );
+
+        showMessage(
+            "Offer updated. Both players must confirm again."
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Could not update offer: " +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* CONFIRM TRADE */
+
+window.confirmTrade =
+async function(){
+
+    if(
+        !activeTrade ||
+        activeTrade.status !== "pending"
+    ){
+        return;
+    }
+
+    try{
+
+        const tradeRef =
+            doc(
+                db,
+                "tradeRequests",
+                activeTrade.id
+            );
+
+        const snap =
+            await getDoc(tradeRef);
+
+        if(!snap.exists()){
+
+            showMessage(
+                "Trade no longer exists."
+            );
+
+            return;
+
+        }
+
+        const trade = {
+            id:snap.id,
+            ...snap.data()
+        };
+
+        const myOffer =
+            getMyOffer(trade);
+
+        const theirOffer =
+            getTheirOffer(trade);
+
+        if(!myOffer.length){
+
+            showMessage(
+                "You must offer at least one card."
+            );
+
+            return;
+
+        }
+
+        if(!theirOffer.length){
+
+            showMessage(
+                "Wait for the other player to offer a card."
+            );
+
+            return;
+
+        }
+
+        if(
+            !sameIds(
+                myOffer.map(card=>card.id),
+                selectedTradeCards
+            )
+        ){
+
+            showMessage(
+                "Update your offer before confirming."
+            );
+
+            return;
+
+        }
+
+        const stillOwns =
+            myOffer.every(
+                offered =>
+                    collection.some(
+                        copy=>copy.id === offered.id
+                    )
+            );
+
+        if(!stillOwns){
+
+            showMessage(
+                "One of your offered cards is no longer in your collection."
+            );
+
+            return;
+
+        }
+
+        const isSender =
+            trade.senderUid === currentUser.uid;
+
+        const field =
+            isSender
+                ? "senderConfirmed"
+                : "receiverConfirmed";
+
+        await updateDoc(
+            tradeRef,
+            {
+                [field]:true
+            }
+        );
+
+        activeTrade = {
+            ...trade,
+            [field]:true
+        };
+
+        renderActiveTrade();
+
+        showMessage(
+            "Confirmed. Waiting for the other player."
+        );
+
+        await tryFinalizeTrade({
+            ...trade,
+            [field]:true
+        });
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Could not confirm trade: " +
+            error.message
+        );
+
+    }
 
 };
 
-}).filter(Boolean);
 
-const isSender=
-activeTrade.senderUid===currentUser.uid;
-
-const field=isSender
-?"senderOffer"
-:"receiverOffer";
-
-try{
-
-await updateDoc(
-doc(db,"tradeRequests",activeTrade.id),
-{
-
-[field]:offer,
-
-senderConfirmed:false,
-receiverConfirmed:false
-
-}
-);
-
-showMessage(
-"Offer updated. Both players must confirm again."
-);
-
-}catch(error){
-
-console.error(error);
-
-showMessage(
-"Could not update offer: "+error.message
-);
-
-}
-
-};
-
-window.confirmTrade=async function(){
-
-if(!activeTrade||
-activeTrade.status!=="pending")return;
-
-try{
-
-const tradeRef=doc(
-db,"tradeRequests",activeTrade.id
-);
-
-const snap=await getDoc(tradeRef);
-
-if(!snap.exists()){
-
-showMessage("Trade no longer exists.");
-return;
-
-}
-
-const trade={
-id:snap.id,
-...snap.data()
-};
-
-const myOffer=getMyOffer(trade);
-const theirOffer=getTheirOffer(trade);
-
-if(!myOffer.length){
-
-showMessage("You must offer at least one card.");
-return;
-
-}
-
-if(!theirOffer.length){
-
-showMessage("Wait for the other player to offer a card.");
-return;
-
-}
-
-if(!sameIds(
-myOffer.map(card=>card.id),
-selectedTradeCards
-)){
-
-showMessage("Update your offer before confirming.");
-return;
-
-}
-
-const stillOwns=myOffer.every(
-offered=>
-collection.some(copy=>copy.id===offered.id)
-);
-
-if(!stillOwns){
-
-showMessage(
-"One offered card is no longer in your collection."
-);
-
-return;
-
-}
-
-const isSender=
-trade.senderUid===currentUser.uid;
-
-const field=isSender
-?"senderConfirmed"
-:"receiverConfirmed";
-
-await updateDoc(
-tradeRef,
-{[field]:true}
-);
-
-activeTrade={
-...trade,
-[field]:true
-};
-
-renderActiveTrade();
-
-await tryFinalizeTrade({
-...trade,
-[field]:true
-});
-
-}catch(error){
-
-console.error(error);
-
-showMessage(
-"Could not confirm trade: "+error.message
-);
-
-}
-
-};
+/* FINALIZE */
 
 async function tryFinalizeTrade(trade){
 
-if(!trade||
-trade.status!=="pending")return;
+    if(
+        !trade ||
+        trade.status !== "pending" ||
+        trade.senderConfirmed !== true ||
+        trade.receiverConfirmed !== true
+    ){
+        return;
+    }
 
-if(
-trade.senderConfirmed!==true||
-trade.receiverConfirmed!==true
-)return;
+    const senderOffer =
+        Array.isArray(trade.senderOffer)
+            ? trade.senderOffer
+            : [];
 
-const senderOffer=
-Array.isArray(trade.senderOffer)
-?trade.senderOffer:[];
+    const receiverOffer =
+        Array.isArray(trade.receiverOffer)
+            ? trade.receiverOffer
+            : [];
 
-const receiverOffer=
-Array.isArray(trade.receiverOffer)
-?trade.receiverOffer:[];
+    if(!senderOffer.length || !receiverOffer.length){
+        return;
+    }
 
-if(!senderOffer.length||!receiverOffer.length)return;
+    try{
 
-try{
+        const tradeRef =
+            doc(
+                db,
+                "tradeRequests",
+                trade.id
+            );
 
-const ref=doc(
-db,"tradeRequests",trade.id
-);
+        const snap =
+            await getDoc(tradeRef);
 
-const snap=await getDoc(ref);
+        if(!snap.exists()){
+            return;
+        }
 
-if(!snap.exists())return;
+        const fresh = {
+            id:snap.id,
+            ...snap.data()
+        };
 
-const fresh={
-id:snap.id,
-...snap.data()
-};
+        if(
+            fresh.status !== "pending" ||
+            fresh.senderConfirmed !== true ||
+            fresh.receiverConfirmed !== true
+        ){
+            return;
+        }
 
-if(fresh.status!=="pending")return;
+        await updateDoc(
+            tradeRef,
+            {
+                status:"completed",
+                completedAt:serverTimestamp()
+            }
+        );
 
-if(
-fresh.senderConfirmed!==true||
-fresh.receiverConfirmed!==true
-)return;
+        await applyCompletedTrade({
+            ...fresh,
+            status:"completed"
+        });
 
-await updateDoc(
-ref,
-{
-status:"completed",
-completedAt:serverTimestamp()
+    }catch(error){
+
+        console.error(
+            "FINALIZE TRADE ERROR:",
+            error
+        );
+
+    }
+
 }
-);
 
-await applyCompletedTrade({
-...fresh,
-status:"completed"
-});
 
-}catch(error){
-
-console.error("FINALIZE TRADE ERROR:",error);
-
-}
-
-}
+/* COMPLETE TRADE */
 
 async function applyCompletedTrade(trade){
 
-if(!currentUser||
-trade.status!=="completed")return;
+    if(
+        !currentUser ||
+        trade.status !== "completed"
+    ){
+        return;
+    }
 
-if(completedTradeIds.includes(trade.id))return;
+    if(
+        completedTradeIds.includes(trade.id) ||
+        applyingTradeIds.has(trade.id)
+    ){
+        return;
+    }
 
-if(applyingTradeIds.has(trade.id))return;
+    applyingTradeIds.add(trade.id);
 
-applyingTradeIds.add(trade.id);
+    try{
 
-try{
+        const isSender =
+            trade.senderUid === currentUser.uid;
 
-const isSender=
-trade.senderUid===currentUser.uid;
+        const myOffer =
+            isSender
+                ? trade.senderOffer || []
+                : trade.receiverOffer || [];
 
-const myOffer=isSender
-?(Array.isArray(trade.senderOffer)
-?trade.senderOffer:[])
-:(Array.isArray(trade.receiverOffer)
-?trade.receiverOffer:[]);
+        const incomingOffer =
+            isSender
+                ? trade.receiverOffer || []
+                : trade.senderOffer || [];
 
-const incomingOffer=isSender
-?(Array.isArray(trade.receiverOffer)
-?trade.receiverOffer:[])
-:(Array.isArray(trade.senderOffer)
-?trade.senderOffer:[]);
+        if(!myOffer.length || !incomingOffer.length){
+            return;
+        }
 
-const ref=doc(
-db,"players",currentUser.uid
-);
+        const playerRef =
+            doc(
+                db,
+                "players",
+                currentUser.uid
+            );
 
-const snap=await getDoc(ref);
+        const playerSnap =
+            await getDoc(playerRef);
 
-if(!snap.exists())return;
+        if(!playerSnap.exists()){
+            return;
+        }
 
-const data=snap.data();
+        const data =
+            playerSnap.data();
 
-let currentCollection=
-normalizeCollection(data.collection);
+        let currentCollection =
+            normalizeCollection(data.collection);
 
-let currentFavorites=
-Array.isArray(data.favorites)
-?[...data.favorites]:[];
+        let currentFavorites =
+            Array.isArray(data.favorites)
+                ? [...data.favorites]
+                : [];
 
-let currentCompleted=
-Array.isArray(data.completedTradeIds)
-?[...data.completedTradeIds]:[];
+        let currentCompleted =
+            Array.isArray(data.completedTradeIds)
+                ? [...data.completedTradeIds]
+                : [];
 
-if(currentCompleted.includes(trade.id))return;
+        if(currentCompleted.includes(trade.id)){
 
-const outgoingIds=new Set(
-myOffer.map(card=>card.id)
-);
+            completedTradeIds =
+                currentCompleted;
 
-currentCollection=
-currentCollection.filter(
-copy=>!outgoingIds.has(copy.id)
-);
+            return;
 
-for(const offered of incomingOffer){
+        }
 
-if(!currentCollection.some(
-copy=>copy.id===offered.id
-)){
+        const outgoingIds =
+            new Set(
+                myOffer.map(card=>card.id)
+            );
 
-currentCollection.push({
-id:offered.id,
-name:offered.name,
-traded:true
-});
+        const ownsAll =
+            myOffer.every(
+                offered =>
+                    currentCollection.some(
+                        copy=>copy.id === offered.id
+                    )
+            );
+
+        if(!ownsAll){
+
+            const incomingAlreadyThere =
+                incomingOffer.every(
+                    offered =>
+                        currentCollection.some(
+                            copy=>copy.id === offered.id
+                        )
+                );
+
+            if(incomingAlreadyThere){
+
+                currentCompleted.push(trade.id);
+
+                await setDoc(
+                    playerRef,
+                    {
+                        completedTradeIds:
+                            currentCompleted
+                    },
+                    {merge:true}
+                );
+
+                completedTradeIds =
+                    currentCompleted;
+
+            }
+
+            return;
+
+        }
+
+        currentCollection =
+            currentCollection.filter(
+                copy=>!outgoingIds.has(copy.id)
+            );
+
+        for(const offered of incomingOffer){
+
+            if(
+                currentCollection.some(
+                    copy=>copy.id === offered.id
+                )
+            ){
+                continue;
+            }
+
+            currentCollection.push({
+                id:offered.id,
+                name:offered.name,
+                traded:true
+            });
+
+            if(
+                offered.favorite === true &&
+                !currentFavorites.includes(offered.name)
+            ){
+
+                currentFavorites.push(
+                    offered.name
+                );
+
+            }
+
+        }
+
+        currentCompleted.push(trade.id);
+
+        await setDoc(
+            playerRef,
+            {
+                collection:currentCollection,
+                favorites:currentFavorites,
+                completedTradeIds:currentCompleted
+            },
+            {merge:true}
+        );
+
+        collection = currentCollection;
+        favorites = currentFavorites;
+        completedTradeIds = currentCompleted;
+
+        updateUI();
+
+        showMessage(
+            "Trade completed! Cards swapped."
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Could not finish the trade: " +
+            error.message
+        );
+
+    }finally{
+
+        applyingTradeIds.delete(trade.id);
+
+    }
 
 }
 
-if(
-offered.favorite===true &&
-!currentFavorites.includes(offered.name)
-){
 
-currentFavorites.push(offered.name);
+/* CANCEL */
 
-}
+window.cancelTrade =
+async function(tradeId){
 
-}
+    try{
 
-currentCompleted.push(trade.id);
+        await updateDoc(
+            doc(
+                db,
+                "tradeRequests",
+                tradeId
+            ),
+            {
+                status:"cancelled"
+            }
+        );
 
-await setDoc(
-ref,
-{
-collection:currentCollection,
-favorites:currentFavorites,
-completedTradeIds:currentCompleted
-},
-{merge:true}
-);
+        if(
+            activeTrade &&
+            activeTrade.id === tradeId
+        ){
+            activeTrade = null;
+        }
 
-collection=currentCollection;
-favorites=currentFavorites;
-completedTradeIds=currentCompleted;
+        selectedTradeCards = [];
 
-updateUI();
+        renderActiveTrade();
+        renderIncomingTrades();
 
-showMessage("Trade completed! Cards swapped.");
+        showMessage("Trade cancelled.");
 
-}catch(error){
+    }catch(error){
 
-console.error(error);
+        console.error(error);
 
-}finally{
+        showMessage(
+            "Could not cancel trade: " +
+            error.message
+        );
 
-applyingTradeIds.delete(trade.id);
-
-}
-
-}
-
-window.cancelTrade=async function(tradeId){
-
-try{
-
-await updateDoc(
-doc(db,"tradeRequests",tradeId),
-{status:"cancelled"}
-);
-
-if(activeTrade?.id===tradeId){
-
-activeTrade=null;
-
-}
-
-selectedTradeCards=[];
-
-renderActiveTrade();
-renderIncomingTrades();
-
-showMessage("Trade cancelled.");
-
-}catch(error){
-
-console.error(error);
-
-showMessage(
-"Could not cancel trade: "+error.message
-);
-
-}
+    }
 
 };
+
+
+/* =========================================================
+   FRIEND SYSTEM
+   ========================================================= */
+
+window.findFriend =
+async function(){
+
+    const input =
+        document.getElementById("friendPlayerInput");
+
+    const result =
+        document.getElementById("friendSearchResult");
+
+    const name =
+        input.value.trim();
+
+    if(!name){
+
+        result.innerHTML =
+            "<p>Enter a username.</p>";
+
+        return;
+
+    }
+
+    if(
+        username &&
+        name.toLowerCase() === username.toLowerCase()
+    ){
+
+        result.innerHTML = `
+            <div class="tradeNotice">
+                You cannot add yourself as a friend.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    result.innerHTML =
+        "<p>Searching...</p>";
+
+    try{
+
+        const usernameRef =
+            doc(
+                db,
+                "usernames",
+                name.toLowerCase()
+            );
+
+        const usernameSnap =
+            await getDoc(usernameRef);
+
+        if(!usernameSnap.exists()){
+
+            result.innerHTML = `
+                <div class="friendEmpty">
+                    Player not found.
+                </div>
+            `;
+
+            return;
+
+        }
+
+        const usernameData =
+            usernameSnap.data();
+
+        const targetUid =
+            usernameData.uid;
+
+        if(targetUid === currentUser.uid){
+
+            result.innerHTML = `
+                <div class="friendEmpty">
+                    You cannot add yourself.
+                </div>
+            `;
+
+            return;
+
+        }
+
+        const playerSnap =
+            await getDoc(
+                doc(
+                    db,
+                    "players",
+                    targetUid
+                )
+            );
+
+        const playerData =
+            playerSnap.exists()
+                ? playerSnap.data()
+                : {};
+
+        const targetUsername =
+            playerData.username ||
+            usernameData.username ||
+            name;
+
+        const targetProfilePic =
+            playerData.profilePic ||
+            DEFAULT_PROFILE_PIC;
+
+        const alreadyFriend =
+            friends.includes(targetUid);
+
+        const alreadySent =
+            friendRequests.some(
+                request =>
+                    request.status === "pending" &&
+                    request.senderUid === currentUser.uid &&
+                    request.receiverUid === targetUid
+            );
+
+        const alreadyReceived =
+            friendRequests.some(
+                request =>
+                    request.status === "pending" &&
+                    request.senderUid === targetUid &&
+                    request.receiverUid === currentUser.uid
+            );
+
+        let actionHtml = "";
+
+        if(alreadyFriend){
+
+            actionHtml = `
+                <button
+                    class="friendActionButton"
+                    disabled>
+                    ALREADY FRIENDS
+                </button>
+            `;
+
+        }else if(alreadySent){
+
+            actionHtml = `
+                <button
+                    class="friendActionButton"
+                    disabled>
+                    REQUEST SENT
+                </button>
+            `;
+
+        }else if(alreadyReceived){
+
+            actionHtml = `
+                <button
+                    class="friendActionButton friendAcceptButton"
+                    onclick="acceptFriendRequestByUser('${escapeHtml(targetUid)}')">
+
+                    ACCEPT FRIEND REQUEST
+
+                </button>
+            `;
+
+        }else{
+
+            actionHtml = `
+                <button
+                    class="friendActionButton"
+                    onclick="sendFriendRequest('${escapeHtml(targetUid)}')">
+
+                    ADD FRIEND
+
+                </button>
+            `;
+
+        }
+
+        result.innerHTML = `
+
+            <div class="friendResultBox">
+
+                <img
+                    class="profilePicSmall"
+                    src="${escapeHtml(targetProfilePic)}"
+                    alt="Profile Picture">
+
+                <div class="friendResultInfo">
+
+                    <div class="friendName">
+                        ${escapeHtml(targetUsername)}
+                    </div>
+
+                    <div>
+                        Player found.
+                    </div>
+
+                    ${actionHtml}
+
+                </div>
+
+            </div>
+
+        `;
+
+    }catch(error){
+
+        console.error(error);
+
+        result.innerHTML = `
+            <div class="friendEmpty">
+                Search error:<br>
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+
+    }
+
+};
+
+
+/* SEND FRIEND REQUEST */
+
+window.sendFriendRequest =
+async function(receiverUid){
+
+    if(!currentUser){
+        return;
+    }
+
+    if(receiverUid === currentUser.uid){
+
+        showMessage(
+            "You cannot add yourself."
+        );
+
+        return;
+
+    }
+
+    try{
+
+        if(friends.includes(receiverUid)){
+
+            showMessage(
+                "You are already friends."
+            );
+
+            return;
+
+        }
+
+        const existingQuery =
+            query(
+                firestoreCollection(
+                    db,
+                    "friendRequests"
+                ),
+                where(
+                    "participants",
+                    "array-contains",
+                    currentUser.uid
+                )
+            );
+
+        const existingSnap =
+            await new Promise(
+                (resolve,reject)=>{
+
+                    let unsubscribe;
+
+                    unsubscribe =
+                        onSnapshot(
+                            existingQuery,
+                            snap=>{
+                                unsubscribe();
+                                resolve(snap);
+                            },
+                            error=>{
+                                unsubscribe();
+                                reject(error);
+                            }
+                        );
+
+                }
+            );
+
+        const existing =
+            existingSnap.docs
+                .map(snap=>({
+                    id:snap.id,
+                    ...snap.data()
+                }))
+                .find(
+                    request =>
+                        request.status === "pending" &&
+                        (
+                            (
+                                request.senderUid === currentUser.uid &&
+                                request.receiverUid === receiverUid
+                            ) ||
+                            (
+                                request.receiverUid === currentUser.uid &&
+                                request.senderUid === receiverUid
+                            )
+                        )
+                );
+
+        if(existing){
+
+            showMessage(
+                "A friend request already exists."
+            );
+
+            return;
+
+        }
+
+        const targetSnap =
+            await getDoc(
+                doc(
+                    db,
+                    "players",
+                    receiverUid
+                )
+            );
+
+        const targetData =
+            targetSnap.exists()
+                ? targetSnap.data()
+                : {};
+
+        const requestId =
+            createCardId();
+
+        await setDoc(
+            doc(
+                db,
+                "friendRequests",
+                requestId
+            ),
+            {
+                participants:[
+                    currentUser.uid,
+                    receiverUid
+                ],
+                senderUid:currentUser.uid,
+                receiverUid:receiverUid,
+                senderUsername:username,
+                receiverUsername:
+                    targetData.username || "",
+                status:"pending",
+                createdAt:serverTimestamp()
+            }
+        );
+
+        showMessage(
+            "Friend request sent!"
+        );
+
+        document.getElementById(
+            "friendSearchResult"
+        ).innerHTML = `
+            <div class="friendEmpty">
+                Friend request sent!
+            </div>
+        `;
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Could not send friend request: " +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* FRIEND REQUEST LISTENER */
+
+function stopFriendListener(){
+
+    if(friendListener){
+
+        friendListener();
+        friendListener = null;
+
+    }
+
+}
+
+
+function startFriendListener(){
+
+    stopFriendListener();
+
+    if(!currentUser){
+        return;
+    }
+
+    const requestCollection =
+        firestoreCollection(
+            db,
+            "friendRequests"
+        );
+
+    const requestQuery =
+        query(
+            requestCollection,
+            where(
+                "participants",
+                "array-contains",
+                currentUser.uid
+            )
+        );
+
+    friendListener =
+        onSnapshot(
+            requestQuery,
+            snapshot=>{
+
+                friendRequests =
+                    snapshot.docs.map(
+                        snap=>({
+                            id:snap.id,
+                            ...snap.data()
+                        })
+                    );
+
+                renderFriendRequests();
+                renderFriends();
+
+            },
+            error=>{
+
+                console.error(error);
+
+                showMessage(
+                    "Friend connection error: " +
+                    error.message
+                );
+
+            }
+
+        );
+
+}
+
+
+/* FRIEND REQUESTS */
+
+function renderFriendRequests(){
+
+    const container =
+        document.getElementById(
+            "friendRequestsArea"
+        );
+
+    if(!container){
+        return;
+    }
+
+    const incoming =
+        friendRequests.filter(
+            request =>
+                request.receiverUid === currentUser?.uid &&
+                request.status === "pending"
+        );
+
+    if(!incoming.length){
+
+        container.innerHTML = "";
+        return;
+
+    }
+
+    container.innerHTML = `
+        <h2 class="friendSection">
+            Friend Requests
+        </h2>
+    `;
+
+    incoming.forEach(request=>{
+
+        const div =
+            document.createElement("div");
+
+        div.className = "tradeRequest";
+
+        div.innerHTML = `
+
+            <div class="playerResultBox">
+
+                <img
+                    class="profilePicTiny"
+                    src="basic_p.png"
+                    id="friendRequestPic_${escapeHtml(request.id)}"
+                    alt="Profile Picture">
+
+                <div class="playerResultInfo">
+
+                    <div class="friendName">
+                        ${escapeHtml(
+                            request.senderUsername ||
+                            "Another player"
+                        )}
+                    </div>
+
+                    <p>
+                        Wants to be your friend.
+                    </p>
+
+                    <button
+                        class="friendAcceptButton"
+                        onclick="acceptFriendRequest('${escapeHtml(request.id)}')">
+
+                        ACCEPT
+
+                    </button>
+
+                    <button
+                        class="friendDeclineButton"
+                        onclick="declineFriendRequest('${escapeHtml(request.id)}')">
+
+                        DECLINE
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+        container.appendChild(div);
+
+        loadFriendRequestPicture(
+            request.id,
+            request.senderUid
+        );
+
+    });
+
+}
+
+
+/* REQUEST PROFILE PICTURE */
+
+async function loadFriendRequestPicture(
+    requestId,
+    senderUid
+){
+
+    try{
+
+        const snap =
+            await getDoc(
+                doc(
+                    db,
+                    "players",
+                    senderUid
+                )
+            );
+
+        if(!snap.exists()){
+            return;
+        }
+
+        const data = snap.data();
+
+        const image =
+            document.getElementById(
+                "friendRequestPic_" + requestId
+            );
+
+        if(image){
+
+            image.src =
+                data.profilePic ||
+                DEFAULT_PROFILE_PIC;
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* ACCEPT FRIEND REQUEST */
+
+window.acceptFriendRequest =
+async function(requestId){
+
+    const request =
+        friendRequests.find(
+            item=>item.id === requestId
+        );
+
+    if(!request){
+
+        showMessage(
+            "Friend request not found."
+        );
+
+        return;
+
+    }
+
+    if(
+        request.receiverUid !== currentUser.uid ||
+        request.status !== "pending"
+    ){
+
+        showMessage(
+            "This request cannot be accepted."
+        );
+
+        return;
+
+    }
+
+    try{
+
+        const myRef =
+            doc(
+                db,
+                "players",
+                currentUser.uid
+            );
+
+        const otherRef =
+            doc(
+                db,
+                "players",
+                request.senderUid
+            );
+
+        await updateDoc(
+            myRef,
+            {
+                friends:
+                    arrayUnion(request.senderUid)
+            }
+        );
+
+        await updateDoc(
+            otherRef,
+            {
+                friends:
+                    arrayUnion(currentUser.uid)
+            }
+        );
+
+        await updateDoc(
+            doc(
+                db,
+                "friendRequests",
+                requestId
+            ),
+            {
+                status:"accepted"
+            }
+        );
+
+        if(!friends.includes(request.senderUid)){
+            friends.push(request.senderUid);
+        }
+
+        showMessage(
+            "You are now friends with " +
+            request.senderUsername + "!"
+        );
+
+        renderFriends();
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Could not accept friend request: " +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* ACCEPT FROM SEARCH */
+
+window.acceptFriendRequestByUser =
+async function(userId){
+
+    const request =
+        friendRequests.find(
+            request =>
+                request.senderUid === userId &&
+                request.receiverUid === currentUser.uid &&
+                request.status === "pending"
+        );
+
+    if(!request){
+
+        showMessage(
+            "Friend request not found."
+        );
+
+        return;
+
+    }
+
+    await acceptFriendRequest(request.id);
+
+};
+
+
+/* DECLINE */
+
+window.declineFriendRequest =
+async function(requestId){
+
+    const request =
+        friendRequests.find(
+            item=>item.id === requestId
+        );
+
+    if(!request){
+
+        showMessage(
+            "Friend request not found."
+        );
+
+        return;
+
+    }
+
+    try{
+
+        await updateDoc(
+            doc(
+                db,
+                "friendRequests",
+                requestId
+            ),
+            {
+                status:"declined"
+            }
+        );
+
+        showMessage(
+            "Friend request declined."
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Could not decline request: " +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* FRIEND LIST */
+
+async function renderFriends(){
+
+    const container =
+        document.getElementById("friendsList");
+
+    if(
+        !container ||
+        !currentUser
+    ){
+        return;
+    }
+
+    if(!friends.length){
+
+        container.innerHTML = `
+            <div class="friendEmpty">
+
+                <h3>
+                    No friends yet
+                </h3>
+
+                <p>
+                    Search for a player above to add them.
+                </p>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+    container.innerHTML =
+        "<p>Loading friends...</p>";
+
+    try{
+
+        const friendProfiles = [];
+
+        for(const friendId of friends){
+
+            const snap =
+                await getDoc(
+                    doc(
+                        db,
+                        "players",
+                        friendId
+                    )
+                );
+
+            if(!snap.exists()){
+                continue;
+            }
+
+            const data =
+                snap.data();
+
+            friendProfiles.push({
+
+                uid:friendId,
+
+                username:
+                    data.username ||
+                    "Unknown Player",
+
+                profilePic:
+                    data.profilePic ||
+                    DEFAULT_PROFILE_PIC
+
+            });
+
+        }
+
+        if(!friendProfiles.length){
+
+            container.innerHTML = `
+                <div class="friendEmpty">
+                    No friends found.
+                </div>
+            `;
+
+            return;
+
+        }
+
+        container.innerHTML = "";
+
+        friendProfiles.forEach(friend=>{
+
+            const div =
+                document.createElement("div");
+
+            div.className = "friendBox";
+
+            div.innerHTML = `
+
+                <img
+                    class="profilePicSmall"
+                    src="${escapeHtml(friend.profilePic)}"
+                    alt="Profile Picture">
+
+                <div class="friendInfo">
+
+                    <div class="friendName">
+                        ${escapeHtml(friend.username)}
+                    </div>
+
+                    <div>
+                        Friend
+                    </div>
+
+                </div>
+
+                <button
+                    class="friendActionButton"
+                    onclick="openTradeWithFriend('${escapeHtml(friend.username)}')">
+
+                    TRADE
+
+                </button>
+
+            `;
+
+            container.appendChild(div);
+
+        });
+
+    }catch(error){
+
+        console.error(error);
+
+        container.innerHTML = `
+            <div class="friendEmpty">
+                Could not load friends.
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* TRADE BUTTON FROM FRIEND LIST */
+
+window.openTradeWithFriend =
+function(friendUsername){
+
+    showPage("trade");
+
+    const input =
+        document.getElementById(
+            "tradePlayerInput"
+        );
+
+    input.value = friendUsername;
+
+    findPlayer();
+
+};
+
 
 /* SETTINGS */
 
-window.openSettings=function(){
+window.openSettings =
+function(){
 
-document.getElementById("settingsOverlay")
-.classList.remove("hidden");
+    document
+        .getElementById("settingsOverlay")
+        .classList.remove("hidden");
+
+};
+
+
+window.closeSettings =
+function(){
+
+    document
+        .getElementById("settingsOverlay")
+        .classList.add("hidden");
 
 };
 
-window.closeSettings=function(){
-
-document.getElementById("settingsOverlay")
-.classList.add("hidden");
-
-};
 
 /* RESET */
 
-window.resetAccount=async function(){
+window.resetAccount =
+async function(){
 
-const yes=confirm(
-"Are you sure you want to reset your account? This deletes your coins, Dolb, cards and profile pictures."
-);
+    const yes =
+        confirm(
+            "Are you sure you want to reset your account? This deletes your coins and collection."
+        );
 
-if(!yes)return;
+    if(!yes){
+        return;
+    }
 
-money=STARTING_COINS;
-dolb=STARTING_DOLB;
-collection=[];
-favorites=[];
-completedTradeIds=[];
-friends=[];
-friendRequests=[];
-profilePic="basic_p.png";
-ownedProfilePics=["basic_p.png"];
+    money = STARTING_COINS;
 
-await savePlayerData();
+    collection = [];
 
-updateUI();
-closeSettings();
+    favorites = [];
 
-showMessage("Account reset.");
+    completedTradeIds = [];
+
+    battle = null;
+
+    await savePlayerData();
+
+    updateUI();
+
+    closeSettings();
+
+    showMessage(
+        "Account reset. You now have 50 coins."
+    );
 
 };
 
-/* START BATTLE LISTENER */
-
-startBattleListener();
-
 </script>
+
 </body>
 </html>
