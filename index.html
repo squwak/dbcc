@@ -1161,10 +1161,12 @@ X
 id="cardViewerImage"                    
 class="cardViewerImage"                    
 src=""                    
-onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script src="https://cdn.jsdelivr.net/npm/firebase@10.14.1/firebase-app-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/firebase@10.14.1/firebase-auth-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/firebase@10.14.1/firebase-firestore-compat.js"></script>
+onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-auth-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-firestore-compat.min.js"></script>
 <script>
+    window.addEventListener("error",e=>{  showMessage("JS Error: "+(e.message||e));  });
+window.addEventListener("unhandledrejection",e=>{  showMessage("Promise Error: "+(e.reason?.message||e.reason));  });
     const firebaseConfig={          
 apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",          
 authDomain:"dbcc-login.firebaseapp.com",          
@@ -1176,7 +1178,7 @@ appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
 measurementId:"G-PT9S1K4E2K"          
 };  const app=firebase.initializeApp(firebaseConfig);        
 const auth=firebase.auth();        
-const db=firebase.firestore();  window.addEventListener("error",e=>{  showMessage("JS Error: "+(e.message||e));  });  window.addEventListener("unhandledrejection",e=>{  showMessage("Promise Error: "+(e.reason?.message||e.reason));  });  (auth).getRedirectResult().catch(e=>{  console.error(e);  showMessage("Redirect Error: "+e.message+" ("+e.code+")");  });  const DEFAULT_PROFILE_PIC="basic_p.png";      
+const db=firebase.firestore();  (auth).getRedirectResult().catch(e=>{  console.error(e);  showMessage("Redirect Error: "+e.message+" ("+e.code+")");  });  const DEFAULT_PROFILE_PIC="basic_p.png";      
 const BUZZY_PROFILE_PIC="buzzy_p.png";  const PACK_PRICE=15;    
 const STARTING_COINS=75;    
 const STARTING_DOLB=0;  const BATTLE_HP=100;  /*
@@ -5970,5 +5972,4 @@ ${escapeHtml(
 r.senderUsername||                    
 "Player"                    
 )}                    
-</div>    <p>                    
-wants to battle you!               
+</div>    <p>               
