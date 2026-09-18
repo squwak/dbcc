@@ -1161,7 +1161,9 @@ X
 id="cardViewerImage"                    
 class="cardViewerImage"                    
 src=""                    
-onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script type="module">    import {                
+onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+<script type="module">    import {                
 initializeApp                
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";  import {              
 getAuth,              
@@ -6155,4 +6157,4 @@ d.innerHTML=`
 <div class="playerResultBox">    <img                    
 class="profilePicSmall"                    
 id="battleReqPic_${escapeHtml(r.id)}"                    
-src="${DEFAULT_PROFILE_PIC}">  <div class="playerResultInfo">    <div class="friendName">                   
+src="${DEFAULT_PRO
