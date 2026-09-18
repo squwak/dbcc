@@ -1161,13 +1161,27 @@ X
 id="cardViewerImage"                    
 class="cardViewerImage"                    
 src=""                    
-onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-app-compat.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-auth-compat.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-firestore-compat.min.js"></script>
-<script>
-    window.addEventListener("error",e=>{  showMessage("JS Error: "+(e.message||e));  });
-window.addEventListener("unhandledrejection",e=>{  showMessage("Promise Error: "+(e.reason?.message||e.reason));  });
-    const firebaseConfig={          
+onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script type="module">    import {                
+initializeApp                
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";  import {              
+getAuth,              
+GoogleAuthProvider,              
+signInWithPopup,              
+signOut,              
+onAuthStateChanged              
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";  import {            
+getFirestore,            
+doc,            
+getDoc,            
+setDoc,            
+updateDoc,            
+onSnapshot,            
+collection as firestoreCollection,            
+query,            
+where,            
+serverTimestamp,            
+arrayUnion            
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";  const firebaseConfig={          
 apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",          
 authDomain:"dbcc-login.firebaseapp.com",          
 databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",          
@@ -1176,9 +1190,9 @@ storageBucket:"dbcc-login.firebasestorage.app",
 messagingSenderId:"878902780767",          
 appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",          
 measurementId:"G-PT9S1K4E2K"          
-};  const app=firebase.initializeApp(firebaseConfig);        
-const auth=firebase.auth();        
-const db=firebase.firestore();  (auth).getRedirectResult().catch(e=>{  console.error(e);  if(e.code==="auth/operation-not-supported-in-this-environment"){showMessage("Sign-in blocked: your browser is blocking site storage/cookies. Turn off Incognito/Private mode, or allow cookies for this site, then reload.");}else{showMessage("Redirect Error: "+e.message+" ("+e.code+")");}  });  const DEFAULT_PROFILE_PIC="basic_p.png";      
+};  const app=initializeApp(firebaseConfig);        
+const auth=getAuth(app);        
+const db=getFirestore(app);  const DEFAULT_PROFILE_PIC="basic_p.png";      
 const BUZZY_PROFILE_PIC="buzzy_p.png";  const PACK_PRICE=15;    
 const STARTING_COINS=75;    
 const STARTING_DOLB=0;  const BATTLE_HP=100;  /*
@@ -1627,51 +1641,17 @@ LOGIN
 
 window.loginGoogle=async()=>{
 
-showMessage("Starting sign-in...");
-
-const provider=new firebase.auth.GoogleAuthProvider();
-
-async function trySetPersistence(){
-try{
-await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-return;
-}catch(e){}
-try{
-await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
-return;
-}catch(e){}
-try{
-await auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
-}catch(e){}
-}
-
-await trySetPersistence();
-
 try{
 
-await auth.signInWithPopup(provider);
-return;
+await signInWithPopup(
+auth,
+new GoogleAuthProvider()
+);
 
-}catch(popupErr){
+}catch(e){
 
-console.error("Popup sign-in failed:",popupErr);
-
-try{
-
-await auth.signInWithRedirect(provider);
-return;
-
-}catch(redirectErr){
-
-console.error("Redirect sign-in failed:",redirectErr);
-
-if(redirectErr.code==="auth/operation-not-supported-in-this-environment"||popupErr.code==="auth/operation-not-supported-in-this-environment"){
-showMessage("Sign-in blocked: your browser is blocking site storage/cookies. Turn off Incognito/Private mode, or allow cookies for this site, then reload.");
-}else{
-showMessage("Login Error: "+redirectErr.message+" ("+redirectErr.code+")");
-}
-
-}
+console.error(e);
+showMessage(e.message);
 
 }
 
@@ -1687,7 +1667,7 @@ stopTradeListener();
 stopFriendListener();
 stopBattleListener();
 
-await (auth).signOut();
+await signOut(auth);
 
 }catch(e){
 
@@ -1744,9 +1724,9 @@ continue;
 
 const normalized=chosen.toLowerCase();
 
-const ref=db.collection("usernames").doc(normalized);
+const ref=doc(db,"usernames",normalized);
 
-const snap=await (ref).get();
+const snap=await getDoc(ref);
 
 if(
 snap.exists() &&
@@ -1758,10 +1738,14 @@ continue;
 
 }
 
-await (ref).set({
+await setDoc(
+ref,
+{
 uid:currentUser.uid,
 username:chosen
-},{merge:true});
+},
+{merge:true}
+);
 
 username=chosen;
 
@@ -1773,10 +1757,14 @@ async function ensureUsernameDocument(){
 
 if(!currentUser||!username)return;
 
-await (db.collection("usernames").doc(username.toLowerCase())).set({
+await setDoc(
+doc(db,"usernames",username.toLowerCase()),
+{
 uid:currentUser.uid,
 username
-},{merge:true});
+},
+{merge:true}
+);
 
 }
 
@@ -1786,9 +1774,9 @@ PLAYER DATA
 
 async function loadPlayerData(){
 
-const ref=db.collection("players").doc(currentUser.uid);
+const ref=doc(db,"players",currentUser.uid);
 
-const snap=await (ref).get();
+const snap=await getDoc(ref);
 
 if(!snap.exists()){
 
@@ -1814,7 +1802,9 @@ easyBotWins=0;
 hardBotLevel=0;
 hardBotWins=0;
 
-await (ref).set({
+await setDoc(
+ref,
+{
 money,
 dolb,
 collection,
@@ -1833,7 +1823,8 @@ easyBotWins,
 
 hardBotLevel,
 hardBotWins
-});
+}
+);
 
 }else{
 
@@ -1983,7 +1974,9 @@ async function savePlayerData(){
 
 if(!currentUser)return;
 
-await (db.collection("players").doc(currentUser.uid)).set({
+await setDoc(
+doc(db,"players",currentUser.uid),
+{
 
 money,
 dolb,
@@ -2004,7 +1997,9 @@ easyBotWins,
 hardBotLevel,
 hardBotWins
 
-},{merge:true});
+},
+{merge:true}
+);
 
 }
 
@@ -2012,7 +2007,9 @@ hardBotWins
 AUTH
 ========================= */
 
-(auth).onAuthStateChanged(async user=>{
+onAuthStateChanged(
+auth,
+async user=>{
 
 if(!user){
 
@@ -2264,9 +2261,13 @@ async function loadDailyShopData(){
 
 const today=getTodayString();
 
-const ref=db.collection("players").doc(currentUser.uid);
+const ref=doc(
+db,
+"players",
+currentUser.uid
+);
 
-const snap=await (ref).get();
+const snap=await getDoc(ref);
 
 if(!snap.exists())return;
 
@@ -2283,10 +2284,14 @@ data.dailyShopBought===true;
 dailyShopDate=today;
 dailyShopBought=false;
 
-await (ref).set({
+await setDoc(
+ref,
+{
 dailyShopDate:today,
 dailyShopBought:false
-},{merge:true});
+},
+{merge:true}
+);
 
 }
 
@@ -2491,7 +2496,11 @@ return;
 
 const today=getTodayString();
 
-const ref=db.collection("players").doc(currentUser.uid);
+const ref=doc(
+db,
+"players",
+currentUser.uid
+);
 
 if(
 dailyShopOffer.type==="profilePic"
@@ -2521,10 +2530,14 @@ dailyShopBought=true;
 
 await savePlayerData();
 
-await (ref).set({
+await setDoc(
+ref,
+{
 dailyShopDate:today,
 dailyShopBought:true
-},{merge:true});
+},
+{merge:true}
+);
 
 updateUI();
 
@@ -2548,10 +2561,14 @@ dailyShopBought=true;
 
 await savePlayerData();
 
-await (ref).set({
+await setDoc(
+ref,
+{
 dailyShopDate:today,
 dailyShopBought:true
-},{merge:true});
+},
+{merge:true}
+);
 
 updateUI();
 
@@ -3109,7 +3126,13 @@ result.innerHTML="<p>Searching...</p>";
 
 try{
 
-const snap=await (db.collection("usernames").doc(name.toLowerCase())).get();
+const snap=await getDoc(
+doc(
+db,
+"usernames",
+name.toLowerCase()
+)
+);
 
 if(!snap.exists()){
 
@@ -3131,7 +3154,9 @@ return;
 
 }
 
-const ps=await (db.collection("players").doc(d.uid)).get();
+const ps=await getDoc(
+doc(db,"players",d.uid)
+);
 
 const pd=ps.exists()?ps.data():{};
 
@@ -3183,7 +3208,13 @@ t.senderUid===receiverUid
 
 }
 
-await (db.collection("tradeRequests").doc(createCardId())).set({
+await setDoc(
+doc(
+db,
+"tradeRequests",
+createCardId()
+),
+{
 
 participants:[
 currentUser.uid,
@@ -3204,9 +3235,10 @@ receiverConfirmed:false,
 
 status:"pending",
 
-createdAt:firebase.firestore.FieldValue.serverTimestamp()
+createdAt:serverTimestamp()
 
-});
+}
+);
 
 showMessage("Trade request sent!");
 
@@ -3240,9 +3272,21 @@ stopTradeListener();
 
 if(!currentUser)return;
 
-const q=db.collection("tradeRequests").where("participants","array-contains",currentUser.uid);
+const q=query(
+firestoreCollection(
+db,
+"tradeRequests"
+),
+where(
+"participants",
+"array-contains",
+currentUser.uid
+)
+);
 
-tradeListener=(q).onSnapshot(s=>{
+tradeListener=onSnapshot(
+q,
+s=>{
 
 tradeRequests=s.docs.map(
 x=>({
@@ -3284,7 +3328,8 @@ if(fresh)activeTrade=fresh;
 renderIncomingTrades();
 renderActiveTrade();
 
-},e=>{
+},
+e=>{
 
 console.error(e);
 
@@ -3293,7 +3338,8 @@ showMessage(
 e.message
 );
 
-});
+}
+);
 
 }
 
@@ -3647,12 +3693,19 @@ sender
 
 try{
 
-await (db.collection("tradeRequests").doc(activeTrade.id)).update({
+await updateDoc(
+doc(
+db,
+"tradeRequests",
+activeTrade.id
+),
+{
 
 senderConfirmed:false,
 receiverConfirmed:false
 
-});
+}
+);
 
 showMessage(
 "Offer updated. Both players must confirm again."
@@ -3680,9 +3733,13 @@ activeTrade.status!=="pending"
 
 try{
 
-const ref=db.collection("tradeRequests").doc(activeTrade.id);
+const ref=doc(
+db,
+"tradeRequests",
+activeTrade.id
+);
 
-const snap=await (ref).get();
+const snap=await getDoc(ref);
 
 if(!snap.exists()){
 
@@ -3763,9 +3820,12 @@ sender
 :
 "receiverConfirmed";
 
-await (ref).update({
+await updateDoc(
+ref,
+{
 [field]:true
-});
+}
+);
 
 activeTrade={
 ...t,
@@ -3812,9 +3872,13 @@ if(!sender.length||!receiver.length)return;
 
 try{
 
-const ref=db.collection("tradeRequests").doc(t.id);
+const ref=doc(
+db,
+"tradeRequests",
+t.id
+);
 
-const snap=await (ref).get();
+const snap=await getDoc(ref);
 
 if(!snap.exists())return;
 
@@ -3829,10 +3893,13 @@ fresh.senderConfirmed!==true||
 fresh.receiverConfirmed!==true
 )return;
 
-await (ref).update({
+await updateDoc(
+ref,
+{
 status:"completed",
-completedAt:firebase.firestore.FieldValue.serverTimestamp()
-});
+completedAt:serverTimestamp()
+}
+);
 
 await applyCompletedTrade({
 ...fresh,
@@ -3880,9 +3947,13 @@ const incoming=sender
 
 if(!my.length||!incoming.length)return;
 
-const ref=db.collection("players").doc(currentUser.uid);
+const ref=doc(
+db,
+"players",
+currentUser.uid
+);
 
-const snap=await (ref).get();
+const snap=await getDoc(ref);
 
 if(!snap.exists())return;
 
@@ -3981,11 +4052,15 @@ favs.push(o.name);
 
 done.push(t.id);
 
-await (ref).set({
+await setDoc(
+ref,
+{
 collection:col,
 favorites:favs,
 completedTradeIds:done
-},{merge:true});
+},
+{merge:true}
+);
 
 collection=col;
 favorites=favs;
@@ -4013,9 +4088,12 @@ window.cancelTrade=async id=>{
 
 try{
 
-await (db.collection("tradeRequests").doc(id)).update({
+await updateDoc(
+doc(db,"tradeRequests",id),
+{
 status:"cancelled"
-});
+}
+);
 
 if(activeTrade?.id===id){
 
@@ -4083,7 +4161,13 @@ result.innerHTML="<p>Searching...</p>";
 
 try{
 
-const snap=await (db.collection("usernames").doc(name.toLowerCase())).get();
+const snap=await getDoc(
+doc(
+db,
+"usernames",
+name.toLowerCase()
+)
+);
 
 if(!snap.exists()){
 
@@ -4098,7 +4182,9 @@ const d=snap.data();
 
 const uid=d.uid;
 
-const ps=await (db.collection("players").doc(uid)).get();
+const ps=await getDoc(
+doc(db,"players",uid)
+);
 
 const pd=ps.exists()
 ?
@@ -4205,7 +4291,9 @@ return;
 
 }
 
-const snap=await (db.collection("players").doc(receiverUid)).get();
+const snap=await getDoc(
+doc(db,"players",receiverUid)
+);
 
 const data=
 snap.exists()
@@ -4214,7 +4302,13 @@ snap.data()
 :
 {};
 
-await (db.collection("friendRequests").doc(createCardId())).set({
+await setDoc(
+doc(
+db,
+"friendRequests",
+createCardId()
+),
+{
 
 participants:[
 currentUser.uid,
@@ -4230,9 +4324,10 @@ data.username||"",
 
 status:"pending",
 
-createdAt:firebase.firestore.FieldValue.serverTimestamp()
+createdAt:serverTimestamp()
 
-});
+}
+);
 
 showMessage(
 "Friend request sent!"
@@ -4273,9 +4368,21 @@ stopFriendListener();
 
 if(!currentUser)return;
 
-const q=db.collection("friendRequests").where("participants","array-contains",currentUser.uid);
+const q=query(
+firestoreCollection(
+db,
+"friendRequests"
+),
+where(
+"participants",
+"array-contains",
+currentUser.uid
+)
+);
 
-friendListener=(q).onSnapshot(s=>{
+friendListener=onSnapshot(
+q,
+s=>{
 
 friendRequests=s.docs.map(
 x=>({
@@ -4288,7 +4395,8 @@ renderFriendRequests();
 renderFriends();
 renderBattleRequests();
 
-},e=>{
+},
+e=>{
 
 console.error(e);
 
@@ -4297,7 +4405,8 @@ showMessage(
 e.message
 );
 
-});
+}
+);
 
 }
 
@@ -4364,7 +4473,9 @@ uid
 
 try{
 
-const s=await (db.collection("players").doc(uid)).get();
+const s=await getDoc(
+doc(db,"players",uid)
+);
 
 if(!s.exists())return;
 
@@ -4410,17 +4521,40 @@ return;
 
 try{
 
-await (db.collection("players").doc(currentUser.uid)).set({
-friends:firebase.firestore.FieldValue.arrayUnion(r.senderUid)
-},{merge:true});
+await setDoc(
+doc(
+db,
+"players",
+currentUser.uid
+),
+{
+friends:arrayUnion(r.senderUid)
+},
+{merge:true}
+);
 
-await (db.collection("players").doc(r.senderUid)).set({
-friends:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)
-},{merge:true});
+await setDoc(
+doc(
+db,
+"players",
+r.senderUid
+),
+{
+friends:arrayUnion(currentUser.uid)
+},
+{merge:true}
+);
 
-await (db.collection("friendRequests").doc(id)).update({
+await updateDoc(
+doc(
+db,
+"friendRequests",
+id
+),
+{
 status:"accepted"
-});
+}
+);
 
 if(!friends.includes(r.senderUid)){
 
@@ -4484,9 +4618,16 @@ if(!r)return;
 
 try{
 
-await (db.collection("friendRequests").doc(id)).update({
+await updateDoc(
+doc(
+db,
+"friendRequests",
+id
+),
+{
 status:"declined"
-});
+}
+);
 
 showMessage(
 "Friend request declined."
@@ -4518,7 +4659,9 @@ c.innerHTML=`
 <div class="friendEmpty">    <h3>No friends yet</h3>    <p>                    
 Search for a player above to add them.                    
 </p>    </div>                    
-`;    return;  }  c.innerHTML="<p>Loading friends...</p>";  try{  const profiles=[];  for(const id of friends){  const s=await (db.collection("players").doc(id)).get();  if(s.exists()){  const d=s.data();
+`;    return;  }  c.innerHTML="<p>Loading friends...</p>";  try{  const profiles=[];  for(const id of friends){  const s=await getDoc(    
+doc(db,"players",id)    
+);  if(s.exists()){  const d=s.data();
 
 profiles.push({
 
@@ -5921,7 +6064,13 @@ return;
 
 try{
 
-await (db.collection("friendRequests").doc(createCardId())).set({
+await setDoc(
+doc(
+db,
+"friendRequests",
+createCardId()
+),
+{
 
 type:"battle",
 
@@ -5941,4 +6090,77 @@ receiverProfilePic:
 pic||
 DEFAULT_PROFILE_PIC,
 
-status:"pen
+status:"pending",
+
+createdAt:serverTimestamp()
+
+}
+);
+
+showMessage(
+"Battle request sent to "+
+name+
+"!"
+);
+
+}catch(e){
+
+console.error(e);
+
+showMessage(
+"Could not send battle request: "+
+e.message
+);
+
+}
+
+};
+
+function renderBattleRequests(){
+
+const c=document.getElementById(
+"battleRequests"
+);
+
+if(!c||!currentUser)return;
+
+const incoming=friendRequests.filter(
+r=>
+r.type==="battle" &&
+r.receiverUid===
+currentUser.uid &&
+r.status==="pending"
+);
+
+if(!incoming.length){
+
+c.innerHTML="";
+return;
+
+}
+
+c.innerHTML="<h2>Battle Requests</h2>";
+
+incoming.forEach(r=>{
+
+const d=document.createElement("div");
+
+d.className="battleRequestBox";
+
+d.innerHTML=`
+
+<div class="playerResultBox">    <img                    
+class="profilePicSmall"                    
+id="battleReqPic_${escapeHtml(r.id)}"                    
+src="${DEFAULT_PROFILE_PIC}">  <div class="playerResultInfo">    <div class="friendName">                    
+${escapeHtml(                    
+r.senderUsername||                    
+"Player"                    
+)}                    
+</div>    <p>                    
+wants to battle you!                    
+</p>    <div class="battleRequestButtons">    <button                    
+class="friendAcceptButton"                    
+onclick="                    
+acceptBattleRequest(                    
+'${escapeHtml(r.id)}'                  
