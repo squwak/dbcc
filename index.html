@@ -1166,7 +1166,8 @@ initializeApp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";  import {              
 getAuth,              
 GoogleAuthProvider,              
-signInWithPopup,              
+signInWithRedirect,              
+getRedirectResult,              
 signOut,              
 onAuthStateChanged              
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";  import {            
@@ -1192,7 +1193,7 @@ appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
 measurementId:"G-PT9S1K4E2K"          
 };  const app=initializeApp(firebaseConfig);        
 const auth=getAuth(app);        
-const db=getFirestore(app);  const DEFAULT_PROFILE_PIC="basic_p.png";      
+const db=getFirestore(app);  getRedirectResult(auth).catch(e=>{  console.error(e);  showMessage(e.message);  });  const DEFAULT_PROFILE_PIC="basic_p.png";      
 const BUZZY_PROFILE_PIC="buzzy_p.png";  const PACK_PRICE=15;    
 const STARTING_COINS=75;    
 const STARTING_DOLB=0;  const BATTLE_HP=100;  /*
@@ -1643,7 +1644,7 @@ window.loginGoogle=async()=>{
 
 try{
 
-await signInWithPopup(
+await signInWithRedirect(
 auth,
 new GoogleAuthProvider()
 );
@@ -6160,7 +6161,4 @@ r.senderUsername||
 </div>    <p>                    
 wants to battle you!                    
 </p>    <div class="battleRequestButtons">    <button                    
-class="friendAcceptButton"                    
-onclick="                    
-acceptBattleRequest(                    
-'${escapeHtml(r.id)}'                  
+class="friendAcceptButton"       
