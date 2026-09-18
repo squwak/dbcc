@@ -1178,7 +1178,7 @@ appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
 measurementId:"G-PT9S1K4E2K"          
 };  const app=firebase.initializeApp(firebaseConfig);        
 const auth=firebase.auth();        
-const db=firebase.firestore();  (auth).getRedirectResult().catch(e=>{  console.error(e);  showMessage("Redirect Error: "+e.message+" ("+e.code+")");  });  const DEFAULT_PROFILE_PIC="basic_p.png";      
+const db=firebase.firestore();  (auth).getRedirectResult().catch(e=>{  console.error(e);  if(e.code==="auth/operation-not-supported-in-this-environment"){showMessage("Sign-in blocked: your browser is blocking site storage/cookies. Turn off Incognito/Private mode, or allow cookies for this site, then reload.");}else{showMessage("Redirect Error: "+e.message+" ("+e.code+")");}  });  const DEFAULT_PROFILE_PIC="basic_p.png";      
 const BUZZY_PROFILE_PIC="buzzy_p.png";  const PACK_PRICE=15;    
 const STARTING_COINS=75;    
 const STARTING_DOLB=0;  const BATTLE_HP=100;  /*
@@ -1629,14 +1629,49 @@ window.loginGoogle=async()=>{
 
 showMessage("Starting sign-in...");
 
+const provider=new firebase.auth.GoogleAuthProvider();
+
+async function trySetPersistence(){
+try{
+await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+return;
+}catch(e){}
+try{
+await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+return;
+}catch(e){}
+try{
+await auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
+}catch(e){}
+}
+
+await trySetPersistence();
+
 try{
 
-await (auth).signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+await auth.signInWithPopup(provider);
+return;
 
-}catch(e){
+}catch(popupErr){
 
-console.error(e);
-showMessage("Login Error: "+e.message+" ("+e.code+")");
+console.error("Popup sign-in failed:",popupErr);
+
+try{
+
+await auth.signInWithRedirect(provider);
+return;
+
+}catch(redirectErr){
+
+console.error("Redirect sign-in failed:",redirectErr);
+
+if(redirectErr.code==="auth/operation-not-supported-in-this-environment"||popupErr.code==="auth/operation-not-supported-in-this-environment"){
+showMessage("Sign-in blocked: your browser is blocking site storage/cookies. Turn off Incognito/Private mode, or allow cookies for this site, then reload.");
+}else{
+showMessage("Login Error: "+redirectErr.message+" ("+redirectErr.code+")");
+}
+
+}
 
 }
 
@@ -5906,70 +5941,4 @@ receiverProfilePic:
 pic||
 DEFAULT_PROFILE_PIC,
 
-status:"pending",
-
-createdAt:firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-showMessage(
-"Battle request sent to "+
-name+
-"!"
-);
-
-}catch(e){
-
-console.error(e);
-
-showMessage(
-"Could not send battle request: "+
-e.message
-);
-
-}
-
-};
-
-function renderBattleRequests(){
-
-const c=document.getElementById(
-"battleRequests"
-);
-
-if(!c||!currentUser)return;
-
-const incoming=friendRequests.filter(
-r=>
-r.type==="battle" &&
-r.receiverUid===
-currentUser.uid &&
-r.status==="pending"
-);
-
-if(!incoming.length){
-
-c.innerHTML="";
-return;
-
-}
-
-c.innerHTML="<h2>Battle Requests</h2>";
-
-incoming.forEach(r=>{
-
-const d=document.createElement("div");
-
-d.className="battleRequestBox";
-
-d.innerHTML=`
-
-<div class="playerResultBox">    <img                    
-class="profilePicSmall"                    
-id="battleReqPic_${escapeHtml(r.id)}"                    
-src="${DEFAULT_PROFILE_PIC}">  <div class="playerResultInfo">    <div class="friendName">                    
-${escapeHtml(                    
-r.senderUsername||                    
-"Player"                    
-)}                    
-</div>    <p>               
+status:"pen
