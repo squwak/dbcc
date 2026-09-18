@@ -1161,8 +1161,14 @@ X
 id="cardViewerImage"                    
 class="cardViewerImage"                    
 src=""                    
-onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script>
+if(location.search.indexOf("debug")!==-1){
+var erudaScript=document.createElement("script");
+erudaScript.src="https://cdn.jsdelivr.net/npm/eruda";
+erudaScript.onload=function(){eruda.init();};
+document.body.appendChild(erudaScript);
+}
+</script>
 <script type="module">    import {                
 initializeApp                
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";  import {              
@@ -6154,7 +6160,4 @@ d.className="battleRequestBox";
 
 d.innerHTML=`
 
-<div class="playerResultBox">    <img                    
-class="profilePicSmall"                    
-id="battleReqPic_${escapeHtml(r.id)}"                    
-src="${DEFAULT_PRO
+<div class="pl
