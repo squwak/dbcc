@@ -1027,6 +1027,7 @@ height:140px
 <h1>Doll Ball Collector Cards</h1>                    
 <p>Log in to play.</p>                    
 <button class="googleButton" onclick="loginGoogle()">Sign in with Google</button>                    
+<p id="debugStatus" style="font-size:12px;opacity:.7;margin-top:15px;text-align:left"></p>
 </div>                    
 </div>  <div id="gameScreen" class="hidden">  <div class="topBar">  <div class="moneyBox">                    
 Coins: <span id="money">0</span>                    
@@ -1161,7 +1162,16 @@ X
 id="cardViewerImage"                    
 class="cardViewerImage"                    
 src=""                    
-onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script type="module">    import {                
+onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script>    
+(function(){
+var d=document.getElementById("debugStatus");
+if(d)d.textContent="Step 1: HTML + inline script OK.";
+window.addEventListener("error",function(e){
+var d2=document.getElementById("debugStatus");
+if(d2)d2.textContent+=" | PAGE ERROR: "+e.message;
+});
+})();
+</script>  <script type="module">    import {                
 initializeApp                
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";  import {              
 getAuth,              
@@ -1182,7 +1192,7 @@ query,
 where,            
 serverTimestamp,            
 arrayUnion            
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";  const firebaseConfig={          
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";  (function(){var d=document.getElementById("debugStatus");if(d)d.textContent+=" | Step 2: Firebase imports OK.";})();  const firebaseConfig={          
 apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",          
 authDomain:"dbcc-login.firebaseapp.com",          
 databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",          
@@ -1193,7 +1203,7 @@ appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",
 measurementId:"G-PT9S1K4E2K"          
 };  const app=initializeApp(firebaseConfig);        
 const auth=getAuth(app);        
-const db=getFirestore(app);  getRedirectResult(auth).catch(e=>{  console.error(e);  showMessage(e.message);  });  const DEFAULT_PROFILE_PIC="basic_p.png";      
+const db=getFirestore(app);  (function(){var d=document.getElementById("debugStatus");if(d)d.textContent+=" | Step 3: Firebase initialized OK.";})();  window.addEventListener("error",e=>{  showMessage("JS Error: "+(e.message||e));  });  window.addEventListener("unhandledrejection",e=>{  showMessage("Promise Error: "+(e.reason?.message||e.reason));  });  getRedirectResult(auth).catch(e=>{  console.error(e);  showMessage("Redirect Error: "+e.message+" ("+e.code+")");  });  const DEFAULT_PROFILE_PIC="basic_p.png";      
 const BUZZY_PROFILE_PIC="buzzy_p.png";  const PACK_PRICE=15;    
 const STARTING_COINS=75;    
 const STARTING_DOLB=0;  const BATTLE_HP=100;  /*
@@ -1642,6 +1652,11 @@ LOGIN
 
 window.loginGoogle=async()=>{
 
+const d=document.getElementById("debugStatus");
+if(d)d.textContent+=" | Step 4: Button clicked, calling signInWithRedirect...";
+
+showMessage("Starting sign-in...");
+
 try{
 
 await signInWithRedirect(
@@ -1652,7 +1667,8 @@ new GoogleAuthProvider()
 }catch(e){
 
 console.error(e);
-showMessage(e.message);
+if(d)d.textContent+=" | ERROR: "+e.code+" - "+e.message;
+showMessage("Login Error: "+e.message+" ("+e.code+")");
 
 }
 
@@ -6104,61 +6120,4 @@ name+
 "!"
 );
 
-}catch(e){
-
-console.error(e);
-
-showMessage(
-"Could not send battle request: "+
-e.message
-);
-
-}
-
-};
-
-function renderBattleRequests(){
-
-const c=document.getElementById(
-"battleRequests"
-);
-
-if(!c||!currentUser)return;
-
-const incoming=friendRequests.filter(
-r=>
-r.type==="battle" &&
-r.receiverUid===
-currentUser.uid &&
-r.status==="pending"
-);
-
-if(!incoming.length){
-
-c.innerHTML="";
-return;
-
-}
-
-c.innerHTML="<h2>Battle Requests</h2>";
-
-incoming.forEach(r=>{
-
-const d=document.createElement("div");
-
-d.className="battleRequestBox";
-
-d.innerHTML=`
-
-<div class="playerResultBox">    <img                    
-class="profilePicSmall"                    
-id="battleReqPic_${escapeHtml(r.id)}"                    
-src="${DEFAULT_PROFILE_PIC}">  <div class="playerResultInfo">    <div class="friendName">                    
-${escapeHtml(                    
-r.senderUsername||                    
-"Player"                    
-)}                    
-</div>    <p>                    
-wants to battle you!                    
-</p>    <div class="battleRequestButtons">    <button                    
-class="friendAcceptButton"      
+}cat
