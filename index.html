@@ -1,649 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Doll Battle, Collection & Trading Game</title>
+  <meta charset="UTF-8">
+  <title>Battle System</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1a1a1a;
-      color: #fff;
-      margin: 0;
-      padding: 0;
-    }
-    
-    /* Navigation Bar */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #111;
-      padding: 10px 20px;
-      border-bottom: 2px solid #333;
-    }
-    .nav-tabs { display: flex; gap: 10px; }
-    .nav-btn {
-      background: #2a2a2a;
-      color: #fff;
-      border: 1px solid #444;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .nav-btn.active { background: #3498db; border-color: #2980b9; }
-    .currencies { display: flex; gap: 15px; font-weight: bold; }
-    .currency-coins { color: #f1c40f; }
-    .currency-dolb { color: #9b59b6; }
-
-    /* Layout Containers */
-    .container { padding: 20px; max-width: 1000px; margin: 0 auto; }
-    .hidden { display: none !important; }
-    
-    /* Cards & Grids */
-    .grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 15px; }
-    .card-item {
-      background: #2a2a2a;
-      border: 2px solid #444;
-      border-radius: 8px;
-      width: 130px;
-      padding: 10px;
-      text-align: center;
-      position: relative;
-    }
-    .card-item.fav { border-color: #f1c40f; }
-    .card-item img { width: 90px; height: 90px; object-fit: contain; }
-    .card-name { font-weight: bold; margin-top: 5px; font-size: 14px; }
-    .card-meta { font-size: 12px; opacity: 0.8; }
-    .fav-star { position: absolute; top: 5px; right: 5px; color: #f1c40f; cursor: pointer; }
-    
-    /* UI Boxes */
-    .friendBox, .battleChoiceCard, .rankBox, .battleRequestBox, .tradeBox {
-      background: #2a2a2a;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 10px;
-    }
-    .profilePicSmall { width: 40px; height: 40px; border-radius: 50%; vertical-align: middle; }
-    
-    /* Battle System */
-    .battleChoiceCard { border: 2px solid transparent; cursor: pointer; display: inline-block; width: 120px; text-align: center; margin: 5px; }
-    .battleChoiceCard.selected { border-color: #25b864; }
-    .hpBar { background: #444; height: 16px; border-radius: 8px; overflow: hidden; margin: 8px 0; }
-    .hpFill { background: #25b864; height: 100%; transition: width 0.3s ease; }
-    .battleVs { font-size: 24px; font-weight: bold; text-align: center; margin: 10px 0; }
-    .battleResult { text-align: center; margin-top: 20px; padding: 20px; background: #222; border-radius: 8px; }
-    .winText { font-size: 28px; font-weight: bold; }
-    .rankProgressBar { background: #444; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 8px; }
-    .rankProgressFill { background: #f1c40f; height: 100%; }
-
-    /* Action Buttons */
-    .btn {
-      background: #3498db;
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-green { background: #2ecc71; }
-    .btn-orange { background: #e67e22; }
-    .btn-red { background: #e74c3c; }
-    .btn-purple { background: #9b59b6; }
-
-    /* Overlay Modal */
-    .overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center;
-      z-index: 100;
-    }
-    .modal { background: #222; padding: 20px; border-radius: 8px; max-width: 400px; width: 90%; }
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    .status { margin: 20px 0; font-size: 1.2rem; }
+    button { padding: 10px 20px; font-size: 1rem; cursor: pointer; }
+    #log { margin-top: 20px; color: #555; }
   </style>
 </head>
 <body>
 
-  <!-- Top Navigation & Currency Tracker -->
-  <div class="navbar">
-    <div class="nav-tabs">
-      <button class="nav-btn active" onclick="switchTab('battle')">Battle Arena</button>
-      <button class="nav-btn" onclick="switchTab('shop')">Pack Shop</button>
-      <button class="nav-btn" onclick="switchTab('collection')">Collection</button>
-      <button class="nav-btn" onclick="switchTab('trading')">Trade Center</button>
-      <button class="nav-btn" onclick="switchTab('friends')">Friends</button>
-    </div>
-    <div class="currencies">
-      <span class="currency-coins">💰 <span id="uiCoins">100</span></span>
-      <span class="currency-dolb">💎 <span id="uiDolb">10</span></span>
-      <button class="nav-btn" onclick="openSettings()">⚙️</button>
-    </div>
+  <h1>Battle Arena</h1>
+
+  <div class="status">
+    <p>Player HP: <span id="player-hp">100</span></p>
+    <p>Enemy HP: <span id="enemy-hp">50</span></p>
   </div>
 
-  <div class="container">
-    <!-- ================= BATTLE SECTION ================= -->
-    <div id="tab-battle">
-      <div id="battleMain">
-        <h2>Battle Arena</h2>
-        <div id="battleRankInfo"></div>
-        <div id="battleRequests"></div>
-        <div style="margin-top: 15px;">
-          <button class="btn btn-orange" onclick="startBotBattle('easy')">Fight Easy Bot</button>
-          <button class="btn btn-red" onclick="startBotBattle('hard')">Fight Hard Bot</button>
-        </div>
-      </div>
+  <button id="attack-btn">Attack</button>
+  <button id="restart-btn" style="display: none;">Play Again</button>
 
-      <div id="battleChoice" class="hidden">
-        <h3>Choose Your Battle Doll</h3>
-        <div id="battleChoiceGrid"></div>
-        <div style="margin-top: 15px;">
-          <button id="battleStartButton" class="btn btn-green" disabled onclick="confirmBattleCard()">START BATTLE</button>
-          <button class="btn" style="background:#7f8c8d" onclick="cancelBattleSetup()">CANCEL</button>
-        </div>
-      </div>
+  <p id="log">Click "Attack" to start the fight!</p>
 
-      <div id="battleArena" class="hidden"></div>
-    </div>
+  <script>
+    // 1. Initial State Variables
+    let playerHp = 100;
+    let enemyHp = 50;
+    let isBattleOver = false;
 
-    <!-- ================= PACK SHOP SECTION ================= -->
-    <div id="tab-shop" class="hidden">
-      <h2>Pack Shop</h2>
-      <p>Open packs to collect rare Dolls!</p>
-      <div style="display: flex; gap: 20px; margin-top: 20px;">
-        <div class="rankBox" style="width: 200px; text-align: center;">
-          <h3>Standard Pack</h3>
-          <p>Contains 1 Random Doll</p>
-          <button class="btn btn-green" onclick="openPack('standard')">Buy (50 Coins)</button>
-        </div>
-        <div class="rankBox" style="width: 200px; text-align: center; border: 1px solid #9b59b6;">
-          <h3>Premium Pack</h3>
-          <p>Higher Chance for Power Dolls!</p>
-          <button class="btn btn-purple" onclick="openPack('premium')">Buy (5 Dolb)</button>
-        </div>
-      </div>
-      <div id="packResult" style="margin-top: 20px;"></div>
-    </div>
+    // 2. DOM Elements
+    const playerHpEl = document.getElementById('player-hp');
+    const enemyHpEl = document.getElementById('enemy-hp');
+    const attackBtn = document.getElementById('attack-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const logEl = document.getElementById('log');
 
-    <!-- ================= COLLECTION SECTION ================= -->
-    <div id="tab-collection" class="hidden">
-      <h2>Your Collection</h2>
-      <div id="collectionGrid" class="grid"></div>
-    </div>
-
-    <!-- ================= TRADING SECTION ================= -->
-    <div id="tab-trading" class="hidden">
-      <h2>Trading Center</h2>
-      <div class="rankBox">
-        <h3>Create Trade Offer</h3>
-        <p>Select one of your Dolls to offer to friends:</p>
-        <select id="tradeOfferSelect" style="padding: 8px; width: 100%; margin-bottom: 10px; background: #111; color: #fff;"></select>
-        <button class="btn btn-green" onclick="createTradeOffer()">Post Trade Offer</button>
-      </div>
-      <h3>Active Trades</h3>
-      <div id="activeTradesList"></div>
-    </div>
-
-    <!-- ================= FRIENDS SECTION ================= -->
-    <div id="tab-friends" class="hidden">
-      <h2>Friends List</h2>
-      <div id="friendsList"></div>
-    </div>
-  </div>
-
-  <!-- Settings Overlay -->
-  <div id="settingsOverlay" class="overlay hidden">
-    <div class="modal">
-      <h3>Settings</h3>
-      <button class="btn btn-red" style="width:100%" onclick="resetAccount()">RESET ACCOUNT</button>
-      <button class="btn" style="width:100%; margin-top:10px" onclick="closeSettings()">CLOSE</button>
-    </div>
-  </div>
-
-  <!-- JavaScript Module -->
-  <script type="module">
-    // Configuration & Utilities
-    const DEFAULT_PROFILE_PIC = "https://via.placeholder.com/40";
-    const STARTING_COINS = 100;
-    const STARTING_DOLB = 10;
-    const BATTLE_HP = 100;
-    const NORMAL_RANK_COINS = 50;
-    const NORMAL_RANK_DOLB = 5;
-    const LEVEL_15_BONUS_COINS = 200;
-    const LEVEL_20_BONUS_DOLB = 50;
-
-    // State Variables
-    let money = STARTING_COINS;
-    let dolb = STARTING_DOLB;
-    let collection = [];
-    let favorites = [];
-    let activeTrades = [];
-    let friends = [];
-    let friendRequests = [];
-    let username = "Player";
-    let playerLevel = 0;
-    let playerLevelWins = 0;
-    let easyBotLevel = 0;
-    let easyBotWins = 0;
-    let hardBotLevel = 0;
-    let hardBotWins = 0;
-    let currentUser = { uid: "user_123" };
-
-    let battleMode = null;
-    let battleDifficulty = null;
-    let battleOpponentUsername = "";
-    let battleSelectedCardId = null;
-    let battleRewardGiven = false;
-
-    // Cards Database
-    const cards = [
-      { name: "Fire Doll", type: ["Fire"], power: 20, move: "Flame Blast", moveType: "Fire", image: "https://via.placeholder.com/100/ff5555/ffffff?text=Fire+Doll" },
-      { name: "Water Doll", type: ["Water"], power: 18, move: "Hydro Splash", moveType: "Water", image: "https://via.placeholder.com/100/5555ff/ffffff?text=Water+Doll" },
-      { name: "Grass Doll", type: ["Grass"], power: 15, move: "Vine Whip", moveType: "Grass", image: "https://via.placeholder.com/100/55ff55/ffffff?text=Grass+Doll" },
-      { name: "Rock Doll", type: ["Rock"], power: 22, move: "Rock Throw", moveType: "Rock", image: "https://via.placeholder.com/100/888888/ffffff?text=Rock+Doll" }
-    ];
-
-    // Helpers
-    function escapeHtml(str) { return String(str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
-    function showMessage(msg) { alert(msg); }
-    function createCardId() { return "card_" + Math.random().toString(36).substr(2, 9); }
-    function winsNeededForLevel(lvl) { return (lvl + 1) * 2; }
-    function getCopyLevel(copy) { return copy ? (copy.level || 0) : 0; }
-    function getCard(cardName) { return cards.find(c => c.name === cardName) || cards[0]; }
-
-    // Firebase Mock Fallbacks
-    const db = {};
-    const doc = (db, col, id) => ({ col, id });
-    const updateDoc = async () => {};
-    const setDoc = async () => {};
-    const getDoc = async () => ({ exists: () => false });
-    const serverTimestamp = () => new Date();
-
-    /* =========================
-       NAVIGATION & UI SYNC
-    ========================= */
-    window.switchTab = (tabName) => {
-      ['battle', 'shop', 'collection', 'trading', 'friends'].forEach(t => {
-        document.getElementById(`tab-${t}`).classList.add('hidden');
-      });
-      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-      
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-
-      if (tabName === 'collection') renderCollection();
-      if (tabName === 'trading') renderTrading();
-      if (tabName === 'friends') renderFriends();
-    };
-
-    function updateUI() {
-      document.getElementById("uiCoins").textContent = money;
-      document.getElementById("uiDolb").textContent = dolb;
-      renderBattleHome();
-      renderBattleRequests();
+    // 3. Update UI Display
+    function updateDisplay() {
+      playerHpEl.textContent = playerHp;
+      enemyHpEl.textContent = enemyHp;
     }
 
-    async function savePlayerData() {
-      console.log("Saving state local cache sync...");
-    }
+    // 4. Main Attack Handler (Triggered ONLY on click)
+    function handlePlayerAttack() {
+      if (isBattleOver) return;
 
-    /* =========================
-       GACHA / PACK OPENING
-    ========================= */
-    window.openPack = (type) => {
-      const cost = type === 'standard' ? 50 : 0;
-      const dolbCost = type === 'premium' ? 5 : 0;
+      // Player attacks enemy
+      const playerDamage = Math.floor(Math.random() * 15) + 5; // 5 to 19 dmg
+      enemyHp = Math.max(0, enemyHp - playerDamage);
+      updateDisplay();
 
-      if (money < cost || dolb < dolbCost) {
-        showMessage("Not enough funds!");
+      // Check if enemy is defeated
+      if (enemyHp <= 0) {
+        logEl.textContent = `You dealt ${playerDamage} damage and WON the battle! 🎉`;
+        endBattle();
         return;
       }
 
-      money -= cost;
-      dolb -= dolbCost;
+      // Enemy retaliates
+      const enemyDamage = Math.floor(Math.random() * 12) + 3; // 3 to 14 dmg
+      playerHp = Math.max(0, playerHp - enemyDamage);
+      updateDisplay();
 
-      const randomCard = cards[Math.floor(Math.random() * cards.length)];
-      const newCopy = { id: createCardId(), name: randomCard.name, level: 0, levelWins: 0 };
-      collection.push(newCopy);
-
-      const res = document.getElementById("packResult");
-      res.innerHTML = `
-        <div class="rankBox" style="text-align:center;">
-          <h3>You pulled: ${escapeHtml(randomCard.name)}!</h3>
-          <img src="${escapeHtml(randomCard.image)}" style="width:100px;">
-          <p>Power: ${randomCard.power} | Type: ${randomCard.type.join('/')}</p>
-        </div>
-      `;
-      
-      updateUI();
-      savePlayerData();
-    };
-
-    /* =========================
-       COLLECTION & FAVORITES
-    ========================= */
-    function renderCollection() {
-      const grid = document.getElementById("collectionGrid");
-      grid.innerHTML = "";
-
-      if (!collection.length) {
-        grid.innerHTML = "<p>Your collection is empty. Open some packs in the shop!</p>";
+      // Check if player is defeated
+      if (playerHp <= 0) {
+        logEl.textContent = `Enemy dealt ${enemyDamage} damage. You were DEFEATED! 💀`;
+        endBattle();
         return;
       }
 
-      collection.forEach(copy => {
-        const card = getCard(copy.name);
-        const isFav = favorites.includes(copy.id);
-        const div = document.createElement("div");
-        div.className = `card-item ${isFav ? 'fav' : ''}`;
-        div.innerHTML = `
-          <span class="fav-star" onclick="toggleFavorite('${copy.id}')">${isFav ? '★' : '☆'}</span>
-          <img src="${escapeHtml(card.image)}">
-          <div class="card-name">${escapeHtml(card.name)}</div>
-          <div class="card-meta">Lv. ${copy.level || 0}</div>
-          <div class="card-meta">Pwr: ${card.power}</div>
-        `;
-        grid.appendChild(div);
-      });
+      logEl.textContent = `You dealt ${playerDamage} damage. Enemy dealt ${enemyDamage} damage back!`;
     }
 
-    window.toggleFavorite = (id) => {
-      if (favorites.includes(id)) {
-        favorites = favorites.filter(fId => fId !== id);
-      } else {
-        favorites.push(id);
-      }
-      renderCollection();
-    };
-
-    /* =========================
-       TRADING SYSTEM
-    ========================= */
-    function renderTrading() {
-      const select = document.getElementById("tradeOfferSelect");
-      select.innerHTML = "";
-      collection.forEach(c => {
-        const option = document.createElement("option");
-        option.value = c.id;
-        option.textContent = `${c.name} (Lv. ${c.level || 0})`;
-        select.appendChild(option);
-      });
-
-      const list = document.getElementById("activeTradesList");
-      list.innerHTML = "";
-      if (!activeTrades.length) {
-        list.innerHTML = "<p>No active trade offers available.</p>";
-        return;
-      }
-
-      activeTrades.forEach(t => {
-        const div = document.createElement("div");
-        div.className = "tradeBox";
-        div.innerHTML = `
-          <div><b>Offer:</b> ${escapeHtml(t.cardName)}</div>
-          <button class="btn btn-green" style="margin-top:5px" onclick="acceptTrade('${t.id}')">Accept Trade</button>
-        `;
-        list.appendChild(div);
-      });
+    // 5. End Battle State
+    function endBattle() {
+      isBattleOver = true;
+      attackBtn.style.display = 'none';
+      restartBtn.style.display = 'inline-block';
     }
 
-    window.createTradeOffer = () => {
-      const select = document.getElementById("tradeOfferSelect");
-      const cardId = select.value;
-      if (!cardId) return;
-
-      const itemIdx = collection.findIndex(c => c.id === cardId);
-      if (itemIdx === -1) return;
-
-      const [offeredItem] = collection.splice(itemIdx, 1);
-      activeTrades.push({
-        id: createCardId(),
-        cardName: offeredItem.name,
-        item: offeredItem
-      });
-
-      showMessage("Trade offer posted!");
-      renderTrading();
-    };
-
-    window.acceptTrade = (tradeId) => {
-      const tIdx = activeTrades.findIndex(t => t.id === tradeId);
-      if (tIdx === -1) return;
-
-      const [trade] = activeTrades.splice(tIdx, 1);
-      collection.push(trade.item);
-      showMessage(`Traded successfully! Added ${trade.cardName} to your collection.`);
-      renderTrading();
-    };
-
-    /* =========================
-       FRIENDS MANAGEMENT
-    ========================= */
-    window.declineFriendRequest = async (id) => {
-      try {
-        await updateDoc(doc(db, "friendRequests", id), { status: "declined" });
-        showMessage("Friend request declined.");
-      } catch (e) {
-        showMessage("Could not decline request: " + e.message);
-      }
-    };
-
-    async function renderFriends() {
-      const c = document.getElementById("friendsList");
-      if (!c) return;
-      if (!friends.length) {
-        c.innerHTML = '<div class="friendBox"><p>You have no friends added yet.</p></div>';
-        return;
-      }
+    // 6. Reset Game State
+    function resetBattle() {
+      playerHp = 100;
+      enemyHp = 50;
+      isBattleOver = false;
+      logEl.textContent = 'Click "Attack" to start the fight!';
+      attackBtn.style.display = 'inline-block';
+      restartBtn.style.display = 'none';
+      updateDisplay();
     }
 
-    /* =========================
-       SETTINGS
-    ========================= */
-    window.openSettings = () => document.getElementById("settingsOverlay").classList.remove("hidden");
-    window.closeSettings = () => document.getElementById("settingsOverlay").classList.add("hidden");
-
-    window.resetAccount = async () => {
-      if (!confirm("Reset account progress?")) return;
-      money = STARTING_COINS;
-      dolb = STARTING_DOLB;
-      collection = [];
-      favorites = [];
-      activeTrades = [];
-      playerLevel = 0;
-      playerLevelWins = 0;
-      closeSettings();
-      updateUI();
-      showMessage("Account reset complete.");
-    };
-
-    /* =========================
-       BATTLE ENGINE
-    ========================= */
-    function renderBattleHome() {
-      const rankInfo = document.getElementById("battleRankInfo");
-      if (!rankInfo) return;
-
-      const currentWins = playerLevelWins;
-      const neededWins = winsNeededForLevel(playerLevel);
-      const progressPercent = Math.min(100, Math.floor((currentWins / neededWins) * 100));
-
-      rankInfo.innerHTML = `
-        <div class="rankBox">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div style="font-size:14px;opacity:.8">YOUR RANK</div>
-              <div class="rankNumber" style="font-size:22px;font-weight:bold">Rank ${playerLevel}</div>
-            </div>
-            <div style="text-align:right">
-              <div>Wins: ${currentWins} / ${neededWins}</div>
-              <div style="font-size:12px;opacity:.7">to Rank ${playerLevel + 1}</div>
-            </div>
-          </div>
-          <div class="rankProgressBar">
-            <div class="rankProgressFill" style="width:${progressPercent}%"></div>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderBattleRequests() {
-      const c = document.getElementById("battleRequests");
-      if (!c) return;
-      c.innerHTML = "";
-    }
-
-    window.startBotBattle = (difficulty) => {
-      if (!collection.length) {
-        collection.push({ id: createCardId(), name: "Fire Doll", level: 0, levelWins: 0 });
-      }
-
-      battleMode = "bot";
-      battleDifficulty = difficulty;
-      battleOpponentUsername = difficulty === "easy" ? "Easy Bot" : "Hard Bot";
-      showBattleChoice();
-    };
-
-    function showBattleChoice() {
-      document.getElementById("battleMain").classList.add("hidden");
-      document.getElementById("battleChoice").classList.remove("hidden");
-      document.getElementById("battleArena").classList.add("hidden");
-
-      battleSelectedCardId = null;
-      const grid = document.getElementById("battleChoiceGrid");
-      grid.innerHTML = "";
-
-      collection.forEach(copy => {
-        const card = getCard(copy.name);
-        const level = getCopyLevel(copy);
-        const fav = favorites.includes(copy.id);
-        const div = document.createElement("div");
-        div.className = "battleChoiceCard " + (fav ? "favoriteBattleCard" : "");
-        div.onclick = () => selectBattleCard(copy.id, div);
-        div.innerHTML = `
-          <img src="${escapeHtml(card.image)}" style="width:80px;height:80px">
-          <div style="font-weight:bold;margin-top:5px">${escapeHtml(card.name)}</div>
-          <div>Lv. ${level}</div>
-          <div>Power: ${card.power}</div>
-        `;
-        grid.appendChild(div);
-      });
-
-      document.getElementById("battleStartButton").disabled = true;
-    }
-
-    function selectBattleCard(copyId, element) {
-      battleSelectedCardId = copyId;
-      document.querySelectorAll(".battleChoiceCard").forEach(e => e.classList.remove("selected"));
-      element.classList.add("selected");
-      document.getElementById("battleStartButton").disabled = false;
-    }
-
-    window.cancelBattleSetup = () => {
-      document.getElementById("battleMain").classList.remove("hidden");
-      document.getElementById("battleChoice").classList.add("hidden");
-      document.getElementById("battleArena").classList.add("hidden");
-    };
-
-    window.confirmBattleCard = () => {
-      if (!battleSelectedCardId) return;
-      document.getElementById("battleChoice").classList.add("hidden");
-      document.getElementById("battleArena").classList.remove("hidden");
-      initiateBattleArena();
-    };
-
-    let p1Hp = BATTLE_HP, p2Hp = BATTLE_HP;
-    let p1Copy = null, p1Card = null, p2Card = null, p2Level = 0;
-
-    function initiateBattleArena() {
-      p1Hp = BATTLE_HP; p2Hp = BATTLE_HP;
-      battleRewardGiven = false;
-
-      p1Copy = collection.find(c => c.id === battleSelectedCardId);
-      p1Card = getCard(p1Copy.name);
-
-      p2Card = cards[Math.floor(Math.random() * cards.length)];
-      p2Level = Math.max(0, playerLevel + (battleDifficulty === "hard" ? 1 : 0));
-      renderArena();
-    }
-
-    function renderArena() {
-      const arena = document.getElementById("battleArena");
-      const p1Level = getCopyLevel(p1Copy);
-
-      arena.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div style="width:40%;">
-            <h3>${escapeHtml(username)}</h3>
-            <p>${escapeHtml(p1Card.name)} (Lv. ${p1Level})</p>
-            <div class="hpBar"><div class="hpFill" id="p1HpFill" style="width:${p1Hp}%"></div></div>
-          </div>
-          <div class="battleVs">VS</div>
-          <div style="width:40%;">
-            <h3>${escapeHtml(battleOpponentUsername)}</h3>
-            <p>${escapeHtml(p2Card.name)} (Lv. ${p2Level})</p>
-            <div class="hpBar"><div class="hpFill" id="p2HpFill" style="width:${p2Hp}%"></div></div>
-          </div>
-        </div>
-        <div id="battleControls" style="margin-top:20px;text-align:center">
-          <button class="btn btn-green" style="width:100%" onclick="executeTurn()">ATTACK!</button>
-        </div>
-        <div class="battleLog" id="battleLog" style="margin-top:15px;background:#111;padding:10px;border-radius:4px">The battle begins!</div>
-      `;
-    }
-
-    window.executeTurn = () => {
-      let damageToP2 = Math.floor(p1Card.power * (1 + getCopyLevel(p1Copy) * 0.05));
-      p2Hp = Math.max(0, p2Hp - damageToP2);
-
-      if (p2Hp <= 0) {
-        updateHpUI();
-        endBattle(true);
-        return;
-      }
-
-      let damageToP1 = Math.floor(p2Card.power * (1 + p2Level * 0.05));
-      p1Hp = Math.max(0, p1Hp - damageToP1);
-
-      updateHpUI();
-      document.getElementById("battleLog").textContent = `Dealt ${damageToP2} damage. Received ${damageToP1} damage!`;
-
-      if (p1Hp <= 0) endBattle(false);
-    };
-
-    function updateHpUI() {
-      document.getElementById("p1HpFill").style.width = Math.max(0, p1Hp) + "%";
-      document.getElementById("p2HpFill").style.width = Math.max(0, p2Hp) + "%";
-    }
-
-    async function endBattle(playerWon) {
-      if (battleRewardGiven) return;
-      battleRewardGiven = true;
-      document.getElementById("battleControls").style.display = "none";
-
-      let coinsEarned = 0;
-      if (playerWon) {
-        coinsEarned = 25;
-        money += coinsEarned;
-        playerLevelWins++;
-        if (playerLevelWins >= winsNeededForLevel(playerLevel)) {
-          playerLevel++;
-          playerLevelWins = 0;
-        }
-      }
-
-      updateUI();
-      const resDiv = document.createElement("div");
-      resDiv.className = "battleResult";
-      resDiv.innerHTML = `
-        <div class="winText" style="color:${playerWon ? "#25b864" : "#e74c3c"}">${playerWon ? "VICTORY!" : "DEFEAT!"}</div>
-        ${playerWon ? `<div>Earned +${coinsEarned} Coins!</div>` : ''}
-        <button class="btn" style="width:100%;margin-top:15px" onclick="cancelBattleSetup()">BACK</button>
-      `;
-      document.getElementById("battleArena").appendChild(resDiv);
-    }
-
-    // Initial Load Setup
-    updateUI();
+    // 7. Event Listeners (Pass functions as callbacks, DO NOT execute with parentheses)
+    attackBtn.addEventListener('click', handlePlayerAttack);
+    restartBtn.addEventListener('click', resetBattle);
   </script>
+
 </body>
 </html>
