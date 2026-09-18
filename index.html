@@ -1161,28 +1161,11 @@ X
 id="cardViewerImage"                    
 class="cardViewerImage"                    
 src=""                    
-onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script type="module">    import {                
-initializeApp                
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";  import {              
-getAuth,              
-GoogleAuthProvider,              
-signInWithRedirect,              
-getRedirectResult,              
-signOut,              
-onAuthStateChanged              
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";  import {            
-getFirestore,            
-doc,            
-getDoc,            
-setDoc,            
-updateDoc,            
-onSnapshot,            
-collection as firestoreCollection,            
-query,            
-where,            
-serverTimestamp,            
-arrayUnion            
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";  const firebaseConfig={          
+onclick="event.stopPropagation()">  </div>  <div id="message"></div>  <script src="https://cdn.jsdelivr.net/npm/firebase@10.14.1/firebase-app-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.14.1/firebase-auth-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.14.1/firebase-firestore-compat.js"></script>
+<script>
+    const firebaseConfig={          
 apiKey:"AIzaSyC-6paRzUxBv6DhZ5Vx_c8BG8vxcKe9xYw",          
 authDomain:"dbcc-login.firebaseapp.com",          
 databaseURL:"https://dbcc-login-default-rtdb.asia-southeast1.firebasedatabase.app",          
@@ -1191,9 +1174,9 @@ storageBucket:"dbcc-login.firebasestorage.app",
 messagingSenderId:"878902780767",          
 appId:"1:878902780767:web:4020d11730e5d9c0ee0cea",          
 measurementId:"G-PT9S1K4E2K"          
-};  const app=initializeApp(firebaseConfig);        
-const auth=getAuth(app);        
-const db=getFirestore(app);  window.addEventListener("error",e=>{  showMessage("JS Error: "+(e.message||e));  });  window.addEventListener("unhandledrejection",e=>{  showMessage("Promise Error: "+(e.reason?.message||e.reason));  });  getRedirectResult(auth).catch(e=>{  console.error(e);  showMessage("Redirect Error: "+e.message+" ("+e.code+")");  });  const DEFAULT_PROFILE_PIC="basic_p.png";      
+};  const app=firebase.initializeApp(firebaseConfig);        
+const auth=firebase.auth();        
+const db=firebase.firestore();  window.addEventListener("error",e=>{  showMessage("JS Error: "+(e.message||e));  });  window.addEventListener("unhandledrejection",e=>{  showMessage("Promise Error: "+(e.reason?.message||e.reason));  });  (auth).getRedirectResult().catch(e=>{  console.error(e);  showMessage("Redirect Error: "+e.message+" ("+e.code+")");  });  const DEFAULT_PROFILE_PIC="basic_p.png";      
 const BUZZY_PROFILE_PIC="buzzy_p.png";  const PACK_PRICE=15;    
 const STARTING_COINS=75;    
 const STARTING_DOLB=0;  const BATTLE_HP=100;  /*
@@ -1646,10 +1629,7 @@ showMessage("Starting sign-in...");
 
 try{
 
-await signInWithRedirect(
-auth,
-new GoogleAuthProvider()
-);
+await (auth).signInWithRedirect(new firebase.auth.GoogleAuthProvider());
 
 }catch(e){
 
@@ -1670,7 +1650,7 @@ stopTradeListener();
 stopFriendListener();
 stopBattleListener();
 
-await signOut(auth);
+await (auth).signOut();
 
 }catch(e){
 
@@ -1727,9 +1707,9 @@ continue;
 
 const normalized=chosen.toLowerCase();
 
-const ref=doc(db,"usernames",normalized);
+const ref=db.collection("usernames").doc(normalized);
 
-const snap=await getDoc(ref);
+const snap=await (ref).get();
 
 if(
 snap.exists() &&
@@ -1741,14 +1721,10 @@ continue;
 
 }
 
-await setDoc(
-ref,
-{
+await (ref).set({
 uid:currentUser.uid,
 username:chosen
-},
-{merge:true}
-);
+},{merge:true});
 
 username=chosen;
 
@@ -1760,14 +1736,10 @@ async function ensureUsernameDocument(){
 
 if(!currentUser||!username)return;
 
-await setDoc(
-doc(db,"usernames",username.toLowerCase()),
-{
+await (db.collection("usernames").doc(username.toLowerCase())).set({
 uid:currentUser.uid,
 username
-},
-{merge:true}
-);
+},{merge:true});
 
 }
 
@@ -1777,9 +1749,9 @@ PLAYER DATA
 
 async function loadPlayerData(){
 
-const ref=doc(db,"players",currentUser.uid);
+const ref=db.collection("players").doc(currentUser.uid);
 
-const snap=await getDoc(ref);
+const snap=await (ref).get();
 
 if(!snap.exists()){
 
@@ -1805,9 +1777,7 @@ easyBotWins=0;
 hardBotLevel=0;
 hardBotWins=0;
 
-await setDoc(
-ref,
-{
+await (ref).set({
 money,
 dolb,
 collection,
@@ -1826,8 +1796,7 @@ easyBotWins,
 
 hardBotLevel,
 hardBotWins
-}
-);
+});
 
 }else{
 
@@ -1977,9 +1946,7 @@ async function savePlayerData(){
 
 if(!currentUser)return;
 
-await setDoc(
-doc(db,"players",currentUser.uid),
-{
+await (db.collection("players").doc(currentUser.uid)).set({
 
 money,
 dolb,
@@ -2000,9 +1967,7 @@ easyBotWins,
 hardBotLevel,
 hardBotWins
 
-},
-{merge:true}
-);
+},{merge:true});
 
 }
 
@@ -2010,9 +1975,7 @@ hardBotWins
 AUTH
 ========================= */
 
-onAuthStateChanged(
-auth,
-async user=>{
+(auth).onAuthStateChanged(async user=>{
 
 if(!user){
 
@@ -2264,13 +2227,9 @@ async function loadDailyShopData(){
 
 const today=getTodayString();
 
-const ref=doc(
-db,
-"players",
-currentUser.uid
-);
+const ref=db.collection("players").doc(currentUser.uid);
 
-const snap=await getDoc(ref);
+const snap=await (ref).get();
 
 if(!snap.exists())return;
 
@@ -2287,14 +2246,10 @@ data.dailyShopBought===true;
 dailyShopDate=today;
 dailyShopBought=false;
 
-await setDoc(
-ref,
-{
+await (ref).set({
 dailyShopDate:today,
 dailyShopBought:false
-},
-{merge:true}
-);
+},{merge:true});
 
 }
 
@@ -2499,11 +2454,7 @@ return;
 
 const today=getTodayString();
 
-const ref=doc(
-db,
-"players",
-currentUser.uid
-);
+const ref=db.collection("players").doc(currentUser.uid);
 
 if(
 dailyShopOffer.type==="profilePic"
@@ -2533,14 +2484,10 @@ dailyShopBought=true;
 
 await savePlayerData();
 
-await setDoc(
-ref,
-{
+await (ref).set({
 dailyShopDate:today,
 dailyShopBought:true
-},
-{merge:true}
-);
+},{merge:true});
 
 updateUI();
 
@@ -2564,14 +2511,10 @@ dailyShopBought=true;
 
 await savePlayerData();
 
-await setDoc(
-ref,
-{
+await (ref).set({
 dailyShopDate:today,
 dailyShopBought:true
-},
-{merge:true}
-);
+},{merge:true});
 
 updateUI();
 
@@ -3129,13 +3072,7 @@ result.innerHTML="<p>Searching...</p>";
 
 try{
 
-const snap=await getDoc(
-doc(
-db,
-"usernames",
-name.toLowerCase()
-)
-);
+const snap=await (db.collection("usernames").doc(name.toLowerCase())).get();
 
 if(!snap.exists()){
 
@@ -3157,9 +3094,7 @@ return;
 
 }
 
-const ps=await getDoc(
-doc(db,"players",d.uid)
-);
+const ps=await (db.collection("players").doc(d.uid)).get();
 
 const pd=ps.exists()?ps.data():{};
 
@@ -3211,13 +3146,7 @@ t.senderUid===receiverUid
 
 }
 
-await setDoc(
-doc(
-db,
-"tradeRequests",
-createCardId()
-),
-{
+await (db.collection("tradeRequests").doc(createCardId())).set({
 
 participants:[
 currentUser.uid,
@@ -3238,10 +3167,9 @@ receiverConfirmed:false,
 
 status:"pending",
 
-createdAt:serverTimestamp()
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
 
-}
-);
+});
 
 showMessage("Trade request sent!");
 
@@ -3275,21 +3203,9 @@ stopTradeListener();
 
 if(!currentUser)return;
 
-const q=query(
-firestoreCollection(
-db,
-"tradeRequests"
-),
-where(
-"participants",
-"array-contains",
-currentUser.uid
-)
-);
+const q=db.collection("tradeRequests").where("participants","array-contains",currentUser.uid);
 
-tradeListener=onSnapshot(
-q,
-s=>{
+tradeListener=(q).onSnapshot(s=>{
 
 tradeRequests=s.docs.map(
 x=>({
@@ -3331,8 +3247,7 @@ if(fresh)activeTrade=fresh;
 renderIncomingTrades();
 renderActiveTrade();
 
-},
-e=>{
+},e=>{
 
 console.error(e);
 
@@ -3341,8 +3256,7 @@ showMessage(
 e.message
 );
 
-}
-);
+});
 
 }
 
@@ -3696,19 +3610,12 @@ sender
 
 try{
 
-await updateDoc(
-doc(
-db,
-"tradeRequests",
-activeTrade.id
-),
-{
+await (db.collection("tradeRequests").doc(activeTrade.id)).update({
 
 senderConfirmed:false,
 receiverConfirmed:false
 
-}
-);
+});
 
 showMessage(
 "Offer updated. Both players must confirm again."
@@ -3736,13 +3643,9 @@ activeTrade.status!=="pending"
 
 try{
 
-const ref=doc(
-db,
-"tradeRequests",
-activeTrade.id
-);
+const ref=db.collection("tradeRequests").doc(activeTrade.id);
 
-const snap=await getDoc(ref);
+const snap=await (ref).get();
 
 if(!snap.exists()){
 
@@ -3823,12 +3726,9 @@ sender
 :
 "receiverConfirmed";
 
-await updateDoc(
-ref,
-{
+await (ref).update({
 [field]:true
-}
-);
+});
 
 activeTrade={
 ...t,
@@ -3875,13 +3775,9 @@ if(!sender.length||!receiver.length)return;
 
 try{
 
-const ref=doc(
-db,
-"tradeRequests",
-t.id
-);
+const ref=db.collection("tradeRequests").doc(t.id);
 
-const snap=await getDoc(ref);
+const snap=await (ref).get();
 
 if(!snap.exists())return;
 
@@ -3896,13 +3792,10 @@ fresh.senderConfirmed!==true||
 fresh.receiverConfirmed!==true
 )return;
 
-await updateDoc(
-ref,
-{
+await (ref).update({
 status:"completed",
-completedAt:serverTimestamp()
-}
-);
+completedAt:firebase.firestore.FieldValue.serverTimestamp()
+});
 
 await applyCompletedTrade({
 ...fresh,
@@ -3950,13 +3843,9 @@ const incoming=sender
 
 if(!my.length||!incoming.length)return;
 
-const ref=doc(
-db,
-"players",
-currentUser.uid
-);
+const ref=db.collection("players").doc(currentUser.uid);
 
-const snap=await getDoc(ref);
+const snap=await (ref).get();
 
 if(!snap.exists())return;
 
@@ -4055,15 +3944,11 @@ favs.push(o.name);
 
 done.push(t.id);
 
-await setDoc(
-ref,
-{
+await (ref).set({
 collection:col,
 favorites:favs,
 completedTradeIds:done
-},
-{merge:true}
-);
+},{merge:true});
 
 collection=col;
 favorites=favs;
@@ -4091,12 +3976,9 @@ window.cancelTrade=async id=>{
 
 try{
 
-await updateDoc(
-doc(db,"tradeRequests",id),
-{
+await (db.collection("tradeRequests").doc(id)).update({
 status:"cancelled"
-}
-);
+});
 
 if(activeTrade?.id===id){
 
@@ -4164,13 +4046,7 @@ result.innerHTML="<p>Searching...</p>";
 
 try{
 
-const snap=await getDoc(
-doc(
-db,
-"usernames",
-name.toLowerCase()
-)
-);
+const snap=await (db.collection("usernames").doc(name.toLowerCase())).get();
 
 if(!snap.exists()){
 
@@ -4185,9 +4061,7 @@ const d=snap.data();
 
 const uid=d.uid;
 
-const ps=await getDoc(
-doc(db,"players",uid)
-);
+const ps=await (db.collection("players").doc(uid)).get();
 
 const pd=ps.exists()
 ?
@@ -4294,9 +4168,7 @@ return;
 
 }
 
-const snap=await getDoc(
-doc(db,"players",receiverUid)
-);
+const snap=await (db.collection("players").doc(receiverUid)).get();
 
 const data=
 snap.exists()
@@ -4305,13 +4177,7 @@ snap.data()
 :
 {};
 
-await setDoc(
-doc(
-db,
-"friendRequests",
-createCardId()
-),
-{
+await (db.collection("friendRequests").doc(createCardId())).set({
 
 participants:[
 currentUser.uid,
@@ -4327,10 +4193,9 @@ data.username||"",
 
 status:"pending",
 
-createdAt:serverTimestamp()
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
 
-}
-);
+});
 
 showMessage(
 "Friend request sent!"
@@ -4371,21 +4236,9 @@ stopFriendListener();
 
 if(!currentUser)return;
 
-const q=query(
-firestoreCollection(
-db,
-"friendRequests"
-),
-where(
-"participants",
-"array-contains",
-currentUser.uid
-)
-);
+const q=db.collection("friendRequests").where("participants","array-contains",currentUser.uid);
 
-friendListener=onSnapshot(
-q,
-s=>{
+friendListener=(q).onSnapshot(s=>{
 
 friendRequests=s.docs.map(
 x=>({
@@ -4398,8 +4251,7 @@ renderFriendRequests();
 renderFriends();
 renderBattleRequests();
 
-},
-e=>{
+},e=>{
 
 console.error(e);
 
@@ -4408,8 +4260,7 @@ showMessage(
 e.message
 );
 
-}
-);
+});
 
 }
 
@@ -4476,9 +4327,7 @@ uid
 
 try{
 
-const s=await getDoc(
-doc(db,"players",uid)
-);
+const s=await (db.collection("players").doc(uid)).get();
 
 if(!s.exists())return;
 
@@ -4524,40 +4373,17 @@ return;
 
 try{
 
-await setDoc(
-doc(
-db,
-"players",
-currentUser.uid
-),
-{
-friends:arrayUnion(r.senderUid)
-},
-{merge:true}
-);
+await (db.collection("players").doc(currentUser.uid)).set({
+friends:firebase.firestore.FieldValue.arrayUnion(r.senderUid)
+},{merge:true});
 
-await setDoc(
-doc(
-db,
-"players",
-r.senderUid
-),
-{
-friends:arrayUnion(currentUser.uid)
-},
-{merge:true}
-);
+await (db.collection("players").doc(r.senderUid)).set({
+friends:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)
+},{merge:true});
 
-await updateDoc(
-doc(
-db,
-"friendRequests",
-id
-),
-{
+await (db.collection("friendRequests").doc(id)).update({
 status:"accepted"
-}
-);
+});
 
 if(!friends.includes(r.senderUid)){
 
@@ -4621,16 +4447,9 @@ if(!r)return;
 
 try{
 
-await updateDoc(
-doc(
-db,
-"friendRequests",
-id
-),
-{
+await (db.collection("friendRequests").doc(id)).update({
 status:"declined"
-}
-);
+});
 
 showMessage(
 "Friend request declined."
@@ -4662,9 +4481,7 @@ c.innerHTML=`
 <div class="friendEmpty">    <h3>No friends yet</h3>    <p>                    
 Search for a player above to add them.                    
 </p>    </div>                    
-`;    return;  }  c.innerHTML="<p>Loading friends...</p>";  try{  const profiles=[];  for(const id of friends){  const s=await getDoc(    
-doc(db,"players",id)    
-);  if(s.exists()){  const d=s.data();
+`;    return;  }  c.innerHTML="<p>Loading friends...</p>";  try{  const profiles=[];  for(const id of friends){  const s=await (db.collection("players").doc(id)).get();  if(s.exists()){  const d=s.data();
 
 profiles.push({
 
@@ -6067,13 +5884,7 @@ return;
 
 try{
 
-await setDoc(
-doc(
-db,
-"friendRequests",
-createCardId()
-),
-{
+await (db.collection("friendRequests").doc(createCardId())).set({
 
 type:"battle",
 
@@ -6095,10 +5906,9 @@ DEFAULT_PROFILE_PIC,
 
 status:"pending",
 
-createdAt:serverTimestamp()
+createdAt:firebase.firestore.FieldValue.serverTimestamp()
 
-}
-);
+});
 
 showMessage(
 "Battle request sent to "+
@@ -6155,4 +5965,10 @@ d.innerHTML=`
 <div class="playerResultBox">    <img                    
 class="profilePicSmall"                    
 id="battleReqPic_${escapeHtml(r.id)}"                    
-src="${DEFAULT_PROFILE_PIC}">  <div class="playerResultInfo">    <div class="friendName">                   
+src="${DEFAULT_PROFILE_PIC}">  <div class="playerResultInfo">    <div class="friendName">                    
+${escapeHtml(                    
+r.senderUsername||                    
+"Player"                    
+)}                    
+</div>    <p>                    
+wants to battle you!               
