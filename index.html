@@ -2968,12 +2968,12 @@ window.acceptBattleRequest = async id => {
 
 const BJ_WIDTH = 360;
 const BJ_HEIGHT = 520;
-const BJ_GRAVITY = 0.45;
-const BJ_FLAP = -7.6;
-const BJ_PIPE_GAP = 155;
+const BJ_GRAVITY = 0.32;
+const BJ_FLAP = -6.6;
+const BJ_PIPE_GAP = 210;
 const BJ_PIPE_WIDTH = 62;
-const BJ_PIPE_SPEED = 2.6;
-const BJ_PIPE_INTERVAL = 105;
+const BJ_PIPE_SPEED = 1.6;
+const BJ_PIPE_INTERVAL = 150;
 const BJ_BIRD_SIZE = 40;
 const BJ_DOLB_PER_OBSTACLE = 5;
 
@@ -2981,6 +2981,11 @@ let buzzyJumpRunning = false;
 let buzzyJumpAnimFrame = null;
 let buzzyJumpBest = 0;
 let buzzyJumpKeyBound = false;
+
+// The game doesn't start moving the instant PLAY is pressed -- Buzzy just
+// hovers in place (bobbing gently) until the player's first flap, which is
+// when gravity, pipe movement, and pipe spawning all actually kick in.
+let bjStarted = false;
 
 let bjBird = null;
 let bjPipes = [];
@@ -2997,6 +3002,8 @@ function bjRectsOverlap(a, b) {
 
 function bjFlap() {
   if (!buzzyJumpRunning || !bjBird) return;
+
+  if (!bjStarted) bjStarted = true;
   bjBird.vel = BJ_FLAP;
 }
 
@@ -3013,12 +3020,13 @@ function initBuzzyJumpState() {
   bjFrame = 0;
   bjScore = 0;
   bjDolbEarned = 0;
+  bjStarted = false;
 
   const restartButton = document.getElementById("buzzyJumpRestartButton");
   if (restartButton) restartButton.classList.add("hidden");
 
   const scoreDisplay = document.getElementById("buzzyJumpScoreDisplay");
-  if (scoreDisplay) scoreDisplay.textContent = "Score: 0";
+  if (scoreDisplay) scoreDisplay.textContent = "Tap, click, or press Space to start!";
 }
 
 function spawnBjPipe() {
@@ -3061,22 +3069,34 @@ function bjDrawCloud(ctx, x, topHeight, w) {
   ctx.fill();
 }
 
+// A proper arched rainbow (concentric bands, rounded ends) hanging down
+// from the top of the screen, instead of flat stacked rectangles.
 function bjDrawRainbow(ctx, x, topHeight, w) {
-  const colors = ["#e63946", "#f4a300", "#ffe066", "#52b788", "#4895ef", "#7b2cbf"];
-  const bandH = 7;
+  const colors = ["#e63946", "#f77f00", "#fcbf49", "#52b788", "#4895ef", "#7b2cbf"];
+  const cx = x + w / 2;
+  const cy = topHeight;
+  const outerRadius = Math.max(w / 2, (topHeight - 6) * 0.72);
+  const bandThickness = Math.max(6, (outerRadius * 0.85) / colors.length);
+
+  // Soft cloud puffs where the rainbow meets the ceiling, so it reads as
+  // "hanging from the sky" rather than a plain shape.
+  ctx.fillStyle = "#ffffff";
+  ctx.beginPath();
+  ctx.arc(x + w * 0.12, 10, w * 0.22, 0, Math.PI * 2);
+  ctx.arc(x + w * 0.88, 10, w * 0.22, 0, Math.PI * 2);
+  ctx.fill();
 
   colors.forEach((color, i) => {
-    ctx.fillStyle = color;
-    ctx.fillRect(x, i * bandH, w, bandH);
+    const radius = outerRadius - i * bandThickness;
+    if (radius <= 0) return;
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = bandThickness * 0.92;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, Math.PI, Math.PI * 2);
+    ctx.stroke();
   });
-
-  const barsHeight = colors.length * bandH;
-  ctx.fillStyle = colors[colors.length - 1];
-  ctx.fillRect(x, barsHeight, w, Math.max(0, topHeight - barsHeight - 12));
-
-  ctx.beginPath();
-  ctx.arc(x + w / 2, topHeight - 12, w / 2, 0, Math.PI);
-  ctx.fill();
 }
 
 function bjDraw(ctx) {
@@ -3094,7 +3114,7 @@ function bjDraw(ctx) {
   if (buzzyJumpImg.complete && buzzyJumpImg.naturalWidth > 0) {
     ctx.save();
     ctx.translate(bjBird.x, bjBird.y);
-    const angle = Math.max(-0.5, Math.min(0.9, bjBird.vel * 0.06));
+    const angle = bjStarted ? Math.max(-0.5, Math.min(0.9, bjBird.vel * 0.06)) : 0;
     ctx.rotate(angle);
     ctx.drawImage(buzzyJumpImg, -BJ_BIRD_SIZE / 2, -BJ_BIRD_SIZE / 2, BJ_BIRD_SIZE, BJ_BIRD_SIZE);
     ctx.restore();
@@ -3110,14 +3130,37 @@ function bjDraw(ctx) {
   ctx.textAlign = "center";
   ctx.fillText(String(bjScore), BJ_WIDTH / 2, 45);
 
+  if (!bjStarted) {
+    ctx.fillStyle = "rgba(11,36,56,0.75)";
+    ctx.font = "bold 20px Arial";
+    ctx.fillText("TAP TO START", BJ_WIDTH / 2, BJ_HEIGHT / 2 + 70);
+  }
+
   const scoreDisplay = document.getElementById("buzzyJumpScoreDisplay");
-  if (scoreDisplay) scoreDisplay.textContent = `Score: ${bjScore} | Dolb earned this run: ${bjDolbEarned}`;
+  if (scoreDisplay) {
+    scoreDisplay.textContent = bjStarted
+      ? `Score: ${bjScore} | Dolb earned this run: ${bjDolbEarned}`
+      : "Tap, click, or press Space to start!";
+  }
 }
 
 function buzzyJumpLoop() {
   if (!buzzyJumpRunning) return;
 
   bjFrame++;
+
+  if (!bjStarted) {
+    // Gentle idle bob while waiting for the first flap -- nothing else
+    // moves or spawns yet, so the player always gets a clean look at the
+    // board before anything can hit them.
+    bjBird.y = BJ_HEIGHT / 2 + Math.sin(bjFrame / 18) * 10;
+
+    const canvas = document.getElementById("buzzyJumpCanvas");
+    if (canvas) bjDraw(canvas.getContext("2d"));
+
+    buzzyJumpAnimFrame = requestAnimationFrame(buzzyJumpLoop);
+    return;
+  }
 
   bjBird.vel += BJ_GRAVITY;
   bjBird.y += bjBird.vel;
