@@ -2887,4 +2887,367 @@ window.challengeFriend = async (uid, name, pic) => {
     showMessage("Battle request sent to " + name + "!");
   } catch (e) {
     console.error(e);
-    showMessage("Could not sen
+    showMessage("Could not send battle request: " + e.message);
+  }
+};
+
+function renderBattleRequests() {
+  const c = document.getElementById("battleRequests");
+  if (!c || !currentUser) return;
+
+  const incoming = friendRequests.filter(r =>
+    r.type === "battle" && r.receiverUid === currentUser.uid && r.status === "pending"
+  );
+
+  if (!incoming.length) { c.innerHTML = ""; return; }
+
+  c.innerHTML = "<h2>Battle Requests</h2>";
+
+  incoming.forEach(r => {
+    const d = document.createElement("div");
+    d.className = "battleRequestBox";
+    d.innerHTML = `
+      <div class="playerResultBox">
+        <img class="profilePicSmall" id="battleReqPic_${escapeHtml(r.id)}" src="${DEFAULT_PROFILE_PIC}">
+        <div class="playerResultInfo">
+          <div class="friendName">${escapeHtml(r.senderUsername || "Player")}</div>
+          <p>wants to battle you!</p>
+          <div class="battleRequestButtons">
+            <button class="friendAcceptButton" onclick="acceptBattleRequest('${escapeHtml(r.id)}')">ACCEPT</button>
+            <button class="friendDeclineButton" onclick="declineFriendRequest('${escapeHtml(r.id)}')">DECLINE</button>
+          </div>
+        </div>
+      </div>
+    `;
+    c.appendChild(d);
+  });
+}
+
+window.acceptBattleRequest = async id => {
+  const r = friendRequests.find(x => x.id === id);
+
+  if (!r || r.type !== "battle" || r.receiverUid !== currentUser.uid || r.status !== "pending") {
+    showMessage("This battle request cannot be accepted.");
+    return;
+  }
+
+  if (!collection.length) {
+    showMessage("You need at least one card to battle.");
+    return;
+  }
+
+  try {
+    await updateDoc(doc(db, "friendRequests", id), { status: "accepted" });
+
+    battleMode = "friend";
+    battleOpponentUid = r.senderUid;
+    battleOpponentUsername = r.senderUsername || "Player";
+    battleOpponentPic = r.senderProfilePic || DEFAULT_PROFILE_PIC;
+    battleSelectedCardId = null;
+
+    showPage("battle");
+    document.getElementById("battleMain").classList.add("hidden");
+    renderBattleChoice();
+  } catch (e) {
+    console.error(e);
+    showMessage("Could not accept battle request: " + e.message);
+  }
+};
+
+/* =========================================================
+   MINIGAME: BUZZY JUMP
+   -----------------------------------------------------------
+   A Flappy-Bird-style minigame. Buzzy (buzzyjump.png) flies between
+   pairs of obstacles: a tree rising from the bottom and either a
+   cloud or a rainbow hanging from the top. Every obstacle passed
+   (tree + cloud/rainbow) earns 5 Dolb each, so 10 Dolb per gap.
+   Dolb earned updates the same `dolb` variable used everywhere else
+   in the game and is saved through the normal savePlayerData() path
+   (a no-op when playing offline).
+   ========================================================= */
+
+const BJ_WIDTH = 360;
+const BJ_HEIGHT = 520;
+const BJ_GRAVITY = 0.45;
+const BJ_FLAP = -7.6;
+const BJ_PIPE_GAP = 155;
+const BJ_PIPE_WIDTH = 62;
+const BJ_PIPE_SPEED = 2.6;
+const BJ_PIPE_INTERVAL = 105;
+const BJ_BIRD_SIZE = 40;
+const BJ_DOLB_PER_OBSTACLE = 5;
+
+let buzzyJumpRunning = false;
+let buzzyJumpAnimFrame = null;
+let buzzyJumpBest = 0;
+let buzzyJumpKeyBound = false;
+
+let bjBird = null;
+let bjPipes = [];
+let bjFrame = 0;
+let bjScore = 0;
+let bjDolbEarned = 0;
+
+const buzzyJumpImg = new Image();
+buzzyJumpImg.src = "buzzyjump.png";
+
+function bjRectsOverlap(a, b) {
+  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+
+function bjFlap() {
+  if (!buzzyJumpRunning || !bjBird) return;
+  bjBird.vel = BJ_FLAP;
+}
+
+function buzzyJumpKeyHandler(e) {
+  if (e.code === "Space") {
+    e.preventDefault();
+    bjFlap();
+  }
+}
+
+function initBuzzyJumpState() {
+  bjBird = { x: 70, y: BJ_HEIGHT / 2, vel: 0 };
+  bjPipes = [];
+  bjFrame = 0;
+  bjScore = 0;
+  bjDolbEarned = 0;
+
+  const restartButton = document.getElementById("buzzyJumpRestartButton");
+  if (restartButton) restartButton.classList.add("hidden");
+
+  const scoreDisplay = document.getElementById("buzzyJumpScoreDisplay");
+  if (scoreDisplay) scoreDisplay.textContent = "Score: 0";
+}
+
+function spawnBjPipe() {
+  const minHeight = 50;
+  const maxTop = BJ_HEIGHT - BJ_PIPE_GAP - minHeight;
+  const topHeight = minHeight + Math.random() * Math.max(10, maxTop - minHeight);
+  const bottomHeight = BJ_HEIGHT - BJ_PIPE_GAP - topHeight;
+  const topType = Math.random() < 0.5 ? "cloud" : "rainbow";
+
+  bjPipes.push({ x: BJ_WIDTH, topHeight, bottomHeight, topType, passed: false });
+}
+
+function bjDrawTree(ctx, x, y, w, h) {
+  ctx.fillStyle = "#7a5230";
+  const trunkW = w * 0.32;
+  ctx.fillRect(x + (w - trunkW) / 2, y + h * 0.55, trunkW, h * 0.45);
+
+  ctx.fillStyle = "#2f7d43";
+  for (let i = 0; i < 3; i++) {
+    const layerY = y + h * 0.55 - i * (h * 0.22);
+    const layerW = w * (1 - i * 0.16);
+    ctx.beginPath();
+    ctx.moveTo(x + w / 2, layerY - h * 0.3);
+    ctx.lineTo(x + w / 2 - layerW / 2, layerY);
+    ctx.lineTo(x + w / 2 + layerW / 2, layerY);
+    ctx.closePath();
+    ctx.fill();
+  }
+}
+
+function bjDrawCloud(ctx, x, topHeight, w) {
+  ctx.fillStyle = "#eef7ff";
+  ctx.fillRect(x, 0, w, Math.max(0, topHeight - 18));
+
+  ctx.fillStyle = "#ffffff";
+  ctx.beginPath();
+  ctx.arc(x + w * 0.25, topHeight - 18, w * 0.28, 0, Math.PI * 2);
+  ctx.arc(x + w * 0.55, topHeight - 10, w * 0.32, 0, Math.PI * 2);
+  ctx.arc(x + w * 0.82, topHeight - 18, w * 0.26, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function bjDrawRainbow(ctx, x, topHeight, w) {
+  const colors = ["#e63946", "#f4a300", "#ffe066", "#52b788", "#4895ef", "#7b2cbf"];
+  const bandH = 7;
+
+  colors.forEach((color, i) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, i * bandH, w, bandH);
+  });
+
+  const barsHeight = colors.length * bandH;
+  ctx.fillStyle = colors[colors.length - 1];
+  ctx.fillRect(x, barsHeight, w, Math.max(0, topHeight - barsHeight - 12));
+
+  ctx.beginPath();
+  ctx.arc(x + w / 2, topHeight - 12, w / 2, 0, Math.PI);
+  ctx.fill();
+}
+
+function bjDraw(ctx) {
+  ctx.clearRect(0, 0, BJ_WIDTH, BJ_HEIGHT);
+  ctx.fillStyle = "#bfe6ff";
+  ctx.fillRect(0, 0, BJ_WIDTH, BJ_HEIGHT);
+
+  bjPipes.forEach(pipe => {
+    bjDrawTree(ctx, pipe.x, BJ_HEIGHT - pipe.bottomHeight, BJ_PIPE_WIDTH, pipe.bottomHeight);
+
+    if (pipe.topType === "cloud") bjDrawCloud(ctx, pipe.x, pipe.topHeight, BJ_PIPE_WIDTH);
+    else bjDrawRainbow(ctx, pipe.x, pipe.topHeight, BJ_PIPE_WIDTH);
+  });
+
+  if (buzzyJumpImg.complete && buzzyJumpImg.naturalWidth > 0) {
+    ctx.save();
+    ctx.translate(bjBird.x, bjBird.y);
+    const angle = Math.max(-0.5, Math.min(0.9, bjBird.vel * 0.06));
+    ctx.rotate(angle);
+    ctx.drawImage(buzzyJumpImg, -BJ_BIRD_SIZE / 2, -BJ_BIRD_SIZE / 2, BJ_BIRD_SIZE, BJ_BIRD_SIZE);
+    ctx.restore();
+  } else {
+    ctx.fillStyle = "#ffcc33";
+    ctx.beginPath();
+    ctx.arc(bjBird.x, bjBird.y, BJ_BIRD_SIZE / 2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.fillStyle = "#0b2438";
+  ctx.font = "bold 26px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(String(bjScore), BJ_WIDTH / 2, 45);
+
+  const scoreDisplay = document.getElementById("buzzyJumpScoreDisplay");
+  if (scoreDisplay) scoreDisplay.textContent = `Score: ${bjScore} | Dolb earned this run: ${bjDolbEarned}`;
+}
+
+function buzzyJumpLoop() {
+  if (!buzzyJumpRunning) return;
+
+  bjFrame++;
+
+  bjBird.vel += BJ_GRAVITY;
+  bjBird.y += bjBird.vel;
+
+  if (bjFrame % BJ_PIPE_INTERVAL === 0) spawnBjPipe();
+
+  let hit = false;
+  const birdBox = {
+    x: bjBird.x - BJ_BIRD_SIZE / 2,
+    y: bjBird.y - BJ_BIRD_SIZE / 2,
+    w: BJ_BIRD_SIZE,
+    h: BJ_BIRD_SIZE
+  };
+
+  bjPipes.forEach(pipe => {
+    pipe.x -= BJ_PIPE_SPEED;
+
+    if (!pipe.passed && pipe.x + BJ_PIPE_WIDTH < bjBird.x) {
+      pipe.passed = true;
+      bjScore++;
+
+      const earned = BJ_DOLB_PER_OBSTACLE * 2; // tree + cloud/rainbow
+      bjDolbEarned += earned;
+      dolb += earned;
+
+      const dolbEl = document.getElementById("dolb");
+      if (dolbEl) dolbEl.textContent = dolb;
+    }
+
+    if (bjRectsOverlap(birdBox, { x: pipe.x, y: BJ_HEIGHT - pipe.bottomHeight, w: BJ_PIPE_WIDTH, h: pipe.bottomHeight })) hit = true;
+    if (bjRectsOverlap(birdBox, { x: pipe.x, y: 0, w: BJ_PIPE_WIDTH, h: pipe.topHeight })) hit = true;
+  });
+
+  bjPipes = bjPipes.filter(p => p.x + BJ_PIPE_WIDTH > -5);
+
+  if (bjBird.y - BJ_BIRD_SIZE / 2 < 0) {
+    bjBird.y = BJ_BIRD_SIZE / 2;
+    bjBird.vel = 0;
+  }
+  if (bjBird.y + BJ_BIRD_SIZE / 2 > BJ_HEIGHT) hit = true;
+
+  const canvas = document.getElementById("buzzyJumpCanvas");
+  if (canvas) bjDraw(canvas.getContext("2d"));
+
+  if (hit) {
+    endBuzzyJump();
+    return;
+  }
+
+  buzzyJumpAnimFrame = requestAnimationFrame(buzzyJumpLoop);
+}
+
+async function endBuzzyJump() {
+  buzzyJumpRunning = false;
+  if (buzzyJumpAnimFrame) cancelAnimationFrame(buzzyJumpAnimFrame);
+  document.removeEventListener("keydown", buzzyJumpKeyHandler);
+
+  if (bjScore > buzzyJumpBest) buzzyJumpBest = bjScore;
+
+  updateUI();
+  await savePlayerData();
+
+  const canvas = document.getElementById("buzzyJumpCanvas");
+  if (canvas) {
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "rgba(0,0,0,0.55)";
+    ctx.fillRect(0, 0, BJ_WIDTH, BJ_HEIGHT);
+    ctx.fillStyle = "#ffffff";
+    ctx.textAlign = "center";
+    ctx.font = "bold 30px Arial";
+    ctx.fillText("GAME OVER", BJ_WIDTH / 2, BJ_HEIGHT / 2 - 40);
+    ctx.font = "22px Arial";
+    ctx.fillText("Score: " + bjScore, BJ_WIDTH / 2, BJ_HEIGHT / 2);
+    ctx.fillText("Dolb Earned: " + bjDolbEarned, BJ_WIDTH / 2, BJ_HEIGHT / 2 + 32);
+    ctx.font = "16px Arial";
+    ctx.fillText("Best Score: " + buzzyJumpBest, BJ_WIDTH / 2, BJ_HEIGHT / 2 + 64);
+  }
+
+  const scoreDisplay = document.getElementById("buzzyJumpScoreDisplay");
+  if (scoreDisplay) scoreDisplay.textContent = `Game Over! Score: ${bjScore} | Dolb earned: ${bjDolbEarned} | Best: ${buzzyJumpBest}`;
+
+  const restartButton = document.getElementById("buzzyJumpRestartButton");
+  if (restartButton) restartButton.classList.remove("hidden");
+}
+
+window.startBuzzyJump = () => {
+  const home = document.getElementById("minigameHome");
+  const game = document.getElementById("buzzyJumpGame");
+  if (home) home.classList.add("hidden");
+  if (game) game.classList.remove("hidden");
+
+  initBuzzyJumpState();
+  buzzyJumpRunning = true;
+
+  if (!buzzyJumpKeyBound) {
+    document.addEventListener("keydown", buzzyJumpKeyHandler);
+    buzzyJumpKeyBound = true;
+  }
+
+  buzzyJumpAnimFrame = requestAnimationFrame(buzzyJumpLoop);
+};
+
+window.exitBuzzyJump = silent => {
+  buzzyJumpRunning = false;
+  if (buzzyJumpAnimFrame) cancelAnimationFrame(buzzyJumpAnimFrame);
+  document.removeEventListener("keydown", buzzyJumpKeyHandler);
+  buzzyJumpKeyBound = false;
+
+  if (!silent) {
+    const home = document.getElementById("minigameHome");
+    const game = document.getElementById("buzzyJumpGame");
+    if (game) game.classList.add("hidden");
+    if (home) home.classList.remove("hidden");
+
+    const bestEl = document.getElementById("buzzyJumpBestDisplay");
+    if (bestEl) bestEl.textContent = "Best Score: " + buzzyJumpBest;
+  }
+};
+
+// Bind tap/click-to-flap once. The canvas is always in the DOM (just
+// hidden behind other pages when not in use), and module scripts run
+// after the DOM has parsed, so this is safe to attach at top level.
+const buzzyJumpCanvasEl = document.getElementById("buzzyJumpCanvas");
+if (buzzyJumpCanvasEl) {
+  buzzyJumpCanvasEl.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    bjFlap();
+  });
+}
+
+</script>
+</body>
+</html>
