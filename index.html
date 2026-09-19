@@ -353,6 +353,16 @@ h1,h2,h3{margin-top:0}
     <div id="friendsList"></div>
   </div>
 
+  <div id="usernameOverlay" class="settingsOverlay hidden">
+    <div class="settingsBox">
+      <h2>Choose a Username</h2>
+      <p>3-20 characters. Letters, numbers, and underscores only.</p>
+      <input id="usernameInput" class="searchBox" type="text" autocomplete="off" placeholder="Username" maxlength="20">
+      <p id="usernameError" style="color:#ff8080;display:none"></p>
+      <button class="settingsButton" onclick="submitUsername()">CONFIRM</button>
+    </div>
+  </div>
+
   <div id="settingsOverlay" class="settingsOverlay hidden">
     <div class="settingsBox">
       <h2>Settings</h2>
@@ -490,9 +500,9 @@ const cards = [
   { name: "Nico", image: "nico.png", weight: 20, price: 3, rarity: "doll", type: ["Flying"], move: "Beak Attack", moveType: "Flying", power: 52 },
   { name: "Choper", image: "choper.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Hand Combat", moveType: "Fighting", power: 57 },
   { name: "Bullet", image: "bullet.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Tail Combat", moveType: "Fighting", power: 62 },
-  { name: "Turkmoon", image: "turkmoon.png", weight: 8, price: 8, rarity: "doll", type: ["Fire","Flying"], move: "Fire Bird", moveType: "Fire", power: 58 },
-  { name: "Rem", image: "rem.png", weight: 12, price: 5, rarity: "doll", type: ["Normal"], move: "Good Elk", moveType: "Normal", power: 48 },
-  { name: "Eep", image: "eep.png", weight: 5, price: 11, rarity: "doll", type: ["Normal"], move: "Super Elk", moveType: "Normal", power: 64 }
+  { name: "Turkmoon", image: "turkmoon.png", weight: 44, price: 8, rarity: "doll", type: ["Fire","Flying"], move: "Fire Bird", moveType: "Fire", power: 58 },
+  { name: "Rem", image: "rem.png", weight: 29, price: 5, rarity: "doll", type: ["Normal"], move: "Good Elk", moveType: "Normal", power: 48 },
+  { name: "Eep", image: "eep.png", weight: 16, price: 11, rarity: "doll", type: ["Normal"], move: "Super Elk", moveType: "Normal", power: 64 }
 ];
 
 /* ===== DAILY SHOP ===== */
@@ -510,8 +520,8 @@ const dailyShopData = [
   { name: "Nico", weight: 15, normalPrice: 1, cheapPrice: 1 },
   { name: "Choper", weight: 25, normalPrice: 1, cheapPrice: 1 },
   { name: "Bullet", weight: 20, normalPrice: 2, cheapPrice: 1 },
-  { name: "Turkmoon", weight: 12, normalPrice: 6, cheapPrice: 1 },
-  { name: "Rem", weight: 20, normalPrice: 4, cheapPrice: 2 },
+  { name: "Turkmoon", weight: 8, normalPrice: 6, cheapPrice: 1 },
+  { name: "Rem", weight: 12, normalPrice: 4, cheapPrice: 2 },
   { name: "Eep", weight: 5, normalPrice: 7, cheapPrice: 2 }
 ];
 
@@ -650,29 +660,83 @@ window.logout = async () => {
   }
 };
 
-/* ===== USERNAME ===== */
+/* ===== USERNAME =====
+   NOTE: this used to use window.prompt()/alert() in a blocking while loop.
+   That is a SYNCHRONOUS blocking dialog, and right after a signInWithPopup()
+   Google sign-in, browsers frequently suppress a prompt() that isn't tied
+   directly to a click event -- it returns instantly with no visible dialog.
+   That turned the while loop into a tight infinite retry with no delay,
+   pinning the tab at 100% CPU with nothing on screen: a freeze.
+   Fixed by using a real, non-blocking in-page modal instead, driven by a
+   Promise that resolves once the player submits a valid username. */
 
-async function askForUsername() {
-  while (!username) {
-    let chosen = prompt("Choose your unique username:") || "";
-    chosen = chosen.trim();
+let usernameResolve = null;
 
-    if (chosen.length < 3) { alert("Username must be at least 3 characters."); continue; }
-    if (chosen.length > 20) { alert("Username must be 20 characters or less."); continue; }
-    if (!/^[a-zA-Z0-9_]+$/.test(chosen)) { alert("Only letters, numbers and _ are allowed."); continue; }
+function showUsernameModal() {
+  document.getElementById("usernameError").style.display = "none";
+  document.getElementById("usernameInput").value = "";
+  document.getElementById("usernameOverlay").classList.remove("hidden");
+  document.getElementById("usernameInput").focus();
+}
 
-    const normalized = chosen.toLowerCase();
+function hideUsernameModal() {
+  document.getElementById("usernameOverlay").classList.add("hidden");
+}
+
+window.submitUsername = async () => {
+  const input = document.getElementById("usernameInput");
+  const errorEl = document.getElementById("usernameError");
+  const chosen = input.value.trim();
+
+  if (chosen.length < 3) {
+    errorEl.textContent = "Username must be at least 3 characters.";
+    errorEl.style.display = "block";
+    return;
+  }
+  if (chosen.length > 20) {
+    errorEl.textContent = "Username must be 20 characters or less.";
+    errorEl.style.display = "block";
+    return;
+  }
+  if (!/^[a-zA-Z0-9_]+$/.test(chosen)) {
+    errorEl.textContent = "Only letters, numbers and _ are allowed.";
+    errorEl.style.display = "block";
+    return;
+  }
+
+  const normalized = chosen.toLowerCase();
+
+  try {
     const ref = doc(db, "usernames", normalized);
     const snap = await getDoc(ref);
 
     if (snap.exists() && snap.data().uid !== currentUser.uid) {
-      alert("That username is already taken.");
-      continue;
+      errorEl.textContent = "That username is already taken.";
+      errorEl.style.display = "block";
+      return;
     }
 
     await setDoc(ref, { uid: currentUser.uid, username: chosen }, { merge: true });
     username = chosen;
+    hideUsernameModal();
+
+    if (usernameResolve) {
+      const resolve = usernameResolve;
+      usernameResolve = null;
+      resolve();
+    }
+  } catch (e) {
+    console.error(e);
+    errorEl.textContent = "Could not save username: " + e.message;
+    errorEl.style.display = "block";
   }
+};
+
+function askForUsername() {
+  return new Promise(resolve => {
+    usernameResolve = resolve;
+    showUsernameModal();
+  });
 }
 
 async function ensureUsernameDocument() {
@@ -759,9 +823,17 @@ async function savePlayerData() {
 
 /* ===== AUTH ===== */
 
+// Guard against onAuthStateChanged firing more than once for the same
+// sign-in (Firebase can emit it twice right after a popup sign-in). Without
+// this, loadPlayerData() could run twice at once, stacking two overlapping
+// username-modal flows and duplicate writes -- another way this could look
+// like a freeze.
+let authHandlerRunning = false;
+
 onAuthStateChanged(auth, async user => {
   if (!user) {
     currentUser = null;
+    authHandlerRunning = false;
 
     stopTradeListener();
     stopFriendListener();
@@ -776,6 +848,9 @@ onAuthStateChanged(auth, async user => {
     document.getElementById("gameScreen").classList.add("hidden");
     return;
   }
+
+  if (authHandlerRunning) return;
+  authHandlerRunning = true;
 
   currentUser = user;
 
@@ -796,6 +871,8 @@ onAuthStateChanged(auth, async user => {
   } catch (e) {
     console.error(e);
     alert("Could not load your account:\n" + e.message);
+  } finally {
+    authHandlerRunning = false;
   }
 });
 
@@ -2679,4 +2756,46 @@ function renderBattleRequests() {
           <p>wants to battle you!</p>
           <div class="battleRequestButtons">
             <button class="friendAcceptButton" onclick="acceptBattleRequest('${escapeHtml(r.id)}')">ACCEPT</button>
-            <button class="friendDeclineButton" onclic
+            <button class="friendDeclineButton" onclick="declineFriendRequest('${escapeHtml(r.id)}')">DECLINE</button>
+          </div>
+        </div>
+      </div>
+    `;
+    c.appendChild(d);
+  });
+}
+
+window.acceptBattleRequest = async id => {
+  const r = friendRequests.find(x => x.id === id);
+
+  if (!r || r.type !== "battle" || r.receiverUid !== currentUser.uid || r.status !== "pending") {
+    showMessage("This battle request cannot be accepted.");
+    return;
+  }
+
+  if (!collection.length) {
+    showMessage("You need at least one card to battle.");
+    return;
+  }
+
+  try {
+    await updateDoc(doc(db, "friendRequests", id), { status: "accepted" });
+
+    battleMode = "friend";
+    battleOpponentUid = r.senderUid;
+    battleOpponentUsername = r.senderUsername || "Player";
+    battleOpponentPic = r.senderProfilePic || DEFAULT_PROFILE_PIC;
+    battleSelectedCardId = null;
+
+    showPage("battle");
+    document.getElementById("battleMain").classList.add("hidden");
+    renderBattleChoice();
+  } catch (e) {
+    console.error(e);
+    showMessage("Could not accept battle request: " + e.message);
+  }
+};
+
+</script>
+</body>
+</html>
