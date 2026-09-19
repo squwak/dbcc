@@ -489,7 +489,10 @@ const cards = [
   { name: "Buzzy", image: "buzzy.png", weight: 5, price: 12, rarity: "doll", type: ["Flying","Fairy"], move: "Flying Hat", moveType: "Flying", power: 65 },
   { name: "Nico", image: "nico.png", weight: 20, price: 3, rarity: "doll", type: ["Flying"], move: "Beak Attack", moveType: "Flying", power: 52 },
   { name: "Choper", image: "choper.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Hand Combat", moveType: "Fighting", power: 57 },
-  { name: "Bullet", image: "bullet.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Tail Combat", moveType: "Fighting", power: 62 }
+  { name: "Bullet", image: "bullet.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Tail Combat", moveType: "Fighting", power: 62 },
+  { name: "Turkmoon", image: "turkmoon.png", weight: 44, price: 8, rarity: "doll", type: ["Fire","Flying"], move: "Fire Bird", moveType: "Fire", power: 58 },
+  { name: "Rem", image: "rem.png", weight: 29, price: 5, rarity: "doll", type: ["Normal"], move: "Good Elk", moveType: "Normal", power: 48 },
+  { name: "Eep", image: "eep.png", weight: 16, price: 11, rarity: "doll", type: ["Normal"], move: "Super Elk", moveType: "Normal", power: 64 }
 ];
 
 /* ===== DAILY SHOP ===== */
@@ -506,7 +509,10 @@ const dailyShopData = [
   { name: "Buzzy", weight: 4, normalPrice: 7, cheapPrice: 4 },
   { name: "Nico", weight: 15, normalPrice: 1, cheapPrice: 1 },
   { name: "Choper", weight: 25, normalPrice: 1, cheapPrice: 1 },
-  { name: "Bullet", weight: 20, normalPrice: 2, cheapPrice: 1 }
+  { name: "Bullet", weight: 20, normalPrice: 2, cheapPrice: 1 },
+  { name: "Turkmoon", weight: 8, normalPrice: 6, cheapPrice: 1 },
+  { name: "Rem", weight: 12, normalPrice: 4, cheapPrice: 2 },
+  { name: "Eep", weight: 5, normalPrice: 7, cheapPrice: 2 }
 ];
 
 const dolbDeals = [
@@ -2673,46 +2679,4 @@ function renderBattleRequests() {
           <p>wants to battle you!</p>
           <div class="battleRequestButtons">
             <button class="friendAcceptButton" onclick="acceptBattleRequest('${escapeHtml(r.id)}')">ACCEPT</button>
-            <button class="friendDeclineButton" onclick="declineFriendRequest('${escapeHtml(r.id)}')">DECLINE</button>
-          </div>
-        </div>
-      </div>
-    `;
-    c.appendChild(d);
-  });
-}
-
-window.acceptBattleRequest = async id => {
-  const r = friendRequests.find(x => x.id === id);
-
-  if (!r || r.type !== "battle" || r.receiverUid !== currentUser.uid || r.status !== "pending") {
-    showMessage("This battle request cannot be accepted.");
-    return;
-  }
-
-  if (!collection.length) {
-    showMessage("You need at least one card to battle.");
-    return;
-  }
-
-  try {
-    await updateDoc(doc(db, "friendRequests", id), { status: "accepted" });
-
-    battleMode = "friend";
-    battleOpponentUid = r.senderUid;
-    battleOpponentUsername = r.senderUsername || "Player";
-    battleOpponentPic = r.senderProfilePic || DEFAULT_PROFILE_PIC;
-    battleSelectedCardId = null;
-
-    showPage("battle");
-    document.getElementById("battleMain").classList.add("hidden");
-    renderBattleChoice();
-  } catch (e) {
-    console.error(e);
-    showMessage("Could not accept battle request: " + e.message);
-  }
-};
-
-</script>
-</body>
-</html>
+            <button class="friendDeclineButton" onclic
