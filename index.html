@@ -22,9 +22,10 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .topBar button{background:#183653;color:white;white-space:nowrap}
 .topBar button:hover{background:#234b70}
 
-.moneyBox,.dolbBox{padding:10px 14px;border-radius:10px;white-space:nowrap;order:-1}
+.moneyBox,.dolbBox,.buzzyPointsBox{padding:10px 14px;border-radius:10px;white-space:nowrap;order:-1}
 .moneyBox{background:#183653}
 .dolbBox{background:#6b4bc3}
+.buzzyPointsBox{background:#caa000}
 
 .page{padding:20px;max-width:1200px;margin:auto}
 h1,h2,h3{margin-top:0}
@@ -94,6 +95,41 @@ h1,h2,h3{margin-top:0}
 .dealButton{background:#6b4bc3;color:white;width:100%}
 
 .eventShopBox{background:#10243d;border-radius:15px;padding:20px;text-align:center;opacity:.7}
+
+.eventHeaderBox{background:linear-gradient(135deg,#3a2f6b,#1c1740);border-radius:18px;padding:20px;margin-bottom:20px;text-align:center}
+.eventCountdown{opacity:.85;font-size:14px;margin-top:5px}
+
+.buzzyPackCard{background:#10243d;border-radius:18px;padding:20px;text-align:center;max-width:430px;margin:0 auto 20px}
+.buzzyVariantPreviewRow{display:flex;justify-content:center;gap:10px;margin:12px 0}
+.buzzyVariantPreviewRow img{width:56px;height:56px;object-fit:contain;background:#091a2d;border-radius:10px}
+.buzzyPackBuyButton{width:100%;background:#caa000;color:#1c1740;font-size:17px}
+
+.buzzyInventoryBox{background:#10243d;border-radius:18px;padding:20px;max-width:430px;margin:0 auto 20px}
+.buzzyInventoryRow{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #183653}
+.buzzyInventoryRow:last-child{border-bottom:none}
+.buzzyInventoryRow img{width:36px;height:36px;object-fit:contain;background:#091a2d;border-radius:8px}
+.buzzyInventoryName{flex:1;text-align:left}
+.buzzyInventoryCount{font-weight:bold}
+
+.redeemGoldenButton{width:100%;background:linear-gradient(135deg,#ffd700,#b8860b);color:#1c1740;font-size:16px;margin-top:12px}
+
+.eventCardNote{opacity:.75;font-size:12px;margin-top:6px}
+
+.goldenBuzzyWrap{position:relative;display:inline-block;width:100%}
+.goldenBuzzyWrap img{opacity:.88;filter:drop-shadow(0 0 10px rgba(255,215,0,.85))}
+.goldenBuzzySprinkles{
+  position:absolute;inset:0;border-radius:10px;pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(255,255,255,.95) 0 2px, transparent 3px),
+    radial-gradient(circle at 72% 18%, rgba(255,255,255,.95) 0 2px, transparent 3px),
+    radial-gradient(circle at 38% 72%, rgba(255,255,255,.95) 0 2px, transparent 3px),
+    radial-gradient(circle at 86% 62%, rgba(255,255,255,.95) 0 2px, transparent 3px),
+    radial-gradient(circle at 55% 45%, rgba(255,255,255,.95) 0 2px, transparent 3px),
+    radial-gradient(circle at 25% 55%, rgba(255,255,255,.85) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 65% 82%, rgba(255,255,255,.85) 0 1.5px, transparent 2.5px),
+    linear-gradient(135deg, rgba(255,215,0,.35), rgba(255,235,150,.12) 40%, rgba(255,215,0,.35));
+  mix-blend-mode:screen;
+}
 
 .tradeNotice{background:#10243d;border-radius:15px;padding:18px;margin-bottom:18px}
 .playerResultBox,.friendResultBox{background:#183653;padding:15px;border-radius:15px;display:flex;align-items:center;gap:14px}
@@ -218,6 +254,7 @@ h1,h2,h3{margin-top:0}
   <div class="topBar">
     <div class="moneyBox">Coins: <span id="money">0</span></div>
     <div class="dolbBox">Dolb: <span id="dolb">0</span></div>
+    <div class="buzzyPointsBox hidden" id="buzzyPointsBoxWrap">Buzzy Points: <span id="buzzyPoints">0</span></div>
     <button onclick="showPage('battle')">BATTLE</button>
     <button onclick="showPage('home')">HOME</button>
     <button onclick="showPage('shop')">SHOP</button>
@@ -300,10 +337,7 @@ h1,h2,h3{margin-top:0}
     <h2 class="shopSection">Coins → Dolb</h2>
     <div id="dolbDeals" class="dealGrid"></div>
     <h2 class="shopSection">Event Shop</h2>
-    <div class="eventShopBox">
-      <h3>No Event Right Now</h3>
-      <p>Event shops will appear here when an event is active.</p>
-    </div>
+    <div id="eventShopArea"></div>
   </div>
 
   <div id="collectionPage" class="page hidden">
@@ -311,6 +345,7 @@ h1,h2,h3{margin-top:0}
     <div class="tabs">
       <button id="collectionAllButton" class="active" onclick="setCollectionTab('all')">ALL</button>
       <button id="collectionFavoritesButton" onclick="setCollectionTab('favorites')">FAVORITES</button>
+      <button id="collectionEventButton" class="hidden" onclick="setCollectionTab('event')">EVENT</button>
     </div>
     <input id="collectionSearch" class="searchBox" type="search" autocomplete="off" placeholder="Search cards..." oninput="renderCollection()">
     <div id="collectionGrid" class="cardGrid"></div>
@@ -321,6 +356,7 @@ h1,h2,h3{margin-top:0}
     <div class="tabs">
       <button id="dexDollsButton" class="active" onclick="setDexTab('dolls')">DOLLS</button>
       <button id="dexRaresButton" onclick="setDexTab('rares')">RARES</button>
+      <button id="dexEventButton" class="hidden" onclick="setDexTab('event')">EVENT</button>
     </div>
     <div id="dexGrid" class="cardGrid"></div>
   </div>
@@ -360,7 +396,7 @@ h1,h2,h3{margin-top:0}
     <h1>Minigame</h1>
     <div id="minigameHome" class="battleHome">
       <h2>Buzzy Jump</h2>
-      <p>Flap Buzzy between the trees and the clouds/rainbows. Every tree or cloud/rainbow you pass earns you 5 Dolb!</p>
+      <p id="buzzyJumpDescription">Flap Buzzy between the trees and the clouds/rainbows. Every tree or cloud/rainbow you pass earns you 5 Dolb!</p>
       <p id="buzzyJumpBestDisplay">Best Score: 0</p>
       <button class="battleStartButton" onclick="startBuzzyJump()">PLAY BUZZY JUMP</button>
     </div>
@@ -453,6 +489,58 @@ const STARTING_COINS = 75;
 const STARTING_DOLB = 0;
 
 const BATTLE_HP = 100;
+
+/* ===== TEMPORARY BUZZY EVENT (Oct 5, 2026 - Dec 1, 2026) =====
+   Everything under this event -- Buzzy Points, the event shop, the four
+   color variants, the Golden Buzzy redemption, and the EVENT tabs in DEX
+   and Collection -- is only active while isEventActive() is true. Outside
+   that window the game behaves exactly as it did before this event was
+   added (Buzzy Jump pays Dolb, no event shop, no event tabs). Uses the
+   device's local clock, same as the rest of the game (see getTodayString). */
+
+const EVENT_START = new Date(2026, 9, 5, 0, 0, 0);   // Oct 5, 2026 00:00 local
+const EVENT_END = new Date(2026, 11, 1, 23, 59, 59); // Dec 1, 2026 23:59:59 local
+
+function isEventActive() {
+  const now = new Date();
+  return now >= EVENT_START && now <= EVENT_END;
+}
+
+const BUZZY_PACK_PRICE = 15; // Buzzy Points per pack
+
+// Kept separate from the main `cards` array on purpose: weightedRandomCard(),
+// the normal DOLLS/RARES dex tabs, dailyShopData, and the regular Collection
+// ALL/FAVORITES tabs all read from `cards` alone, so none of them need any
+// extra filtering to stay event-card-free -- these five just never show up
+// there. getCard() below searches both arrays so image/name lookups work
+// everywhere images are actually allowed to appear (event tabs, reveal
+// popups), while getBattleCollectionCopies() deliberately does NOT use
+// getCard(), so event cards can never be selected for battle.
+const eventCards = [
+  { name: "Blue Buzzy", image: "buzzy_blue.png", rarity: "event", eventVariant: "blue" },
+  { name: "Red Buzzy", image: "buzzy_red.png", rarity: "event", eventVariant: "red" },
+  { name: "Green Buzzy", image: "buzzy_green.png", rarity: "event", eventVariant: "green" },
+  { name: "Gray Buzzy", image: "buzzy_gray.png", rarity: "event", eventVariant: "gray" },
+  { name: "Golden Buzzy", image: "buzzy.png", rarity: "event", eventVariant: "golden" }
+];
+
+const buzzyPackWeights = [
+  { name: "Blue Buzzy", weight: 50 },
+  { name: "Red Buzzy", weight: 25 },
+  { name: "Green Buzzy", weight: 13.5 },
+  { name: "Gray Buzzy", weight: 2.5 }
+];
+
+function weightedRandomBuzzyVariant() {
+  const total = buzzyPackWeights.reduce((s, i) => s + i.weight, 0);
+  let r = Math.random() * total;
+
+  for (const item of buzzyPackWeights) {
+    r -= item.weight;
+    if (r <= 0) return item.name;
+  }
+  return buzzyPackWeights[buzzyPackWeights.length - 1].name;
+}
 
 /* ===== LEVEL / RANK SYSTEM ===== */
 
@@ -560,6 +648,7 @@ let offlineMode = false;
 
 let money = STARTING_COINS;
 let dolb = STARTING_DOLB;
+let buzzyPoints = 0;
 
 let username = "";
 let profilePic = DEFAULT_PROFILE_PIC;
@@ -610,7 +699,7 @@ function createCardId() {
 }
 
 function getCard(name) {
-  return cards.find(c => c.name === name);
+  return cards.find(c => c.name === name) || eventCards.find(c => c.name === name);
 }
 
 function escapeHtml(v) {
@@ -715,6 +804,7 @@ window.playOffline = () => {
 
   money = STARTING_COINS;
   dolb = STARTING_DOLB;
+  buzzyPoints = 0;
   collection = [];
   favorites = [];
   completedTradeIds = [];
@@ -839,6 +929,7 @@ async function loadPlayerData() {
   if (!snap.exists()) {
     money = STARTING_COINS;
     dolb = STARTING_DOLB;
+    buzzyPoints = 0;
     collection = [];
     favorites = [];
     completedTradeIds = [];
@@ -853,7 +944,7 @@ async function loadPlayerData() {
     hardBotWins = 0;
 
     await setDoc(ref, {
-      money, dolb, collection, favorites, completedTradeIds,
+      money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
       ownedProfilePics, username, profilePic,
       playerLevel, playerLevelWins,
       easyBotLevel, easyBotWins,
@@ -864,6 +955,7 @@ async function loadPlayerData() {
 
     money = typeof data.money === "number" ? data.money : STARTING_COINS;
     dolb = typeof data.dolb === "number" ? data.dolb : STARTING_DOLB;
+    buzzyPoints = typeof data.buzzyPoints === "number" ? Math.max(0, data.buzzyPoints) : 0;
     collection = normalizeCollection(data.collection);
     favorites = Array.isArray(data.favorites) ? data.favorites : [];
     completedTradeIds = Array.isArray(data.completedTradeIds) ? data.completedTradeIds : [];
@@ -899,7 +991,7 @@ async function savePlayerData() {
   // shared "friendships" collection and is derived from a live listener,
   // so there is nothing to save on the player doc for it.
   await setDoc(doc(db, "players", currentUser.uid), {
-    money, dolb, collection, favorites, completedTradeIds,
+    money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
     ownedProfilePics, username, profilePic,
     playerLevel, playerLevelWins,
     easyBotLevel, easyBotWins,
@@ -965,9 +1057,24 @@ onAuthStateChanged(auth, async user => {
 function updateUI() {
   const moneyEl = document.getElementById("money");
   const dolbEl = document.getElementById("dolb");
+  const buzzyPointsEl = document.getElementById("buzzyPoints");
+  const buzzyPointsBoxWrap = document.getElementById("buzzyPointsBoxWrap");
+  const collectionEventButton = document.getElementById("collectionEventButton");
+  const dexEventButton = document.getElementById("dexEventButton");
 
   if (moneyEl) moneyEl.textContent = money;
   if (dolbEl) dolbEl.textContent = dolb;
+  if (buzzyPointsEl) buzzyPointsEl.textContent = buzzyPoints;
+
+  const eventOn = isEventActive();
+  if (buzzyPointsBoxWrap) buzzyPointsBoxWrap.classList.toggle("hidden", !eventOn);
+  if (collectionEventButton) collectionEventButton.classList.toggle("hidden", !eventOn);
+  if (dexEventButton) dexEventButton.classList.toggle("hidden", !eventOn);
+
+  // If the event just ended while someone had the EVENT tab open, bounce
+  // them back to a tab that still exists rather than leaving a dead tab active.
+  if (!eventOn && collectionTab === "event") collectionTab = "all";
+  if (!eventOn && dexTab === "event") dexTab = "dolls";
 
   document.getElementById("usernameDisplay").textContent = username;
   document.getElementById("settingsUsername").textContent = username;
@@ -1002,6 +1109,14 @@ window.showPage = page => {
   if (page === "minigame") {
     const bestEl = document.getElementById("buzzyJumpBestDisplay");
     if (bestEl) bestEl.textContent = "Best Score: " + buzzyJumpBest;
+
+    const descEl = document.getElementById("buzzyJumpDescription");
+    if (descEl) {
+      descEl.textContent = isEventActive()
+        ? "Flap Buzzy between the trees and the clouds/rainbows. During the Buzzy Event, every tree or cloud/rainbow you pass earns you 5 Buzzy Points!"
+        : "Flap Buzzy between the trees and the clouds/rainbows. Every tree or cloud/rainbow you pass earns you 5 Dolb!";
+    }
+
     if (!buzzyJumpRunning) {
       document.getElementById("buzzyJumpGame").classList.add("hidden");
       document.getElementById("minigameHome").classList.remove("hidden");
@@ -1040,6 +1155,7 @@ window.resetAccount = async () => {
 
   money = STARTING_COINS;
   dolb = STARTING_DOLB;
+  buzzyPoints = 0;
   collection = [];
   favorites = [];
   playerLevel = 0;
@@ -1234,7 +1350,128 @@ function renderShop() {
     `;
     deals.appendChild(div);
   });
+
+  renderEventShop();
 }
+
+/* ===== EVENT SHOP (Buzzy Event) ===== */
+
+function getEventCountdownText() {
+  const now = new Date();
+  const msLeft = EVENT_END - now;
+  const daysLeft = Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)));
+  return `Event runs Oct 5 - Dec 1, 2026 (${daysLeft} day${daysLeft === 1 ? "" : "s"} left)`;
+}
+
+function getEventVariantCount(name) {
+  return collection.filter(c => c.name === name).length;
+}
+
+function renderEventShop() {
+  const area = document.getElementById("eventShopArea");
+  if (!area) return;
+
+  if (!isEventActive()) {
+    area.innerHTML = `
+      <div class="eventShopBox">
+        <h3>No Event Right Now</h3>
+        <p>Event shops will appear here when an event is active.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const variants = eventCards.filter(c => c.eventVariant !== "golden");
+  const haveAllColors = variants.every(v => getEventVariantCount(v.name) > 0);
+
+  area.innerHTML = `
+    <div class="eventHeaderBox">
+      <h2>🎉 Buzzy Event</h2>
+      <p>Buzzy Jump pays out Buzzy Points instead of Dolb during the event. Spend them here!</p>
+      <div class="eventCountdown">${getEventCountdownText()}</div>
+    </div>
+
+    <div class="buzzyPackCard">
+      <h3>Buzzy Pack</h3>
+      <div class="buzzyVariantPreviewRow">
+        ${variants.map(v => `<img src="${escapeHtml(v.image)}" onclick="openEncodedCardViewer('${encoded(v.image)}','${encoded(v.name)}')">`).join("")}
+      </div>
+      <p>Contains 1 random Buzzy variant. Odds: Blue 50% • Red 25% • Green 13.5% • Gray 2.5%</p>
+      <div class="shopPrice">${BUZZY_PACK_PRICE} Buzzy Points</div>
+      ${buzzyPoints < BUZZY_PACK_PRICE
+        ? '<button class="buzzyPackBuyButton" disabled>NOT ENOUGH BUZZY POINTS</button>'
+        : `<button class="buzzyPackBuyButton" onclick="buyBuzzyPack()">OPEN A BUZZY PACK</button>`}
+      <p class="eventCardNote">Buzzy variants cannot be sold or traded.</p>
+    </div>
+
+    <div class="buzzyInventoryBox">
+      <h3>Your Buzzy Variants</h3>
+      ${variants.map(v => `
+        <div class="buzzyInventoryRow">
+          <img src="${escapeHtml(v.image)}">
+          <div class="buzzyInventoryName">${escapeHtml(v.name)}</div>
+          <div class="buzzyInventoryCount">x${getEventVariantCount(v.name)}</div>
+        </div>
+      `).join("")}
+      ${haveAllColors
+        ? `<button class="redeemGoldenButton" onclick="redeemGoldenBuzzy()">REDEEM 1 OF EACH FOR A GOLDEN BUZZY</button>`
+        : `<p class="eventCardNote">Collect at least 1 of each color to redeem a Golden Buzzy.</p>`}
+      <p class="eventCardNote">The Golden Buzzy cannot be sold or traded either, and can't be used in battle.</p>
+    </div>
+  `;
+}
+
+window.buyBuzzyPack = async () => {
+  if (!isEventActive()) {
+    showMessage("The Buzzy event isn't running right now.");
+    return;
+  }
+  if (buzzyPoints < BUZZY_PACK_PRICE) {
+    showMessage("Not enough Buzzy Points.");
+    return;
+  }
+
+  buzzyPoints -= BUZZY_PACK_PRICE;
+  const variantName = weightedRandomBuzzyVariant();
+  const copy = createCardCopy(variantName);
+  collection.push(copy);
+
+  await savePlayerData();
+  updateUI();
+
+  const variantCard = getCard(variantName);
+  showPackResults([{ ...variantCard, copyId: copy.id }]);
+  showMessage(variantName + " pack opened!");
+};
+
+window.redeemGoldenBuzzy = async () => {
+  if (!isEventActive()) {
+    showMessage("The Buzzy event isn't running right now.");
+    return;
+  }
+
+  const colorNames = eventCards.filter(c => c.eventVariant !== "golden").map(c => c.name);
+  const haveAll = colorNames.every(name => collection.some(c => c.name === name));
+
+  if (!haveAll) {
+    showMessage("You need at least 1 of each Buzzy color to redeem.");
+    return;
+  }
+
+  colorNames.forEach(name => {
+    const idx = collection.findIndex(c => c.name === name);
+    if (idx !== -1) collection.splice(idx, 1);
+  });
+
+  const goldenCopy = createCardCopy("Golden Buzzy");
+  collection.push(goldenCopy);
+
+  await savePlayerData();
+  updateUI();
+
+  showPackResults([{ ...getCard("Golden Buzzy"), copyId: goldenCopy.id }]);
+  showMessage("You redeemed the Golden Buzzy!");
+};
 
 window.buyDailyShopOffer = async () => {
   if (!dailyShopOffer) return;
@@ -1355,12 +1592,30 @@ function showPackResults(pulled) {
     const box = document.createElement("div");
     Object.assign(box.style, { background: "#10243d", borderRadius: "15px", padding: "10px", textAlign: "center" });
 
-    const img = document.createElement("img");
-    img.src = card.image;
-    img.alt = card.name;
-    Object.assign(img.style, { width: "100%", maxHeight: "55vh", objectFit: "contain", borderRadius: "10px", cursor: "pointer" });
-    img.onclick = e => { e.stopPropagation(); openCardViewer(card.image, card.name); };
-    box.appendChild(img);
+    if (card.eventVariant === "golden") {
+      const wrap = document.createElement("div");
+      wrap.className = "goldenBuzzyWrap";
+
+      const img = document.createElement("img");
+      img.src = card.image;
+      img.alt = card.name;
+      Object.assign(img.style, { width: "100%", maxHeight: "55vh", objectFit: "contain", borderRadius: "10px", cursor: "pointer" });
+      img.onclick = e => { e.stopPropagation(); openCardViewer(card.image, card.name); };
+      wrap.appendChild(img);
+
+      const sprinkles = document.createElement("div");
+      sprinkles.className = "goldenBuzzySprinkles";
+      wrap.appendChild(sprinkles);
+
+      box.appendChild(wrap);
+    } else {
+      const img = document.createElement("img");
+      img.src = card.image;
+      img.alt = card.name;
+      Object.assign(img.style, { width: "100%", maxHeight: "55vh", objectFit: "contain", borderRadius: "10px", cursor: "pointer" });
+      img.onclick = e => { e.stopPropagation(); openCardViewer(card.image, card.name); };
+      box.appendChild(img);
+    }
 
     const text = document.createElement("div");
     text.style.fontWeight = "bold";
@@ -1388,6 +1643,8 @@ window.setCollectionTab = tab => {
   collectionTab = tab;
   document.getElementById("collectionAllButton").classList.toggle("active", tab === "all");
   document.getElementById("collectionFavoritesButton").classList.toggle("active", tab === "favorites");
+  const eventBtn = document.getElementById("collectionEventButton");
+  if (eventBtn) eventBtn.classList.toggle("active", tab === "event");
   renderCollection();
 };
 
@@ -1404,6 +1661,11 @@ function getFirstCopy(name) {
 function renderCollection() {
   const grid = document.getElementById("collectionGrid");
   if (!grid) return;
+
+  if (collectionTab === "event") {
+    renderEventCollection(grid);
+    return;
+  }
 
   const search = (document.getElementById("collectionSearch")?.value || "").trim().toLowerCase();
   const counts = getCollectionCounts();
@@ -1450,6 +1712,43 @@ function renderCollection() {
   }
 }
 
+// Event cards (the 4 Buzzy variants + Golden Buzzy) never show up in the
+// ALL/FAVORITES tabs above -- they aren't in the main `cards` array, so
+// they're structurally excluded there. This is their only home, and it has
+// no star/sell button: event cards can't be favorited, sold, or traded.
+function renderEventCollection(grid) {
+  grid.innerHTML = "";
+
+  if (!isEventActive()) {
+    grid.innerHTML = "<p>The Buzzy event isn't running right now.</p>";
+    return;
+  }
+
+  for (const card of eventCards) {
+    const count = collection.filter(c => c.name === card.name).length;
+
+    const div = document.createElement("div");
+    div.className = "card";
+
+    const media = card.eventVariant === "golden"
+      ? `<div class="goldenBuzzyWrap">
+           <img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
+           <div class="goldenBuzzySprinkles"></div>
+         </div>`
+      : `<img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">`;
+
+    div.innerHTML = `
+      <div class="cardCount">${count}</div>
+      ${media}
+      <div class="cardName">${escapeHtml(card.name)}</div>
+      <div>${count} ${count === 1 ? "copy" : "copies"}</div>
+      <p class="eventCardNote">Cannot be sold or traded • not usable in battle</p>
+    `;
+
+    grid.appendChild(div);
+  }
+}
+
 window.toggleFavorite = async encodedName => {
   const name = decodeURIComponent(encodedName);
 
@@ -1468,6 +1767,14 @@ window.toggleFavorite = async encodedName => {
 window.sellCard = async encodedName => {
   const name = decodeURIComponent(encodedName);
 
+  const card = getCard(name);
+  if (!card) return;
+
+  if (card.rarity === "event") {
+    showMessage("Event cards cannot be sold.");
+    return;
+  }
+
   if (favorites.includes(name)) {
     showMessage("Favorite cards cannot be sold.");
     return;
@@ -1475,9 +1782,6 @@ window.sellCard = async encodedName => {
 
   const index = collection.findIndex(c => c.name === name);
   if (index === -1) return;
-
-  const card = getCard(name);
-  if (!card) return;
 
   collection.splice(index, 1);
   money += card.price;
@@ -1493,6 +1797,8 @@ window.setDexTab = tab => {
   dexTab = tab;
   document.getElementById("dexDollsButton").classList.toggle("active", tab === "dolls");
   document.getElementById("dexRaresButton").classList.toggle("active", tab === "rares");
+  const eventBtn = document.getElementById("dexEventButton");
+  if (eventBtn) eventBtn.classList.toggle("active", tab === "event");
   renderDex();
 };
 
@@ -1501,6 +1807,34 @@ function renderDex() {
   if (!grid) return;
 
   grid.innerHTML = "";
+
+  if (dexTab === "event") {
+    if (!isEventActive()) {
+      grid.innerHTML = "<p>The Buzzy event isn't running right now.</p>";
+      return;
+    }
+
+    for (const card of eventCards) {
+      const count = collection.filter(c => c.name === card.name).length;
+      const div = document.createElement("div");
+      div.className = "dexCard " + (!count ? "comingSoon" : "");
+
+      const media = card.eventVariant === "golden"
+        ? `<div class="goldenBuzzyWrap">
+             <img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
+             <div class="goldenBuzzySprinkles"></div>
+           </div>`
+        : `<img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">`;
+
+      div.innerHTML = `
+        ${media}
+        <b>${escapeHtml(card.name)}</b>
+        <p>${count ? `Owned: ${count}` : "Not Owned"}</p>
+      `;
+      grid.appendChild(div);
+    }
+    return;
+  }
 
   if (dexTab === "rares") {
     const rareCards = cards.filter(c => c.rarity === "rare");
@@ -1754,13 +2088,17 @@ function renderOfferCards(offer) {
 }
 
 function renderSelectableTradeCards() {
-  if (!collection.length) return `<p style="text-align:center">You have no cards.</p>`;
+  const tradeable = collection.filter(copy => {
+    const card = getCard(copy.name);
+    return card && card.rarity !== "event";
+  });
+
+  if (!tradeable.length) return `<p style="text-align:center">You have no tradeable cards.</p>`;
 
   return `
     <div class="tradeCardGrid">
-      ${collection.map(copy => {
+      ${tradeable.map(copy => {
         const card = getCard(copy.name);
-        if (!card) return "";
         return `
           <div class="tradeCard ${selectedTradeCards.includes(copy.id) ? "selected" : ""}" onclick="toggleTradeCard('${escapeHtml(copy.id)}')">
             <img src="${escapeHtml(card.image)}" onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
@@ -1835,7 +2173,12 @@ function renderActiveTrade() {
 
 window.toggleTradeCard = id => {
   if (!activeTrade || activeTrade.status !== "pending") return;
-  if (!collection.some(c => c.id === id)) return;
+
+  const copy = collection.find(c => c.id === id);
+  if (!copy) return;
+
+  const card = getCard(copy.name);
+  if (!card || card.rarity === "event") return; // event cards can never be offered in trade
 
   if (selectedTradeCards.includes(id)) {
     selectedTradeCards = selectedTradeCards.filter(x => x !== id);
@@ -1849,7 +2192,12 @@ window.toggleTradeCard = id => {
 window.submitTradeOffer = async () => {
   if (!activeTrade || activeTrade.status !== "pending") return;
 
-  selectedTradeCards = selectedTradeCards.filter(id => collection.some(c => c.id === id));
+  selectedTradeCards = selectedTradeCards.filter(id => {
+    const c = collection.find(x => x.id === id);
+    if (!c) return false;
+    const card = getCard(c.name);
+    return card && card.rarity !== "event";
+  });
 
   const offer = selectedTradeCards.map(id => {
     const c = collection.find(x => x.id === id);
@@ -1971,6 +2319,9 @@ async function applyCompletedTrade(t) {
     col = col.filter(c => !ids.has(c.id));
 
     for (const o of incoming) {
+      const incomingCard = getCard(o.name);
+      if (incomingCard && incomingCard.rarity === "event") continue; // event cards can never be traded in, even via a tampered offer
+
       if (!col.some(c => c.id === o.id)) {
         col.push({
           id: o.id, name: o.name, traded: true,
@@ -2388,7 +2739,10 @@ function getBattlePower(baseCard, copy) {
 
 function getBattleCollectionCopies() {
   return collection
-    .filter(copy => getCard(copy.name))
+    .filter(copy => {
+      const card = getCard(copy.name);
+      return card && card.rarity !== "event"; // event cards can never fight
+    })
     .slice()
     .sort((a, b) => {
       const af = favorites.includes(a.name);
@@ -2960,10 +3314,16 @@ window.acceptBattleRequest = async id => {
    A Flappy-Bird-style minigame. Buzzy (buzzyjump.png) flies between
    pairs of obstacles: a tree rising from the bottom and either a
    cloud or a rainbow hanging from the top. Every obstacle passed
-   (tree + cloud/rainbow) earns 5 Dolb each, so 10 Dolb per gap.
-   Dolb earned updates the same `dolb` variable used everywhere else
-   in the game and is saved through the normal savePlayerData() path
-   (a no-op when playing offline).
+   (tree + cloud/rainbow) earns 5 currency each, so 10 per gap.
+   Normally that currency is Dolb. During the Buzzy Event
+   (Oct 5 - Dec 1, 2026, see isEventActive() above) it pays out
+   Buzzy Points instead, spendable in the event shop. Whichever
+   currency a run earns is fixed at the moment PLAY is pressed
+   (bjEventMode), so a run never switches currency mid-flight even
+   if it happens to straddle the event boundary. Earnings update
+   the normal `dolb` / `buzzyPoints` variables used everywhere else
+   in the game and are saved through the normal savePlayerData()
+   path (a no-op when playing offline).
    ========================================================= */
 
 const BJ_WIDTH = 360;
@@ -2975,7 +3335,7 @@ const BJ_PIPE_WIDTH = 62;
 const BJ_PIPE_SPEED = 1.6;
 const BJ_PIPE_INTERVAL = 150;
 const BJ_BIRD_SIZE = 40;
-const BJ_DOLB_PER_OBSTACLE = 5;
+const BJ_CURRENCY_PER_OBSTACLE = 5;
 
 let buzzyJumpRunning = false;
 let buzzyJumpAnimFrame = null;
@@ -2991,7 +3351,8 @@ let bjBird = null;
 let bjPipes = [];
 let bjFrame = 0;
 let bjScore = 0;
-let bjDolbEarned = 0;
+let bjCurrencyEarned = 0;
+let bjEventMode = false;
 
 const buzzyJumpImg = new Image();
 buzzyJumpImg.src = "buzzyjump.png";
@@ -3019,8 +3380,9 @@ function initBuzzyJumpState() {
   bjPipes = [];
   bjFrame = 0;
   bjScore = 0;
-  bjDolbEarned = 0;
+  bjCurrencyEarned = 0;
   bjStarted = false;
+  bjEventMode = isEventActive();
 
   const restartButton = document.getElementById("buzzyJumpRestartButton");
   if (restartButton) restartButton.classList.add("hidden");
@@ -3139,7 +3501,7 @@ function bjDraw(ctx) {
   const scoreDisplay = document.getElementById("buzzyJumpScoreDisplay");
   if (scoreDisplay) {
     scoreDisplay.textContent = bjStarted
-      ? `Score: ${bjScore} | Dolb earned this run: ${bjDolbEarned}`
+      ? `Score: ${bjScore} | ${bjEventMode ? "Buzzy Points" : "Dolb"} earned this run: ${bjCurrencyEarned}`
       : "Tap, click, or press Space to start!";
   }
 }
@@ -3182,12 +3544,18 @@ function buzzyJumpLoop() {
       pipe.passed = true;
       bjScore++;
 
-      const earned = BJ_DOLB_PER_OBSTACLE * 2; // tree + cloud/rainbow
-      bjDolbEarned += earned;
-      dolb += earned;
+      const earned = BJ_CURRENCY_PER_OBSTACLE * 2; // tree + cloud/rainbow
+      bjCurrencyEarned += earned;
 
-      const dolbEl = document.getElementById("dolb");
-      if (dolbEl) dolbEl.textContent = dolb;
+      if (bjEventMode) {
+        buzzyPoints += earned;
+        const buzzyPointsEl = document.getElementById("buzzyPoints");
+        if (buzzyPointsEl) buzzyPointsEl.textContent = buzzyPoints;
+      } else {
+        dolb += earned;
+        const dolbEl = document.getElementById("dolb");
+        if (dolbEl) dolbEl.textContent = dolb;
+      }
     }
 
     if (bjRectsOverlap(birdBox, { x: pipe.x, y: BJ_HEIGHT - pipe.bottomHeight, w: BJ_PIPE_WIDTH, h: pipe.bottomHeight })) hit = true;
@@ -3220,6 +3588,8 @@ async function endBuzzyJump() {
 
   if (bjScore > buzzyJumpBest) buzzyJumpBest = bjScore;
 
+  const currencyLabel = bjEventMode ? "Buzzy Points" : "Dolb";
+
   updateUI();
   await savePlayerData();
 
@@ -3234,13 +3604,13 @@ async function endBuzzyJump() {
     ctx.fillText("GAME OVER", BJ_WIDTH / 2, BJ_HEIGHT / 2 - 40);
     ctx.font = "22px Arial";
     ctx.fillText("Score: " + bjScore, BJ_WIDTH / 2, BJ_HEIGHT / 2);
-    ctx.fillText("Dolb Earned: " + bjDolbEarned, BJ_WIDTH / 2, BJ_HEIGHT / 2 + 32);
+    ctx.fillText(currencyLabel + " Earned: " + bjCurrencyEarned, BJ_WIDTH / 2, BJ_HEIGHT / 2 + 32);
     ctx.font = "16px Arial";
     ctx.fillText("Best Score: " + buzzyJumpBest, BJ_WIDTH / 2, BJ_HEIGHT / 2 + 64);
   }
 
   const scoreDisplay = document.getElementById("buzzyJumpScoreDisplay");
-  if (scoreDisplay) scoreDisplay.textContent = `Game Over! Score: ${bjScore} | Dolb earned: ${bjDolbEarned} | Best: ${buzzyJumpBest}`;
+  if (scoreDisplay) scoreDisplay.textContent = `Game Over! Score: ${bjScore} | ${currencyLabel} earned: ${bjCurrencyEarned} | Best: ${buzzyJumpBest}`;
 
   const restartButton = document.getElementById("buzzyJumpRestartButton");
   if (restartButton) restartButton.classList.remove("hidden");
