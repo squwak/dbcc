@@ -345,7 +345,7 @@ h1,h2,h3{margin-top:0}
     <div class="tabs">
       <button id="collectionAllButton" class="active" onclick="setCollectionTab('all')">ALL</button>
       <button id="collectionFavoritesButton" onclick="setCollectionTab('favorites')">FAVORITES</button>
-      <button id="collectionEventButton" class="hidden" onclick="setCollectionTab('event')">EVENT</button>
+      <button id="collectionEventButton" onclick="setCollectionTab('event')">EVENT</button>
     </div>
     <input id="collectionSearch" class="searchBox" type="search" autocomplete="off" placeholder="Search cards..." oninput="renderCollection()">
     <div id="collectionGrid" class="cardGrid"></div>
@@ -356,7 +356,7 @@ h1,h2,h3{margin-top:0}
     <div class="tabs">
       <button id="dexDollsButton" class="active" onclick="setDexTab('dolls')">DOLLS</button>
       <button id="dexRaresButton" onclick="setDexTab('rares')">RARES</button>
-      <button id="dexEventButton" class="hidden" onclick="setDexTab('event')">EVENT</button>
+      <button id="dexEventButton" onclick="setDexTab('event')">EVENT</button>
     </div>
     <div id="dexGrid" class="cardGrid"></div>
   </div>
@@ -1059,22 +1059,16 @@ function updateUI() {
   const dolbEl = document.getElementById("dolb");
   const buzzyPointsEl = document.getElementById("buzzyPoints");
   const buzzyPointsBoxWrap = document.getElementById("buzzyPointsBoxWrap");
-  const collectionEventButton = document.getElementById("collectionEventButton");
-  const dexEventButton = document.getElementById("dexEventButton");
 
   if (moneyEl) moneyEl.textContent = money;
   if (dolbEl) dolbEl.textContent = dolb;
   if (buzzyPointsEl) buzzyPointsEl.textContent = buzzyPoints;
 
-  const eventOn = isEventActive();
-  if (buzzyPointsBoxWrap) buzzyPointsBoxWrap.classList.toggle("hidden", !eventOn);
-  if (collectionEventButton) collectionEventButton.classList.toggle("hidden", !eventOn);
-  if (dexEventButton) dexEventButton.classList.toggle("hidden", !eventOn);
-
-  // If the event just ended while someone had the EVENT tab open, bounce
-  // them back to a tab that still exists rather than leaving a dead tab active.
-  if (!eventOn && collectionTab === "event") collectionTab = "all";
-  if (!eventOn && dexTab === "event") dexTab = "dolls";
+  // Buzzy Points only exist during the event, so that box alone stays
+  // gated. The EVENT tabs in Collection/DEX are always visible -- outside
+  // the event window they render a "Coming Soon" preview instead of being
+  // hidden entirely (see renderEventCollection / renderDex's event branch).
+  if (buzzyPointsBoxWrap) buzzyPointsBoxWrap.classList.toggle("hidden", !isEventActive());
 
   document.getElementById("usernameDisplay").textContent = username;
   document.getElementById("settingsUsername").textContent = username;
@@ -1719,16 +1713,13 @@ function renderCollection() {
 function renderEventCollection(grid) {
   grid.innerHTML = "";
 
-  if (!isEventActive()) {
-    grid.innerHTML = "<p>The Buzzy event isn't running right now.</p>";
-    return;
-  }
+  const eventOn = isEventActive();
 
   for (const card of eventCards) {
     const count = collection.filter(c => c.name === card.name).length;
 
     const div = document.createElement("div");
-    div.className = "card";
+    div.className = "card" + (!eventOn ? " comingSoon" : "");
 
     const media = card.eventVariant === "golden"
       ? `<div class="goldenBuzzyWrap">
@@ -1737,13 +1728,19 @@ function renderEventCollection(grid) {
          </div>`
       : `<img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">`;
 
-    div.innerHTML = `
-      <div class="cardCount">${count}</div>
-      ${media}
-      <div class="cardName">${escapeHtml(card.name)}</div>
-      <div>${count} ${count === 1 ? "copy" : "copies"}</div>
-      <p class="eventCardNote">Cannot be sold or traded • not usable in battle</p>
-    `;
+    div.innerHTML = eventOn
+      ? `
+        <div class="cardCount">${count}</div>
+        ${media}
+        <div class="cardName">${escapeHtml(card.name)}</div>
+        <div>${count} ${count === 1 ? "copy" : "copies"}</div>
+        <p class="eventCardNote">Cannot be sold or traded • not usable in battle</p>
+      `
+      : `
+        ${media}
+        <div class="cardName">${escapeHtml(card.name)}</div>
+        <p>Coming Soon</p>
+      `;
 
     grid.appendChild(div);
   }
@@ -1809,15 +1806,12 @@ function renderDex() {
   grid.innerHTML = "";
 
   if (dexTab === "event") {
-    if (!isEventActive()) {
-      grid.innerHTML = "<p>The Buzzy event isn't running right now.</p>";
-      return;
-    }
+    const eventOn = isEventActive();
 
     for (const card of eventCards) {
       const count = collection.filter(c => c.name === card.name).length;
       const div = document.createElement("div");
-      div.className = "dexCard " + (!count ? "comingSoon" : "");
+      div.className = "dexCard " + (!eventOn || !count ? "comingSoon" : "");
 
       const media = card.eventVariant === "golden"
         ? `<div class="goldenBuzzyWrap">
@@ -1829,7 +1823,7 @@ function renderDex() {
       div.innerHTML = `
         ${media}
         <b>${escapeHtml(card.name)}</b>
-        <p>${count ? `Owned: ${count}` : "Not Owned"}</p>
+        <p>${eventOn ? (count ? `Owned: ${count}` : "Not Owned") : "Coming Soon"}</p>
       `;
       grid.appendChild(div);
     }
@@ -2808,12 +2802,15 @@ function addBotWin(difficulty) {
   return levelUps;
 }
 
-function getBotLevel(difficulty) {
-  return difficulty === "hard" ? hardBotLevel : easyBotLevel;
-}
-
-function makeBotCopy(card) {
-  return { id: "BOT_" + createCardId(), name: card.name, traded: false, level: getBotLevel(battleDifficulty), levelWins: 0 };
+// NOTE: this used to level the bot's doll off the bot's own separate
+// win-tracked progression (easyBotLevel/hardBotLevel), so the fight was
+// "vs the bot's overall level" no matter which of your dolls you brought.
+// Now the bot's doll level mirrors whatever specific doll copy the player
+// selected for this battle, so it's always a level-for-level fight against
+// that doll. easyBotLevel/hardBotLevel are still tracked (addBotWin) for
+// backward-compatible save data, they just no longer drive battle stats.
+function makeBotCopy(card, matchLevel) {
+  return { id: "BOT_" + createCardId(), name: card.name, traded: false, level: matchLevel, levelWins: 0 };
 }
 
 function renderBattleRankInfo() {
@@ -3034,7 +3031,7 @@ function battleCardHTML(card, copy, hp, name, pic) {
 
 function showLocalBotBattle(playerCopy, botCard) {
   const playerCard = getCard(playerCopy.name);
-  const botCopy = makeBotCopy(botCard);
+  const botCopy = makeBotCopy(botCard, getCopyLevel(playerCopy));
 
   let playerHP = getBattleMaxHP(playerCopy);
   let botHP = getBattleMaxHP(botCopy);
@@ -3050,7 +3047,7 @@ function showLocalBotBattle(playerCopy, botCard) {
     arena.innerHTML = `
       <h2 style="text-align:center">${battleDifficulty === "hard" ? "Hard Bot Battle" : "Easy Bot Battle"}</h2>
       <div style="text-align:center;opacity:.8;margin-bottom:12px">
-        Your Battle Level: <b>${playerLevel}</b> • Bot Level: <b>${getBotLevel(battleDifficulty)}</b>
+        Battling vs your ${escapeHtml(playerCard.name)}'s specific doll level: <b>${getCopyLevel(playerCopy)}</b>
       </div>
       <div class="battleHeader">
         ${battleCardHTML(botCard, botCopy, botHP, battleOpponentUsername, DEFAULT_PROFILE_PIC)}
