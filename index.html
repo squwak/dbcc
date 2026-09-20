@@ -490,7 +490,7 @@ const STARTING_DOLB = 0;
 
 const BATTLE_HP = 100;
 
-/* ===== TEMPORARY BUZZY EVENT (Oct 5, 2026 - Dec 1, 2026) =====
+/* ===== TEMPORARY BUZZY EVENT (Sep 28, 2026 - Dec 1, 2026) =====
    Everything under this event -- Buzzy Points, the event shop, the four
    color variants, the Golden Buzzy redemption, and the EVENT tabs in DEX
    and Collection -- is only active while isEventActive() is true. Outside
@@ -498,8 +498,8 @@ const BATTLE_HP = 100;
    added (Buzzy Jump pays Dolb, no event shop, no event tabs). Uses the
    device's local clock, same as the rest of the game (see getTodayString). */
 
-const EVENT_START = new Date(2026, 8, 28, 0, 0, 0);   // Oct 5, 2026 00:00 local
-const EVENT_END = new Date(2026, 11, 1, 23, 59, 59); // Dec 1, 2026 23:59:59 local
+const EVENT_START = new Date(2026, 8, 28, 0, 0, 0);  // Sep 28, 2026 00:00 local
+const EVENT_END = new Date(2026, 11, 1, 23, 59, 59);  // Dec 1, 2026 23:59:59 local
 
 function isEventActive() {
   const now = new Date();
@@ -1354,7 +1354,7 @@ function getEventCountdownText() {
   const now = new Date();
   const msLeft = EVENT_END - now;
   const daysLeft = Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)));
-  return `Event runs Oct 5 - Dec 1, 2026 (${daysLeft} day${daysLeft === 1 ? "" : "s"} left)`;
+  return `Event runs Sep 28 - Dec 1, 2026 (${daysLeft} day${daysLeft === 1 ? "" : "s"} left)`;
 }
 
 function getEventVariantCount(name) {
@@ -3313,7 +3313,7 @@ window.acceptBattleRequest = async id => {
    cloud or a rainbow hanging from the top. Every obstacle passed
    (tree + cloud/rainbow) earns 5 currency each, so 10 per gap.
    Normally that currency is Dolb. During the Buzzy Event
-   (Oct 5 - Dec 1, 2026, see isEventActive() above) it pays out
+   (Sep 28 - Dec 1, 2026, see isEventActive() above) it pays out
    Buzzy Points instead, spendable in the event shop. Whichever
    currency a run earns is fixed at the moment PLAY is pressed
    (bjEventMode), so a run never switches currency mid-flight even
