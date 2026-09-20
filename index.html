@@ -561,6 +561,23 @@ function getCopyWins(copy) {
   return Number.isFinite(copy.levelWins) ? Math.max(0, copy.levelWins) : 0;
 }
 
+// Easy bot wins add up in thirds (winIncrement = 1/3), so raw levelWins can
+// come out as ugly floats like 0.3333333333333333 or 0.6666666666666666.
+// This snaps to the nearest third and renders it as a clean fraction --
+// "1/3", "2/3", "1 1/3" -- instead of the decimal, for any UI showing wins.
+function formatWinsDisplay(wins) {
+  if (!Number.isFinite(wins) || wins <= 0) return "0";
+
+  const totalThirds = Math.round(wins * 3);
+  const whole = Math.floor(totalThirds / 3);
+  const remainderThirds = totalThirds % 3;
+
+  if (remainderThirds === 0) return String(whole);
+
+  const fraction = remainderThirds === 1 ? "1/3" : "2/3";
+  return whole > 0 ? `${whole} ${fraction}` : fraction;
+}
+
 function normalizeCopy(copy) {
   return {
     id: copy.id || createCardId(),
@@ -2828,7 +2845,7 @@ function renderBattleRankInfo() {
     <div class="rankBox">
       <div style="opacity:.8">YOUR BATTLE LEVEL</div>
       <div class="rankNumber">Lv. ${playerLevel}</div>
-      <div>${playerLevelWins} / ${needed} wins toward next level</div>
+      <div>${formatWinsDisplay(playerLevelWins)} / ${needed} wins toward next level</div>
       <div class="rankProgressBar"><div class="rankProgressFill" style="width:${percent}%"></div></div>
       <p>${nextText}</p>
     </div>
@@ -2913,7 +2930,7 @@ function renderBattleChoice() {
       <div class="battleStats">
         HP: ${hp}<br>
         ${escapeHtml(card.move)} Power: ${power}<br>
-        Wins: ${wins}/${winsNeededForLevel(level)}
+        Wins: ${formatWinsDisplay(wins)}/${winsNeededForLevel(level)}
       </div>
     `;
 
@@ -3154,7 +3171,7 @@ async function finishBotBattle(won, playerCopy, botCopy) {
           </div>
         ` : `
           <p>Your doll: <b>Lv. ${getCopyLevel(actualCopy)}</b></p>
-          <p>Doll wins: ${getCopyWins(actualCopy)} / ${winsNeededForLevel(getCopyLevel(actualCopy))}</p>
+          <p>Doll wins: ${formatWinsDisplay(getCopyWins(actualCopy))} / ${winsNeededForLevel(getCopyLevel(actualCopy))}</p>
         `}
         ${levelUps ? `
           <div class="levelUpBox">
@@ -3166,7 +3183,7 @@ async function finishBotBattle(won, playerCopy, botCopy) {
           </div>
         ` : `
           <p>Battle Level: <b>${playerLevel}</b></p>
-          <p>${playerLevelWins} / ${winsNeededForLevel(playerLevel)} wins toward your next battle level.</p>
+          <p>${formatWinsDisplay(playerLevelWins)} / ${winsNeededForLevel(playerLevel)} wins toward your next battle level.</p>
         `}
         <button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button>
       </div>
