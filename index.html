@@ -242,7 +242,7 @@ h1,h2,h3{margin-top:0}
 .battleItemChoice.disabledItem{opacity:.4;cursor:not-allowed}
 .cupcakeActiveNote{background:#6b4bc3;border-radius:10px;padding:10px;margin-top:10px;text-align:center}
 
-.levelUpSellCard{background:#10243d;border-radius:15px;padding:10px;text-align:center}
+.levelUpSellCard{background:#10243d;border-radius:15px;padding:10px;text-align:center;position:relative}
 .levelUpSellCard img{width:100%;aspect-ratio:1/1.35;object-fit:contain;background:#091a2d;border-radius:10px;cursor:pointer}
 
 @media(max-width:650px){
@@ -426,7 +426,7 @@ h1,h2,h3{margin-top:0}
     <h1>Minigame</h1>
     <div id="minigameHome" class="battleHome">
       <h2>Buzzy Jump</h2>
-      <p id="buzzyJumpDescription">Flap Buzzy between the trees and the clouds/rainbows. Every tree or cloud/rainbow you pass earns you 5 Dolb!</p>
+      <p id="buzzyJumpDescription">Flap Buzzy between the trees and the clouds. Every tree or cloud you pass earns you 5 Dolb!</p>
       <p id="buzzyJumpBestDisplay">Best Score: 0</p>
       <button class="battleStartButton" onclick="startBuzzyJump()">PLAY BUZZY JUMP</button>
     </div>
@@ -1229,8 +1229,8 @@ window.showPage = page => {
     const descEl = document.getElementById("buzzyJumpDescription");
     if (descEl) {
       descEl.textContent = isEventActive()
-        ? "Flap Buzzy between the trees and the clouds/rainbows. During the Buzzy Event, every tree or cloud/rainbow you pass earns you 5 Buzzy Points!"
-        : "Flap Buzzy between the trees and the clouds/rainbows. Every tree or cloud/rainbow you pass earns you 5 Dolb!";
+        ? "Flap Buzzy between the trees and the clouds. During the Buzzy Event, every tree or cloud you pass earns you 5 Buzzy Points!"
+        : "Flap Buzzy between the trees and the clouds. Every tree or cloud you pass earns you 5 Dolb!";
     }
 
     if (!buzzyJumpRunning) {
@@ -2047,26 +2047,10 @@ window.toggleFavorite = async encodedName => {
   } else {
     favorites.push(name);
 
-    // Favoriting a doll keeps things tidy: only ONE copy of a favorited
-    // doll is kept. Any extra copies you already own are automatically
-    // sold off (for their normal sell price) the moment you favorite it.
-    // The single copy that's kept is the highest-level one, so you never
-    // lose battle progress by favoriting.
-    const card = getCard(name);
-    const copies = collection.filter(c => c.name === name);
-
-    if (card && card.rarity !== "event" && copies.length > 1) {
-      const keeper = copies.slice().sort((a, b) => getCopyLevel(b) - getCopyLevel(a))[0];
-      const toSell = copies.filter(c => c.id !== keeper.id);
-
-      collection = collection.filter(c => !toSell.some(s => s.id === c.id));
-      const refund = toSell.length * card.price;
-      money += refund;
-
-      showMessage(name + " is now a favorite. Sold " + toSell.length + " extra " + (toSell.length === 1 ? "copy" : "copies") + " for " + refund + " coins.");
-    } else {
-      showMessage(name + " is now a favorite.");
-    }
+    // Favoriting a doll just marks it favorite and locks its sell button --
+    // it does NOT sell off any extra copies. Every copy you own (including
+    // duplicates) just stays in your collection untouched.
+    showMessage(name + " is now a favorite.");
   }
 
   await savePlayerData();
@@ -4224,6 +4208,8 @@ window.acceptBattleRequest = async id => {
   try {
     await updateDoc(doc(db, "friendRequests", id), { status: "accepted" });
 
+    enteredBattleRequestIds.add(id);
+
     battleMode = "friend";
     battleOpponentUid = r.senderUid;
     battleOpponentUsername = r.senderUsername || "Player";
@@ -4244,18 +4230,17 @@ window.acceptBattleRequest = async id => {
    MINIGAME: BUZZY JUMP
    -----------------------------------------------------------
    A Flappy-Bird-style minigame. Buzzy (buzzyjump.png) flies between
-   pairs of obstacles: a tree rising from the bottom and either a
-   cloud or a rainbow hanging from the top. Every obstacle passed
-   (tree + cloud/rainbow) earns 5 currency each, so 10 per gap.
-   Normally that currency is Dolb. During the Buzzy Event
-   (Sep 28 - Dec 1, 2026, see isEventActive() above) it pays out
-   Buzzy Points instead, spendable in the event shop. Whichever
-   currency a run earns is fixed at the moment PLAY is pressed
-   (bjEventMode), so a run never switches currency mid-flight even
-   if it happens to straddle the event boundary. Earnings update
-   the normal `dolb` / `buzzyPoints` variables used everywhere else
-   in the game and are saved through the normal savePlayerData()
-   path (a no-op when playing offline).
+   pairs of obstacles: a tree rising from the bottom and a cloud
+   hanging from the top. Every obstacle passed (tree + cloud) earns
+   5 currency each, so 10 per gap. Normally that currency is Dolb.
+   During the Buzzy Event (Sep 28 - Dec 1, 2026, see isEventActive()
+   above) it pays out Buzzy Points instead, spendable in the event
+   shop. Whichever currency a run earns is fixed at the moment PLAY
+   is pressed (bjEventMode), so a run never switches currency
+   mid-flight even if it happens to straddle the event boundary.
+   Earnings update the normal `dolb` / `buzzyPoints` variables used
+   everywhere else in the game and are saved through the normal
+   savePlayerData() path (a no-op when playing offline).
    ========================================================= */
 
 const BJ_WIDTH = 360;
@@ -4328,9 +4313,8 @@ function spawnBjPipe() {
   const maxTop = BJ_HEIGHT - BJ_PIPE_GAP - minHeight;
   const topHeight = minHeight + Math.random() * Math.max(10, maxTop - minHeight);
   const bottomHeight = BJ_HEIGHT - BJ_PIPE_GAP - topHeight;
-  const topType = Math.random() < 0.5 ? "cloud" : "rainbow";
 
-  bjPipes.push({ x: BJ_WIDTH, topHeight, bottomHeight, topType, passed: false });
+  bjPipes.push({ x: BJ_WIDTH, topHeight, bottomHeight, passed: false });
 }
 
 function bjDrawTree(ctx, x, y, w, h) {
@@ -4363,36 +4347,6 @@ function bjDrawCloud(ctx, x, topHeight, w) {
   ctx.fill();
 }
 
-// A proper arched rainbow (concentric bands, rounded ends) hanging down
-// from the top of the screen, instead of flat stacked rectangles.
-function bjDrawRainbow(ctx, x, topHeight, w) {
-  const colors = ["#e63946", "#f77f00", "#fcbf49", "#52b788", "#4895ef", "#7b2cbf"];
-  const cx = x + w / 2;
-  const cy = topHeight;
-  const outerRadius = Math.max(w / 2, (topHeight - 6) * 0.72);
-  const bandThickness = Math.max(6, (outerRadius * 0.85) / colors.length);
-
-  // Soft cloud puffs where the rainbow meets the ceiling, so it reads as
-  // "hanging from the sky" rather than a plain shape.
-  ctx.fillStyle = "#ffffff";
-  ctx.beginPath();
-  ctx.arc(x + w * 0.12, 10, w * 0.22, 0, Math.PI * 2);
-  ctx.arc(x + w * 0.88, 10, w * 0.22, 0, Math.PI * 2);
-  ctx.fill();
-
-  colors.forEach((color, i) => {
-    const radius = outerRadius - i * bandThickness;
-    if (radius <= 0) return;
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = bandThickness * 0.92;
-    ctx.lineCap = "round";
-    ctx.beginPath();
-    ctx.arc(cx, cy, radius, Math.PI, Math.PI * 2);
-    ctx.stroke();
-  });
-}
-
 function bjDraw(ctx) {
   ctx.clearRect(0, 0, BJ_WIDTH, BJ_HEIGHT);
   ctx.fillStyle = "#bfe6ff";
@@ -4400,9 +4354,7 @@ function bjDraw(ctx) {
 
   bjPipes.forEach(pipe => {
     bjDrawTree(ctx, pipe.x, BJ_HEIGHT - pipe.bottomHeight, BJ_PIPE_WIDTH, pipe.bottomHeight);
-
-    if (pipe.topType === "cloud") bjDrawCloud(ctx, pipe.x, pipe.topHeight, BJ_PIPE_WIDTH);
-    else bjDrawRainbow(ctx, pipe.x, pipe.topHeight, BJ_PIPE_WIDTH);
+    bjDrawCloud(ctx, pipe.x, pipe.topHeight, BJ_PIPE_WIDTH);
   });
 
   if (buzzyJumpImg.complete && buzzyJumpImg.naturalWidth > 0) {
@@ -4476,7 +4428,7 @@ function buzzyJumpLoop() {
       pipe.passed = true;
       bjScore++;
 
-      const earned = BJ_CURRENCY_PER_OBSTACLE * 2; // tree + cloud/rainbow
+      const earned = BJ_CURRENCY_PER_OBSTACLE * 2; // tree + cloud
       bjCurrencyEarned += earned;
 
       if (bjEventMode) {
