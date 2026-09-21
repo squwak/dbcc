@@ -167,6 +167,7 @@ h1,h2,h3{margin-top:0}
 .battleMode button{width:100%;margin-top:10px;background:#2674d9;color:white}
 .battleMode.hard button{background:#9b2929}
 .battleMode.friend button{background:#6b4bc3}
+.battleMode.boss button{background:linear-gradient(135deg,#caa000,#7a4b00)}
 
 .battleArena{background:#10243d;border-radius:20px;padding:20px;margin-top:20px}
 .battleHeader{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
@@ -223,6 +224,26 @@ h1,h2,h3{margin-top:0}
 .cardViewer{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px}
 .cardViewerImage{max-width:95vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
 .cardViewerClose{position:fixed;top:15px;right:15px;background:#183653;color:white;font-size:24px;width:48px;height:48px;padding:0;z-index:5001}
+
+.itemShopGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.itemShopCard{background:#10243d;border-radius:15px;padding:18px;text-align:center}
+.itemEmoji{font-size:42px}
+.itemName{font-size:18px;font-weight:bold;margin-top:6px}
+.itemDesc{font-size:13px;opacity:.85;margin:8px 0}
+.itemOwnedCount{opacity:.8;font-size:13px;margin-bottom:8px}
+.itemBuyButton{width:100%;background:#6b4bc3;color:white}
+.itemSellButton{width:100%;background:#176f46;color:white;margin-top:6px}
+.rerollButton{width:100%;background:#183653;color:white;margin-top:8px}
+
+.battleItemPicker{background:#091a2d;border-radius:15px;padding:15px;margin-top:15px}
+.battleItemRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.battleItemChoice{background:#183653;border:3px solid transparent;border-radius:12px;padding:10px 14px;text-align:center;cursor:pointer;min-width:110px}
+.battleItemChoice.selected{border-color:#36b9ff;box-shadow:0 0 10px #36b9ff}
+.battleItemChoice.disabledItem{opacity:.4;cursor:not-allowed}
+.cupcakeActiveNote{background:#6b4bc3;border-radius:10px;padding:10px;margin-top:10px;text-align:center}
+
+.levelUpSellCard{background:#10243d;border-radius:15px;padding:10px;text-align:center}
+.levelUpSellCard img{width:100%;aspect-ratio:1/1.35;object-fit:contain;background:#091a2d;border-radius:10px;cursor:pointer}
 
 @media(max-width:650px){
 .tradeColumns{grid-template-columns:1fr}
@@ -309,6 +330,11 @@ h1,h2,h3{margin-top:0}
             <p>Challenge one of your friends.</p>
             <button onclick="showPage('friends')">CHOOSE FRIEND</button>
           </div>
+          <div class="battleMode boss hidden" id="bossModeButton">
+            <h3>Buzzy Boss</h3>
+            <p>A Level 75 Buzzy. Bring a team of 3 dolls!</p>
+            <button onclick="startBossBattle()">FIGHT THE BOSS</button>
+          </div>
         </div>
       </div>
       <div id="battleRequests"></div>
@@ -318,6 +344,7 @@ h1,h2,h3{margin-top:0}
     <div id="battleChoice" class="battleHome hidden">
       <h2 id="battleChoiceTitle">Choose Your Doll</h2>
       <p id="battleChoiceDescription">Choose one specific copy to use in battle.</p>
+      <div id="battleItemPickerArea"></div>
       <div id="battleChoiceGrid" class="battleChoiceGrid"></div>
       <button id="battleStartButton" class="battleStartButton" onclick="confirmBattleCard()" disabled>BATTLE!</button>
       <button class="battleCancelButton" onclick="cancelBattleSetup()">CANCEL</button>
@@ -336,6 +363,8 @@ h1,h2,h3{margin-top:0}
     <div id="dailyShop"></div>
     <h2 class="shopSection">Coins → Dolb</h2>
     <div id="dolbDeals" class="dealGrid"></div>
+    <h2 class="shopSection">Battle Items</h2>
+    <div id="itemsShopArea"></div>
     <h2 class="shopSection">Event Shop</h2>
     <div id="eventShopArea"></div>
   </div>
@@ -345,6 +374,7 @@ h1,h2,h3{margin-top:0}
     <div class="tabs">
       <button id="collectionAllButton" class="active" onclick="setCollectionTab('all')">ALL</button>
       <button id="collectionFavoritesButton" onclick="setCollectionTab('favorites')">FAVORITES</button>
+      <button id="collectionLevelUpButton" onclick="setCollectionTab('levelup')">LEVEL UP</button>
       <button id="collectionEventButton" onclick="setCollectionTab('event')">EVENT</button>
     </div>
     <input id="collectionSearch" class="searchBox" type="search" autocomplete="off" placeholder="Search cards..." oninput="renderCollection()">
@@ -506,6 +536,23 @@ function isEventActive() {
   return now >= EVENT_START && now <= EVENT_END;
 }
 
+/* ===== BUZZY BOSS (Nov 1, 2026 - Dec 1, 2026, inside the Buzzy Event) =====
+   A one-off Level 75 Buzzy fight. The player brings a team of 3 specific
+   doll copies; they fight the boss one at a time (in the order picked),
+   and the next teammate comes in automatically whenever the current one
+   faints. The boss itself never heals between teammates. */
+
+const BOSS_START = new Date(2026, 10, 1, 0, 0, 0);   // Nov 1, 2026 00:00 local
+const BUZZY_BOSS_LEVEL = 75;
+const BUZZY_BOSS_REWARD_COINS = 300;
+const BUZZY_BOSS_REWARD_DOLB = 40;
+const BUZZY_BOSS_REWARD_BUZZY_POINTS = 100;
+
+function isBossActive() {
+  const now = new Date();
+  return now >= BOSS_START && now <= EVENT_END;
+}
+
 const BUZZY_PACK_PRICE = 15; // Buzzy Points per pack
 
 // Kept separate from the main `cards` array on purpose: weightedRandomCard(),
@@ -540,6 +587,43 @@ function weightedRandomBuzzyVariant() {
     if (r <= 0) return item.name;
   }
   return buzzyPackWeights[buzzyPackWeights.length - 1].name;
+}
+
+/* ===== BATTLE ITEMS =====
+   Consumable items bought with Dolb in the shop and used in battle. Exactly
+   one item can be active per match (chosen on the battle-setup screen,
+   right along with the doll copy). They work against bots AND friends.
+   Buy price is always 2x the sell price. */
+
+const battleItems = [
+  {
+    id: "doubleOrNothing",
+    name: "Double or Nothing",
+    emoji: "🎰",
+    buyPrice: 20,
+    sellPrice: 10,
+    description: "Win: double the XP you earn. Lose: you lose XP instead."
+  },
+  {
+    id: "cupcake",
+    name: "Cupcake",
+    emoji: "🧁",
+    buyPrice: 50,
+    sellPrice: 25,
+    description: "×1.75 damage for your next 5 battles (any opponent)."
+  },
+  {
+    id: "greedy",
+    name: "Greedy",
+    emoji: "🤑",
+    buyPrice: 160,
+    sellPrice: 80,
+    description: "If you win, you also steal a copy of the opponent's doll (with its level). Works vs bots and friends."
+  }
+];
+
+function getBattleItem(id) {
+  return battleItems.find(i => i.id === id);
 }
 
 /* ===== LEVEL / RANK SYSTEM ===== */
@@ -679,6 +763,10 @@ let ownedProfilePics = [DEFAULT_PROFILE_PIC];
 let dailyShopOffer = null;
 let dailyShopBought = false;
 let dailyShopDate = "";
+let dailyShopRerollCount = 0;
+
+let itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
+let cupcakeChargesLeft = 0;
 
 let collectionTab = "all";
 let dexTab = "dolls";
@@ -705,9 +793,12 @@ let battleOpponentUid = null;
 let battleOpponentUsername = "";
 let battleOpponentPic = DEFAULT_PROFILE_PIC;
 let battleSelectedCardId = null;
+let battleSelectedItem = null;
 let battleRoomId = null;
 let battleChoiceSubmitted = false;
 let battleRewardGiven = false;
+
+let bossTeamSelected = [];
 
 /* ===== GENERAL ===== */
 
@@ -836,6 +927,10 @@ window.playOffline = () => {
   hardBotLevel = 0;
   hardBotWins = 0;
 
+  itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
+  cupcakeChargesLeft = 0;
+  dailyShopRerollCount = 0;
+
   activeTrade = null;
   selectedTradeCards = [];
   tradeRequests = [];
@@ -959,13 +1054,17 @@ async function loadPlayerData() {
     easyBotWins = 0;
     hardBotLevel = 0;
     hardBotWins = 0;
+    itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
+    cupcakeChargesLeft = 0;
+    dailyShopRerollCount = 0;
 
     await setDoc(ref, {
       money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
       ownedProfilePics, username, profilePic,
       playerLevel, playerLevelWins,
       easyBotLevel, easyBotWins,
-      hardBotLevel, hardBotWins
+      hardBotLevel, hardBotWins,
+      itemInventory, cupcakeChargesLeft
     });
   } else {
     const data = snap.data();
@@ -992,6 +1091,11 @@ async function loadPlayerData() {
     username = data.username || "";
     profilePic = data.profilePic || DEFAULT_PROFILE_PIC;
     if (!ownedProfilePics.includes(profilePic)) ownedProfilePics.push(profilePic);
+
+    itemInventory = data.itemInventory && typeof data.itemInventory === "object"
+      ? { doubleOrNothing: 0, cupcake: 0, greedy: 0, ...data.itemInventory }
+      : { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
+    cupcakeChargesLeft = typeof data.cupcakeChargesLeft === "number" ? Math.max(0, data.cupcakeChargesLeft) : 0;
   }
 
   if (!username) await askForUsername();
@@ -1012,7 +1116,8 @@ async function savePlayerData() {
     ownedProfilePics, username, profilePic,
     playerLevel, playerLevelWins,
     easyBotLevel, easyBotWins,
-    hardBotLevel, hardBotWins
+    hardBotLevel, hardBotWins,
+    itemInventory, cupcakeChargesLeft
   }, { merge: true });
 }
 
@@ -1175,6 +1280,8 @@ window.resetAccount = async () => {
   easyBotWins = 0;
   hardBotLevel = 0;
   hardBotWins = 0;
+  itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
+  cupcakeChargesLeft = 0;
 
   await savePlayerData();
   updateUI();
@@ -1199,9 +1306,10 @@ function seededRandom(seed) {
   return x - Math.floor(x);
 }
 
-function chooseDailyDoll(date) {
+function chooseDailyDoll(date, rerollCount = 0) {
   const total = dailyShopData.reduce((s, i) => s + i.weight, 0);
-  let r = seededRandom("DBCC_DAILY_SHOP_" + seedUid() + "_" + date) * total;
+  const seedSuffix = rerollCount > 0 ? "_reroll" + rerollCount : "";
+  let r = seededRandom("DBCC_DAILY_SHOP_" + seedUid() + "_" + date + seedSuffix) * total;
 
   for (const item of dailyShopData) {
     r -= item.weight;
@@ -1210,15 +1318,45 @@ function chooseDailyDoll(date) {
   return dailyShopData[dailyShopData.length - 1];
 }
 
-function getDailyBuzzyProfileChance(date) {
-  return seededRandom("DBCC_BUZZY_PROFILE_" + seedUid() + "_" + date) < .0075;
+function getDailyBuzzyProfileChance(date, rerollCount = 0) {
+  const seedSuffix = rerollCount > 0 ? "_reroll" + rerollCount : "";
+  return seededRandom("DBCC_BUZZY_PROFILE_" + seedUid() + "_" + date + seedSuffix) < .0075;
 }
 
-function getDailyCheapPrice(item, date) {
+function getDailyCheapPrice(item, date, rerollCount = 0) {
   if (item.normalPrice === item.cheapPrice) return item.normalPrice;
-  return seededRandom("DBCC_CHEAP_PRICE_" + seedUid() + "" + date + "" + (item.name || "BuzzyProfile")) < .5
+  const seedSuffix = rerollCount > 0 ? "_reroll" + rerollCount : "";
+  return seededRandom("DBCC_CHEAP_PRICE_" + seedUid() + "" + date + "" + (item.name || "BuzzyProfile") + seedSuffix) < .5
     ? item.cheapPrice
     : item.normalPrice;
+}
+
+function getRerollCost() {
+  return 5 * (dailyShopRerollCount + 1);
+}
+
+function computeDailyShopOffer(date, rerollCount) {
+  const item = chooseDailyDoll(date, rerollCount);
+
+  if (item.name === "Buzzy" && getDailyBuzzyProfileChance(date, rerollCount)) {
+    return {
+      type: "profilePic",
+      name: "Buzzy",
+      image: BUZZY_PROFILE_PIC,
+      normalPrice: 30,
+      cheapPrice: 15,
+      price: getDailyCheapPrice({ name: "Buzzy Profile Picture", normalPrice: 30, cheapPrice: 15 }, date, rerollCount)
+    };
+  }
+
+  return {
+    type: "doll",
+    name: item.name,
+    image: getCard(item.name).image,
+    normalPrice: item.normalPrice,
+    cheapPrice: item.cheapPrice,
+    price: getDailyCheapPrice(item, date, rerollCount)
+  };
 }
 
 async function loadDailyShopData() {
@@ -1232,34 +1370,15 @@ async function loadDailyShopData() {
   if (data.dailyShopDate === today) {
     dailyShopDate = today;
     dailyShopBought = data.dailyShopBought === true;
+    dailyShopRerollCount = typeof data.dailyShopRerollCount === "number" ? Math.max(0, data.dailyShopRerollCount) : 0;
   } else {
     dailyShopDate = today;
     dailyShopBought = false;
-    await setDoc(ref, { dailyShopDate: today, dailyShopBought: false }, { merge: true });
+    dailyShopRerollCount = 0;
+    await setDoc(ref, { dailyShopDate: today, dailyShopBought: false, dailyShopRerollCount: 0 }, { merge: true });
   }
 
-  const item = chooseDailyDoll(today);
-
-  if (item.name === "Buzzy" && getDailyBuzzyProfileChance(today)) {
-    dailyShopOffer = {
-      type: "profilePic",
-      name: "Buzzy",
-      image: BUZZY_PROFILE_PIC,
-      normalPrice: 30,
-      cheapPrice: 15,
-      price: getDailyCheapPrice({ name: "Buzzy Profile Picture", normalPrice: 30, cheapPrice: 15 }, today)
-    };
-    return;
-  }
-
-  dailyShopOffer = {
-    type: "doll",
-    name: item.name,
-    image: getCard(item.name).image,
-    normalPrice: item.normalPrice,
-    cheapPrice: item.cheapPrice,
-    price: getDailyCheapPrice(item, today)
-  };
+  dailyShopOffer = computeDailyShopOffer(today, dailyShopRerollCount);
 }
 
 // Offline equivalent of loadDailyShopData() -- same deterministic picks,
@@ -1268,30 +1387,39 @@ function initOfflineDailyShop() {
   const today = getTodayString();
   dailyShopDate = today;
   dailyShopBought = false;
+  dailyShopRerollCount = 0;
 
-  const item = chooseDailyDoll(today);
+  dailyShopOffer = computeDailyShopOffer(today, dailyShopRerollCount);
+}
 
-  if (item.name === "Buzzy" && getDailyBuzzyProfileChance(today)) {
-    dailyShopOffer = {
-      type: "profilePic",
-      name: "Buzzy",
-      image: BUZZY_PROFILE_PIC,
-      normalPrice: 30,
-      cheapPrice: 15,
-      price: getDailyCheapPrice({ name: "Buzzy Profile Picture", normalPrice: 30, cheapPrice: 15 }, today)
-    };
+window.rerollDailyShop = async () => {
+  if (dailyShopBought) {
+    showMessage("You already bought today's shop offer -- can't reroll now.");
     return;
   }
 
-  dailyShopOffer = {
-    type: "doll",
-    name: item.name,
-    image: getCard(item.name).image,
-    normalPrice: item.normalPrice,
-    cheapPrice: item.cheapPrice,
-    price: getDailyCheapPrice(item, today)
-  };
-}
+  const cost = getRerollCost();
+
+  if (dolb < cost) {
+    showMessage("Not enough Dolb to reroll (needs " + cost + ").");
+    return;
+  }
+
+  dolb -= cost;
+  dailyShopRerollCount++;
+  dailyShopOffer = computeDailyShopOffer(getTodayString(), dailyShopRerollCount);
+
+  if (currentUser) {
+    await setDoc(doc(db, "players", currentUser.uid), {
+      dailyShopDate: getTodayString(),
+      dailyShopRerollCount
+    }, { merge: true });
+    await savePlayerData();
+  }
+
+  updateUI();
+  showMessage("Daily shop rerolled!");
+};
 
 /* ===== SHOP ===== */
 
@@ -1333,6 +1461,11 @@ function renderShop() {
       button = `<button class="shopBuyButton" onclick="buyDailyShopOffer()">BUY FOR ${dailyShopOffer.price} DOLB</button>`;
     }
 
+    const rerollCost = getRerollCost();
+    const rerollButton = dailyShopBought
+      ? ""
+      : `<button class="rerollButton" ${dolb < rerollCost ? "disabled" : ""} onclick="rerollDailyShop()">🔄 REROLL FOR ${rerollCost} DOLB</button>`;
+
     daily.innerHTML = `
       <div class="dailyShopCard">
         ${imageHtml}
@@ -1344,6 +1477,7 @@ function renderShop() {
         ` : ""}
         ${dailyShopOffer.type === "doll" ? "<p>You can own multiple copies of this doll.</p>" : "<p>You can own only one copy of this profile picture.</p>"}
         ${button}
+        ${rerollButton}
       </div>
     `;
   }
@@ -1362,8 +1496,74 @@ function renderShop() {
     deals.appendChild(div);
   });
 
+  renderItemsShop();
   renderEventShop();
 }
+
+/* ===== BATTLE ITEMS SHOP ===== */
+
+function renderItemsShop() {
+  const area = document.getElementById("itemsShopArea");
+  if (!area) return;
+
+  area.innerHTML = `
+    <div class="itemShopGrid">
+      ${battleItems.map(item => {
+        const owned = itemInventory[item.id] || 0;
+        const canAfford = dolb >= item.buyPrice;
+
+        return `
+          <div class="itemShopCard">
+            <div class="itemEmoji">${item.emoji}</div>
+            <div class="itemName">${escapeHtml(item.name)}</div>
+            <p class="itemDesc">${escapeHtml(item.description)}</p>
+            <div class="itemOwnedCount">You own: ${owned}</div>
+            <button class="itemBuyButton" ${canAfford ? "" : "disabled"} onclick="buyItem('${item.id}')">
+              BUY FOR ${item.buyPrice} DOLB
+            </button>
+            <button class="itemSellButton" ${owned > 0 ? "" : "disabled"} onclick="sellItem('${item.id}')">
+              SELL 1 FOR ${item.sellPrice} DOLB
+            </button>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+window.buyItem = async itemId => {
+  const item = getBattleItem(itemId);
+  if (!item) return;
+
+  if (dolb < item.buyPrice) {
+    showMessage("Not enough Dolb.");
+    return;
+  }
+
+  dolb -= item.buyPrice;
+  itemInventory[itemId] = (itemInventory[itemId] || 0) + 1;
+
+  await savePlayerData();
+  updateUI();
+  showMessage(item.emoji + " " + item.name + " purchased!");
+};
+
+window.sellItem = async itemId => {
+  const item = getBattleItem(itemId);
+  if (!item) return;
+
+  if ((itemInventory[itemId] || 0) <= 0) {
+    showMessage("You don't own any " + item.name + ".");
+    return;
+  }
+
+  itemInventory[itemId]--;
+  dolb += item.sellPrice;
+
+  await savePlayerData();
+  updateUI();
+  showMessage(item.name + " sold for " + item.sellPrice + " Dolb.");
+};
 
 /* ===== EVENT SHOP (Buzzy Event) ===== */
 
@@ -1400,6 +1600,7 @@ function renderEventShop() {
       <h2>🎉 Buzzy Event</h2>
       <p>Buzzy Jump pays out Buzzy Points instead of Dolb during the event. Spend them here!</p>
       <div class="eventCountdown">${getEventCountdownText()}</div>
+      ${isBossActive() ? '<div class="eventCountdown">🐝 The Buzzy Boss has appeared! Check the Battle page.</div>' : ""}
     </div>
 
     <div class="buzzyPackCard">
@@ -1654,6 +1855,8 @@ window.setCollectionTab = tab => {
   collectionTab = tab;
   document.getElementById("collectionAllButton").classList.toggle("active", tab === "all");
   document.getElementById("collectionFavoritesButton").classList.toggle("active", tab === "favorites");
+  const levelUpBtn = document.getElementById("collectionLevelUpButton");
+  if (levelUpBtn) levelUpBtn.classList.toggle("active", tab === "levelup");
   const eventBtn = document.getElementById("collectionEventButton");
   if (eventBtn) eventBtn.classList.toggle("active", tab === "event");
   renderCollection();
@@ -1675,6 +1878,11 @@ function renderCollection() {
 
   if (collectionTab === "event") {
     renderEventCollection(grid);
+    return;
+  }
+
+  if (collectionTab === "levelup") {
+    renderLevelUpCollection(grid);
     return;
   }
 
@@ -1722,6 +1930,73 @@ function renderCollection() {
     grid.appendChild(div);
   }
 }
+
+// LEVEL UP tab: every individual doll copy that has been leveled up at
+// least once (level > 0) shows up here as its own card (not grouped by
+// name, since two copies of the same doll can be different levels). Each
+// one can be sold on its own for its base price PLUS 1 coin for every
+// level it has gained -- a small reward for the effort of leveling it.
+function renderLevelUpCollection(grid) {
+  grid.innerHTML = "";
+
+  const leveled = collection.filter(c => getCopyLevel(c) > 0);
+
+  if (!leveled.length) {
+    grid.innerHTML = "<p>No leveled-up dolls yet. Win battles to level up your dolls!</p>";
+    return;
+  }
+
+  leveled
+    .slice()
+    .sort((a, b) => getCopyLevel(b) - getCopyLevel(a))
+    .forEach(copy => {
+      const card = getCard(copy.name);
+      if (!card) return;
+
+      const level = getCopyLevel(copy);
+      const sellPrice = card.price + level;
+      const fav = favorites.includes(copy.name);
+
+      const div = document.createElement("div");
+      div.className = "levelUpSellCard";
+      div.innerHTML = `
+        <img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(copy.name)}')">
+        <div class="cardName">${escapeHtml(copy.name)}</div>
+        <div class="battleLevelBadge">LEVEL ${level}</div>
+        <div>Sell: ${sellPrice} coins (${card.price} + ${level})</div>
+        <button class="sellButton ${fav ? "favoriteLocked" : ""}" ${fav ? "disabled" : ""} onclick="sellLeveledCopy('${escapeHtml(copy.id)}')">
+          ${fav ? "FAVORITED" : "SELL THIS COPY"}
+        </button>
+      `;
+      grid.appendChild(div);
+    });
+}
+
+window.sellLeveledCopy = async copyId => {
+  const copy = collection.find(c => c.id === copyId);
+  if (!copy) return;
+
+  const card = getCard(copy.name);
+  if (!card || card.rarity === "event") {
+    showMessage("This doll cannot be sold.");
+    return;
+  }
+
+  if (favorites.includes(copy.name)) {
+    showMessage("Favorite cards cannot be sold.");
+    return;
+  }
+
+  const level = getCopyLevel(copy);
+  const sellPrice = card.price + level;
+
+  collection = collection.filter(c => c.id !== copyId);
+  money += sellPrice;
+
+  await savePlayerData();
+  updateUI();
+  showMessage(copy.name + " (Lv. " + level + ") sold for " + sellPrice + " coins.");
+};
 
 // Event cards (the 4 Buzzy variants + Golden Buzzy) never show up in the
 // ALL/FAVORITES tabs above -- they aren't in the main `cards` array, so
@@ -1771,7 +2046,27 @@ window.toggleFavorite = async encodedName => {
     showMessage(name + " is no longer a favorite.");
   } else {
     favorites.push(name);
-    showMessage(name + " is now a favorite.");
+
+    // Favoriting a doll keeps things tidy: only ONE copy of a favorited
+    // doll is kept. Any extra copies you already own are automatically
+    // sold off (for their normal sell price) the moment you favorite it.
+    // The single copy that's kept is the highest-level one, so you never
+    // lose battle progress by favoriting.
+    const card = getCard(name);
+    const copies = collection.filter(c => c.name === name);
+
+    if (card && card.rarity !== "event" && copies.length > 1) {
+      const keeper = copies.slice().sort((a, b) => getCopyLevel(b) - getCopyLevel(a))[0];
+      const toSell = copies.filter(c => c.id !== keeper.id);
+
+      collection = collection.filter(c => !toSell.some(s => s.id === c.id));
+      const refund = toSell.length * card.price;
+      money += refund;
+
+      showMessage(name + " is now a favorite. Sold " + toSell.length + " extra " + (toSell.length === 1 ? "copy" : "copies") + " for " + refund + " coins.");
+    } else {
+      showMessage(name + " is now a favorite.");
+    }
   }
 
   await savePlayerData();
@@ -2848,6 +3143,7 @@ function renderBattleRankInfo() {
       <div>${formatWinsDisplay(playerLevelWins)} / ${needed} wins toward next level</div>
       <div class="rankProgressBar"><div class="rankProgressFill" style="width:${percent}%"></div></div>
       <p>${nextText}</p>
+      ${cupcakeChargesLeft > 0 ? `<div class="cupcakeActiveNote">🧁 Cupcake active: ×1.75 damage for ${cupcakeChargesLeft} more battle${cupcakeChargesLeft === 1 ? "" : "s"}</div>` : ""}
     </div>
   `;
 }
@@ -2874,12 +3170,82 @@ function renderBattleHome() {
 
   renderBattleRankInfo();
 
+  const bossButton = document.getElementById("bossModeButton");
+  if (bossButton) bossButton.classList.toggle("hidden", !isBossActive());
+
   if (battleRoomId) return;
 
   main.classList.remove("hidden");
 
   const requestArea = document.getElementById("battleRequests");
   if (requestArea) renderBattleRequests();
+}
+
+/* ===== BATTLE ITEM PICKER (shared by bot/friend/boss setup) ===== */
+
+function renderBattleItemPicker() {
+  const area = document.getElementById("battleItemPickerArea");
+  if (!area) return;
+
+  if (cupcakeChargesLeft > 0 && battleSelectedItem !== "cupcake") {
+    // Cupcake is a persistent buff -- while it's active it just keeps
+    // applying automatically, no need (or ability) to pick anything else
+    // to layer on top of it, but the player can still pick a *different*
+    // item id if they want the other item's effect this match (only one
+    // "match item" effect fires per battle; the cupcake damage boost still
+    // applies underneath regardless of what's picked below).
+  }
+
+  area.innerHTML = `
+    <div class="battleItemPicker">
+      <h3>Battle Item (optional -- only 1 active per match)</h3>
+      ${cupcakeChargesLeft > 0 ? `<div class="cupcakeActiveNote">🧁 Cupcake buff active: ×1.75 damage for ${cupcakeChargesLeft} more battle${cupcakeChargesLeft === 1 ? "" : "s"} (automatic)</div>` : ""}
+      <div class="battleItemRow">
+        <div class="battleItemChoice ${battleSelectedItem === null ? "selected" : ""}" onclick="selectBattleItem(null)">
+          <div>🚫</div><div>None</div>
+        </div>
+        ${battleItems.map(item => {
+          const owned = itemInventory[item.id] || 0;
+          const isCupcakeAlreadyActive = item.id === "cupcake" && cupcakeChargesLeft > 0;
+          const disabled = owned <= 0 && !isCupcakeAlreadyActive;
+          return `
+            <div class="battleItemChoice ${battleSelectedItem === item.id ? "selected" : ""} ${disabled ? "disabledItem" : ""}"
+                 onclick="${disabled ? "" : `selectBattleItem('${item.id}')`}">
+              <div>${item.emoji}</div>
+              <div>${escapeHtml(item.name)}</div>
+              <div style="font-size:11px;opacity:.8">${isCupcakeAlreadyActive ? "active" : "x" + owned}</div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+}
+
+window.selectBattleItem = id => {
+  battleSelectedItem = battleSelectedItem === id ? null : id;
+  renderBattleItemPicker();
+};
+
+// Consumes the chosen item from inventory (once, at the moment the battle
+// actually begins) and, for Cupcake specifically, (re)starts its 5-battle
+// buff window. Cupcake's damage boost then keeps applying automatically on
+// every battle (regardless of what's picked) until the charges run out.
+function consumeSelectedBattleItem() {
+  if (battleSelectedItem === "cupcake") {
+    if (cupcakeChargesLeft <= 0) {
+      itemInventory.cupcake = Math.max(0, (itemInventory.cupcake || 0) - 1);
+      cupcakeChargesLeft = 5;
+    }
+  } else if (battleSelectedItem) {
+    itemInventory[battleSelectedItem] = Math.max(0, (itemInventory[battleSelectedItem] || 0) - 1);
+  }
+}
+
+// Called once per completed battle (win or lose) to tick down the cupcake
+// buff, independent of whatever battleSelectedItem was for that match.
+function tickCupcakeCharge() {
+  if (cupcakeChargesLeft > 0) cupcakeChargesLeft = Math.max(0, cupcakeChargesLeft - 1);
 }
 
 function renderBattleChoice() {
@@ -2897,6 +3263,8 @@ function renderBattleChoice() {
   description.textContent = battleMode === "bot"
     ? "Favorite dolls appear first. Each card below is ONE specific copy."
     : "Choose one specific leveled copy to use against " + battleOpponentUsername + ".";
+
+  renderBattleItemPicker();
 
   const available = getBattleCollectionCopies();
 
@@ -2947,6 +3315,8 @@ function hideBattleChoice() {
 window.cancelBattleSetup = () => {
   battleMode = null;
   battleSelectedCardId = null;
+  battleSelectedItem = null;
+  bossTeamSelected = [];
   hideBattleChoice();
   document.getElementById("battleMain").classList.remove("hidden");
 };
@@ -2964,6 +3334,7 @@ window.startBotBattle = difficulty => {
   battleOpponentUsername = difficulty === "hard" ? "Hard Bot" : "Easy Bot";
   battleOpponentPic = DEFAULT_PROFILE_PIC;
   battleSelectedCardId = null;
+  battleSelectedItem = null;
   battleChoiceSubmitted = false;
   battleRewardGiven = false;
 
@@ -2973,7 +3344,7 @@ window.startBotBattle = difficulty => {
   renderBattleChoice();
 };
 
-window.confirmBattleCard = () => {
+window.confirmBattleCard = async () => {
   if (!battleSelectedCardId) return;
 
   const playerCopy = collection.find(c => c.id === battleSelectedCardId);
@@ -2984,7 +3355,55 @@ window.confirmBattleCard = () => {
       ? chooseHardBotCard(getCard(playerCopy.name))
       : chooseEasyBotCard();
 
+    consumeSelectedBattleItem();
     showLocalBotBattle(playerCopy, botCard);
+    return;
+  }
+
+  if (battleMode === "friend") {
+    const startButton = document.getElementById("battleStartButton");
+    if (startButton) startButton.disabled = true;
+
+    try {
+      const snap = await getDoc(doc(db, "players", battleOpponentUid));
+      if (!snap.exists()) {
+        showMessage("Could not find that player's cards.");
+        if (startButton) startButton.disabled = false;
+        return;
+      }
+
+      const data = snap.data();
+      const friendCollection = normalizeCollection(data.collection);
+      const friendFavorites = Array.isArray(data.favorites) ? data.favorites : [];
+
+      const friendTradeable = friendCollection
+        .filter(copy => {
+          const card = getCard(copy.name);
+          return card && card.rarity !== "event";
+        })
+        .sort((a, b) => {
+          const af = friendFavorites.includes(a.name);
+          const bf = friendFavorites.includes(b.name);
+          if (af && !bf) return -1;
+          if (!af && bf) return 1;
+          return getCopyLevel(b) - getCopyLevel(a);
+        });
+
+      if (!friendTradeable.length) {
+        showMessage(battleOpponentUsername + " doesn't have any battle-ready dolls yet.");
+        if (startButton) startButton.disabled = false;
+        return;
+      }
+
+      const friendCopy = friendTradeable[0];
+
+      consumeSelectedBattleItem();
+      showLocalFriendBattle(playerCopy, friendCopy);
+    } catch (e) {
+      console.error(e);
+      showMessage("Could not start the battle: " + e.message);
+      if (startButton) startButton.disabled = false;
+    }
   }
 };
 
@@ -3004,12 +3423,13 @@ function chooseHardBotCard(playerCard) {
   return chooseEasyBotCard();
 }
 
-function calculateBattleDamage(attacker, attackerCopy, defender, defenderCopy) {
+function calculateBattleDamage(attacker, attackerCopy, defender, defenderCopy, applyCupcake = false) {
   const effectiveness = getTypeMultiplier(attacker.moveType, defender.type);
   const stab = attacker.type.includes(attacker.moveType) ? 1.15 : 1;
   const random = .9 + Math.random() * .15;
   const power = getBattlePower(attacker, attackerCopy);
-  const damage = Math.max(1, Math.round(power * effectiveness * stab * random));
+  const cupcakeMultiplier = applyCupcake ? 1.75 : 1;
+  const damage = Math.max(1, Math.round(power * effectiveness * stab * random * cupcakeMultiplier));
   return { damage, effectiveness };
 }
 
@@ -3049,6 +3469,8 @@ function battleCardHTML(card, copy, hp, name, pic) {
 function showLocalBotBattle(playerCopy, botCard) {
   const playerCard = getCard(playerCopy.name);
   const botCopy = makeBotCopy(botCard, getCopyLevel(playerCopy));
+  const usingCupcake = cupcakeChargesLeft > 0;
+  const usedItem = battleSelectedItem;
 
   let playerHP = getBattleMaxHP(playerCopy);
   let botHP = getBattleMaxHP(botCopy);
@@ -3065,6 +3487,7 @@ function showLocalBotBattle(playerCopy, botCard) {
       <h2 style="text-align:center">${battleDifficulty === "hard" ? "Hard Bot Battle" : "Easy Bot Battle"}</h2>
       <div style="text-align:center;opacity:.8;margin-bottom:12px">
         Battling vs your ${escapeHtml(playerCard.name)}'s specific doll level: <b>${getCopyLevel(playerCopy)}</b>
+        ${usingCupcake ? " • 🧁 ×1.75 damage active" : ""}
       </div>
       <div class="battleHeader">
         ${battleCardHTML(botCard, botCopy, botHP, battleOpponentUsername, DEFAULT_PROFILE_PIC)}
@@ -3086,12 +3509,12 @@ function showLocalBotBattle(playerCopy, botCard) {
       playerTurn = false;
       btn.disabled = true;
 
-      const result = calculateBattleDamage(playerCard, playerCopy, botCard, botCopy);
+      const result = calculateBattleDamage(playerCard, playerCopy, botCard, botCopy, usingCupcake);
       botHP = Math.max(0, botHP - result.damage);
 
       if (botHP <= 0) {
         render();
-        finishBotBattle(true, playerCopy, botCopy);
+        finishBotBattle(true, playerCopy, botCopy, usedItem);
         return;
       }
 
@@ -3101,7 +3524,7 @@ function showLocalBotBattle(playerCopy, botCard) {
       log.innerHTML = `You used <b>${escapeHtml(playerCard.move)}</b>!<br>You dealt <b>${result.damage}</b> damage. ${battleEffectivenessText(result.effectiveness)}`;
 
       setTimeout(() => {
-        const result2 = calculateBattleDamage(botCard, botCopy, playerCard, playerCopy);
+        const result2 = calculateBattleDamage(botCard, botCopy, playerCard, playerCopy, false);
         playerHP = Math.max(0, playerHP - result2.damage);
 
         render();
@@ -3110,7 +3533,7 @@ function showLocalBotBattle(playerCopy, botCard) {
         log2.innerHTML = `${escapeHtml(botCard.name)} used <b>${escapeHtml(botCard.move)}</b>!<br>It dealt <b>${result2.damage}</b> damage. ${battleEffectivenessText(result2.effectiveness)}`;
 
         if (playerHP <= 0) {
-          finishBotBattle(false, playerCopy, botCopy);
+          finishBotBattle(false, playerCopy, botCopy, usedItem);
           return;
         }
 
@@ -3127,11 +3550,15 @@ function showLocalBotBattle(playerCopy, botCard) {
   render();
 }
 
-async function finishBotBattle(won, playerCopy, botCopy) {
+async function finishBotBattle(won, playerCopy, botCopy, usedItem) {
   const arena = document.getElementById("battleArena");
 
+  tickCupcakeCharge();
+
   if (won) {
-    const winIncrement = battleDifficulty === "easy" ? 1 / 3 : 1;
+    let winIncrement = battleDifficulty === "easy" ? 1 / 3 : 1;
+    if (usedItem === "doubleOrNothing") winIncrement *= 2;
+
     const actualCopy = collection.find(c => c.id === playerCopy.id);
 
     let dollLevelUp = false;
@@ -3154,6 +3581,16 @@ async function finishBotBattle(won, playerCopy, botCopy) {
 
     addBotWin(battleDifficulty);
 
+    let greedyHtml = "";
+    if (usedItem === "greedy") {
+      const stolenCard = getCard(botCopy.name);
+      if (stolenCard) {
+        const stolenCopy = { id: createCardId(), name: botCopy.name, traded: true, level: getCopyLevel(botCopy), levelWins: 0 };
+        collection.push(stolenCopy);
+        greedyHtml = `<div class="levelUpBox">🤑 GREEDY! You stole a Level ${getCopyLevel(botCopy)} ${escapeHtml(botCopy.name)}!</div>`;
+      }
+    }
+
     await savePlayerData();
     updateUI();
 
@@ -3162,6 +3599,8 @@ async function finishBotBattle(won, playerCopy, botCopy) {
         <div class="winText">YOU WIN!</div>
         <div class="rewardText">BATTLE WON!</div>
         <p>You defeated ${escapeHtml(battleOpponentUsername)}!</p>
+        ${usedItem === "doubleOrNothing" ? '<p>🎰 Double or Nothing paid off -- double XP!</p>' : ""}
+        ${greedyHtml}
         ${dollLevelUp ? `
           <div class="levelUpBox">
             <h2>${escapeHtml(playerCopy.name)} LEVEL UP!</h2>
@@ -3190,6 +3629,20 @@ async function finishBotBattle(won, playerCopy, botCopy) {
     `;
   } else {
     addBotWin(battleDifficulty);
+
+    let lostXpHtml = "";
+    if (usedItem === "doubleOrNothing") {
+      const loseAmount = battleDifficulty === "easy" ? 1 / 3 : 1;
+
+      const actualCopy = collection.find(c => c.id === playerCopy.id);
+      if (actualCopy) {
+        actualCopy.levelWins = Math.max(0, getCopyWins(actualCopy) - loseAmount);
+      }
+      playerLevelWins = Math.max(0, playerLevelWins - loseAmount);
+
+      lostXpHtml = '<p>🎰 Double or Nothing backfired -- you lost XP instead!</p>';
+    }
+
     await savePlayerData();
     updateUI();
 
@@ -3198,6 +3651,190 @@ async function finishBotBattle(won, playerCopy, botCopy) {
         <div class="winText">YOU LOST</div>
         <p>${escapeHtml(battleOpponentUsername)} won this battle.</p>
         <p>Your doll stayed at <b>Level ${getCopyLevel(playerCopy)}</b>.</p>
+        ${lostXpHtml}
+        <button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button>
+      </div>
+    `;
+  }
+}
+
+/* ===== LOCAL FRIEND BATTLE =====
+   A synchronous, single-player simulation fought against a snapshot of the
+   friend's own doll data (their best/favorite battle-ready copy). This is
+   not a live, turn-synced PvP match -- it plays out immediately, the same
+   way a bot battle does -- but it uses the friend's real collection, and
+   rewards/items behave exactly like they do vs bots (Greedy can steal a
+   copy of the friend's doll into YOUR collection only; nothing is ever
+   removed from the friend's own account). */
+
+function showLocalFriendBattle(playerCopy, friendCopy) {
+  const playerCard = getCard(playerCopy.name);
+  const friendCard = getCard(friendCopy.name);
+  const usingCupcake = cupcakeChargesLeft > 0;
+  const usedItem = battleSelectedItem;
+
+  let playerHP = getBattleMaxHP(playerCopy);
+  let friendHP = getBattleMaxHP(friendCopy);
+
+  const arena = document.getElementById("battleArena");
+  arena.classList.remove("hidden");
+  document.getElementById("battleMain").classList.add("hidden");
+  hideBattleChoice();
+
+  let playerTurn = true;
+
+  function render() {
+    arena.innerHTML = `
+      <h2 style="text-align:center">Friend Battle vs ${escapeHtml(battleOpponentUsername)}</h2>
+      <div style="text-align:center;opacity:.8;margin-bottom:12px">
+        Your ${escapeHtml(playerCard.name)} (Lv. ${getCopyLevel(playerCopy)}) vs their ${escapeHtml(friendCard.name)} (Lv. ${getCopyLevel(friendCopy)})
+        ${usingCupcake ? " • 🧁 ×1.75 damage active" : ""}
+      </div>
+      <div class="battleHeader">
+        ${battleCardHTML(friendCard, friendCopy, friendHP, battleOpponentUsername, battleOpponentPic)}
+        <div class="battleVs">VS</div>
+        ${battleCardHTML(playerCard, playerCopy, playerHP, username, profilePic)}
+      </div>
+      <div class="battleMove">
+        <div class="moveName">${escapeHtml(playerCard.move)}</div>
+        <div class="moveType">${escapeHtml(playerCard.moveType)} Type Move</div>
+        <button class="battleStartButton" id="useMoveButton">USE ${escapeHtml(playerCard.move).toUpperCase()}</button>
+      </div>
+      <div class="battleLog" id="battleLog">Your turn!</div>
+    `;
+
+    const btn = document.getElementById("useMoveButton");
+
+    btn.onclick = () => {
+      if (!playerTurn) return;
+      playerTurn = false;
+      btn.disabled = true;
+
+      const result = calculateBattleDamage(playerCard, playerCopy, friendCard, friendCopy, usingCupcake);
+      friendHP = Math.max(0, friendHP - result.damage);
+
+      if (friendHP <= 0) {
+        render();
+        finishFriendBattle(true, playerCopy, friendCopy, usedItem);
+        return;
+      }
+
+      render();
+
+      const log = document.getElementById("battleLog");
+      log.innerHTML = `You used <b>${escapeHtml(playerCard.move)}</b>!<br>You dealt <b>${result.damage}</b> damage. ${battleEffectivenessText(result.effectiveness)}`;
+
+      setTimeout(() => {
+        const result2 = calculateBattleDamage(friendCard, friendCopy, playerCard, playerCopy, false);
+        playerHP = Math.max(0, playerHP - result2.damage);
+
+        render();
+
+        const log2 = document.getElementById("battleLog");
+        log2.innerHTML = `${escapeHtml(friendCard.name)} used <b>${escapeHtml(friendCard.move)}</b>!<br>It dealt <b>${result2.damage}</b> damage. ${battleEffectivenessText(result2.effectiveness)}`;
+
+        if (playerHP <= 0) {
+          finishFriendBattle(false, playerCopy, friendCopy, usedItem);
+          return;
+        }
+
+        setTimeout(() => {
+          playerTurn = true;
+          render();
+          const log3 = document.getElementById("battleLog");
+          log3.textContent = "Your turn!";
+        }, 650);
+      }, 650);
+    };
+  }
+
+  render();
+}
+
+async function finishFriendBattle(won, playerCopy, friendCopy, usedItem) {
+  const arena = document.getElementById("battleArena");
+
+  tickCupcakeCharge();
+
+  if (won) {
+    let winIncrement = 1;
+    if (usedItem === "doubleOrNothing") winIncrement *= 2;
+
+    const actualCopy = collection.find(c => c.id === playerCopy.id);
+
+    let dollLevelUp = false;
+    let oldDollLevel = 0;
+
+    if (actualCopy) {
+      oldDollLevel = getCopyLevel(actualCopy);
+      actualCopy.levelWins = getCopyWins(actualCopy) + winIncrement;
+
+      while (actualCopy.levelWins >= winsNeededForLevel(getCopyLevel(actualCopy))) {
+        actualCopy.levelWins -= winsNeededForLevel(getCopyLevel(actualCopy));
+        actualCopy.level = getCopyLevel(actualCopy) + 1;
+        dollLevelUp = true;
+      }
+    }
+
+    const oldPlayerLevel = playerLevel;
+    const levelUps = addPlayerWin(winIncrement);
+    const rewards = await giveRankRewards(levelUps);
+
+    let greedyHtml = "";
+    if (usedItem === "greedy") {
+      const stolenCard = getCard(friendCopy.name);
+      if (stolenCard) {
+        const stolenCopy = { id: createCardId(), name: friendCopy.name, traded: true, level: getCopyLevel(friendCopy), levelWins: 0 };
+        collection.push(stolenCopy);
+        greedyHtml = `<div class="levelUpBox">🤑 GREEDY! You stole a Level ${getCopyLevel(friendCopy)} ${escapeHtml(friendCopy.name)}!</div>`;
+      }
+    }
+
+    await savePlayerData();
+    updateUI();
+
+    arena.innerHTML = `
+      <div class="battleResult">
+        <div class="winText">YOU WIN!</div>
+        <div class="rewardText">BATTLE WON!</div>
+        <p>You defeated ${escapeHtml(battleOpponentUsername)}!</p>
+        ${usedItem === "doubleOrNothing" ? '<p>🎰 Double or Nothing paid off -- double XP!</p>' : ""}
+        ${greedyHtml}
+        ${dollLevelUp ? `
+          <div class="levelUpBox">
+            <h2>${escapeHtml(playerCopy.name)} LEVEL UP!</h2>
+            <p>Level <b>${oldDollLevel}</b> → <b>${getCopyLevel(actualCopy)}</b></p>
+          </div>
+        ` : `
+          <p>Your doll: <b>Lv. ${getCopyLevel(actualCopy)}</b></p>
+        `}
+        ${levelUps ? `
+          <div class="levelUpBox">
+            <h2>BATTLE LEVEL UP!</h2>
+            <p>Battle Level <b>${oldPlayerLevel}</b> → <b>${playerLevel}</b></p>
+            <p>Rewards: <b>+${rewards.coins} Coins</b> and <b>+${rewards.dolbs} Dolb</b></p>
+          </div>
+        ` : ""}
+        <button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button>
+      </div>
+    `;
+  } else {
+    let lostXpHtml = "";
+    if (usedItem === "doubleOrNothing") {
+      const actualCopy = collection.find(c => c.id === playerCopy.id);
+      if (actualCopy) actualCopy.levelWins = Math.max(0, getCopyWins(actualCopy) - 1);
+      playerLevelWins = Math.max(0, playerLevelWins - 1);
+      lostXpHtml = '<p>🎰 Double or Nothing backfired -- you lost XP instead!</p>';
+    }
+
+    await savePlayerData();
+    updateUI();
+
+    arena.innerHTML = `
+      <div class="battleResult">
+        <div class="winText">YOU LOST</div>
+        <p>${escapeHtml(battleOpponentUsername)} won this battle.</p>
+        ${lostXpHtml}
         <button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button>
       </div>
     `;
@@ -3207,10 +3844,290 @@ async function finishBotBattle(won, playerCopy, botCopy) {
 window.exitBattle = () => {
   battleMode = null;
   battleSelectedCardId = null;
+  battleSelectedItem = null;
+  bossTeamSelected = [];
   document.getElementById("battleArena").classList.add("hidden");
   document.getElementById("battleMain").classList.remove("hidden");
   renderBattleHome();
 };
+
+/* =========================================================
+   BUZZY BOSS (team battle vs a Level 75 Buzzy)
+   ========================================================= */
+
+window.startBossBattle = () => {
+  if (!isBossActive()) {
+    showMessage("The Buzzy Boss isn't here right now.");
+    return;
+  }
+
+  if (getBattleCollectionCopies().length < 1) {
+    showMessage("You need at least one card to challenge the boss.");
+    showPage("collection");
+    return;
+  }
+
+  battleMode = "boss";
+  battleOpponentUsername = "Buzzy Boss";
+  battleOpponentPic = "buzzy.png";
+  battleSelectedItem = null;
+  bossTeamSelected = [];
+
+  showPage("battle");
+  document.getElementById("battleMain").classList.add("hidden");
+  renderBossChoice();
+};
+
+function renderBossChoice() {
+  const box = document.getElementById("battleChoice");
+  const grid = document.getElementById("battleChoiceGrid");
+  const title = document.getElementById("battleChoiceTitle");
+  const description = document.getElementById("battleChoiceDescription");
+  const start = document.getElementById("battleStartButton");
+
+  if (!box || !grid) return;
+
+  box.classList.remove("hidden");
+  title.textContent = "Choose Your Team of 3";
+  description.textContent = `Pick exactly 3 doll copies to fight the Level ${BUZZY_BOSS_LEVEL} Buzzy Boss. They fight one at a time, in the order you pick them.`;
+
+  renderBattleItemPicker();
+
+  const available = getBattleCollectionCopies();
+
+  grid.innerHTML = "";
+
+  if (!available.length) {
+    grid.innerHTML = `<div class="friendEmpty"><h3>You need a card!</h3><p>Open a pack first to get a battle doll.</p></div>`;
+    start.disabled = true;
+    return;
+  }
+
+  available.forEach(copy => {
+    const card = getCard(copy.name);
+    const level = getCopyLevel(copy);
+    const hp = getBattleMaxHP(copy);
+    const power = getBattlePower(card, copy);
+    const fav = favorites.includes(copy.name);
+    const teamIndex = bossTeamSelected.indexOf(copy.id);
+
+    const div = document.createElement("div");
+    div.className = "battleChoiceCard" + (teamIndex !== -1 ? " selected" : "") + (fav ? " favoriteBattleCard" : "");
+
+    div.onclick = () => {
+      if (teamIndex !== -1) {
+        bossTeamSelected.splice(teamIndex, 1);
+      } else if (bossTeamSelected.length < 3) {
+        bossTeamSelected.push(copy.id);
+      } else {
+        showMessage("You can only pick 3 dolls for the boss team.");
+        return;
+      }
+      renderBossChoice();
+    };
+
+    div.innerHTML = `
+      ${fav ? '<div class="battleFavoriteBadge">★</div>' : ""}
+      ${teamIndex !== -1 ? `<div class="battleFavoriteBadge" style="left:auto;right:8px;background:#198754">${teamIndex + 1}</div>` : ""}
+      <img src="${escapeHtml(card.image)}" onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
+      <div class="cardName">${escapeHtml(card.name)}</div>
+      <div class="typeBadge">${card.type.join(" / ")}</div>
+      <div class="battleLevelBadge">LEVEL ${level}</div>
+      <div class="battleStats">HP: ${hp}<br>${escapeHtml(card.move)} Power: ${power}</div>
+    `;
+
+    grid.appendChild(div);
+  });
+
+  start.textContent = `FIGHT THE BOSS (${bossTeamSelected.length}/3)`;
+  start.disabled = bossTeamSelected.length !== 3;
+  start.onclick = confirmBossTeam;
+}
+
+window.confirmBossTeam = () => {
+  if (bossTeamSelected.length !== 3) return;
+
+  const teamCopies = bossTeamSelected.map(id => collection.find(c => c.id === id)).filter(Boolean);
+  if (teamCopies.length !== 3) return;
+
+  consumeSelectedBattleItem();
+  showBossBattle(teamCopies);
+};
+
+function showBossBattle(teamCopies) {
+  const bossCard = getCard("Buzzy");
+  const bossCopy = { id: "BOSS_" + createCardId(), name: "Buzzy", traded: false, level: BUZZY_BOSS_LEVEL, levelWins: 0 };
+  const usingCupcake = cupcakeChargesLeft > 0;
+  const usedItem = battleSelectedItem;
+
+  let bossHP = getBattleMaxHP(bossCopy);
+  let teamIndex = 0;
+  let currentHP = getBattleMaxHP(teamCopies[0]);
+
+  const arena = document.getElementById("battleArena");
+  arena.classList.remove("hidden");
+  document.getElementById("battleMain").classList.add("hidden");
+  hideBattleChoice();
+
+  let playerTurn = true;
+
+  function currentCopy() { return teamCopies[teamIndex]; }
+  function currentCard() { return getCard(currentCopy().name); }
+
+  function render() {
+    const playerCard = currentCard();
+    const playerCopy = currentCopy();
+
+    arena.innerHTML = `
+      <h2 style="text-align:center">🐝 Buzzy Boss Fight</h2>
+      <div style="text-align:center;opacity:.8;margin-bottom:12px">
+        Teammate ${teamIndex + 1} of 3: ${escapeHtml(playerCard.name)} (Lv. ${getCopyLevel(playerCopy)})
+        ${usingCupcake ? " • 🧁 ×1.75 damage active" : ""}
+      </div>
+      <div class="battleHeader">
+        ${battleCardHTML(bossCard, bossCopy, bossHP, "Buzzy Boss", "buzzy.png")}
+        <div class="battleVs">VS</div>
+        ${battleCardHTML(playerCard, playerCopy, currentHP, username, profilePic)}
+      </div>
+      <div class="battleMove">
+        <div class="moveName">${escapeHtml(playerCard.move)}</div>
+        <div class="moveType">${escapeHtml(playerCard.moveType)} Type Move</div>
+        <button class="battleStartButton" id="useMoveButton">USE ${escapeHtml(playerCard.move).toUpperCase()}</button>
+      </div>
+      <div class="battleLog" id="battleLog">Your turn!</div>
+    `;
+
+    const btn = document.getElementById("useMoveButton");
+
+    btn.onclick = () => {
+      if (!playerTurn) return;
+      playerTurn = false;
+      btn.disabled = true;
+
+      const playerCard2 = currentCard();
+      const playerCopy2 = currentCopy();
+
+      const result = calculateBattleDamage(playerCard2, playerCopy2, bossCard, bossCopy, usingCupcake);
+      bossHP = Math.max(0, bossHP - result.damage);
+
+      if (bossHP <= 0) {
+        render();
+        finishBossBattle(true, teamCopies, bossCopy, usedItem);
+        return;
+      }
+
+      render();
+      const log = document.getElementById("battleLog");
+      log.innerHTML = `You used <b>${escapeHtml(playerCard2.move)}</b>!<br>You dealt <b>${result.damage}</b> damage. ${battleEffectivenessText(result.effectiveness)}`;
+
+      setTimeout(() => {
+        const result2 = calculateBattleDamage(bossCard, bossCopy, playerCard2, playerCopy2, false);
+        currentHP = Math.max(0, currentHP - result2.damage);
+
+        render();
+        const log2 = document.getElementById("battleLog");
+        log2.innerHTML = `Buzzy Boss used <b>${escapeHtml(bossCard.move)}</b>!<br>It dealt <b>${result2.damage}</b> damage. ${battleEffectivenessText(result2.effectiveness)}`;
+
+        if (currentHP <= 0) {
+          teamIndex++;
+
+          if (teamIndex >= teamCopies.length) {
+            finishBossBattle(false, teamCopies, bossCopy, usedItem);
+            return;
+          }
+
+          currentHP = getBattleMaxHP(teamCopies[teamIndex]);
+
+          setTimeout(() => {
+            playerTurn = true;
+            render();
+            const log3 = document.getElementById("battleLog");
+            log3.textContent = escapeHtml(teamCopies[teamIndex].name) + " is up! Your turn!";
+          }, 750);
+          return;
+        }
+
+        setTimeout(() => {
+          playerTurn = true;
+          render();
+          const log3 = document.getElementById("battleLog");
+          log3.textContent = "Your turn!";
+        }, 650);
+      }, 650);
+    };
+  }
+
+  render();
+}
+
+async function finishBossBattle(won, teamCopies, bossCopy, usedItem) {
+  const arena = document.getElementById("battleArena");
+
+  tickCupcakeCharge();
+
+  if (won) {
+    let winIncrement = 3; // team boss fight is worth more than a normal win
+    if (usedItem === "doubleOrNothing") winIncrement *= 2;
+
+    const oldPlayerLevel = playerLevel;
+    const levelUps = addPlayerWin(winIncrement);
+    const rewards = await giveRankRewards(levelUps);
+
+    let bonusCoins = BUZZY_BOSS_REWARD_COINS;
+    let bonusDolb = BUZZY_BOSS_REWARD_DOLB;
+    let bonusBuzzyPoints = isEventActive() ? BUZZY_BOSS_REWARD_BUZZY_POINTS : 0;
+
+    money += bonusCoins;
+    dolb += bonusDolb;
+    buzzyPoints += bonusBuzzyPoints;
+
+    let greedyHtml = "";
+    if (usedItem === "greedy") {
+      const stolenCopy = { id: createCardId(), name: bossCopy.name, traded: true, level: getCopyLevel(bossCopy), levelWins: 0 };
+      collection.push(stolenCopy);
+      greedyHtml = `<div class="levelUpBox">🤑 GREEDY! You stole a Level ${getCopyLevel(bossCopy)} Buzzy!</div>`;
+    }
+
+    await savePlayerData();
+    updateUI();
+
+    arena.innerHTML = `
+      <div class="battleResult">
+        <div class="winText">BOSS DEFEATED!</div>
+        <div class="rewardText">You beat the Buzzy Boss!</div>
+        <p>Rewards: <b>+${bonusCoins} Coins</b>, <b>+${bonusDolb} Dolb</b>${bonusBuzzyPoints ? `, <b>+${bonusBuzzyPoints} Buzzy Points</b>` : ""}</p>
+        ${usedItem === "doubleOrNothing" ? '<p>🎰 Double or Nothing paid off -- double XP!</p>' : ""}
+        ${greedyHtml}
+        ${levelUps ? `
+          <div class="levelUpBox">
+            <h2>BATTLE LEVEL UP!</h2>
+            <p>Battle Level <b>${oldPlayerLevel}</b> → <b>${playerLevel}</b></p>
+            <p>Rewards: <b>+${rewards.coins} Coins</b> and <b>+${rewards.dolbs} Dolb</b></p>
+          </div>
+        ` : ""}
+        <button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button>
+      </div>
+    `;
+  } else {
+    let lostXpHtml = "";
+    if (usedItem === "doubleOrNothing") {
+      playerLevelWins = Math.max(0, playerLevelWins - 1);
+      lostXpHtml = '<p>🎰 Double or Nothing backfired -- you lost XP instead!</p>';
+    }
+
+    await savePlayerData();
+    updateUI();
+
+    arena.innerHTML = `
+      <div class="battleResult">
+        <div class="winText">YOUR TEAM FELL</div>
+        <p>The Buzzy Boss defeated your whole team this time.</p>
+        ${lostXpHtml}
+        <button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button>
+      </div>
+    `;
+  }
+}
 
 /* ===== FRIEND BATTLE REQUESTS ===== */
 
@@ -3312,6 +4229,7 @@ window.acceptBattleRequest = async id => {
     battleOpponentUsername = r.senderUsername || "Player";
     battleOpponentPic = r.senderProfilePic || DEFAULT_PROFILE_PIC;
     battleSelectedCardId = null;
+    battleSelectedItem = null;
 
     showPage("battle");
     document.getElementById("battleMain").classList.add("hidden");
