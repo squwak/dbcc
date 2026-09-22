@@ -785,6 +785,11 @@ let friendRequests = [];
 let friendListener = null;
 let friendshipListener = null;
 
+// Tracks battle-request ids the current client has already "entered" (i.e.
+// shown the battle setup screen for), so the friendRequests listener below
+// never re-triggers battle entry twice for the same request.
+let enteredBattleRequestIds = new Set();
+
 let applyingTradeIds = new Set();
 
 let battleMode = null;
@@ -1960,6 +1965,7 @@ function renderLevelUpCollection(grid) {
       const div = document.createElement("div");
       div.className = "levelUpSellCard";
       div.innerHTML = `
+        <button class="starButton ${fav ? "favorite" : ""}" onclick="toggleFavorite('${encoded(copy.name)}')">${fav ? "★" : "☆"}</button>
         <img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(copy.name)}')">
         <div class="cardName">${escapeHtml(copy.name)}</div>
         <div class="battleLevelBadge">LEVEL ${level}</div>
@@ -2798,6 +2804,18 @@ function startFriendListener() {
 
   friendListener = onSnapshot(q, s => {
     friendRequests = s.docs.map(x => ({ id: x.id, ...x.data() }));
+
+    // FIX: when you challenge a friend, only the RECEIVER used to get sent
+    // into the battle screen (via acceptBattleRequest, triggered by their
+    // own click). The sender's client never heard about the acceptance and
+    // just sat on the Friends page forever. This watches for exactly that:
+    // a battle request THIS user sent whose status just became "accepted".
+    friendRequests.forEach(r => {
+      if (r.type === "battle" && r.status === "accepted" && r.senderUid === currentUser.uid) {
+        enterFriendBattleAsChallenger(r);
+      }
+    });
+
     renderFriendRequests();
     renderFriends();
     renderBattleRequests();
@@ -2805,6 +2823,36 @@ function startFriendListener() {
     console.error(e);
     showMessage("Friend connection error: " + e.message);
   });
+}
+
+// Called on the CHALLENGER's client once their battle request has been
+// accepted, so they land on the same doll-selection screen the receiver
+// already sees. Guards against double-entry with enteredBattleRequestIds,
+// and against entering while already mid-battle (in which case it will
+// simply retry the next time this listener fires).
+function enterFriendBattleAsChallenger(r) {
+  if (enteredBattleRequestIds.has(r.id)) return;
+  if (battleMode) return;
+
+  if (!collection.length) {
+    showMessage("You need at least one card to battle.");
+    return;
+  }
+
+  enteredBattleRequestIds.add(r.id);
+
+  battleMode = "friend";
+  battleOpponentUid = r.receiverUid;
+  battleOpponentUsername = r.receiverUsername || "Player";
+  battleOpponentPic = r.receiverProfilePic || DEFAULT_PROFILE_PIC;
+  battleSelectedCardId = null;
+  battleSelectedItem = null;
+
+  showPage("battle");
+  document.getElementById("battleMain").classList.add("hidden");
+  renderBattleChoice();
+
+  showMessage(battleOpponentUsername + " accepted your battle request!");
 }
 
 // NEW: live listener over the shared friendships collection. This is what
@@ -4252,6 +4300,14 @@ const BJ_PIPE_WIDTH = 62;
 const BJ_PIPE_SPEED = 1.6;
 const BJ_PIPE_INTERVAL = 150;
 const BJ_BIRD_SIZE = 40;
+// The bird's collision box is smaller than what's actually drawn, so Buzzy
+// looks the same size on screen but is noticeably easier to slip between
+// the trees and clouds without a "that shouldn't have hit me" feeling.
+const BJ_BIRD_HITBOX = 22;
+// Small forgiving inset on each pipe's hitbox too, so grazing the edge of
+// a tree/cloud sprite (which has transparent padding around the art) isn't
+// counted as a hit.
+const BJ_PIPE_HITBOX_INSET = 8;
 const BJ_CURRENCY_PER_OBSTACLE = 5;
 
 let buzzyJumpRunning = false;
@@ -4415,10 +4471,10 @@ function buzzyJumpLoop() {
 
   let hit = false;
   const birdBox = {
-    x: bjBird.x - BJ_BIRD_SIZE / 2,
-    y: bjBird.y - BJ_BIRD_SIZE / 2,
-    w: BJ_BIRD_SIZE,
-    h: BJ_BIRD_SIZE
+    x: bjBird.x - BJ_BIRD_HITBOX / 2,
+    y: bjBird.y - BJ_BIRD_HITBOX / 2,
+    w: BJ_BIRD_HITBOX,
+    h: BJ_BIRD_HITBOX
   };
 
   bjPipes.forEach(pipe => {
@@ -4442,8 +4498,11 @@ function buzzyJumpLoop() {
       }
     }
 
-    if (bjRectsOverlap(birdBox, { x: pipe.x, y: BJ_HEIGHT - pipe.bottomHeight, w: BJ_PIPE_WIDTH, h: pipe.bottomHeight })) hit = true;
-    if (bjRectsOverlap(birdBox, { x: pipe.x, y: 0, w: BJ_PIPE_WIDTH, h: pipe.topHeight })) hit = true;
+    const pipeHitX = pipe.x + BJ_PIPE_HITBOX_INSET;
+    const pipeHitW = Math.max(4, BJ_PIPE_WIDTH - BJ_PIPE_HITBOX_INSET * 2);
+
+    if (bjRectsOverlap(birdBox, { x: pipeHitX, y: BJ_HEIGHT - pipe.bottomHeight, w: pipeHitW, h: pipe.bottomHeight })) hit = true;
+    if (bjRectsOverlap(birdBox, { x: pipeHitX, y: 0, w: pipeHitW, h: pipe.topHeight })) hit = true;
   });
 
   bjPipes = bjPipes.filter(p => p.x + BJ_PIPE_WIDTH > -5);
