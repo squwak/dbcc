@@ -245,6 +245,12 @@ h1,h2,h3{margin-top:0}
 .levelUpSellCard{background:#10243d;border-radius:15px;padding:10px;text-align:center;position:relative}
 .levelUpSellCard img{width:100%;aspect-ratio:1/1.35;object-fit:contain;background:#091a2d;border-radius:10px;cursor:pointer}
 
+.bundleBuzzCard{background:linear-gradient(135deg,#3a2f6b,#1c1740);border-radius:18px;padding:20px;text-align:center;max-width:430px;margin:0 auto 20px}
+.bundleBuzzContents{text-align:left;background:rgba(0,0,0,.2);border-radius:12px;padding:12px 16px;margin:12px 0}
+.bundleBuzzContents li{margin:4px 0}
+.bundleBuzzBuyButton{width:100%;background:#caa000;color:#1c1740;font-size:17px}
+.coinBackBanner{background:linear-gradient(135deg,#caa000,#7a5c00);border-radius:15px;padding:12px 16px;margin-bottom:12px;text-align:center;font-weight:bold}
+
 @media(max-width:650px){
 .tradeColumns{grid-template-columns:1fr}
 .topBar{flex-wrap:nowrap}
@@ -361,7 +367,7 @@ h1,h2,h3{margin-top:0}
     </div>
     <h2 class="shopSection">Daily Doll</h2>
     <div id="dailyShop"></div>
-    <h2 class="shopSection">Coins → Dolb</h2>
+    <h2 class="shopSection" id="dolbDealsHeader">Coins → Dolb</h2>
     <div id="dolbDeals" class="dealGrid"></div>
     <h2 class="shopSection">Battle Items</h2>
     <div id="itemsShopArea"></div>
@@ -522,11 +528,12 @@ const BATTLE_HP = 100;
 
 /* ===== TEMPORARY BUZZY EVENT (Sep 28, 2026 - Dec 1, 2026) =====
    Everything under this event -- Buzzy Points, the event shop, the four
-   color variants, the Golden Buzzy redemption, and the EVENT tabs in DEX
-   and Collection -- is only active while isEventActive() is true. Outside
-   that window the game behaves exactly as it did before this event was
-   added (Buzzy Jump pays Dolb, no event shop, no event tabs). Uses the
-   device's local clock, same as the rest of the game (see getTodayString). */
+   color variants, the Golden Buzzy redemption, Bundle Buzz, and the EVENT
+   tabs in DEX and Collection -- is only active while isEventActive() is
+   true. Outside that window the game behaves exactly as it did before this
+   event was added (Buzzy Jump pays Dolb, no event shop, no event tabs).
+   Uses the device's local clock, same as the rest of the game (see
+   getTodayString). */
 
 const EVENT_START = new Date(2026, 8, 28, 0, 0, 0);  // Sep 28, 2026 00:00 local
 const EVENT_END = new Date(2026, 11, 1, 23, 59, 59);  // Dec 1, 2026 23:59:59 local
@@ -544,16 +551,45 @@ function isEventActive() {
 
 const BOSS_START = new Date(2026, 10, 1, 0, 0, 0);   // Nov 1, 2026 00:00 local
 const BUZZY_BOSS_LEVEL = 75;
-const BUZZY_BOSS_REWARD_COINS = 300;
-const BUZZY_BOSS_REWARD_DOLB = 40;
-const BUZZY_BOSS_REWARD_BUZZY_POINTS = 100;
+const BUZZY_BOSS_REWARD_COINS = 500;
+const BUZZY_BOSS_REWARD_DOLB = 20;
+const BUZZY_BOSS_REWARD_BUZZY_POINTS = 50;
 
 function isBossActive() {
   const now = new Date();
   return now >= BOSS_START && now <= EVENT_END;
 }
 
-const BUZZY_PACK_PRICE = 15; // Buzzy Points per pack
+const BUZZY_PACK_PRICE = 25; // Buzzy Points per pack
+
+/* ===== COIN BACK (every month, the 4th through the 7th) =====
+   A recurring (not event-tied) shop promo: for those four days, the
+   "Coins -> Dolb" deals in the shop flip into "Dolb -> Coins" deals at the
+   same numeric pairs, just reversed. Purely a date-of-month check, so it
+   repeats every month regardless of year. */
+
+function isCoinBackActive() {
+  const day = new Date().getDate();
+  return day >= 4 && day <= 7;
+}
+
+const coinBackDeals = [
+  { dolb: 10, coins: 30 },
+  { dolb: 25, coins: 50 },
+  { dolb: 75, coins: 100 },
+  { dolb: 150, coins: 150 }
+];
+
+/* ===== BUNDLE BUZZ (event shop, Sep 28 - Dec 1, 2026) =====
+   A one-off bundle: 3 Buzzy Packs (random color variants) + 1 regular pack
+   (3 random dolls, same as Home's Open a Pack) + 1 base Buzzy doll + 200
+   bonus coins, for 300 Dolb. Once bought, it goes on a 2-day cooldown
+   before it can be bought again (tracked via lastBundleBuzzPurchase, an
+   epoch-ms timestamp saved to the player doc). */
+
+const BUNDLE_BUZZ_PRICE = 300; // Dolb
+const BUNDLE_BUZZ_COOLDOWN_MS = 2 * 24 * 60 * 60 * 1000; // 2 days
+const BUNDLE_BUZZ_BONUS_COINS = 200;
 
 // Kept separate from the main `cards` array on purpose: weightedRandomCard(),
 // the normal DOLLS/RARES dex tabs, dailyShopData, and the regular Collection
@@ -768,6 +804,8 @@ let dailyShopRerollCount = 0;
 let itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
 let cupcakeChargesLeft = 0;
 
+let lastBundleBuzzPurchase = 0; // epoch ms, 0 = never bought
+
 let collectionTab = "all";
 let dexTab = "dolls";
 
@@ -935,6 +973,7 @@ window.playOffline = () => {
   itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
   cupcakeChargesLeft = 0;
   dailyShopRerollCount = 0;
+  lastBundleBuzzPurchase = 0;
 
   activeTrade = null;
   selectedTradeCards = [];
@@ -1062,6 +1101,7 @@ async function loadPlayerData() {
     itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
     cupcakeChargesLeft = 0;
     dailyShopRerollCount = 0;
+    lastBundleBuzzPurchase = 0;
 
     await setDoc(ref, {
       money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
@@ -1069,7 +1109,7 @@ async function loadPlayerData() {
       playerLevel, playerLevelWins,
       easyBotLevel, easyBotWins,
       hardBotLevel, hardBotWins,
-      itemInventory, cupcakeChargesLeft
+      itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase
     });
   } else {
     const data = snap.data();
@@ -1101,6 +1141,7 @@ async function loadPlayerData() {
       ? { doubleOrNothing: 0, cupcake: 0, greedy: 0, ...data.itemInventory }
       : { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
     cupcakeChargesLeft = typeof data.cupcakeChargesLeft === "number" ? Math.max(0, data.cupcakeChargesLeft) : 0;
+    lastBundleBuzzPurchase = typeof data.lastBundleBuzzPurchase === "number" ? Math.max(0, data.lastBundleBuzzPurchase) : 0;
   }
 
   if (!username) await askForUsername();
@@ -1122,7 +1163,7 @@ async function savePlayerData() {
     playerLevel, playerLevelWins,
     easyBotLevel, easyBotWins,
     hardBotLevel, hardBotWins,
-    itemInventory, cupcakeChargesLeft
+    itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase
   }, { merge: true });
 }
 
@@ -1287,6 +1328,7 @@ window.resetAccount = async () => {
   hardBotWins = 0;
   itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
   cupcakeChargesLeft = 0;
+  lastBundleBuzzPurchase = 0;
 
   await savePlayerData();
   updateUI();
@@ -1431,6 +1473,7 @@ window.rerollDailyShop = async () => {
 function renderShop() {
   const daily = document.getElementById("dailyShop");
   const deals = document.getElementById("dolbDeals");
+  const dealsHeader = document.getElementById("dolbDealsHeader");
   const date = document.getElementById("shopDate");
 
   if (!daily || !deals) return;
@@ -1487,23 +1530,66 @@ function renderShop() {
     `;
   }
 
+  const coinBack = isCoinBackActive();
+
+  if (dealsHeader) dealsHeader.textContent = coinBack ? "🪙 Coin Back! Dolb → Coins" : "Coins → Dolb";
+
   deals.innerHTML = "";
-  dolbDeals.forEach(deal => {
-    const div = document.createElement("div");
-    div.className = "dealBox";
-    div.innerHTML = `
-      <div class="dealTitle">${deal.coins} Coins</div>
-      <div class="dealArrow">↓</div>
-      <div style="font-size:20px;font-weight:bold;color:#d0b5ff">${deal.dolb} Dolb</div>
-      <p>Spend ${deal.coins} Coins to receive ${deal.dolb} Dolb.</p>
-      <button class="dealButton" onclick="buyDolbDeal(${deal.coins},${deal.dolb})">BUY FOR ${deal.coins} COINS</button>
-    `;
-    deals.appendChild(div);
-  });
+
+  if (coinBack) {
+    const banner = document.createElement("div");
+    banner.className = "coinBackBanner";
+    banner.textContent = "🪙 Coin Back is live! (Every month, the 4th-7th) Trade Dolb for Coins below.";
+    deals.appendChild(banner);
+
+    coinBackDeals.forEach(deal => {
+      const div = document.createElement("div");
+      div.className = "dealBox";
+      div.innerHTML = `
+        <div class="dealTitle">${deal.dolb} Dolb</div>
+        <div class="dealArrow">↓</div>
+        <div style="font-size:20px;font-weight:bold;color:#7ee7a7">${deal.coins} Coins</div>
+        <p>Spend ${deal.dolb} Dolb to receive ${deal.coins} Coins.</p>
+        <button class="dealButton" ${dolb < deal.dolb ? "disabled" : ""} onclick="buyCoinBackDeal(${deal.dolb},${deal.coins})">BUY FOR ${deal.dolb} DOLB</button>
+      `;
+      deals.appendChild(div);
+    });
+  } else {
+    dolbDeals.forEach(deal => {
+      const div = document.createElement("div");
+      div.className = "dealBox";
+      div.innerHTML = `
+        <div class="dealTitle">${deal.coins} Coins</div>
+        <div class="dealArrow">↓</div>
+        <div style="font-size:20px;font-weight:bold;color:#d0b5ff">${deal.dolb} Dolb</div>
+        <p>Spend ${deal.coins} Coins to receive ${deal.dolb} Dolb.</p>
+        <button class="dealButton" ${money < deal.coins ? "disabled" : ""} onclick="buyDolbDeal(${deal.coins},${deal.dolb})">BUY FOR ${deal.coins} COINS</button>
+      `;
+      deals.appendChild(div);
+    });
+  }
 
   renderItemsShop();
   renderEventShop();
 }
+
+window.buyCoinBackDeal = async (dolbCost, coinsGain) => {
+  if (!isCoinBackActive()) {
+    showMessage("Coin Back isn't running right now.");
+    return;
+  }
+  if (dolb < dolbCost) {
+    showMessage("Not enough Dolb.");
+    return;
+  }
+
+  dolb -= dolbCost;
+  money += coinsGain;
+
+  await savePlayerData();
+  updateUI();
+  showMessage("You received " + coinsGain + " coins!");
+};
 
 /* ===== BATTLE ITEMS SHOP ===== */
 
@@ -1583,6 +1669,20 @@ function getEventVariantCount(name) {
   return collection.filter(c => c.name === name).length;
 }
 
+function getBundleBuzzCooldownRemaining() {
+  if (!lastBundleBuzzPurchase) return 0;
+  const elapsed = Date.now() - lastBundleBuzzPurchase;
+  return Math.max(0, BUNDLE_BUZZ_COOLDOWN_MS - elapsed);
+}
+
+function formatCooldown(ms) {
+  const totalMinutes = Math.ceil(ms / 60000);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  return `${minutes}m`;
+}
+
 function renderEventShop() {
   const area = document.getElementById("eventShopArea");
   if (!area) return;
@@ -1599,6 +1699,7 @@ function renderEventShop() {
 
   const variants = eventCards.filter(c => c.eventVariant !== "golden");
   const haveAllColors = variants.every(v => getEventVariantCount(v.name) > 0);
+  const cooldownLeft = getBundleBuzzCooldownRemaining();
 
   area.innerHTML = `
     <div class="eventHeaderBox">
@@ -1606,6 +1707,23 @@ function renderEventShop() {
       <p>Buzzy Jump pays out Buzzy Points instead of Dolb during the event. Spend them here!</p>
       <div class="eventCountdown">${getEventCountdownText()}</div>
       ${isBossActive() ? '<div class="eventCountdown">🐝 The Buzzy Boss has appeared! Check the Battle page.</div>' : ""}
+    </div>
+
+    <div class="bundleBuzzCard">
+      <h3>🎁 Bundle Buzz</h3>
+      <div class="bundleBuzzContents">
+        <li>3x Buzzy Packs</li>
+        <li>1x Regular Pack (3 dolls)</li>
+        <li>1x Buzzy (base doll)</li>
+        <li>+${BUNDLE_BUZZ_BONUS_COINS} Coins</li>
+      </div>
+      <div class="shopPrice">${BUNDLE_BUZZ_PRICE} Dolb</div>
+      ${cooldownLeft > 0
+        ? `<button class="bundleBuzzBuyButton" disabled>AVAILABLE AGAIN IN ${formatCooldown(cooldownLeft)}</button>`
+        : dolb < BUNDLE_BUZZ_PRICE
+          ? '<button class="bundleBuzzBuyButton" disabled>NOT ENOUGH DOLB</button>'
+          : `<button class="bundleBuzzBuyButton" onclick="buyBundleBuzz()">BUY BUNDLE BUZZ</button>`}
+      <p class="eventCardNote">One purchase every 2 days.</p>
     </div>
 
     <div class="buzzyPackCard">
@@ -1637,6 +1755,53 @@ function renderEventShop() {
     </div>
   `;
 }
+
+window.buyBundleBuzz = async () => {
+  if (!isEventActive()) {
+    showMessage("The Buzzy event isn't running right now.");
+    return;
+  }
+  if (getBundleBuzzCooldownRemaining() > 0) {
+    showMessage("Bundle Buzz is still on cooldown.");
+    return;
+  }
+  if (dolb < BUNDLE_BUZZ_PRICE) {
+    showMessage("Not enough Dolb.");
+    return;
+  }
+
+  dolb -= BUNDLE_BUZZ_PRICE;
+
+  const pulled = [];
+
+  for (let i = 0; i < 3; i++) {
+    const variantName = weightedRandomBuzzyVariant();
+    const copy = createCardCopy(variantName);
+    collection.push(copy);
+    pulled.push({ ...getCard(variantName), copyId: copy.id });
+  }
+
+  for (let i = 0; i < 3; i++) {
+    const card = weightedRandomCard();
+    const copy = createCardCopy(card.name);
+    collection.push(copy);
+    pulled.push({ ...card, copyId: copy.id });
+  }
+
+  const buzzyCard = getCard("Buzzy");
+  const buzzyCopy = createCardCopy("Buzzy");
+  collection.push(buzzyCopy);
+  pulled.push({ ...buzzyCard, copyId: buzzyCopy.id });
+
+  money += BUNDLE_BUZZ_BONUS_COINS;
+  lastBundleBuzzPurchase = Date.now();
+
+  await savePlayerData();
+  updateUI();
+
+  showPackResults(pulled);
+  showMessage("Bundle Buzz opened! +" + BUNDLE_BUZZ_BONUS_COINS + " coins too.");
+};
 
 window.buyBuzzyPack = async () => {
   if (!isEventActive()) {
@@ -3218,15 +3383,6 @@ function renderBattleHome() {
 function renderBattleItemPicker() {
   const area = document.getElementById("battleItemPickerArea");
   if (!area) return;
-
-  if (cupcakeChargesLeft > 0 && battleSelectedItem !== "cupcake") {
-    // Cupcake is a persistent buff -- while it's active it just keeps
-    // applying automatically, no need (or ability) to pick anything else
-    // to layer on top of it, but the player can still pick a *different*
-    // item id if they want the other item's effect this match (only one
-    // "match item" effect fires per battle; the cupcake damage boost still
-    // applies underneath regardless of what's picked below).
-  }
 
   area.innerHTML = `
     <div class="battleItemPicker">
