@@ -185,6 +185,11 @@ h1,h2,h3{margin-top:0}
 .moveType{font-size:14px;opacity:.8;margin-top:5px}
 .battleLog{background:#091a2d;border-radius:12px;padding:15px;margin-top:15px;min-height:70px}
 
+.moveChoiceRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.moveChoiceButton{flex:1;min-width:150px;background:#2674d9;color:white;text-align:center}
+.moveChoiceButton .moveChoiceName{font-size:16px;font-weight:bold;display:block}
+.moveChoiceButton .moveChoiceMeta{font-size:12px;opacity:.85;display:block;margin-top:3px}
+
 .battleResult{text-align:center;background:#183653;border-radius:18px;padding:25px;margin-top:20px}
 .winText{font-size:32px;font-weight:bold}
 .rewardText{font-size:22px;font-weight:bold;margin:15px}
@@ -730,7 +735,13 @@ function normalizeCollection(data) {
   }).filter(item => getCard(item.name));
 }
 
-/* ===== CARDS ===== */
+/* ===== CARDS =====
+   Every doll has a primary move (move/moveType/power). Two-type dolls also
+   get a second move (move2/move2Type/move2Power) of their OTHER type. The
+   second move's power is always 0.8x the primary move's power, rounded UP
+   (Math.ceil), so it's always a clean whole number. One-type dolls simply
+   have no second move -- see getCardMoves() below, which is what all
+   battle code reads instead of the raw fields directly. */
 
 const cards = [
   { name: "Baby Pickels", image: "baby pikels.png", weight: 14, price: 5, rarity: "doll", type: ["Grass"], move: "Baby Food", moveType: "Grass", power: 50 },
@@ -739,17 +750,39 @@ const cards = [
   { name: "Will", image: "will.png", weight: 9, price: 7, rarity: "doll", type: ["Water"], move: "Big Splash", moveType: "Water", power: 62 },
   { name: "Waffle", image: "waffle.png", weight: 14, price: 5, rarity: "doll", type: ["Fire"], move: "Tasty Fire", moveType: "Fire", power: 50 },
   { name: "Cute Cake", image: "cute cake.png", weight: 9, price: 7, rarity: "doll", type: ["Fire"], move: "Delicuse", moveType: "Fire", power: 60 },
-  { name: "Buttyr", image: "buttyr.png", weight: 20, price: 7, rarity: "doll", type: ["Flying","Rock"], move: "Hard Wing", moveType: "Flying", power: 55 },
-  { name: "Blossem", image: "blossem.png", weight: 20, price: 7, rarity: "doll", type: ["Flying","Fairy"], move: "Flying Cuteness", moveType: "Flying", power: 55 },
-  { name: "Buzzy", image: "buzzy.png", weight: 5, price: 12, rarity: "doll", type: ["Flying","Fairy"], move: "Flying Hat", moveType: "Flying", power: 65 },
+  { name: "Buttyr", image: "buttyr.png", weight: 20, price: 7, rarity: "doll", type: ["Flying","Rock"], move: "Wing Attack", moveType: "Flying", power: 55, move2: "Hard Wing", move2Type: "Rock", move2Power: 44 },
+  { name: "Blossem", image: "blossem.png", weight: 20, price: 7, rarity: "doll", type: ["Flying","Fairy"], move: "Flying Bee", moveType: "Flying", power: 55, move2: "Flying Cuteness", move2Type: "Fairy", move2Power: 44 },
+  { name: "Buzzy", image: "buzzy.png", weight: 5, price: 12, rarity: "doll", type: ["Flying","Fairy"], move: "Flying Bumble Bee", moveType: "Flying", power: 65, move2: "Flying Magic Hat", move2Type: "Fairy", move2Power: 52 },
   { name: "Nico", image: "nico.png", weight: 20, price: 3, rarity: "doll", type: ["Flying"], move: "Beak Attack", moveType: "Flying", power: 52 },
-  { name: "Choper", image: "choper.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Hand Combat", moveType: "Fighting", power: 57 },
-  { name: "Bullet", image: "bullet.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Tail Combat", moveType: "Fighting", power: 62 },
-  { name: "Turkmoon", image: "turkmoon.png", weight: 8, price: 8, rarity: "doll", type: ["Fire","Flying"], move: "Fire Bird", moveType: "Fire", power: 58 },
+  { name: "Choper", image: "choper.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Small Bite", moveType: "Normal", power: 57, move2: "Hand Combat", move2Type: "Fighting", move2Power: 46 },
+  { name: "Bullet", image: "bullet.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Big Bite", moveType: "Normal", power: 62, move2: "Tail Combat", move2Type: "Fighting", move2Power: 50 },
+  { name: "Turkmoon", image: "turkmoon.png", weight: 8, price: 8, rarity: "doll", type: ["Fire","Flying"], move: "Chicken Wings", moveType: "Fire", power: 58, move2: "Fire Bird", move2Type: "Flying", move2Power: 47 },
   { name: "Rem", image: "rem.png", weight: 12, price: 5, rarity: "doll", type: ["Normal"], move: "Good Elk", moveType: "Normal", power: 48 },
   { name: "Eep", image: "eep.png", weight: 5, price: 11, rarity: "doll", type: ["Normal"], move: "Super Elk", moveType: "Normal", power: 64 },
   { name: "King Eep", image: "king eep.png", weight: 0.675, price: 70, rarity: "rare", type: ["Normal"], move: "King Elk", moveType: "Normal", power: 140 }
 ];
+
+// Returns every usable move for a card, as {name, moveType, power} objects.
+// One-type dolls return a single-item array (their only move). Two-type
+// dolls return two: their primary move first, then their secondary move
+// (0.8x power, rounded up, of their other type).
+function getCardMoves(card) {
+  const moves = [{ name: card.move, moveType: card.moveType, power: card.power }];
+  if (card.move2) {
+    moves.push({ name: card.move2, moveType: card.move2Type, power: card.move2Power });
+  }
+  return moves;
+}
+
+// A short "Name/Name • Power X/Y" summary line for a card+copy, used
+// anywhere a doll's move info needs to be shown at a glance. One-type
+// dolls just show their single move/power with no slash.
+function getMovesSummaryText(card, copy) {
+  const moves = getCardMoves(card);
+  const names = moves.map(m => m.name).join("/");
+  const powers = moves.map(m => getBattlePower(m, copy)).join("/");
+  return `${names} • Power ${powers}`;
+}
 
 /* ===== DAILY SHOP ===== */
 
@@ -3236,8 +3269,11 @@ function getBattleMaxHP(copy) {
   return BATTLE_HP + getCopyLevel(copy) * 10;
 }
 
-function getBattlePower(baseCard, copy) {
-  return baseCard.power + getCopyLevel(copy);
+// Accepts anything with a .power field -- a full card (using its primary
+// move's power) or a specific move object from getCardMoves(). Both shapes
+// carry .power, so this works unchanged either way.
+function getBattlePower(moveLike, copy) {
+  return moveLike.power + getCopyLevel(copy);
 }
 
 function getBattleCollectionCopies() {
@@ -3320,6 +3356,14 @@ function addBotWin(difficulty) {
 // backward-compatible save data, they just no longer drive battle stats.
 function makeBotCopy(card, matchLevel) {
   return { id: "BOT_" + createCardId(), name: card.name, traded: false, level: matchLevel, levelWins: 0 };
+}
+
+// A simple move-picking AI shared by bots and the boss: picks uniformly at
+// random among whatever moves the card actually has (1 for single-type,
+// 2 for dual-type).
+function pickAiMove(card) {
+  const moves = getCardMoves(card);
+  return moves[Math.floor(Math.random() * moves.length)];
 }
 
 function renderBattleRankInfo() {
@@ -3469,7 +3513,6 @@ function renderBattleChoice() {
     const level = getCopyLevel(copy);
     const wins = getCopyWins(copy);
     const hp = getBattleMaxHP(copy);
-    const power = getBattlePower(card, copy);
     const fav = favorites.includes(copy.name);
 
     const div = document.createElement("div");
@@ -3485,7 +3528,7 @@ function renderBattleChoice() {
       <div class="battleLevelBadge">LEVEL ${level}</div>
       <div class="battleStats">
         HP: ${hp}<br>
-        ${escapeHtml(card.move)} Power: ${power}<br>
+        ${getMovesSummaryText(card, copy)}<br>
         Wins: ${formatWinsDisplay(wins)}/${winsNeededForLevel(level)}
       </div>
     `;
@@ -3611,11 +3654,14 @@ function chooseHardBotCard(playerCard) {
   return chooseEasyBotCard();
 }
 
-function calculateBattleDamage(attacker, attackerCopy, defender, defenderCopy, applyCupcake = false) {
-  const effectiveness = getTypeMultiplier(attacker.moveType, defender.type);
-  const stab = attacker.type.includes(attacker.moveType) ? 1.15 : 1;
+// attackerCard/defenderCard are the doll cards (for .type, used in STAB and
+// defending-type lookups). attackerMove is the specific move object being
+// used this turn (from getCardMoves()), with its own moveType and power.
+function calculateBattleDamage(attackerCard, attackerMove, attackerCopy, defenderCard, defenderCopy, applyCupcake = false) {
+  const effectiveness = getTypeMultiplier(attackerMove.moveType, defenderCard.type);
+  const stab = attackerCard.type.includes(attackerMove.moveType) ? 1.15 : 1;
   const random = .9 + Math.random() * .15;
-  const power = getBattlePower(attacker, attackerCopy);
+  const power = getBattlePower(attackerMove, attackerCopy);
   const cupcakeMultiplier = applyCupcake ? 1.75 : 1;
   const damage = Math.max(1, Math.round(power * effectiveness * stab * random * cupcakeMultiplier));
   return { damage, effectiveness };
@@ -3631,7 +3677,6 @@ function battleCardHTML(card, copy, hp, name, pic) {
   const maxHP = getBattleMaxHP(copy);
   const hpPercent = Math.max(0, Math.min(100, (hp / maxHP) * 100));
   const level = getCopyLevel(copy);
-  const power = getBattlePower(card, copy);
 
   return `
     <div class="battlePlayer">
@@ -3646,12 +3691,54 @@ function battleCardHTML(card, copy, hp, name, pic) {
       <div style="text-align:center;margin:12px">
         <img class="battleCardImage" src="${escapeHtml(card.image)}" alt="${escapeHtml(card.name)}">
         <div class="cardName">${escapeHtml(card.name)}</div>
-        <div class="signatureMove">${escapeHtml(card.move)} • Power ${power}</div>
+        <div class="signatureMove">${getMovesSummaryText(card, copy)}</div>
       </div>
       <div class="hpBar"><div class="hpFill" style="width:${hpPercent}%"></div></div>
       <div class="hpText">HP: ${Math.max(0, hp)} / ${maxHP}</div>
     </div>
   `;
+}
+
+// Builds the "choose a move" block for the player's active card and wires
+// up onclick handlers via onMoveChosen(move). One-type dolls get a single
+// full-width "USE X" button (same as before); two-type dolls get one
+// button per move, each labeled with its own name, type and power.
+function renderMoveChoiceHTML(card, copy) {
+  const moves = getCardMoves(card);
+
+  if (moves.length === 1) {
+    const move = moves[0];
+    const power = getBattlePower(move, copy);
+    return `
+      <div class="battleMove">
+        <div class="moveName">${escapeHtml(move.name)}</div>
+        <div class="moveType">${escapeHtml(move.moveType)} Type Move • Power ${power}</div>
+        <button class="battleStartButton" id="useMoveButton0">USE ${escapeHtml(move.name).toUpperCase()}</button>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="battleMove">
+      <h3>Choose Your Move</h3>
+      <div class="moveChoiceRow">
+        ${moves.map((move, idx) => `
+          <button class="battleStartButton moveChoiceButton" id="useMoveButton${idx}">
+            <span class="moveChoiceName">${escapeHtml(move.name)}</span>
+            <span class="moveChoiceMeta">${escapeHtml(move.moveType)} • Power ${getBattlePower(move, copy)}</span>
+          </button>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function bindMoveChoiceButtons(card, onMoveChosen) {
+  const moves = getCardMoves(card);
+  moves.forEach((move, idx) => {
+    const btn = document.getElementById("useMoveButton" + idx);
+    if (btn) btn.onclick = () => onMoveChosen(move);
+  });
 }
 
 function showLocalBotBattle(playerCopy, botCard) {
@@ -3682,22 +3769,16 @@ function showLocalBotBattle(playerCopy, botCard) {
         <div class="battleVs">VS</div>
         ${battleCardHTML(playerCard, playerCopy, playerHP, username, profilePic)}
       </div>
-      <div class="battleMove">
-        <div class="moveName">${escapeHtml(playerCard.move)}</div>
-        <div class="moveType">${escapeHtml(playerCard.moveType)} Type Move</div>
-        <button class="battleStartButton" id="useMoveButton">USE ${escapeHtml(playerCard.move).toUpperCase()}</button>
-      </div>
+      ${renderMoveChoiceHTML(playerCard, playerCopy)}
       <div class="battleLog" id="battleLog">Your turn!</div>
     `;
 
-    const btn = document.getElementById("useMoveButton");
-
-    btn.onclick = () => {
+    bindMoveChoiceButtons(playerCard, playerMove => {
       if (!playerTurn) return;
       playerTurn = false;
-      btn.disabled = true;
+      document.querySelectorAll("#battleArena .moveChoiceButton, #battleArena .battleMove .battleStartButton").forEach(b => b.disabled = true);
 
-      const result = calculateBattleDamage(playerCard, playerCopy, botCard, botCopy, usingCupcake);
+      const result = calculateBattleDamage(playerCard, playerMove, playerCopy, botCard, botCopy, usingCupcake);
       botHP = Math.max(0, botHP - result.damage);
 
       if (botHP <= 0) {
@@ -3709,16 +3790,17 @@ function showLocalBotBattle(playerCopy, botCard) {
       render();
 
       const log = document.getElementById("battleLog");
-      log.innerHTML = `You used <b>${escapeHtml(playerCard.move)}</b>!<br>You dealt <b>${result.damage}</b> damage. ${battleEffectivenessText(result.effectiveness)}`;
+      log.innerHTML = `You used <b>${escapeHtml(playerMove.name)}</b>!<br>You dealt <b>${result.damage}</b> damage. ${battleEffectivenessText(result.effectiveness)}`;
 
       setTimeout(() => {
-        const result2 = calculateBattleDamage(botCard, botCopy, playerCard, playerCopy, false);
+        const botMove = pickAiMove(botCard);
+        const result2 = calculateBattleDamage(botCard, botMove, botCopy, playerCard, playerCopy, false);
         playerHP = Math.max(0, playerHP - result2.damage);
 
         render();
 
         const log2 = document.getElementById("battleLog");
-        log2.innerHTML = `${escapeHtml(botCard.name)} used <b>${escapeHtml(botCard.move)}</b>!<br>It dealt <b>${result2.damage}</b> damage. ${battleEffectivenessText(result2.effectiveness)}`;
+        log2.innerHTML = `${escapeHtml(botCard.name)} used <b>${escapeHtml(botMove.name)}</b>!<br>It dealt <b>${result2.damage}</b> damage. ${battleEffectivenessText(result2.effectiveness)}`;
 
         if (playerHP <= 0) {
           finishBotBattle(false, playerCopy, botCopy, usedItem);
@@ -3732,7 +3814,7 @@ function showLocalBotBattle(playerCopy, botCard) {
           log3.textContent = "Your turn!";
         }, 650);
       }, 650);
-    };
+    });
   }
 
   render();
@@ -3883,22 +3965,16 @@ function showLocalFriendBattle(playerCopy, friendCopy) {
         <div class="battleVs">VS</div>
         ${battleCardHTML(playerCard, playerCopy, playerHP, username, profilePic)}
       </div>
-      <div class="battleMove">
-        <div class="moveName">${escapeHtml(playerCard.move)}</div>
-        <div class="moveType">${escapeHtml(playerCard.moveType)} Type Move</div>
-        <button class="battleStartButton" id="useMoveButton">USE ${escapeHtml(playerCard.move).toUpperCase()}</button>
-      </div>
+      ${renderMoveChoiceHTML(playerCard, playerCopy)}
       <div class="battleLog" id="battleLog">Your turn!</div>
     `;
 
-    const btn = document.getElementById("useMoveButton");
-
-    btn.onclick = () => {
+    bindMoveChoiceButtons(playerCard, playerMove => {
       if (!playerTurn) return;
       playerTurn = false;
-      btn.disabled = true;
+      document.querySelectorAll("#battleArena .moveChoiceButton, #battleArena .battleMove .battleStartButton").forEach(b => b.disabled = true);
 
-      const result = calculateBattleDamage(playerCard, playerCopy, friendCard, friendCopy, usingCupcake);
+      const result = calculateBattleDamage(playerCard, playerMove, playerCopy, friendCard, friendCopy, usingCupcake);
       friendHP = Math.max(0, friendHP - result.damage);
 
       if (friendHP <= 0) {
@@ -3910,16 +3986,17 @@ function showLocalFriendBattle(playerCopy, friendCopy) {
       render();
 
       const log = document.getElementById("battleLog");
-      log.innerHTML = `You used <b>${escapeHtml(playerCard.move)}</b>!<br>You dealt <b>${result.damage}</b> damage. ${battleEffectivenessText(result.effectiveness)}`;
+      log.innerHTML = `You used <b>${escapeHtml(playerMove.name)}</b>!<br>You dealt <b>${result.damage}</b> damage. ${battleEffectivenessText(result.effectiveness)}`;
 
       setTimeout(() => {
-        const result2 = calculateBattleDamage(friendCard, friendCopy, playerCard, playerCopy, false);
+        const friendMove = pickAiMove(friendCard);
+        const result2 = calculateBattleDamage(friendCard, friendMove, friendCopy, playerCard, playerCopy, false);
         playerHP = Math.max(0, playerHP - result2.damage);
 
         render();
 
         const log2 = document.getElementById("battleLog");
-        log2.innerHTML = `${escapeHtml(friendCard.name)} used <b>${escapeHtml(friendCard.move)}</b>!<br>It dealt <b>${result2.damage}</b> damage. ${battleEffectivenessText(result2.effectiveness)}`;
+        log2.innerHTML = `${escapeHtml(friendCard.name)} used <b>${escapeHtml(friendMove.name)}</b>!<br>It dealt <b>${result2.damage}</b> damage. ${battleEffectivenessText(result2.effectiveness)}`;
 
         if (playerHP <= 0) {
           finishFriendBattle(false, playerCopy, friendCopy, usedItem);
@@ -3933,7 +4010,7 @@ function showLocalFriendBattle(playerCopy, friendCopy) {
           log3.textContent = "Your turn!";
         }, 650);
       }, 650);
-    };
+    });
   }
 
   render();
@@ -4095,7 +4172,6 @@ function renderBossChoice() {
     const card = getCard(copy.name);
     const level = getCopyLevel(copy);
     const hp = getBattleMaxHP(copy);
-    const power = getBattlePower(card, copy);
     const fav = favorites.includes(copy.name);
     const teamIndex = bossTeamSelected.indexOf(copy.id);
 
@@ -4121,7 +4197,7 @@ function renderBossChoice() {
       <div class="cardName">${escapeHtml(card.name)}</div>
       <div class="typeBadge">${card.type.join(" / ")}</div>
       <div class="battleLevelBadge">LEVEL ${level}</div>
-      <div class="battleStats">HP: ${hp}<br>${escapeHtml(card.move)} Power: ${power}</div>
+      <div class="battleStats">HP: ${hp}<br>${getMovesSummaryText(card, copy)}</div>
     `;
 
     grid.appendChild(div);
@@ -4177,25 +4253,20 @@ function showBossBattle(teamCopies) {
         <div class="battleVs">VS</div>
         ${battleCardHTML(playerCard, playerCopy, currentHP, username, profilePic)}
       </div>
-      <div class="battleMove">
-        <div class="moveName">${escapeHtml(playerCard.move)}</div>
-        <div class="moveType">${escapeHtml(playerCard.moveType)} Type Move</div>
-        <button class="battleStartButton" id="useMoveButton">USE ${escapeHtml(playerCard.move).toUpperCase()}</button>
-      </div>
+      ${renderMoveChoiceHTML(playerCard, playerCopy)}
       <div class="battleLog" id="battleLog">Your turn!</div>
     `;
 
-    const btn = document.getElementById("useMoveButton");
+    const playerCard2 = currentCard();
 
-    btn.onclick = () => {
+    bindMoveChoiceButtons(playerCard2, playerMove => {
       if (!playerTurn) return;
       playerTurn = false;
-      btn.disabled = true;
+      document.querySelectorAll("#battleArena .moveChoiceButton, #battleArena .battleMove .battleStartButton").forEach(b => b.disabled = true);
 
-      const playerCard2 = currentCard();
       const playerCopy2 = currentCopy();
 
-      const result = calculateBattleDamage(playerCard2, playerCopy2, bossCard, bossCopy, usingCupcake);
+      const result = calculateBattleDamage(playerCard2, playerMove, playerCopy2, bossCard, bossCopy, usingCupcake);
       bossHP = Math.max(0, bossHP - result.damage);
 
       if (bossHP <= 0) {
@@ -4206,15 +4277,16 @@ function showBossBattle(teamCopies) {
 
       render();
       const log = document.getElementById("battleLog");
-      log.innerHTML = `You used <b>${escapeHtml(playerCard2.move)}</b>!<br>You dealt <b>${result.damage}</b> damage. ${battleEffectivenessText(result.effectiveness)}`;
+      log.innerHTML = `You used <b>${escapeHtml(playerMove.name)}</b>!<br>You dealt <b>${result.damage}</b> damage. ${battleEffectivenessText(result.effectiveness)}`;
 
       setTimeout(() => {
-        const result2 = calculateBattleDamage(bossCard, bossCopy, playerCard2, playerCopy2, false);
+        const bossMove = pickAiMove(bossCard);
+        const result2 = calculateBattleDamage(bossCard, bossMove, bossCopy, playerCard2, playerCopy2, false);
         currentHP = Math.max(0, currentHP - result2.damage);
 
         render();
         const log2 = document.getElementById("battleLog");
-        log2.innerHTML = `Buzzy Boss used <b>${escapeHtml(bossCard.move)}</b>!<br>It dealt <b>${result2.damage}</b> damage. ${battleEffectivenessText(result2.effectiveness)}`;
+        log2.innerHTML = `Buzzy Boss used <b>${escapeHtml(bossMove.name)}</b>!<br>It dealt <b>${result2.damage}</b> damage. ${battleEffectivenessText(result2.effectiveness)}`;
 
         if (currentHP <= 0) {
           teamIndex++;
@@ -4242,7 +4314,7 @@ function showBossBattle(teamCopies) {
           log3.textContent = "Your turn!";
         }, 650);
       }, 650);
-    };
+    });
   }
 
   render();
