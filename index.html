@@ -785,10 +785,9 @@ function getMovesSummaryText(card, copy) {
    Category Pick: a themed doll pool (a type, a dex range, or a specific
    named evolution line). You can only BUY one ticket per day, but tickets
    stack in categoryPickInventory and can be USED anytime -- buying and
-   using are on separate limits on purpose. Using a ticket now picks a
-   RANDOM category for you (the player has no control over which one) and
-   shows 3 random dolls from that category's pool (or fewer if the pool is
-   smaller) to pick 1 from. */
+   using are on separate limits on purpose. Using a ticket shows 3 random
+   dolls from the chosen category's pool (or fewer if the pool is smaller)
+   and lets you pick 1. */
 
 function hasTypeCaseInsensitive(card, typeName) {
   return card.type.some(t => t.toLowerCase() === typeName.toLowerCase());
@@ -804,7 +803,7 @@ const CATEGORY_DEFS = [
   { id: "first10", name: "First 10 Dolls", desc: "The first 10 dolls in the DEX.", kind: "explicit", names: cards.filter(c => c.rarity !== "rare").slice(0, 10).map(c => c.name) },
   { id: "elkline", name: "Elk Evolution Line", desc: "Rem, Eep, and King Eep -- the Elk move evolution line.", kind: "explicit", names: ["Rem", "Eep", "King Eep"] },
   { id: "buzzline", name: "Buzzy & Blossem", desc: "Two dolls from the same Flying/Fairy evolution line.", kind: "explicit", names: ["Buzzy", "Blossem"] },
-  { id: "axline", name: "Ax Evolution Line", desc: "tax, ax, bucket of ax, and drimy -- the Ax evolution line.", kind: "explicit", names: ["tax", "ax", "bucket of ax", "drimy"] }
+  { id: "axline", name: "Ax Evolution Line", desc: "tax, ax, and bucket of ax -- the Ax evolution line.", kind: "explicit", names: ["tax", "ax", "bucket of ax"] }
 ];
 
 function getCategoryCardNames(catDef) {
@@ -842,7 +841,7 @@ function renderPackShop() {
       <div class="itemShopCard">
         <div class="itemEmoji">🗂️</div>
         <div class="itemName">Category Pick</div>
-        <p class="itemDesc">Buy a ticket for a themed pool (a type, or a specific evolution line). Tickets stack -- buy at most 1 per day, but use them whenever you like. Using a ticket picks a random category for you.</p>
+        <p class="itemDesc">Buy a ticket for a themed pool (a type, or a specific evolution line). Tickets stack -- buy at most 1 per day, but use them whenever you like.</p>
         <div class="itemOwnedCount">Tickets owned: ${categoryPickInventory}</div>
         <div class="shopPrice">${CATEGORY_PICK_PRICE} Coins</div>
         <button class="itemBuyButton" ${categoryBoughtToday || money < CATEGORY_PICK_PRICE ? "disabled" : ""} onclick="buyCategoryPickTicket()">
@@ -951,26 +950,55 @@ window.buyCategoryPickTicket = async () => {
   showMessage("Category Pick ticket purchased! Use it anytime from the Pack Shop.");
 };
 
-// Using a ticket no longer lets the player choose which category they get --
-// it picks a random category (among the ones with at least 1 eligible doll)
-// for them automatically, then goes straight to the 3-doll pick screen.
 window.useCategoryPickTicket = () => {
   if (categoryPickInventory <= 0) {
     showMessage("You don't have any Category Pick tickets.");
     return;
   }
 
-  const eligible = CATEGORY_DEFS.filter(catDef => getCategoryCardNames(catDef).length > 0);
-
-  if (!eligible.length) {
-    showMessage("No categories are available right now.");
-    return;
-  }
-
-  const catDef = eligible[Math.floor(Math.random() * eligible.length)];
-  showMessage("Your ticket rolled: " + catDef.name + "!");
-  showCategoryDollOptions(catDef);
+  showCategoryPickerOverlay();
 };
+
+function showCategoryPickerOverlay() {
+  const overlay = document.createElement("div");
+  Object.assign(overlay.style, {
+    position: "fixed", inset: "0", background: "rgba(0,0,0,.94)", zIndex: "4000",
+    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+    padding: "20px", overflowY: "auto", gap: "12px"
+  });
+
+  const title = document.createElement("h2");
+  title.textContent = "Choose a Category";
+  overlay.appendChild(title);
+
+  const list = document.createElement("div");
+  Object.assign(list.style, { display: "flex", flexDirection: "column", gap: "10px", width: "min(100%,500px)" });
+
+  CATEGORY_DEFS.forEach(catDef => {
+    const pool = getCategoryCardNames(catDef);
+    if (!pool.length) return;
+
+    const btn = document.createElement("button");
+    btn.className = "battleStartButton";
+    btn.style.textAlign = "left";
+    btn.innerHTML = `<b>${escapeHtml(catDef.name)}</b><br><span style="font-weight:normal;font-size:13px;opacity:.85">${escapeHtml(catDef.desc)}</span>`;
+    btn.onclick = () => {
+      overlay.remove();
+      showCategoryDollOptions(catDef);
+    };
+    list.appendChild(btn);
+  });
+
+  overlay.appendChild(list);
+
+  const cancel = document.createElement("button");
+  cancel.textContent = "CANCEL";
+  Object.assign(cancel.style, { background: "#9b2929", color: "white" });
+  cancel.onclick = () => overlay.remove();
+  overlay.appendChild(cancel);
+
+  document.body.appendChild(overlay);
+}
 
 function showCategoryDollOptions(catDef) {
   const pool = getCategoryCardNames(catDef);
@@ -1029,13 +1057,6 @@ function showCategoryDollOptions(catDef) {
   });
 
   overlay.appendChild(grid);
-
-  const cancel = document.createElement("button");
-  cancel.textContent = "CANCEL (keep your ticket)";
-  Object.assign(cancel.style, { marginTop: "20px", background: "#9b2929", color: "white" });
-  cancel.onclick = () => overlay.remove();
-  overlay.appendChild(cancel);
-
   document.body.appendChild(overlay);
 }
 
