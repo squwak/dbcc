@@ -349,7 +349,13 @@ h1,h2,h3{margin-top:0}
       <h1>Shop</h1>
       <p>Buy special daily dolls with Dolb.</p>
       <div class="shopDate">Daily shop changes every day. <span id="shopDate"></span></div>
-    </div>
+    </div> <h2 class="shopSection">Redeem Code</h2>
+<div class="itemShopCard" style="max-width:430px;margin:0 auto 20px">
+  <div class="itemEmoji">🎟️</div>
+  <p class="itemDesc">Enter a code to claim a reward. Each code can only be used once.</p>
+  <input id="redeemCodeInput" class="searchBox" type="text" autocomplete="off" placeholder="Enter code">
+  <button class="itemBuyButton" onclick="redeemCode()">REDEEM</button>
+</div>
     <h2 class="shopSection">Pack Shop</h2>
     <div id="packShopArea"></div>
     <h2 class="shopSection">Daily Doll</h2>
@@ -941,7 +947,7 @@ let itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
 let cupcakeChargesLeft = 0;
 
 let lastBundleBuzzPurchase = 0; // epoch ms, 0 = never bought
-
+let redeemedCodes = []; // codes this account has already redeemed
 let collectionTab = "all";
 let dexTab = "dolls";
 
@@ -1110,6 +1116,7 @@ window.playOffline = () => {
   cupcakeChargesLeft = 0;
   dailyShopRerollCount = 0;
   lastBundleBuzzPurchase = 0;
+  redeemedCodes = [];
 
   activeTrade = null;
   selectedTradeCards = [];
@@ -1236,6 +1243,7 @@ async function loadPlayerData() {
     itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
     cupcakeChargesLeft = 0;
     lastBundleBuzzPurchase = 0;
+    redeemedCodes = [];
 
     await setDoc(ref, {
       money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
@@ -1243,7 +1251,8 @@ async function loadPlayerData() {
       playerLevel, playerLevelWins,
       easyBotLevel, easyBotWins,
       hardBotLevel, hardBotWins,
-      itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase
+      itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase,
+      redeemedCodes
     });
   } else {
     const data = snap.data();
@@ -1276,6 +1285,7 @@ async function loadPlayerData() {
       : { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
     cupcakeChargesLeft = typeof data.cupcakeChargesLeft === "number" ? Math.max(0, data.cupcakeChargesLeft) : 0;
     lastBundleBuzzPurchase = typeof data.lastBundleBuzzPurchase === "number" ? Math.max(0, data.lastBundleBuzzPurchase) : 0;
+    redeemedCodes = Array.isArray(data.redeemedCodes) ? data.redeemedCodes : [];
   }
 
   if (!username) await askForUsername();
@@ -1297,7 +1307,8 @@ async function savePlayerData() {
     playerLevel, playerLevelWins,
     easyBotLevel, easyBotWins,
     hardBotLevel, hardBotWins,
-    itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase
+    itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase,
+    redeemedCodes
   }, { merge: true });
 }
 
@@ -1495,6 +1506,7 @@ window.resetAccount = async () => {
   itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
   cupcakeChargesLeft = 0;
   lastBundleBuzzPurchase = 0;
+  redeemedCodes = [];
 
   await savePlayerData();
   updateUI();
@@ -2081,6 +2093,49 @@ window.buyDolbDeal = async (coins, amountDolb) => {
   await savePlayerData();
   updateUI();
   showMessage("You received " + amountDolb + " Dolb!");
+};
+
+/* ===== REDEEM CODES =====
+   A flat map of code -> reward. Each code in `redeemedCodes` on the player
+   doc can only ever be applied once per account (checked below, and
+   persisted through savePlayerData() so it can't be reused by refreshing
+   or reopening the game). Codes are matched case-insensitively. */
+
+const redeemCodes = {
+  buzzyfyp: { coins: 0, dolb: 1000, cards: ["Buzzy"] }
+};
+
+window.redeemCode = async () => {
+  const input = document.getElementById("redeemCodeInput");
+  const code = input.value.trim().toLowerCase();
+
+  if (!code) { showMessage("Enter a code."); return; }
+
+  const reward = redeemCodes[code];
+  if (!reward) { showMessage("Invalid code."); return; }
+
+  if (redeemedCodes.includes(code)) {
+    showMessage("You already redeemed this code.");
+    return;
+  }
+
+  redeemedCodes.push(code);
+  money += reward.coins || 0;
+  dolb += reward.dolb || 0;
+
+  const pulled = [];
+  (reward.cards || []).forEach(name => {
+    const copy = createCardCopy(name);
+    collection.push(copy);
+    pulled.push({ ...getCard(name), copyId: copy.id });
+  });
+
+  await savePlayerData();
+  input.value = "";
+  updateUI();
+
+  if (pulled.length) showPackResults(pulled);
+  showMessage("Code redeemed!");
 };
 
 /* ===== PACKS ===== */
