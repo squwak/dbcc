@@ -288,7 +288,6 @@ h1,h2,h3{margin-top:0}
     <div class="dolbBox">Dolb: <span id="dolb">0</span></div>
     <div class="buzzyPointsBox hidden" id="buzzyPointsBoxWrap">Buzzy Points: <span id="buzzyPoints">0</span></div>
     <button onclick="showPage('battle')">BATTLE</button>
-    <button onclick="showPage('home')">HOME</button>
     <button onclick="showPage('shop')">SHOP</button>
     <button onclick="showPage('collection')">COLLECTION</button>
     <button onclick="showPage('dex')">DEX</button>
@@ -297,25 +296,6 @@ h1,h2,h3{margin-top:0}
     <button onclick="showPage('minigame')">MINIGAME</button>
     <button onclick="openSettings()">SETTINGS</button>
     <button class="logoutButton" onclick="logout()">LOG OUT</button>
-  </div>
-
-  <div id="homePage" class="page">
-    <div class="homeBox">
-      <div class="profileBox">
-        <img id="homeProfilePic" class="profilePic" src="basic_p.png">
-        <div class="profileInfo">
-          <div class="profileUsername" id="homeUsername"></div>
-          <div>Doll Ball Collector Cards</div>
-        </div>
-      </div>
-      <h1>Welcome!</h1>
-      <p>Google Account: <span id="accountEmail"></span></p>
-      <p>Username: <span class="username" id="usernameDisplay"></span></p>
-      <hr>
-      <h2>Open a Pack</h2>
-      <p>Cost: 15 coins<br>Cards: 3</p>
-      <button class="packButton" onclick="openPack()">OPEN PACK - 15 COINS</button>
-    </div>
   </div>
 
   <div id="battlePage" class="page hidden">
@@ -370,6 +350,8 @@ h1,h2,h3{margin-top:0}
       <p>Buy special daily dolls with Dolb.</p>
       <div class="shopDate">Daily shop changes every day. <span id="shopDate"></span></div>
     </div>
+    <h2 class="shopSection">Pack Shop</h2>
+    <div id="packShopArea"></div>
     <h2 class="shopSection">Daily Doll</h2>
     <div id="dailyShop"></div>
     <h2 class="shopSection" id="dolbDealsHeader">Coins → Dolb</h2>
@@ -463,6 +445,7 @@ h1,h2,h3{margin-top:0}
   <div id="settingsOverlay" class="settingsOverlay hidden">
     <div class="settingsBox">
       <h2>Settings</h2>
+      <p>Google Account: <span id="settingsAccountEmail"></span></p>
       <p>Username: <b id="settingsUsername"></b></p>
       <div style="text-align:center;margin:20px 0">
         <img id="settingsProfilePic" class="profilePic" src="basic_p.png">
@@ -526,6 +509,8 @@ const DEFAULT_PROFILE_PIC = "basic_p.png";
 const BUZZY_PROFILE_PIC = "buzzy_p.png";
 
 const PACK_PRICE = 15;
+const PICK_PACK_PRICE = 50;
+const CATEGORY_PICK_PRICE = 30;
 const STARTING_COINS = 75;
 const STARTING_DOLB = 0;
 
@@ -790,6 +775,295 @@ function getMovesSummaryText(card, copy) {
   const names = moves.map(m => m.name).join("/");
   const powers = moves.map(m => getBattlePower(m, copy)).join("/");
   return `${names} • Power ${powers}`;
+}
+
+/* ===== PACK SHOP: PICK PACK + CATEGORY PICK =====
+   Pick Pack: pay coins, see 3 random non-event dolls, keep only the one you
+   choose (the other 2 are not added to your collection).
+
+   Category Pick: a themed doll pool (a type, a dex range, or a specific
+   named evolution line). You can only BUY one ticket per day, but tickets
+   stack in categoryPickInventory and can be USED anytime -- buying and
+   using are on separate limits on purpose. Using a ticket shows 3 random
+   dolls from the chosen category's pool (or fewer if the pool is smaller)
+   and lets you pick 1. */
+
+function hasTypeCaseInsensitive(card, typeName) {
+  return card.type.some(t => t.toLowerCase() === typeName.toLowerCase());
+}
+
+const CATEGORY_DEFS = [
+  { id: "water", name: "Water Types", desc: "Any doll with the Water type.", kind: "typeFilter", typeName: "water" },
+  { id: "fire", name: "Fire Types", desc: "Any doll with the Fire type.", kind: "typeFilter", typeName: "fire" },
+  { id: "grass", name: "Grass Types", desc: "Any doll with the Grass type.", kind: "typeFilter", typeName: "grass" },
+  { id: "flying", name: "Flying Types", desc: "Any doll with the Flying type.", kind: "typeFilter", typeName: "flying" },
+  { id: "normal", name: "Normal Types", desc: "Any doll with the Normal type.", kind: "typeFilter", typeName: "normal" },
+  { id: "fighting", name: "Fighting Types", desc: "Any doll with the Fighting type.", kind: "typeFilter", typeName: "fighting" },
+  { id: "first10", name: "First 10 Dolls", desc: "The first 10 dolls in the DEX.", kind: "explicit", names: cards.filter(c => c.rarity !== "rare").slice(0, 10).map(c => c.name) },
+  { id: "elkline", name: "Elk Evolution Line", desc: "Rem, Eep, and King Eep -- the Elk move evolution line.", kind: "explicit", names: ["Rem", "Eep", "King Eep"] },
+  { id: "buzzline", name: "Buzzy & Blossem", desc: "Two dolls from the same Flying/Fairy evolution line.", kind: "explicit", names: ["Buzzy", "Blossem"] },
+  { id: "axline", name: "Ax Evolution Line", desc: "tax, ax, and bucket of ax -- the Ax evolution line.", kind: "explicit", names: ["tax", "ax", "bucket of ax"] }
+];
+
+function getCategoryCardNames(catDef) {
+  if (catDef.kind === "typeFilter") {
+    return cards.filter(c => c.rarity !== "event" && hasTypeCaseInsensitive(c, catDef.typeName)).map(c => c.name);
+  }
+  return catDef.names.filter(name => {
+    const c = getCard(name);
+    return c && c.rarity !== "event";
+  });
+}
+
+function renderPackShop() {
+  const area = document.getElementById("packShopArea");
+  if (!area) return;
+
+  const categoryBoughtToday = lastCategoryPickPurchaseDate === getTodayString();
+
+  area.innerHTML = `
+    <div class="itemShopGrid">
+      <div class="itemShopCard">
+        <div class="itemEmoji">🎴</div>
+        <div class="itemName">Regular Pack</div>
+        <p class="itemDesc">3 random dolls, weighted by rarity. You keep all 3.</p>
+        <div class="shopPrice">${PACK_PRICE} Coins</div>
+        <button class="itemBuyButton" ${money < PACK_PRICE ? "disabled" : ""} onclick="openPack()">OPEN PACK</button>
+      </div>
+      <div class="itemShopCard">
+        <div class="itemEmoji">🎯</div>
+        <div class="itemName">Pick Pack</div>
+        <p class="itemDesc">See 3 random dolls (no event dolls) and keep only the 1 you choose.</p>
+        <div class="shopPrice">${PICK_PACK_PRICE} Coins</div>
+        <button class="itemBuyButton" ${money < PICK_PACK_PRICE ? "disabled" : ""} onclick="openPickPack()">OPEN PICK PACK</button>
+      </div>
+      <div class="itemShopCard">
+        <div class="itemEmoji">🗂️</div>
+        <div class="itemName">Category Pick</div>
+        <p class="itemDesc">Buy a ticket for a themed pool (a type, or a specific evolution line). Tickets stack -- buy at most 1 per day, but use them whenever you like.</p>
+        <div class="itemOwnedCount">Tickets owned: ${categoryPickInventory}</div>
+        <div class="shopPrice">${CATEGORY_PICK_PRICE} Coins</div>
+        <button class="itemBuyButton" ${categoryBoughtToday || money < CATEGORY_PICK_PRICE ? "disabled" : ""} onclick="buyCategoryPickTicket()">
+          ${categoryBoughtToday ? "ALREADY BOUGHT TODAY" : "BUY TICKET"}
+        </button>
+        <button class="rerollButton" ${categoryPickInventory <= 0 ? "disabled" : ""} onclick="useCategoryPickTicket()">USE A TICKET</button>
+      </div>
+    </div>
+  `;
+}
+
+window.openPickPack = async () => {
+  if (money < PICK_PACK_PRICE) {
+    showMessage("Not enough coins.");
+    return;
+  }
+
+  money -= PICK_PACK_PRICE;
+
+  const picks = [];
+  let attempts = 0;
+  while (picks.length < 3 && attempts < 50) {
+    const c = weightedRandomCard();
+    if (!picks.some(p => p.name === c.name)) picks.push(c);
+    attempts++;
+  }
+  while (picks.length < 3) picks.push(weightedRandomCard());
+
+  await savePlayerData();
+  updateUI();
+
+  showPickPackChoices(picks);
+};
+
+function showPickPackChoices(picks) {
+  const overlay = document.createElement("div");
+  Object.assign(overlay.style, {
+    position: "fixed", inset: "0", background: "rgba(0,0,0,.94)", zIndex: "4000",
+    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+    padding: "20px", overflowY: "auto"
+  });
+
+  const title = document.createElement("h2");
+  title.textContent = "Pick 1 to Keep:";
+  overlay.appendChild(title);
+
+  const grid = document.createElement("div");
+  Object.assign(grid.style, {
+    display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: "15px", width: "min(100%,900px)"
+  });
+
+  picks.forEach(card => {
+    const box = document.createElement("div");
+    Object.assign(box.style, { background: "#10243d", borderRadius: "15px", padding: "10px", textAlign: "center" });
+
+    const img = document.createElement("img");
+    img.src = card.image;
+    img.alt = card.name;
+    Object.assign(img.style, { width: "100%", maxHeight: "50vh", objectFit: "contain", borderRadius: "10px", cursor: "pointer" });
+    img.onclick = e => { e.stopPropagation(); openCardViewer(card.image, card.name); };
+    box.appendChild(img);
+
+    const text = document.createElement("div");
+    text.style.fontWeight = "bold";
+    text.style.marginTop = "7px";
+    text.textContent = card.name;
+    box.appendChild(text);
+
+    const chooseBtn = document.createElement("button");
+    chooseBtn.textContent = "CHOOSE";
+    Object.assign(chooseBtn.style, { marginTop: "8px", width: "100%", background: "#2674d9", color: "white" });
+    chooseBtn.onclick = async () => {
+      collection.push(createCardCopy(card.name));
+      await savePlayerData();
+      updateUI();
+      overlay.remove();
+      showMessage("You picked " + card.name + "!");
+    };
+    box.appendChild(chooseBtn);
+
+    grid.appendChild(box);
+  });
+
+  overlay.appendChild(grid);
+  document.body.appendChild(overlay);
+}
+
+window.buyCategoryPickTicket = async () => {
+  const today = getTodayString();
+
+  if (lastCategoryPickPurchaseDate === today) {
+    showMessage("You already bought a Category Pick ticket today.");
+    return;
+  }
+  if (money < CATEGORY_PICK_PRICE) {
+    showMessage("Not enough coins.");
+    return;
+  }
+
+  money -= CATEGORY_PICK_PRICE;
+  categoryPickInventory++;
+  lastCategoryPickPurchaseDate = today;
+
+  await savePlayerData();
+  updateUI();
+  showMessage("Category Pick ticket purchased! Use it anytime from the Pack Shop.");
+};
+
+window.useCategoryPickTicket = () => {
+  if (categoryPickInventory <= 0) {
+    showMessage("You don't have any Category Pick tickets.");
+    return;
+  }
+
+  showCategoryPickerOverlay();
+};
+
+function showCategoryPickerOverlay() {
+  const overlay = document.createElement("div");
+  Object.assign(overlay.style, {
+    position: "fixed", inset: "0", background: "rgba(0,0,0,.94)", zIndex: "4000",
+    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+    padding: "20px", overflowY: "auto", gap: "12px"
+  });
+
+  const title = document.createElement("h2");
+  title.textContent = "Choose a Category";
+  overlay.appendChild(title);
+
+  const list = document.createElement("div");
+  Object.assign(list.style, { display: "flex", flexDirection: "column", gap: "10px", width: "min(100%,500px)" });
+
+  CATEGORY_DEFS.forEach(catDef => {
+    const pool = getCategoryCardNames(catDef);
+    if (!pool.length) return;
+
+    const btn = document.createElement("button");
+    btn.className = "battleStartButton";
+    btn.style.textAlign = "left";
+    btn.innerHTML = `<b>${escapeHtml(catDef.name)}</b><br><span style="font-weight:normal;font-size:13px;opacity:.85">${escapeHtml(catDef.desc)}</span>`;
+    btn.onclick = () => {
+      overlay.remove();
+      showCategoryDollOptions(catDef);
+    };
+    list.appendChild(btn);
+  });
+
+  overlay.appendChild(list);
+
+  const cancel = document.createElement("button");
+  cancel.textContent = "CANCEL";
+  Object.assign(cancel.style, { background: "#9b2929", color: "white" });
+  cancel.onclick = () => overlay.remove();
+  overlay.appendChild(cancel);
+
+  document.body.appendChild(overlay);
+}
+
+function showCategoryDollOptions(catDef) {
+  const pool = getCategoryCardNames(catDef);
+  const names = pool.length <= 3 ? pool : pool.slice().sort(() => Math.random() - .5).slice(0, 3);
+
+  const overlay = document.createElement("div");
+  Object.assign(overlay.style, {
+    position: "fixed", inset: "0", background: "rgba(0,0,0,.94)", zIndex: "4000",
+    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+    padding: "20px", overflowY: "auto"
+  });
+
+  const title = document.createElement("h2");
+  title.textContent = catDef.name + " -- Pick 1";
+  overlay.appendChild(title);
+
+  const grid = document.createElement("div");
+  Object.assign(grid.style, {
+    display: "grid", gridTemplateColumns: `repeat(${names.length},minmax(0,1fr))`, gap: "15px", width: "min(100%,900px)"
+  });
+
+  names.forEach(name => {
+    const card = getCard(name);
+    if (!card) return;
+
+    const box = document.createElement("div");
+    Object.assign(box.style, { background: "#10243d", borderRadius: "15px", padding: "10px", textAlign: "center" });
+
+    const img = document.createElement("img");
+    img.src = card.image;
+    img.alt = name;
+    Object.assign(img.style, { width: "100%", maxHeight: "45vh", objectFit: "contain", borderRadius: "10px", cursor: "pointer" });
+    img.onclick = e => { e.stopPropagation(); openCardViewer(card.image, name); };
+    box.appendChild(img);
+
+    const text = document.createElement("div");
+    text.style.fontWeight = "bold";
+    text.style.marginTop = "7px";
+    text.textContent = name;
+    box.appendChild(text);
+
+    const chooseBtn = document.createElement("button");
+    chooseBtn.textContent = "CHOOSE";
+    Object.assign(chooseBtn.style, { marginTop: "8px", width: "100%", background: "#2674d9", color: "white" });
+    chooseBtn.onclick = async () => {
+      categoryPickInventory = Math.max(0, categoryPickInventory - 1);
+      collection.push(createCardCopy(name));
+      await savePlayerData();
+      updateUI();
+      overlay.remove();
+      showMessage("You picked " + name + " from " + catDef.name + "!");
+    };
+    box.appendChild(chooseBtn);
+
+    grid.appendChild(box);
+  });
+
+  overlay.appendChild(grid);
+
+  const cancel = document.createElement("button");
+  cancel.textContent = "CANCEL (keep your ticket)";
+  Object.assign(cancel.style, { marginTop: "20px", background: "#9b2929", color: "white" });
+  cancel.onclick = () => overlay.remove();
+  overlay.appendChild(cancel);
+
+  document.body.appendChild(overlay);
 }
 
 /* ===== DAILY SHOP ===== */
