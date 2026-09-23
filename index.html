@@ -744,25 +744,29 @@ function normalizeCollection(data) {
    battle code reads instead of the raw fields directly. */
 
 const cards = [
-  { name: "Baby Pickels", image: "baby pikels.png", weight: 14, price: 5, rarity: "doll", type: ["Grass"], move: "Baby Food", moveType: "Grass", power: 50 },
-  { name: "Mr. Pickels", image: "mr. pickels.png", weight: 9, price: 7, rarity: "doll", type: ["Grass"], move: "Fancy Food", moveType: "Grass", power: 58 },
-  { name: "Wily", image: "wily.png", weight: 14, price: 5, rarity: "doll", type: ["Water"], move: "Small Splash", moveType: "Water", power: 50 },
-  { name: "Will", image: "will.png", weight: 9, price: 7, rarity: "doll", type: ["Water"], move: "Big Splash", moveType: "Water", power: 62 },
-  { name: "Waffle", image: "waffle.png", weight: 14, price: 5, rarity: "doll", type: ["Fire"], move: "Tasty Fire", moveType: "Fire", power: 50 },
+  { name: "Baby Pickels", image: "baby pikels.png", weight: 14, price: 5, rarity: "doll", type: ["Grass"], move: "Baby Food", moveType: "Grass", power: 30 },
+  { name: "Mr. Pickels", image: "mr. pickels.png", weight: 9, price: 7, rarity: "doll", type: ["Grass"], move: "Fancy Food", moveType: "Grass", power: 60 },
+  { name: "Wily", image: "wily.png", weight: 14, price: 5, rarity: "doll", type: ["Water"], move: "Small Splash", moveType: "Water", power: 30 },
+  { name: "Will", image: "will.png", weight: 9, price: 7, rarity: "doll", type: ["Water"], move: "Big Splash", moveType: "Water", power: 60 },
+  { name: "Waffle", image: "waffle.png", weight: 14, price: 5, rarity: "doll", type: ["Fire"], move: "Tasty Fire", moveType: "Fire", power: 30 },
   { name: "Cute Cake", image: "cute cake.png", weight: 9, price: 7, rarity: "doll", type: ["Fire"], move: "Delicuse", moveType: "Fire", power: 60 },
-  { name: "Buttyr", image: "buttyr.png", weight: 20, price: 7, rarity: "doll", type: ["Flying","Rock"], move: "Wing Attack", moveType: "Flying", power: 55, move2: "Hard Wing", move2Type: "Rock", move2Power: 44 },
-  { name: "Blossem", image: "blossem.png", weight: 20, price: 7, rarity: "doll", type: ["Flying","Fairy"], move: "Flying Bee", moveType: "Flying", power: 55, move2: "Flying Cuteness", move2Type: "Fairy", move2Power: 44 },
-  { name: "Buzzy", image: "buzzy.png", weight: 5, price: 12, rarity: "doll", type: ["Flying","Fairy"], move: "Flying Bumble Bee", moveType: "Flying", power: 65, move2: "Flying Magic Hat", move2Type: "Fairy", move2Power: 52 },
-  { name: "Nico", image: "nico.png", weight: 20, price: 3, rarity: "doll", type: ["Flying"], move: "Beak Attack", moveType: "Flying", power: 52 },
-  { name: "Choper", image: "choper.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Small Bite", moveType: "Normal", power: 57, move2: "Hand Combat", move2Type: "Fighting", move2Power: 46 },
-  { name: "Bullet", image: "bullet.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Big Bite", moveType: "Normal", power: 62, move2: "Tail Combat", move2Type: "Fighting", move2Power: 50 },
-  { name: "Turkmoon", image: "turkmoon.png", weight: 8, price: 8, rarity: "doll", type: ["Fire","Flying"], move: "Chicken Wings", moveType: "Fire", power: 58, move2: "Fire Bird", move2Type: "Flying", move2Power: 47 },
-  { name: "Rem", image: "rem.png", weight: 12, price: 5, rarity: "doll", type: ["Normal"], move: "Good Elk", moveType: "Normal", power: 48 },
-  { name: "Eep", image: "eep.png", weight: 5, price: 11, rarity: "doll", type: ["Normal"], move: "Super Elk", moveType: "Normal", power: 64 },
+  { name: "Buttyr", image: "buttyr.png", weight: 20, price: 7, rarity: "doll", type: ["Flying","Rock"], move: "Wing Attack", moveType: "Flying", power: 60, move2: "Hard Wing", move2Type: "Rock", move2Power: 48 },
+  { name: "Blossem", image: "blossem.png", weight: 20, price: 7, rarity: "doll", type: ["Flying","Fairy"], move: "Flying Bee", moveType: "Flying", power: 45, move2: "Flying Cuteness", move2Type: "Fairy", move2Power: 35 },
+  { name: "Buzzy", image: "buzzy.png", weight: 5, price: 12, rarity: "doll", type: ["Flying","Fairy"], move: "Flying Bumble Bee", moveType: "Flying", power: 70, move2: "Flying Magic Hat", move2Type: "Fairy", move2Power: 55 },
+  { name: "Nico", image: "nico.png", weight: 20, price: 3, rarity: "doll", type: ["Flying"], move: "Beak Attack", moveType: "Flying", power: 40 },
+  { name: "Choper", image: "choper.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Small Bite", moveType: "Normal", power: 40, move2: "Hand Combat", move2Type: "Fighting", move2Power: 40 },
+  { name: "Bullet", image: "bullet.png", weight: 10, price: 5, rarity: "doll", type: ["Normal","Fighting"], move: "Big Bite", moveType: "Normal", power: 55, move2: "Tail Combat", move2Type: "Fighting", move2Power: 55 },
+  { name: "Turkmoon", image: "turkmoon.png", weight: 8, price: 8, rarity: "doll", type: ["Fire","Flying"], move: "Chicken Wings", moveType: "Fire", power: 60, move2: "Fire Bird", move2Type: "Flying", move2Power: 50 },
+  { name: "Rem", image: "rem.png", weight: 12, price: 5, rarity: "doll", type: ["Normal"], move: "Good Elk", moveType: "Normal", power: 40 },
+  { name: "Eep", image: "eep.png", weight: 5, price: 11, rarity: "doll", type: ["Normal"], move: "Super Elk", moveType: "Normal", power: 65 },
 { name: "King Eep", image: "king eep.png", weight: 0.675, price: 70, rarity: "rare", type: ["Normal"], move: "King Elk", moveType: "Normal", power: 140 },
   { name: "egg", image: "egg.png", weight: 8.75, price: 10, rarity: "doll", type: ["Steel"], move: "cooked", moveType: "Steel", power: 60 },
 { name: "zevel", image: "zevel.png", weight: 8.75, price: 10, rarity: "doll", type: ["poison"], move: "trash talk", moveType: "poison", power: 60 },
-  { name: "gice cream", image: "gice cream.png", weight: 8.75, price: 10, rarity: "doll", type: ["ice"], move: "brain freeze", moveType: "ice", power: 60 }
+  { name: "gice cream", image: "gice cream.png", weight: 8.75, price: 10, rarity: "doll", type: ["ice"], move: "brain freeze", moveType: "ice", power: 60 },
+{ name: "tax", image: "tax.png", weight: 25, price: 1, rarity: "doll", type: ["water"], move: "taxes", moveType: "water", power: 20 },
+  { name: "ax", image: "ax.png", weight: 5, price: 12, rarity: "doll", type: ["water"], move: "ax attack", moveType: "water", power: 60 },
+{ name: "bucket of ax", image: "bucket of ax.png", weight: 0.375, price: 75, rarity: "rare", type: ["water"], move: "bucket of ax attack", moveType: "water", power: 150 },
+  { name: "drimy", image: "drimy.png", weight: 2.5, price: 18, rarity: "doll", type: ["water","dragon"], move: "you cant swim", moveType: "water", power: 80 move2: "dragon dream", move2Type: "dragon", move2Power: 75 }
 ];
 
 
@@ -808,7 +812,10 @@ const dailyShopData = [
   { name: "Eep", weight: 5, normalPrice: 7, cheapPrice: 2 },
   { name: "egg", weight: 6.5, normalPrice: 6, cheapPrice: 2 },
   { name: "zevel", weight: 6.5, normalPrice: 6, cheapPrice: 2 },
-  { name: "gice cream", weight: 6.5, normalPrice: 6, cheapPrice: 2 }
+  { name: "gice cream", weight: 6.5, normalPrice: 6, cheapPrice: 2 },
+{ name: "tax", weight: 25, normalPrice: 1, cheapPrice: 1 },
+  { name: "ax", weight: 5, normalPrice: 7, cheapPrice: 3 },
+  { name: "drimy", weight: 1.75, normalPrice: 14, cheapPrice: 8 }
 ];
 
 const dolbDeals = [
