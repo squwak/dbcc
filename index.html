@@ -450,6 +450,7 @@ h1,h2,h3{margin-top:0}
       <div style="text-align:center;margin:20px 0">
         <img id="settingsProfilePic" class="profilePic" src="basic_p.png">
         <p>Profile Picture</p>
+        <div id="settingsProfilePicOptions" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px"></div>
       </div>
       <button class="settingsButton resetButton" onclick="resetAccount()">RESET ACCOUNT</button>
       <button class="settingsButton" onclick="closeSettings()">CLOSE</button>
@@ -1127,6 +1128,9 @@ let cupcakeChargesLeft = 0;
 
 let lastBundleBuzzPurchase = 0; // epoch ms, 0 = never bought
 
+let categoryPickInventory = 0;
+let lastCategoryPickPurchaseDate = "";
+
 let collectionTab = "all";
 let dexTab = "dolls";
 
@@ -1296,6 +1300,9 @@ window.playOffline = () => {
   dailyShopRerollCount = 0;
   lastBundleBuzzPurchase = 0;
 
+  categoryPickInventory = 0;
+  lastCategoryPickPurchaseDate = "";
+
   activeTrade = null;
   selectedTradeCards = [];
   tradeRequests = [];
@@ -1306,9 +1313,8 @@ window.playOffline = () => {
 
   document.getElementById("loginScreen").classList.add("hidden");
   document.getElementById("gameScreen").classList.remove("hidden");
-  document.getElementById("accountEmail").textContent = "Offline Mode -- progress will not be saved";
 
-  showPage("home");
+  showPage("shop");
   updateUI();
   showMessage("Playing offline. Your progress will not be saved.");
 };
@@ -1421,8 +1427,9 @@ async function loadPlayerData() {
     hardBotWins = 0;
     itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
     cupcakeChargesLeft = 0;
-    dailyShopRerollCount = 0;
     lastBundleBuzzPurchase = 0;
+    categoryPickInventory = 0;
+    lastCategoryPickPurchaseDate = "";
 
     await setDoc(ref, {
       money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
@@ -1430,7 +1437,8 @@ async function loadPlayerData() {
       playerLevel, playerLevelWins,
       easyBotLevel, easyBotWins,
       hardBotLevel, hardBotWins,
-      itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase
+      itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase,
+      categoryPickInventory, lastCategoryPickPurchaseDate
     });
   } else {
     const data = snap.data();
@@ -1463,6 +1471,9 @@ async function loadPlayerData() {
       : { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
     cupcakeChargesLeft = typeof data.cupcakeChargesLeft === "number" ? Math.max(0, data.cupcakeChargesLeft) : 0;
     lastBundleBuzzPurchase = typeof data.lastBundleBuzzPurchase === "number" ? Math.max(0, data.lastBundleBuzzPurchase) : 0;
+
+    categoryPickInventory = typeof data.categoryPickInventory === "number" ? Math.max(0, data.categoryPickInventory) : 0;
+    lastCategoryPickPurchaseDate = typeof data.lastCategoryPickPurchaseDate === "string" ? data.lastCategoryPickPurchaseDate : "";
   }
 
   if (!username) await askForUsername();
@@ -1484,7 +1495,8 @@ async function savePlayerData() {
     playerLevel, playerLevelWins,
     easyBotLevel, easyBotWins,
     hardBotLevel, hardBotWins,
-    itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase
+    itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase,
+    categoryPickInventory, lastCategoryPickPurchaseDate
   }, { merge: true });
 }
 
@@ -1527,8 +1539,10 @@ onAuthStateChanged(auth, async user => {
     document.getElementById("loginScreen").classList.add("hidden");
     document.getElementById("gameScreen").classList.remove("hidden");
 
-    showPage("home");
-    document.getElementById("accountEmail").textContent = user.email || "";
+    showPage("shop");
+
+    const settingsEmailEl = document.getElementById("settingsAccountEmail");
+    if (settingsEmailEl) settingsEmailEl.textContent = user.email || "";
 
     updateUI();
 
@@ -1559,11 +1573,12 @@ function updateUI() {
   // hidden entirely (see renderEventCollection / renderDex's event branch).
   if (buzzyPointsBoxWrap) buzzyPointsBoxWrap.classList.toggle("hidden", !isEventActive());
 
-  document.getElementById("usernameDisplay").textContent = username;
-  document.getElementById("settingsUsername").textContent = username;
-  document.getElementById("homeUsername").textContent = username;
-  document.getElementById("homeProfilePic").src = profilePic;
-  document.getElementById("settingsProfilePic").src = profilePic;
+  const settingsUsernameEl = document.getElementById("settingsUsername");
+  const settingsProfilePicEl = document.getElementById("settingsProfilePic");
+  if (settingsUsernameEl) settingsUsernameEl.textContent = username;
+  if (settingsProfilePicEl) settingsProfilePicEl.src = profilePic;
+
+  renderSettingsProfilePicOptions();
 
   renderCollection();
   renderDex();
@@ -1625,11 +1640,40 @@ window.showPage = page => {
 /* ===== SETTINGS ===== */
 
 window.openSettings = () => {
+  renderSettingsProfilePicOptions();
   document.getElementById("settingsOverlay").classList.remove("hidden");
 };
 
 window.closeSettings = () => {
   document.getElementById("settingsOverlay").classList.add("hidden");
+};
+
+// Lets the player switch between every profile picture they own (the
+// default one plus any bought from the daily shop, e.g. the Buzzy one).
+function renderSettingsProfilePicOptions() {
+  const area = document.getElementById("settingsProfilePicOptions");
+  if (!area) return;
+
+  if (!ownedProfilePics || ownedProfilePics.length <= 1) {
+    area.innerHTML = "";
+    return;
+  }
+
+  area.innerHTML = ownedProfilePics.map(pic => `
+    <img src="${escapeHtml(pic)}"
+      style="width:55px;height:55px;border-radius:50%;object-fit:cover;background:#091a2d;cursor:pointer;border:3px solid ${pic === profilePic ? "#2674d9" : "transparent"}"
+      onclick="selectProfilePic('${encoded(pic)}')">
+  `).join("");
+}
+
+window.selectProfilePic = async encodedPic => {
+  const pic = decodeURIComponent(encodedPic);
+  if (!ownedProfilePics.includes(pic)) return;
+
+  profilePic = pic;
+  await savePlayerData();
+  updateUI();
+  showMessage("Profile picture updated!");
 };
 
 window.resetAccount = async () => {
@@ -1650,6 +1694,8 @@ window.resetAccount = async () => {
   itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
   cupcakeChargesLeft = 0;
   lastBundleBuzzPurchase = 0;
+  categoryPickInventory = 0;
+  lastCategoryPickPurchaseDate = "";
 
   await savePlayerData();
   updateUI();
@@ -1799,6 +1845,8 @@ function renderShop() {
 
   if (!daily || !deals) return;
   if (date) date.textContent = " Today: " + getTodayString();
+
+  renderPackShop();
 
   if (!dailyShopOffer) {
     daily.innerHTML = '<div class="dailyShopCard"><p>Loading today\'s shop...</p></div>';
