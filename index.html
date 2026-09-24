@@ -1106,6 +1106,7 @@ let trophyCount=0;
 let dollTrophies={};
 let dollRanks={};
 let claimedTrophyRewards=[];
+let trophySystemVersion=2;
 
 let completedTradeIds = [];
 let ownedProfilePics = [DEFAULT_PROFILE_PIC];
@@ -1281,6 +1282,7 @@ window.playOffline = () => {
   dollTrophies = {};
   dollRanks = {};
   claimedTrophyRewards = [];
+  trophySystemVersion = 2;
 
   itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
   cupcakeChargesLeft = 0;
@@ -1412,7 +1414,7 @@ async function loadPlayerData() {
     await setDoc(ref, {
       money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
       ownedProfilePics, username, profilePic,
-      trophyCount, dollTrophies, dollRanks, claimedTrophyRewards,
+      trophyCount, dollTrophies, dollRanks, claimedTrophyRewards, trophySystemVersion,
       itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase,
       redeemedCodes
     });
@@ -1429,10 +1431,19 @@ async function loadPlayerData() {
     ownedProfilePics = Array.isArray(data.ownedProfilePics) ? data.ownedProfilePics : [DEFAULT_PROFILE_PIC];
     if (!ownedProfilePics.includes(DEFAULT_PROFILE_PIC)) ownedProfilePics.push(DEFAULT_PROFILE_PIC);
 
-    trophyCount=typeof data.trophyCount==="number"?Math.max(0,data.trophyCount):0;
-    dollTrophies=data.dollTrophies&&typeof data.dollTrophies==="object"?data.dollTrophies:{};
-    dollRanks=data.dollRanks&&typeof data.dollRanks==="object"?data.dollRanks:{};
-    claimedTrophyRewards=Array.isArray(data.claimedTrophyRewards)?data.claimedTrophyRewards:[];
+    // Trophy Way v2 migration: the previous broken version could load/save an
+    // incorrect trophy total (for example 200 after the first win). Reset the
+    // old trophy data once, then use the new exact +5-per-win system.
+    if (data.trophySystemVersion !== 2) {
+      trophyCount = 0;
+      dollTrophies = {};
+      claimedTrophyRewards = [];
+      trophySystemVersion = 2;
+    } else {
+      trophyCount=typeof data.trophyCount==="number"?Math.max(0,data.trophyCount):0;
+      dollTrophies=data.dollTrophies&&typeof data.dollTrophies==="object"?data.dollTrophies:{};
+      claimedTrophyRewards=Array.isArray(data.claimedTrophyRewards)?data.claimedTrophyRewards:[];
+    }
 
     username = data.username || "";
     profilePic = data.profilePic || DEFAULT_PROFILE_PIC;
@@ -1462,7 +1473,7 @@ async function savePlayerData() {
   await setDoc(doc(db, "players", currentUser.uid), {
     money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
     ownedProfilePics, username, profilePic,
-    trophyCount,dollTrophies,dollRanks,claimedTrophyRewards,
+    trophyCount,dollTrophies,dollRanks,claimedTrophyRewards,trophySystemVersion,
     itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase,
     redeemedCodes
   }, { merge: true });
@@ -1661,6 +1672,7 @@ window.resetAccount = async () => {
   dollTrophies = {};
   dollRanks = {};
   claimedTrophyRewards = [];
+  trophySystemVersion = 2;
   itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
   cupcakeChargesLeft = 0;
   lastBundleBuzzPurchase = 0;
