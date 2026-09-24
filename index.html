@@ -1442,7 +1442,12 @@ async function loadPlayerData() {
     } else {
       trophyCount=typeof data.trophyCount==="number"?Math.max(0,data.trophyCount):0;
       dollTrophies=data.dollTrophies&&typeof data.dollTrophies==="object"?data.dollTrophies:{};
-      claimedTrophyRewards=Array.isArray(data.claimedTrophyRewards)?data.claimedTrophyRewards:[];
+      // Never trust stale claimed milestones from older Trophy Way versions.
+      // A reward can only be marked CLAIMED when its trophy threshold has
+      // actually been reached by the current trophy total.
+      claimedTrophyRewards=Array.isArray(data.claimedTrophyRewards)
+        ? [...new Set(data.claimedTrophyRewards.map(Number).filter(t=>Number.isFinite(t)&&t>=0&&t<=trophyCount))]
+        : [];
     }
 
     username = data.username || "";
