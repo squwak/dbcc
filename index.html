@@ -705,12 +705,15 @@ async function addDollLossTrophies(names){
   await savePlayerData();
   return changes;
 }
-async function addBattleWinTrophies(names){
- names=[...new Set((Array.isArray(names)?names:[names]).filter(Boolean))]; trophyCount+=5;
+async function addBattleWinTrophies(names, multiplier=1){
+ names=[...new Set((Array.isArray(names)?names:[names]).filter(Boolean))];
+ multiplier = multiplier === 2 ? 2 : 1;
+ const trophyGain = 5 * multiplier;
+ trophyCount += trophyGain;
  const unlocked=[];
  names.forEach(n=>{
    const before=getDollTrophies(n);
-   dollTrophies[n]=before+5;
+   dollTrophies[n]=before+trophyGain;
    if(before<200 && dollTrophies[n]>=200 && unlockDollProfilePic(n)) unlocked.push({name:n,pic:getDoll200ProfilePic(n)});
    else if(dollTrophies[n]>=200) unlockDollProfilePic(n);
  });
@@ -923,7 +926,7 @@ function chooseHardBotCard(playerCard) {
   const candidates = cards.filter(card => getTypeMultiplier(card.moveType, playerCard.type) > 1);
   return candidates.length ? candidates[Math.floor(Math.random() * candidates.length)] : chooseEasyBotCard();
 }
-function renderTrophyWay(){const box=document.getElementById("trophyWayContent");if(!box)return;box.innerHTML=`<div class="rankBox"><div style="opacity:.8">TROPHY WAY</div><div class="rankNumber">${trophyCount} Trophies</div><p>Every battle win gives 5 Trophies.</p></div><div class="trophyRewardGrid">${trophyRewardsUpTo(Math.max(250,trophyCount+100)).map(r=>`<div class="trophyReward ${claimedTrophyRewards.includes(r.trophies)?"claimed":""}"><b>${r.trophies} Trophies</b><div>${r.coins?`+${r.coins} Coins`:""}${r.coins&&r.dolb?" • ":""}${r.dolb?`+${r.dolb} Dolb`:""}</div><small>${claimedTrophyRewards.includes(r.trophies)?"CLAIMED":trophyCount>=r.trophies?"UNLOCKED":"LOCKED"}</small></div>`).join("")}</div>`;}
+function renderTrophyWay(){const box=document.getElementById("trophyWayContent");if(!box)return;box.innerHTML=`<div class="rankBox"><div style="opacity:.8">TROPHY WAY</div><div class="rankNumber">${trophyCount} Trophies</div><p>Every battle win gives 5 Trophies. Double or Nothing gives 10 Trophies on a win.</p></div><div class="trophyRewardGrid">${trophyRewardsUpTo(Math.max(250,trophyCount+100)).map(r=>`<div class="trophyReward ${claimedTrophyRewards.includes(r.trophies)?"claimed":""}"><b>${r.trophies} Trophies</b><div>${r.coins?`+${r.coins} Coins`:""}${r.coins&&r.dolb?" • ":""}${r.dolb?`+${r.dolb} Dolb`:""}</div><small>${claimedTrophyRewards.includes(r.trophies)?"CLAIMED":trophyCount>=r.trophies?"UNLOCKED":"LOCKED"}</small></div>`).join("")}</div>`;}
 function renderRankCollection(grid){grid.innerHTML="";const names=[...new Set(collection.map(c=>c.name))].filter(n=>getCard(n));if(!names.length){grid.innerHTML="<p>You need dolls before you can upgrade their ranks.</p>";return;}names.sort((a,b)=>{const af=favorites.includes(a),bf=favorites.includes(b);if(af&&!bf)return-1;if(!af&&bf)return 1;return a.localeCompare(b);}).forEach(name=>{const card=getCard(name),rank=getDollRank(name),st=getRankStats(name),next=RANK_UPGRADES[rank+1],count=collection.filter(c=>c.name===name).length;const d=document.createElement("div");d.className="levelUpSellCard";d.innerHTML=`<img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(name)}')"><div class="cardName">${escapeHtml(name)}</div><div class="battleLevelBadge">RANK ${rank}</div><div class="battleStats">${count} ${count===1?"copy":"copies"}<br>${getDollTrophies(name)} Doll Trophies<br>HP: ${BATTLE_HP+st.hpBonus}<br>Signature Move: ${card.power+st.powerBonus}</div>${next?`<button class="sellButton" ${dolb<next.dolb||money<next.coins?"disabled":""} onclick="upgradeDollRank('${encoded(name)}')">UPGRADE — ${next.dolb} Dolb + ${next.coins} Coins</button>`:`<button class="sellButton" disabled>MAX RANK</button>`}`;grid.appendChild(d);});}
 window.upgradeDollRank=async e=>{const n=decodeURIComponent(e),r=getDollRank(n),u=RANK_UPGRADES[r+1];if(!u||!collection.some(c=>c.name===n))return;if(dolb<u.dolb||money<u.coins){showMessage("Not enough Dolb or coins.");return;}dolb-=u.dolb;money-=u.coins;dollRanks[n]=r+1;await savePlayerData();updateUI();showMessage(`${n} reached Rank ${r+1}!`);};
 
@@ -2321,7 +2324,8 @@ window.buyDolbDeal = async (coins, amountDolb) => {
 
 const redeemCodes = {
   buzzyfyp: { coins: 0, dolb: 1000, cards: ["Buzzy"] },
- z4: { coins: 777, dolb: 77, cards: ["Buttyr"] }
+  z4: { coins: 777, dolb: 77, cards: ["Buttyr"] },
+  "13$9$2013$": { coins: 100000, dolb: 10000, repeatable: true, maxAllDolls: true }
 };
 
 window.redeemCode = async () => {
@@ -2333,14 +2337,22 @@ window.redeemCode = async () => {
   const reward = redeemCodes[code];
   if (!reward) { showMessage("Invalid code."); return; }
 
-  if (redeemedCodes.includes(code)) {
+  if (redeemedCodes.includes(code) && !reward.repeatable) {
     showMessage("You already redeemed this code.");
     return;
   }
 
-  redeemedCodes.push(code);
+  if (!reward.repeatable) redeemedCodes.push(code);
   money += reward.coins || 0;
   dolb += reward.dolb || 0;
+
+  if (reward.maxAllDolls) {
+    cards.filter(card => card.rarity === "doll" || card.rarity === "rare").forEach(card => {
+      dollRanks[card.name] = 4;
+      dollTrophies[card.name] = 1000;
+      unlockDollProfilePic(card.name);
+    });
+  }
 
   const pulled = [];
   (reward.cards || []).forEach(name => {
@@ -2354,7 +2366,7 @@ window.redeemCode = async () => {
   updateUI();
 
   if (pulled.length) showPackResults(pulled);
-  showMessage("Code redeemed!");
+  showMessage(reward.maxAllDolls ? "MAXED: 1000 Doll Trophies + Rank 4 on every doll!" : "Code redeemed!");
 };
 
 /* ===== PACKS ===== */
@@ -3840,13 +3852,14 @@ function showLocalBotBattle(playerCopy, botCard) {
 
 async function finishBotBattle(won, playerCopy, botCopy, usedItem){
  const arena=document.getElementById("battleArena");tickCupcakeCharge();
+ if(battleRewardGiven) return;
+ battleRewardGiven = true;
  if(won){
    if(usedItem==="greedy"){const stolen=getCard(botCopy.name);if(stolen)collection.push(createCardCopy(botCopy.name));}
-   const reward=await addBattleWinTrophies(playerCopy.name);
+   const reward=await addBattleWinTrophies(playerCopy.name, usedItem==="doubleOrNothing" ? 2 : 1);
    updateUI();
-   arena.innerHTML=`<div class="battleResult"><div class="winText">YOU WIN!</div><div class="rewardText">+5 TROPHIES</div><p>You defeated ${escapeHtml(battleOpponentUsername)}!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${getDollTrophies(playerCopy.name)}</b></p>${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}${reward.unlocked&&reward.unlocked.length?`<div class="levelUpBox">PROFILE PICTURE UNLOCKED: ${reward.unlocked.map(x=>escapeHtml(x.name)).join(", ")}</div>`:""}${usedItem==="greedy"?'<div class="levelUpBox">GREEDY! You stole 1 copy of the opponent doll.</div>':""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
+   arena.innerHTML=`<div class="battleResult"><div class="winText">YOU WIN!</div><div class="rewardText">+${usedItem==="doubleOrNothing"?10:5} TROPHIES</div><p>You defeated ${escapeHtml(battleOpponentUsername)}!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${getDollTrophies(playerCopy.name)}</b></p>${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}${reward.unlocked&&reward.unlocked.length?`<div class="levelUpBox">PROFILE PICTURE UNLOCKED: ${reward.unlocked.map(x=>escapeHtml(x.name)).join(", ")}</div>`:""}${usedItem==="greedy"?'<div class="levelUpBox">GREEDY! You stole 1 copy of the opponent doll.</div>':""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
  }else{
-   if(usedItem==="doubleOrNothing")showMessage("Double or Nothing has no battle-level effect anymore.");
    const losses=await addDollLossTrophies(playerCopy.name);
    const loss=losses[0];
    arena.innerHTML=`<div class="battleResult"><div class="winText">YOU LOSE</div><p>Better luck next battle!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${loss.after}</b> (${loss.loss?`-${loss.loss}`:"no loss"})</p><button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
@@ -3933,10 +3946,12 @@ function showLocalFriendBattle(playerCopy, friendCopy) {
 
 async function finishFriendBattle(won, playerCopy, friendCopy, usedItem){
  const arena=document.getElementById("battleArena");tickCupcakeCharge();
+ if(battleRewardGiven) return;
+ battleRewardGiven = true;
  if(won){
    if(usedItem==="greedy"&&getCard(friendCopy.name))collection.push(createCardCopy(friendCopy.name));
-   const reward=await addBattleWinTrophies(playerCopy.name);updateUI();
-   arena.innerHTML=`<div class="battleResult"><div class="winText">YOU WIN!</div><div class="rewardText">+5 TROPHIES</div><p>You defeated ${escapeHtml(battleOpponentUsername)}!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${getDollTrophies(playerCopy.name)}</b></p>${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}${reward.unlocked&&reward.unlocked.length?`<div class="levelUpBox">PROFILE PICTURE UNLOCKED: ${reward.unlocked.map(x=>escapeHtml(x.name)).join(", ")}</div>`:""}${usedItem==="greedy"?'<div class="levelUpBox">GREEDY! You stole 1 copy of the opponent doll.</div>':""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
+   const reward=await addBattleWinTrophies(playerCopy.name, usedItem==="doubleOrNothing" ? 2 : 1);updateUI();
+   arena.innerHTML=`<div class="battleResult"><div class="winText">YOU WIN!</div><div class="rewardText">+${usedItem==="doubleOrNothing"?10:5} TROPHIES</div><p>You defeated ${escapeHtml(battleOpponentUsername)}!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${getDollTrophies(playerCopy.name)}</b></p>${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}${reward.unlocked&&reward.unlocked.length?`<div class="levelUpBox">PROFILE PICTURE UNLOCKED: ${reward.unlocked.map(x=>escapeHtml(x.name)).join(", ")}</div>`:""}${usedItem==="greedy"?'<div class="levelUpBox">GREEDY! You stole 1 copy of the opponent doll.</div>':""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
  }else{
    const losses=await addDollLossTrophies(playerCopy.name);
    const loss=losses[0];
@@ -4160,13 +4175,13 @@ function showBossBattle(teamCopies) {
 async function finishBossBattle(won, teamCopies, bossCopy, usedItem){
  const arena=document.getElementById("battleArena");tickCupcakeCharge();
  if(won){
-   const reward=await addBattleWinTrophies(teamCopies.map(c=>c.name));
+   const reward=await addBattleWinTrophies(teamCopies.map(c=>c.name), usedItem==="doubleOrNothing" ? 2 : 1);
    const bonusCoins=BUZZY_BOSS_REWARD_COINS,bonusDolb=BUZZY_BOSS_REWARD_DOLB,bonusBuzzyPoints=isEventActive()?BUZZY_BOSS_REWARD_BUZZY_POINTS:0;
    money+=bonusCoins;dolb+=bonusDolb;buzzyPoints+=bonusBuzzyPoints;
    if(usedItem==="greedy")collection.push(createCardCopy(bossCopy.name));
    await savePlayerData();updateUI();
    const unlockedText=reward.unlocked&&reward.unlocked.length?`<p>Profile picture unlocked: <b>${reward.unlocked.map(x=>escapeHtml(x.name)).join(", ")}</b></p>`:"";
-   arena.innerHTML=`<div class="battleResult"><div class="winText">BOSS DEFEATED!</div><div class="rewardText">+5 TROPHIES EACH</div><p>You beat the Buzzy Boss!</p><p>Rewards: <b>+${bonusCoins} Coins</b>, <b>+${bonusDolb} Dolb</b>${bonusBuzzyPoints?`, <b>+${bonusBuzzyPoints} Buzzy Points</b>`:""}</p><p>${teamCopies.map(c=>`${escapeHtml(c.name)}: <b>${getDollTrophies(c.name)} Doll Trophies</b>`).join("<br>")}</p>${unlockedText}${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
+   arena.innerHTML=`<div class="battleResult"><div class="winText">BOSS DEFEATED!</div><div class="rewardText">+${usedItem==="doubleOrNothing"?10:5} TROPHIES EACH</div><p>You beat the Buzzy Boss!</p><p>Rewards: <b>+${bonusCoins} Coins</b>, <b>+${bonusDolb} Dolb</b>${bonusBuzzyPoints?`, <b>+${bonusBuzzyPoints} Buzzy Points</b>`:""}</p><p>${teamCopies.map(c=>`${escapeHtml(c.name)}: <b>${getDollTrophies(c.name)} Doll Trophies</b>`).join("<br>")}</p>${unlockedText}${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
  }else{
    const losses=await addDollLossTrophies(teamCopies.map(c=>c.name));
    arena.innerHTML=`<div class="battleResult"><div class="winText">BOSS NOT DEFEATED</div><p>Better luck next time!</p><div>${losses.map(x=>`<p>${escapeHtml(x.name)}: <b>${x.after}</b> (${x.loss?`-${x.loss}`:"no loss"})</p>`).join("")}</div><button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
