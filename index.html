@@ -552,15 +552,31 @@ const TROPHY_REWARDS=[{trophies:5,coins:100,dolb:0},{trophies:10,coins:0,dolb:5}
 
 // One profile picture is unlocked for each doll when that doll reaches 200 Doll Trophies.
 const DOLL_200_PROFILE_PICS={
-  "Baby Pickels":"baby pickels 200.png", "Mr. Pickels":"mr pickels 200.png",
-  "Wily":"wily 200.png", "Will":"will 200.png", "Waffle":"waffle 200.png",
-  "Cute Cake":"cute cake 200.png", "Buttyr":"buttyr 200.png", "Blossem":"blossem 200.png",
-  "Buzzy":"buzzy 200.png", "Nico":"nico 200.png", "Choper":"choper 200.png",
-  "Bullet":"bullet 200.png", "turkmoon":"turkmoon 200.png", "rem":"rem 200.png",
-  "eep":"eep200.png", "egg":"egg 200.png", "zevel":"zevel 200.png",
-  "gice cream":"gice cream 200.png", "tax":"tax 200.png", "ax":"ax 200.png",
-  "drimy":"drimy 200.png", "King Eep":"king eep 200.png", "bucket of ax":"bucket of ax 200.png"
+  "Baby Pickels":"baby pickels 200.png",
+  "Mr. Pickels":"mr pickels 200.png",
+  "Wily":"wily 200.png",
+  "Will":"will 200.png",
+  "Waffle":"waffle 200.png",
+  "Cute Cake":"cute cake 200.png",
+  "Buttyr":"buttyr 200.png",
+  "Blossem":"blossem 200.png",
+  "Buzzy":"buzzy 200.png",
+  "Nico":"nico 200.png",
+  "Choper":"choper 200.png",
+  "Bullet":"bullet 200.png",
+  "Turkmoon":"turkmoon 200.png",
+  "Rem":"rem 200.png",
+  "Eep":"eep200.png",
+  "Egg":"egg 200.png",
+  "Zevel":"zevel 200.png",
+  "Gice Cream":"gice cream 200.png",
+  "Tax":"tax 200.png",
+  "Ax":"ax 200.png",
+  "Drimy":"drimy 200.png",
+  "King Eep":"king eep 200.png",
+  "Bucket of Ax":"bucket of ax 200.png"
 };
+
 function getDoll200ProfilePic(name){return DOLL_200_PROFILE_PICS[name]||null;}
 function unlockDollProfilePic(name){
   const pic=getDoll200ProfilePic(name);
