@@ -202,6 +202,32 @@ h1,h2,h3{margin-top:0}
 .battleChoiceCard img{width:100%;aspect-ratio:1/1.35;object-fit:contain;background:#091a2d;border-radius:10px}
 .battleLevelBadge{background:#6b4bc3;padding:5px 9px;border-radius:8px;font-size:13px;font-weight:bold;display:inline-block;margin-top:7px}
 .battleStats{font-size:12px;opacity:.9;margin-top:5px;line-height:1.4}
+.dollTrophyGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-top:18px}
+.dollTrophyCard{background:#10243d;border-radius:16px;padding:12px;border:2px solid transparent;cursor:pointer;transition:.15s}
+.dollTrophyCard:hover{border-color:#36b9ff;transform:translateY(-2px)}
+.dollTrophyCard.selected{border-color:#36b9ff;box-shadow:0 0 14px #36b9ff}
+.dollTrophyCard img{width:100%;height:150px;object-fit:contain;background:#091a2d;border-radius:12px}
+.dollTrophyName{font-size:17px;font-weight:bold;margin-top:9px}
+.dollTrophyCount{font-size:14px;margin-top:4px;opacity:.9}
+.dollTrophyBar{height:10px;background:#071525;border-radius:20px;overflow:hidden;margin-top:9px}
+.dollTrophyFill{height:100%;background:#f5b400;border-radius:20px}
+.dollTrophyRoad{background:#10243d;border-radius:18px;padding:18px;margin-top:18px}
+.dollTrophyRoadHead{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.dollTrophyRoadHead img{width:105px;height:135px;object-fit:contain;background:#091a2d;border-radius:12px}
+.dollTrophyRoadInfo{flex:1;min-width:200px}
+.dollTrophyRoadTitle{font-size:25px;font-weight:bold}
+.dollTrophyRoadSub{opacity:.85;margin-top:4px}
+.dollTrophyProgress{height:18px;background:#071525;border-radius:20px;overflow:hidden;margin-top:12px}
+.dollTrophyProgressFill{height:100%;background:#f5b400;border-radius:20px}
+.dollTrophyRewardGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;margin-top:18px}
+.dollTrophyReward{background:#183653;border-radius:13px;padding:13px;text-align:center;border:2px solid #274b6c;position:relative}
+.dollTrophyReward.reached{border-color:#f5b400}
+.dollTrophyReward.claimed{border-color:#25b864}
+.dollTrophyReward .rewardTrophy{font-size:16px;font-weight:bold}
+.dollTrophyReward .rewardIcon{font-size:13px;margin-top:7px;min-height:36px}
+.dollTrophyReward small{display:block;margin-top:8px;opacity:.8;font-weight:bold}
+.dollTrophyReward img{width:55px;height:55px;object-fit:contain;margin-top:5px}
+
 .battleFavoriteBadge{position:absolute;top:8px;left:8px;background:#172b43;color:#36b9ff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:16px}
 .typeBadge{display:inline-block;padding:5px 9px;border-radius:8px;background:#183653;font-size:12px;font-weight:bold;margin-top:5px}
 .signatureMove{font-size:13px;opacity:.85;margin-top:5px}
@@ -300,7 +326,7 @@ h1,h2,h3{margin-top:0}
 
   <div id="battlePage" class="page hidden">
     <h1>Battle</h1>
-    <div class="tabs battleTabs"><button id="battleHomeTab" class="active" onclick="showBattleTab('battle')">BATTLE</button><button id="battleTrophyTab" onclick="showBattleTab('trophies')">TROPHY WAY</button></div><div id="battleRankInfo"></div><div id="trophyWayContent" class="hidden"></div>
+    <div class="tabs battleTabs"><button id="battleHomeTab" class="active" onclick="showBattleTab('battle')">BATTLE</button><button id="battleTrophyTab" onclick="showBattleTab('trophies')">TROPHY WAY</button><button id="battleDollTrophyTab" onclick="showBattleTab('dollTrophies')">DOLL TROPHIES</button></div><div id="battleRankInfo"></div><div id="trophyWayContent" class="hidden"></div><div id="dollTrophyContent" class="hidden"></div>
     <div id="battleMain">
       <div class="battleHome">
         <h2>Choose a Battle</h2>
@@ -703,8 +729,50 @@ async function addDollLossTrophies(names){
     changes.push({name:n,loss,before,after});
   });
   await savePlayerData();
+  if(document.getElementById("dollTrophyContent") && !document.getElementById("dollTrophyContent").classList.contains("hidden")) renderDollTrophyWay();
+  updateUI();
   return changes;
 }
+const DOLL_TROPHY_REWARDS = [
+  {trophies:10, coins:0, dolb:10},
+  {trophies:25, coins:0, dolb:15},
+  {trophies:50, coins:25, dolb:20},
+  {trophies:75, coins:0, dolb:30},
+  {trophies:100, coins:50, dolb:40},
+  {trophies:150, coins:0, dolb:75},
+  {trophies:200, coins:0, dolb:100, profilePic:true},
+  {trophies:300, coins:0, dolb:150},
+  {trophies:500, coins:250, dolb:200},
+  {trophies:750, coins:0, dolb:300},
+  {trophies:1000, coins:500, dolb:500}
+];
+function getDollTrophyRewards(name){return Array.isArray(claimedDollTrophyRewards[name])?claimedDollTrophyRewards[name]:[];}
+function dollTrophyRewardText(r){
+  const parts=[];
+  if(r.coins)parts.push(`+${r.coins} Coins`);
+  if(r.dolb)parts.push(`+${r.dolb} Dolb`);
+  if(r.profilePic)parts.push('200 Trophy Profile Picture');
+  return parts.join(' • ');
+}
+function claimDollTrophyRewardsFor(name){
+  const trophies=getDollTrophies(name);
+  const claimed=getDollTrophyRewards(name);
+  let coins=0,dolbs=0,newRewards=[];
+  DOLL_TROPHY_REWARDS.forEach(r=>{
+    if(trophies>=r.trophies && !claimed.includes(r.trophies)){
+      claimed.push(r.trophies);
+      coins+=r.coins||0;
+      dolbs+=r.dolb||0;
+      if(r.profilePic)unlockDollProfilePic(name);
+      newRewards.push(r);
+    }
+  });
+  claimedDollTrophyRewards[name]=claimed;
+  money+=coins;
+  dolb+=dolbs;
+  return {coins,dolbs,newRewards};
+}
+function claimAllDollTrophyRewardsFor(name){return claimDollTrophyRewardsFor(name);}
 async function addBattleWinTrophies(names, multiplier=1){
  names=[...new Set((Array.isArray(names)?names:[names]).filter(Boolean))];
  multiplier = multiplier === 2 ? 2 : 1;
@@ -717,8 +785,15 @@ async function addBattleWinTrophies(names, multiplier=1){
    if(before<200 && dollTrophies[n]>=200 && unlockDollProfilePic(n)) unlocked.push({name:n,pic:getDoll200ProfilePic(n)});
    else if(dollTrophies[n]>=200) unlockDollProfilePic(n);
  });
- let coins=0,dolbs=0,reached=[]; trophyRewardsUpTo(trophyCount).forEach(r=>{if(!claimedTrophyRewards.includes(r.trophies)){claimedTrophyRewards.push(r.trophies);coins+=r.coins;dolbs+=r.dolb;reached.push(r);}});
- money+=coins;dolb+=dolbs;await savePlayerData();return{coinsReward:coins,dolbReward:dolbs,reached,unlocked};
+ let dollRewardCoins=0,dollRewardDolbs=0;
+ names.forEach(n=>{const rr=claimDollTrophyRewardsFor(n);dollRewardCoins+=rr.coins;dollRewardDolbs+=rr.dolbs;});
+ let coins=dollRewardCoins,dolbs=dollRewardDolbs,reached=[]; trophyRewardsUpTo(trophyCount).forEach(r=>{if(!claimedTrophyRewards.includes(r.trophies)){claimedTrophyRewards.push(r.trophies);coins+=r.coins;dolbs+=r.dolb;reached.push(r);}});
+ money+=coins;dolb+=dolbs;
+ await savePlayerData();
+ if(document.getElementById("dollTrophyContent") && !document.getElementById("dollTrophyContent").classList.contains("hidden")) renderDollTrophyWay();
+ if(document.getElementById("trophyWayContent") && !document.getElementById("trophyWayContent").classList.contains("hidden")) renderTrophyWay();
+ updateUI();
+ return{coinsReward:coins,dolbReward:dolbs,reached,unlocked};
 }
 function renderBattleRankInfo(){}
 
@@ -925,6 +1000,24 @@ function chooseEasyBotCard() {
 function chooseHardBotCard(playerCard) {
   const candidates = cards.filter(card => getTypeMultiplier(card.moveType, playerCard.type) > 1);
   return candidates.length ? candidates[Math.floor(Math.random() * candidates.length)] : chooseEasyBotCard();
+}
+let selectedDollTrophyName="";
+function renderDollTrophyWay(name){
+  if(name) name=decodeURIComponent(name);
+  const box=document.getElementById("dollTrophyContent");
+  if(!box)return;
+  const ownedNames=[...new Set(collection.map(c=>c.name))].filter(n=>getCard(n));
+  if(!ownedNames.length){box.innerHTML='<div class="battleHome"><h2>DOLL TROPHIES</h2><p>Get a doll in your collection to start its Trophy Road.</p></div>';return;}
+  if(!name || !ownedNames.includes(name))name=selectedDollTrophyName&&ownedNames.includes(selectedDollTrophyName)?selectedDollTrophyName:ownedNames[0];
+  selectedDollTrophyName=name;
+  const card=getCard(name),trophies=getDollTrophies(name),maxTrophy=1000;
+  const next=DOLL_TROPHY_REWARDS.find(r=>r.trophies>trophies);
+  const previous=next?DOLL_TROPHY_REWARDS.filter(r=>r.trophies<=trophies).at(-1):DOLL_TROPHY_REWARDS.at(-1);
+  const start=previous?previous.trophies:0;
+  const target=next?next.trophies:maxTrophy;
+  const progress=next?Math.max(0,Math.min(100,((trophies-start)/(target-start))*100)):100;
+  const claimed=getDollTrophyRewards(name);
+  box.innerHTML=`<div class="battleHome"><h2>DOLL TROPHIES</h2><p>Pick a card to see its own Trophy Road. Wins add 5 trophies to that doll; Double or Nothing adds 10.</p><div class="dollTrophyGrid">${ownedNames.map(n=>{const c=getCard(n),t=getDollTrophies(n),sel=n===name,roadMax=1000,p=Math.min(100,(t/roadMax)*100);return `<div class="dollTrophyCard ${sel?'selected':''}" onclick="renderDollTrophyWay('${encoded(n)}')"><img src="${escapeHtml(c.image)}"><div class="dollTrophyName">${escapeHtml(n)}</div><div class="dollTrophyCount">${t} Trophies</div><div class="dollTrophyBar"><div class="dollTrophyFill" style="width:${p}%"></div></div></div>`;}).join('')}</div></div><div class="dollTrophyRoad"><div class="dollTrophyRoadHead"><img src="${escapeHtml(card.image)}"><div class="dollTrophyRoadInfo"><div class="dollTrophyRoadTitle">${escapeHtml(name)}</div><div class="dollTrophyRoadSub">${trophies} Doll Trophies • Rank ${getDollRank(name)}</div><div class="dollTrophyProgress"><div class="dollTrophyProgressFill" style="width:${progress}%"></div></div><div style="margin-top:7px;font-weight:bold">${next?`${Math.max(0,next.trophies-trophies)} more to ${next.trophies}`:'Trophy Road complete!'}</div></div></div><div class="dollTrophyRewardGrid">${DOLL_TROPHY_REWARDS.map(r=>{const reached=trophies>=r.trophies,done=claimed.includes(r.trophies);return `<div class="dollTrophyReward ${done?'claimed':reached?'reached':''}"><div class="rewardTrophy">${r.trophies} Trophies</div>${r.profilePic&&getDoll200ProfilePic(name)?`<img src="${escapeHtml(getDoll200ProfilePic(name))}">`:''}<div class="rewardIcon">${escapeHtml(dollTrophyRewardText(r))}</div><small>${done?'CLAIMED':reached?'UNLOCKED':'LOCKED'}</small></div>`;}).join('')}</div></div>`;
 }
 function renderTrophyWay(){const box=document.getElementById("trophyWayContent");if(!box)return;box.innerHTML=`<div class="rankBox"><div style="opacity:.8">TROPHY WAY</div><div class="rankNumber">${trophyCount} Trophies</div><p>Every battle win gives 5 Trophies. Double or Nothing gives 10 Trophies on a win.</p></div><div class="trophyRewardGrid">${trophyRewardsUpTo(Math.max(250,trophyCount+100)).map(r=>`<div class="trophyReward ${claimedTrophyRewards.includes(r.trophies)?"claimed":""}"><b>${r.trophies} Trophies</b><div>${r.coins?`+${r.coins} Coins`:""}${r.coins&&r.dolb?" • ":""}${r.dolb?`+${r.dolb} Dolb`:""}</div><small>${claimedTrophyRewards.includes(r.trophies)?"CLAIMED":trophyCount>=r.trophies?"UNLOCKED":"LOCKED"}</small></div>`).join("")}</div>`;}
 function renderRankCollection(grid){grid.innerHTML="";const names=[...new Set(collection.map(c=>c.name))].filter(n=>getCard(n));if(!names.length){grid.innerHTML="<p>You need dolls before you can upgrade their ranks.</p>";return;}names.sort((a,b)=>{const af=favorites.includes(a),bf=favorites.includes(b);if(af&&!bf)return-1;if(!af&&bf)return 1;return a.localeCompare(b);}).forEach(name=>{const card=getCard(name),rank=getDollRank(name),st=getRankStats(name),next=RANK_UPGRADES[rank+1],count=collection.filter(c=>c.name===name).length;const d=document.createElement("div");d.className="levelUpSellCard";d.innerHTML=`<img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(name)}')"><div class="cardName">${escapeHtml(name)}</div><div class="battleLevelBadge">RANK ${rank}</div><div class="battleStats">${count} ${count===1?"copy":"copies"}<br>${getDollTrophies(name)} Doll Trophies<br>HP: ${BATTLE_HP+st.hpBonus}<br>Signature Move: ${card.power+st.powerBonus}</div>${next?`<button class="sellButton" ${dolb<next.dolb||money<next.coins?"disabled":""} onclick="upgradeDollRank('${encoded(name)}')">UPGRADE — ${next.dolb} Dolb + ${next.coins} Coins</button>`:`<button class="sellButton" disabled>MAX RANK</button>`}`;grid.appendChild(d);});}
@@ -1153,6 +1246,7 @@ let trophyCount=0;
 let dollTrophies={};
 let dollRanks={};
 let claimedTrophyRewards=[];
+let claimedDollTrophyRewards={};
 let trophySystemVersion=3;
 
 let completedTradeIds = [];
@@ -1329,6 +1423,7 @@ window.playOffline = () => {
   dollTrophies = {};
   dollRanks = {};
   claimedTrophyRewards = [];
+  claimedDollTrophyRewards = {};
   trophySystemVersion = 3;
 
   itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
@@ -1461,7 +1556,7 @@ async function loadPlayerData() {
     await setDoc(ref, {
       money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
       ownedProfilePics, username, profilePic,
-      trophyCount, dollTrophies, dollRanks, claimedTrophyRewards, trophySystemVersion,
+      trophyCount, dollTrophies, dollRanks, claimedTrophyRewards, claimedDollTrophyRewards, trophySystemVersion,
       itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase,
       redeemedCodes
     });
@@ -1493,6 +1588,7 @@ async function loadPlayerData() {
     claimedTrophyRewards=Array.isArray(data.claimedTrophyRewards)
       ? [...new Set(data.claimedTrophyRewards.map(Number).filter(t=>Number.isFinite(t)&&t>=0&&t<=trophyCount))]
       : [];
+    claimedDollTrophyRewards=data.claimedDollTrophyRewards&&typeof data.claimedDollTrophyRewards==='object' ? data.claimedDollTrophyRewards : {};
     trophySystemVersion=3;
     Object.keys(dollTrophies).forEach(name=>{if(getDollTrophies(name)>=200)unlockDollProfilePic(name);});
 
@@ -1515,19 +1611,30 @@ async function loadPlayerData() {
   await savePlayerData();
 }
 
+let playerSaveQueue = Promise.resolve();
+
 async function savePlayerData() {
   if (!currentUser) return;
 
-  // NOTE: "friends" is intentionally NOT written here. It now lives in the
-  // shared "friendships" collection and is derived from a live listener,
-  // so there is nothing to save on the player doc for it.
-  await setDoc(doc(db, "players", currentUser.uid), {
-    money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
-    ownedProfilePics, username, profilePic,
-    trophyCount,dollTrophies,dollRanks,claimedTrophyRewards,trophySystemVersion,
-    itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase,
-    redeemedCodes
-  }, { merge: true });
+  // Serialize player saves. Without this, two saves can start at the same
+  // time and the older snapshot can finish last, making trophy progress
+  // appear to reset after a refresh.
+  playerSaveQueue = playerSaveQueue.then(async () => {
+    if (!currentUser) return;
+    const uid = currentUser.uid;
+    await setDoc(doc(db, "players", uid), {
+      money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
+      ownedProfilePics, username, profilePic,
+      trophyCount, dollTrophies, dollRanks, claimedTrophyRewards, claimedDollTrophyRewards, trophySystemVersion,
+      itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase,
+      redeemedCodes
+    }, { merge: true });
+  }).catch(e => {
+    console.error("Player save failed:", e);
+    showMessage("Could not save your progress. Check your connection and try again.");
+  });
+
+  await playerSaveQueue;
 }
 
 /* ===== AUTH ===== */
@@ -1622,7 +1729,7 @@ function updateUI() {
 /* ===== PAGES ===== */
 
 
-window.showBattleTab=tab=>{const battle=document.getElementById("battleMain"),trophy=document.getElementById("trophyWayContent");document.getElementById("battleHomeTab")?.classList.toggle("active",tab==="battle");document.getElementById("battleTrophyTab")?.classList.toggle("active",tab==="trophies");battle?.classList.toggle("hidden",tab!=="battle");trophy?.classList.toggle("hidden",tab!=="trophies");if(tab==="trophies")renderTrophyWay();};
+window.showBattleTab=tab=>{const battle=document.getElementById("battleMain"),trophy=document.getElementById("trophyWayContent"),dollTrophy=document.getElementById("dollTrophyContent");document.getElementById("battleHomeTab")?.classList.toggle("active",tab==="battle");document.getElementById("battleTrophyTab")?.classList.toggle("active",tab==="trophies");document.getElementById("battleDollTrophyTab")?.classList.toggle("active",tab==="dollTrophies");battle?.classList.toggle("hidden",tab!=="battle");trophy?.classList.toggle("hidden",tab!=="trophies");dollTrophy?.classList.toggle("hidden",tab!=="dollTrophies");if(tab==="trophies")renderTrophyWay();if(tab==="dollTrophies")renderDollTrophyWay();};
 window.showPage = page => {
   if (page !== "minigame" && typeof buzzyJumpRunning !== "undefined" && buzzyJumpRunning) {
     exitBuzzyJump(true);
@@ -2351,6 +2458,7 @@ window.redeemCode = async () => {
       dollRanks[card.name] = 4;
       dollTrophies[card.name] = 1000;
       unlockDollProfilePic(card.name);
+      claimDollTrophyRewardsFor(card.name);
     });
   }
 
