@@ -524,6 +524,24 @@ const BATTLE_HP = 100;
 const RANK_UPGRADES={1:{dolb:5,coins:25,hp:10,power:5},2:{dolb:10,coins:50,hp:10,power:10},3:{dolb:15,coins:55,hp:20,power:15},4:{dolb:20,coins:75,hp:25,power:20}};
 const TROPHY_REWARDS=[{trophies:5,coins:100,dolb:0},{trophies:10,coins:0,dolb:5},{trophies:20,coins:200,dolb:0},{trophies:30,coins:0,dolb:10},{trophies:40,coins:300,dolb:0},{trophies:50,coins:0,dolb:20},{trophies:70,coins:500,dolb:0},{trophies:100,coins:0,dolb:45},{trophies:150,coins:1000,dolb:0},{trophies:200,coins:0,dolb:75}];
 
+// One profile picture is unlocked for each doll when that doll reaches 200 Doll Trophies.
+const DOLL_200_PROFILE_PICS={
+  "Baby Pickels":"baby pickels 200.png", "Mr. Pickels":"mr pickels 200.png",
+  "Wily":"wily 200.png", "Will":"will 200.png", "Waffle":"waffle 200.png",
+  "Cute Cake":"cute cake 200.png", "Buttyr":"buttyr 200.png", "Blossem":"blossem 200.png",
+  "Buzzy":"buzzy 200.png", "Nico":"nico 200.png", "Choper":"choper 200.png",
+  "Bullet":"bullet 200.png", "turkmoon":"turkmoon 200.png", "rem":"rem 200.png",
+  "eep":"eep 200.png", "egg":"egg 200.png", "zevel":"zevel 200.png",
+  "gice cream":"gice cream 200.png", "tax":"tax 200.png", "ax":"ax 200.png",
+  "drimy":"drimy 200.png", "King Eep":"king eep 200.png", "bucket of ax":"bucket of ax 200.png"
+};
+function getDoll200ProfilePic(name){return DOLL_200_PROFILE_PICS[name]||null;}
+function unlockDollProfilePic(name){
+  const pic=getDoll200ProfilePic(name);
+  if(pic && !ownedProfilePics.includes(pic)) { ownedProfilePics.push(pic); return true; }
+  return false;
+}
+
 /* ===== TEMPORARY BUZZY EVENT (Sep 28, 2026 - Dec 1, 2026) =====
    Everything under this event -- Buzzy Points, the event shop, the four
    color variants, the Golden Buzzy redemption, Bundle Buzz, and the EVENT
@@ -667,11 +685,37 @@ function getRankStats(name){let h=0,p=0,r=getDollRank(name);for(let i=1;i<=r;i++
 function normalizeCopy(copy){return{id:copy.id||createCardId(),name:copy.name,traded:copy.traded===true};}
 function normalizeCollection(data){if(!Array.isArray(data))return[];return data.map(x=>typeof x==="string"?createCardCopy(x):normalizeCopy(x)).filter(x=>getCard(x.name));}
 function trophyRewardsUpTo(n){let a=[...TROPHY_REWARDS];for(let t=250;t<=n;t+=50)a.push({trophies:t,coins:0,dolb:100});return a;}
+function getDollLossPenalty(current){
+  if(current<=0) return 0;
+  if(current<50) return 1;
+  if(current<100) return 2;
+  if(current<500) return 3;
+  return 4;
+}
+async function addDollLossTrophies(names){
+  names=[...new Set((Array.isArray(names)?names:[names]).filter(Boolean))];
+  const changes=[];
+  names.forEach(n=>{
+    const before=getDollTrophies(n);
+    const loss=getDollLossPenalty(before);
+    const after=Math.max(0,before-loss);
+    dollTrophies[n]=after;
+    changes.push({name:n,loss,before,after});
+  });
+  await savePlayerData();
+  return changes;
+}
 async function addBattleWinTrophies(names){
  names=[...new Set((Array.isArray(names)?names:[names]).filter(Boolean))]; trophyCount+=5;
- names.forEach(n=>dollTrophies[n]=getDollTrophies(n)+1);
+ const unlocked=[];
+ names.forEach(n=>{
+   const before=getDollTrophies(n);
+   dollTrophies[n]=before+5;
+   if(before<200 && dollTrophies[n]>=200 && unlockDollProfilePic(n)) unlocked.push({name:n,pic:getDoll200ProfilePic(n)});
+   else if(dollTrophies[n]>=200) unlockDollProfilePic(n);
+ });
  let coins=0,dolbs=0,reached=[]; trophyRewardsUpTo(trophyCount).forEach(r=>{if(!claimedTrophyRewards.includes(r.trophies)){claimedTrophyRewards.push(r.trophies);coins+=r.coins;dolbs+=r.dolb;reached.push(r);}});
- money+=coins;dolb+=dolbs;await savePlayerData();return{coinsReward:coins,dolbReward:dolbs,reached};
+ money+=coins;dolb+=dolbs;await savePlayerData();return{coinsReward:coins,dolbReward:dolbs,reached,unlocked};
 }
 function renderBattleRankInfo(){}
 
@@ -1106,7 +1150,7 @@ let trophyCount=0;
 let dollTrophies={};
 let dollRanks={};
 let claimedTrophyRewards=[];
-let trophySystemVersion=2;
+let trophySystemVersion=3;
 
 let completedTradeIds = [];
 let ownedProfilePics = [DEFAULT_PROFILE_PIC];
@@ -1282,7 +1326,7 @@ window.playOffline = () => {
   dollTrophies = {};
   dollRanks = {};
   claimedTrophyRewards = [];
-  trophySystemVersion = 2;
+  trophySystemVersion = 3;
 
   itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
   cupcakeChargesLeft = 0;
@@ -1431,24 +1475,23 @@ async function loadPlayerData() {
     ownedProfilePics = Array.isArray(data.ownedProfilePics) ? data.ownedProfilePics : [DEFAULT_PROFILE_PIC];
     if (!ownedProfilePics.includes(DEFAULT_PROFILE_PIC)) ownedProfilePics.push(DEFAULT_PROFILE_PIC);
 
-    // Trophy Way v2 migration: the previous broken version could load/save an
-    // incorrect trophy total (for example 200 after the first win). Reset the
-    // old trophy data once, then use the new exact +5-per-win system.
-    if (data.trophySystemVersion !== 2) {
-      trophyCount = 0;
-      dollTrophies = {};
-      claimedTrophyRewards = [];
-      trophySystemVersion = 2;
+    // Trophy Way v3 migration. The old v2 doll counter gave +1 per win, so
+    // existing doll trophy progress is converted to the new +5-per-win scale.
+    trophyCount=typeof data.trophyCount==="number"?Math.max(0,data.trophyCount):0;
+    if(data.trophySystemVersion===2 && data.dollTrophies && typeof data.dollTrophies==="object") {
+      dollTrophies={};
+      Object.entries(data.dollTrophies).forEach(([name,value])=>{
+        const n=Number(value);
+        dollTrophies[name]=Number.isFinite(n)?Math.max(0,n*5):0;
+      });
     } else {
-      trophyCount=typeof data.trophyCount==="number"?Math.max(0,data.trophyCount):0;
       dollTrophies=data.dollTrophies&&typeof data.dollTrophies==="object"?data.dollTrophies:{};
-      // Never trust stale claimed milestones from older Trophy Way versions.
-      // A reward can only be marked CLAIMED when its trophy threshold has
-      // actually been reached by the current trophy total.
-      claimedTrophyRewards=Array.isArray(data.claimedTrophyRewards)
-        ? [...new Set(data.claimedTrophyRewards.map(Number).filter(t=>Number.isFinite(t)&&t>=0&&t<=trophyCount))]
-        : [];
     }
+    claimedTrophyRewards=Array.isArray(data.claimedTrophyRewards)
+      ? [...new Set(data.claimedTrophyRewards.map(Number).filter(t=>Number.isFinite(t)&&t>=0&&t<=trophyCount))]
+      : [];
+    trophySystemVersion=3;
+    Object.keys(dollTrophies).forEach(name=>{if(getDollTrophies(name)>=200)unlockDollProfilePic(name);});
 
     username = data.username || "";
     profilePic = data.profilePic || DEFAULT_PROFILE_PIC;
@@ -3801,10 +3844,12 @@ async function finishBotBattle(won, playerCopy, botCopy, usedItem){
    if(usedItem==="greedy"){const stolen=getCard(botCopy.name);if(stolen)collection.push(createCardCopy(botCopy.name));}
    const reward=await addBattleWinTrophies(playerCopy.name);
    updateUI();
-   arena.innerHTML=`<div class="battleResult"><div class="winText">YOU WIN!</div><div class="rewardText">+5 TROPHIES</div><p>You defeated ${escapeHtml(battleOpponentUsername)}!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${getDollTrophies(playerCopy.name)}</b></p>${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}${usedItem==="greedy"?'<div class="levelUpBox">GREEDY! You stole 1 copy of the opponent doll.</div>':""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
+   arena.innerHTML=`<div class="battleResult"><div class="winText">YOU WIN!</div><div class="rewardText">+5 TROPHIES</div><p>You defeated ${escapeHtml(battleOpponentUsername)}!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${getDollTrophies(playerCopy.name)}</b></p>${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}${reward.unlocked&&reward.unlocked.length?`<div class="levelUpBox">PROFILE PICTURE UNLOCKED: ${reward.unlocked.map(x=>escapeHtml(x.name)).join(", ")}</div>`:""}${usedItem==="greedy"?'<div class="levelUpBox">GREEDY! You stole 1 copy of the opponent doll.</div>':""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
  }else{
    if(usedItem==="doubleOrNothing")showMessage("Double or Nothing has no battle-level effect anymore.");
-   arena.innerHTML=`<div class="battleResult"><div class="winText">YOU LOSE</div><p>Better luck next battle!</p><button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
+   const losses=await addDollLossTrophies(playerCopy.name);
+   const loss=losses[0];
+   arena.innerHTML=`<div class="battleResult"><div class="winText">YOU LOSE</div><p>Better luck next battle!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${loss.after}</b> (${loss.loss?`-${loss.loss}`:"no loss"})</p><button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
  }
 }
 function showLocalFriendBattle(playerCopy, friendCopy) {
@@ -3891,8 +3936,12 @@ async function finishFriendBattle(won, playerCopy, friendCopy, usedItem){
  if(won){
    if(usedItem==="greedy"&&getCard(friendCopy.name))collection.push(createCardCopy(friendCopy.name));
    const reward=await addBattleWinTrophies(playerCopy.name);updateUI();
-   arena.innerHTML=`<div class="battleResult"><div class="winText">YOU WIN!</div><div class="rewardText">+5 TROPHIES</div><p>You defeated ${escapeHtml(battleOpponentUsername)}!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${getDollTrophies(playerCopy.name)}</b></p>${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}${usedItem==="greedy"?'<div class="levelUpBox">GREEDY! You stole 1 copy of the opponent doll.</div>':""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
- }else arena.innerHTML=`<div class="battleResult"><div class="winText">YOU LOSE</div><p>Better luck next battle!</p><button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
+   arena.innerHTML=`<div class="battleResult"><div class="winText">YOU WIN!</div><div class="rewardText">+5 TROPHIES</div><p>You defeated ${escapeHtml(battleOpponentUsername)}!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${getDollTrophies(playerCopy.name)}</b></p>${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}${reward.unlocked&&reward.unlocked.length?`<div class="levelUpBox">PROFILE PICTURE UNLOCKED: ${reward.unlocked.map(x=>escapeHtml(x.name)).join(", ")}</div>`:""}${usedItem==="greedy"?'<div class="levelUpBox">GREEDY! You stole 1 copy of the opponent doll.</div>':""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
+ }else{
+   const losses=await addDollLossTrophies(playerCopy.name);
+   const loss=losses[0];
+   arena.innerHTML=`<div class="battleResult"><div class="winText">YOU LOSE</div><p>Better luck next battle!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${loss.after}</b> (${loss.loss?`-${loss.loss}`:"no loss"})</p><button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
+ }
 }
 window.exitBattle = () => {
   battleMode = null;
@@ -4116,8 +4165,12 @@ async function finishBossBattle(won, teamCopies, bossCopy, usedItem){
    money+=bonusCoins;dolb+=bonusDolb;buzzyPoints+=bonusBuzzyPoints;
    if(usedItem==="greedy")collection.push(createCardCopy(bossCopy.name));
    await savePlayerData();updateUI();
-   arena.innerHTML=`<div class="battleResult"><div class="winText">BOSS DEFEATED!</div><div class="rewardText">+5 TROPHIES</div><p>You beat the Buzzy Boss!</p><p>Rewards: <b>+${bonusCoins} Coins</b>, <b>+${bonusDolb} Dolb</b>${bonusBuzzyPoints?`, <b>+${bonusBuzzyPoints} Buzzy Points</b>`:""}</p>${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
- }else arena.innerHTML=`<div class="battleResult"><div class="winText">BOSS NOT DEFEATED</div><p>Better luck next time!</p><button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
+   const unlockedText=reward.unlocked&&reward.unlocked.length?`<p>Profile picture unlocked: <b>${reward.unlocked.map(x=>escapeHtml(x.name)).join(", ")}</b></p>`:"";
+   arena.innerHTML=`<div class="battleResult"><div class="winText">BOSS DEFEATED!</div><div class="rewardText">+5 TROPHIES EACH</div><p>You beat the Buzzy Boss!</p><p>Rewards: <b>+${bonusCoins} Coins</b>, <b>+${bonusDolb} Dolb</b>${bonusBuzzyPoints?`, <b>+${bonusBuzzyPoints} Buzzy Points</b>`:""}</p><p>${teamCopies.map(c=>`${escapeHtml(c.name)}: <b>${getDollTrophies(c.name)} Doll Trophies</b>`).join("<br>")}</p>${unlockedText}${reward.coinsReward||reward.dolbReward?`<p>Trophy Way reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
+ }else{
+   const losses=await addDollLossTrophies(teamCopies.map(c=>c.name));
+   arena.innerHTML=`<div class="battleResult"><div class="winText">BOSS NOT DEFEATED</div><p>Better luck next time!</p><div>${losses.map(x=>`<p>${escapeHtml(x.name)}: <b>${x.after}</b> (${x.loss?`-${x.loss}`:"no loss"})</p>`).join("")}</div><button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
+ }
 }
 function renderBattleRequests() {
   const c = document.getElementById("battleRequests");
