@@ -674,6 +674,211 @@ async function addBattleWinTrophies(names){
  money+=coins;dolb+=dolbs;await savePlayerData();return{coinsReward:coins,dolbReward:dolbs,reached};
 }
 function renderBattleRankInfo(){}
+
+
+// ===== BATTLE SETUP / CONTROLS =====
+function makeBotCopy(card) {
+  return { id: "BOT_" + createCardId(), name: card.name, traded: false };
+}
+
+function pickAiMove(card) {
+  const moves = getCardMoves(card);
+  return moves[Math.floor(Math.random() * moves.length)];
+}
+
+function renderBattleHome() {
+  const main = document.getElementById("battleMain");
+  if (!main) return;
+  const bossButton = document.getElementById("bossModeButton");
+  if (bossButton) bossButton.classList.toggle("hidden", !isBossActive());
+  if (battleRoomId) return;
+  main.classList.remove("hidden");
+  const requestArea = document.getElementById("battleRequests");
+  if (requestArea && typeof renderBattleRequests === "function") renderBattleRequests();
+}
+
+function renderBattleItemPicker() {
+  const area = document.getElementById("battleItemPickerArea");
+  if (!area) return;
+  area.innerHTML = `
+    <div class="battleItemPicker">
+      <h3>Battle Item (optional — only 1 active per match)</h3>
+      ${cupcakeChargesLeft > 0 ? `<div class="cupcakeActiveNote">Cupcake buff active: ×1.75 damage for ${cupcakeChargesLeft} more battle${cupcakeChargesLeft === 1 ? "" : "s"}</div>` : ""}
+      <div class="battleItemRow">
+        <div class="battleItemChoice ${battleSelectedItem === null ? "selected" : ""}" onclick="selectBattleItem(null)">
+          <div>None</div><div>None</div>
+        </div>
+        ${battleItems.map(item => {
+          const owned = itemInventory[item.id] || 0;
+          const active = item.id === "cupcake" && cupcakeChargesLeft > 0;
+          const disabled = owned <= 0 && !active;
+          return `<div class="battleItemChoice ${battleSelectedItem === item.id ? "selected" : ""} ${disabled ? "disabledItem" : ""}"
+            ${disabled ? "" : `onclick="selectBattleItem('${item.id}')"`}>
+            <div>${item.emoji || ""}</div><div>${escapeHtml(item.name)}</div>
+            <div style="font-size:11px;opacity:.8">${active ? "active" : "x" + owned}</div>
+          </div>`;
+        }).join("")}
+      </div>
+    </div>`;
+}
+
+window.selectBattleItem = id => {
+  if (id !== null && id !== "cupcake" && !(itemInventory[id] > 0)) return;
+  battleSelectedItem = battleSelectedItem === id ? null : id;
+  renderBattleItemPicker();
+};
+
+function consumeSelectedBattleItem() {
+  if (battleSelectedItem === "cupcake") {
+    if (cupcakeChargesLeft <= 0) {
+      itemInventory.cupcake = Math.max(0, (itemInventory.cupcake || 0) - 1);
+      cupcakeChargesLeft = 5;
+    }
+  } else if (battleSelectedItem) {
+    itemInventory[battleSelectedItem] = Math.max(0, (itemInventory[battleSelectedItem] || 0) - 1);
+  }
+}
+
+function tickCupcakeCharge() {
+  if (cupcakeChargesLeft > 0) cupcakeChargesLeft = Math.max(0, cupcakeChargesLeft - 1);
+}
+
+function renderBattleChoice() {
+  const box = document.getElementById("battleChoice");
+  const grid = document.getElementById("battleChoiceGrid");
+  const title = document.getElementById("battleChoiceTitle");
+  const description = document.getElementById("battleChoiceDescription");
+  const start = document.getElementById("battleStartButton");
+  if (!box || !grid || !start) return;
+
+  box.classList.remove("hidden");
+  title.textContent = "Choose Your Doll";
+  description.textContent = battleMode === "bot"
+    ? "Favorite dolls appear first. Dolls are grouped together — choose the doll you want to battle with."
+    : "Choose a doll to use against " + battleOpponentUsername + ".";
+
+  renderBattleItemPicker();
+  const available = getBattleCollectionCopies();
+  grid.innerHTML = "";
+
+  if (!available.length) {
+    grid.innerHTML = `<div class="friendEmpty"><h3>You need a card!</h3><p>Open a pack first to get a battle doll.</p></div>`;
+    start.disabled = true;
+    return;
+  }
+
+  available.forEach(copy => {
+    const card = getCard(copy.name);
+    if (!card) return;
+    const hp = getBattleMaxHP(copy.name);
+    const fav = favorites.includes(copy.name);
+    const selected = battleSelectedCardId === copy.name;
+    const count = collection.filter(c => c.name === copy.name).length;
+    const div = document.createElement("div");
+    div.className = "battleChoiceCard" + (selected ? " selected" : "") + (fav ? " favoriteBattleCard" : "");
+    div.onclick = () => { battleSelectedCardId = selected ? null : copy.name; renderBattleChoice(); };
+    div.innerHTML = `
+      ${fav ? '<div class="battleFavoriteBadge">★</div>' : ""}
+      <img src="${escapeHtml(card.image)}" onclick="event.stopPropagation();openEncodedCardViewer('${encoded(card.image)}','${encoded(card.name)}')">
+      <div class="cardName">${escapeHtml(card.name)}</div>
+      <div class="typeBadge">${card.type.join(" / ")}</div>
+      <div class="battleLevelBadge">RANK ${getDollRank(copy.name)}</div>
+      <div class="battleStats">${count} ${count === 1 ? "copy" : "copies"}<br>HP: ${hp}<br>${getMovesSummaryText(card, copy)}<br>${getDollTrophies(copy.name)} Doll Trophies</div>
+    `;
+    grid.appendChild(div);
+  });
+  start.disabled = !battleSelectedCardId;
+  start.onclick = confirmBattleCard;
+}
+
+function hideBattleChoice() {
+  const el = document.getElementById("battleChoice");
+  if (el) el.classList.add("hidden");
+}
+
+window.cancelBattleSetup = () => {
+  battleMode = null;
+  battleSelectedCardId = null;
+  battleSelectedItem = null;
+  bossTeamSelected = [];
+  hideBattleChoice();
+  const main = document.getElementById("battleMain");
+  if (main) main.classList.remove("hidden");
+};
+
+window.startBotBattle = difficulty => {
+  if (!getBattleCollectionCopies().length) {
+    showMessage("You need at least one card to battle.");
+    showPage("collection");
+    return;
+  }
+  battleMode = "bot";
+  battleDifficulty = difficulty;
+  battleOpponentUid = null;
+  battleOpponentUsername = difficulty === "hard" ? "Hard Bot" : "Easy Bot";
+  battleOpponentPic = DEFAULT_PROFILE_PIC;
+  battleSelectedCardId = null;
+  battleSelectedItem = null;
+  battleChoiceSubmitted = false;
+  battleRewardGiven = false;
+  showPage("battle");
+  const main = document.getElementById("battleMain");
+  if (main) main.classList.add("hidden");
+  renderBattleChoice();
+};
+
+window.confirmBattleCard = async () => {
+  if (!battleSelectedCardId) return;
+  const playerCopy = collection.find(c => c.name === battleSelectedCardId);
+  if (!playerCopy) {
+    showMessage("That doll is no longer in your collection.");
+    return;
+  }
+  const startButton = document.getElementById("battleStartButton");
+  if (startButton) startButton.disabled = true;
+
+  if (battleMode === "bot") {
+    const playerCard = getCard(playerCopy.name);
+    const botCard = battleDifficulty === "hard" ? chooseHardBotCard(playerCard) : chooseEasyBotCard();
+    consumeSelectedBattleItem();
+    showLocalBotBattle(playerCopy, botCard);
+    return;
+  }
+
+  if (battleMode === "friend") {
+    try {
+      const snap = await getDoc(doc(db, "players", battleOpponentUid));
+      if (!snap.exists()) throw new Error("Could not find that player's cards.");
+      const data = snap.data();
+      const friendCollection = normalizeCollection(data.collection);
+      const friendFavorites = Array.isArray(data.favorites) ? data.favorites : [];
+      const friendTradeable = friendCollection.filter(copy => {
+        const card = getCard(copy.name);
+        return card && card.rarity !== "event";
+      }).sort((a,b) => {
+        const af = friendFavorites.includes(a.name), bf = friendFavorites.includes(b.name);
+        if (af && !bf) return -1;
+        if (!af && bf) return 1;
+        return a.name.localeCompare(b.name);
+      });
+      if (!friendTradeable.length) throw new Error(battleOpponentUsername + " doesn't have any battle-ready dolls yet.");
+      consumeSelectedBattleItem();
+      showLocalFriendBattle(playerCopy, friendTradeable[0]);
+    } catch (e) {
+      console.error(e);
+      showMessage("Could not start the battle: " + e.message);
+      if (startButton) startButton.disabled = false;
+    }
+  }
+};
+
+function chooseEasyBotCard() {
+  return cards[Math.floor(Math.random() * cards.length)];
+}
+function chooseHardBotCard(playerCard) {
+  const candidates = cards.filter(card => getTypeMultiplier(card.moveType, playerCard.type) > 1);
+  return candidates.length ? candidates[Math.floor(Math.random() * candidates.length)] : chooseEasyBotCard();
+}
 function renderTrophyWay(){const box=document.getElementById("trophyWayContent");if(!box)return;box.innerHTML=`<div class="rankBox"><div style="opacity:.8">TROPHY WAY</div><div class="rankNumber">${trophyCount} Trophies</div><p>Every battle win gives 5 Trophies.</p></div><div class="trophyRewardGrid">${trophyRewardsUpTo(Math.max(250,trophyCount+100)).map(r=>`<div class="trophyReward ${claimedTrophyRewards.includes(r.trophies)?"claimed":""}"><b>${r.trophies} Trophies</b><div>${r.coins?`+${r.coins} Coins`:""}${r.coins&&r.dolb?" • ":""}${r.dolb?`+${r.dolb} Dolb`:""}</div><small>${claimedTrophyRewards.includes(r.trophies)?"CLAIMED":trophyCount>=r.trophies?"UNLOCKED":"LOCKED"}</small></div>`).join("")}</div>`;}
 function renderRankCollection(grid){grid.innerHTML="";const names=[...new Set(collection.map(c=>c.name))].filter(n=>getCard(n));if(!names.length){grid.innerHTML="<p>You need dolls before you can upgrade their ranks.</p>";return;}names.sort((a,b)=>{const af=favorites.includes(a),bf=favorites.includes(b);if(af&&!bf)return-1;if(!af&&bf)return 1;return a.localeCompare(b);}).forEach(name=>{const card=getCard(name),rank=getDollRank(name),st=getRankStats(name),next=RANK_UPGRADES[rank+1],count=collection.filter(c=>c.name===name).length;const d=document.createElement("div");d.className="levelUpSellCard";d.innerHTML=`<img src="${escapeHtml(card.image)}" onclick="openEncodedCardViewer('${encoded(card.image)}','${encoded(name)}')"><div class="cardName">${escapeHtml(name)}</div><div class="battleLevelBadge">RANK ${rank}</div><div class="battleStats">${count} ${count===1?"copy":"copies"}<br>${getDollTrophies(name)} Doll Trophies<br>HP: ${BATTLE_HP+st.hpBonus}<br>Signature Move: ${card.power+st.powerBonus}</div>${next?`<button class="sellButton" ${dolb<next.dolb||money<next.coins?"disabled":""} onclick="upgradeDollRank('${encoded(name)}')">UPGRADE — ${next.dolb} Dolb + ${next.coins} Coins</button>`:`<button class="sellButton" disabled>MAX RANK</button>`}`;grid.appendChild(d);});}
 window.upgradeDollRank=async e=>{const n=decodeURIComponent(e),r=getDollRank(n),u=RANK_UPGRADES[r+1];if(!u||!collection.some(c=>c.name===n))return;if(dolb<u.dolb||money<u.coins){showMessage("Not enough Dolb or coins.");return;}dolb-=u.dolb;money-=u.coins;dollRanks[n]=r+1;await savePlayerData();updateUI();showMessage(`${n} reached Rank ${r+1}!`);};
@@ -817,10 +1022,26 @@ function showPickPackChoices(picks) {
     const chooseBtn = document.createElement("button");
     chooseBtn.textContent = "SELECT";
     Object.assign(chooseBtn.style, { marginTop: "8px", width: "100%", background: "#2674d9", color: "white" });
-    chooseBtn.onclick = () => {
-      if(selected.has(card.name)){selected.delete(card.name);chooseBtn.textContent="SELECT";chooseBtn.style.background="#2674d9";}
-      else{if(selected.size>=2){showMessage("You can only pick 2 dolls.");return;}selected.add(card.name);chooseBtn.textContent="SELECTED";chooseBtn.style.background="#198754";}
-      confirmBtn.disabled=selected.size!==2;
+    const toggleChoice = () => {
+      if (selected.has(card.name)) {
+        selected.delete(card.name);
+        chooseBtn.textContent = "SELECT";
+        chooseBtn.style.background = "#2674d9";
+        box.style.outline = "none";
+      } else {
+        if (selected.size >= 2) { showMessage("You can only pick 2 dolls."); return; }
+        selected.add(card.name);
+        chooseBtn.textContent = "SELECTED";
+        chooseBtn.style.background = "#198754";
+        box.style.outline = "3px solid #36b9ff";
+      }
+      confirmBtn.disabled = selected.size !== 2;
+    };
+    chooseBtn.onclick = toggleChoice;
+    box.onclick = e => {
+      if (e.target === img) return;
+      if (e.target === chooseBtn) return;
+      toggleChoice();
     };
     box.appendChild(chooseBtn);
 
@@ -2123,7 +2344,7 @@ function showPackResults(pulled) {
   });
 
   const title = document.createElement("h2");
-  title.textContent = "You got:";
+  title.textContent = pulled.length === 1 ? "You got 1 doll!" : `You got ${pulled.length} dolls!`;
   overlay.appendChild(title);
 
   const grid = document.createElement("div");
