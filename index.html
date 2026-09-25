@@ -255,6 +255,11 @@ h1,h2,h3{margin-top:0}
 .cardViewer{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px}
 .cardViewerImage{max-width:95vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
 .cardViewerClose{position:fixed;top:15px;right:15px;background:#183653;color:white;font-size:24px;width:48px;height:48px;padding:0;z-index:5001}
+.pfpFullscreenButton{background:#2674d9;color:white;margin-top:8px;width:100%}
+.superDollCard{background:#10243d;border-radius:15px;padding:16px;text-align:center}
+.superDollArrow{font-size:22px;font-weight:bold;margin:8px 0}
+.superDollGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px}
+.superDollImg{width:100%;aspect-ratio:1/1.2;object-fit:contain;background:#091a2d;border-radius:10px}
 
 .itemShopGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
 .itemShopCard{background:#10243d;border-radius:15px;padding:18px;text-align:center}
@@ -390,6 +395,8 @@ h1,h2,h3{margin-top:0}
     <div id="dolbDeals" class="dealGrid"></div>
     <h2 class="shopSection">Battle Items</h2>
     <div id="itemsShopArea"></div>
+    <h2 class="shopSection">Super Dolls</h2>
+    <div id="superDollShopArea"></div>
     <h2 class="shopSection">Event Shop</h2>
     <div id="eventShopArea"></div>
   </div>
@@ -480,7 +487,7 @@ h1,h2,h3{margin-top:0}
       <p>Google Account: <span id="settingsAccountEmail"></span></p>
       <p>Username: <b id="settingsUsername"></b></p>
       <div style="text-align:center;margin:20px 0">
-        <img id="settingsProfilePic" class="profilePic" src="basic_p.png">
+        <img id="settingsProfilePic" class="profilePic" src="basic_p.png" style="cursor:pointer" onclick="openProfilePicFullscreen(this.src,'Profile Picture')">
         <p>Profile Picture</p>
         <div id="settingsProfilePicOptions" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px"></div>
       </div>
@@ -542,7 +549,9 @@ const DEFAULT_PROFILE_PIC = "basic_p.png";
 const BUZZY_PROFILE_PIC = "buzzy_p.png";
 
 const PACK_PRICE = 15;
-const PICK_PACK_PRICE = 175;
+const PICK_PACK_PRICE = 100;
+const BIG_PACK_PRICE = 50;
+const SUPER_DOLLER_PRICE = 300;
 const STARTING_COINS = 75;
 const STARTING_DOLB = 0;
 
@@ -567,14 +576,14 @@ const DOLL_200_PROFILE_PICS={
   "Turkmoon":"turkmoon 200.png",
   "Rem":"rem 200.png",
   "Eep":"eep200.png",
-  "egg":"egg 200.png",
-  "zevel":"zevel 200.png",
-  "gice cream":"gice cream 200.png",
-  "tax":"tax 200.png",
-  "ax":"ax 200.png",
-  "drimy":"drimy 200.png",
+  "Egg":"egg 200.png",
+  "Zevel":"zevel 200.png",
+  "Gice Cream":"gice cream 200.png",
+  "Tax":"tax 200.png",
+  "Ax":"ax 200.png",
+  "Drimy":"drimy 200.png",
   "King Eep":"king eep 200.png",
-  "bucket of ax":"bucket of ax 200.png"
+  "Bucket of Ax":"bucket of ax 200.png"
 };
 function getDoll200ProfilePic(name){
   if(!name) return null;
@@ -1134,6 +1143,13 @@ function renderPackShop() {
         <div class="shopPrice">${PICK_PACK_PRICE} Coins</div>
         <button class="itemBuyButton" ${money < PICK_PACK_PRICE ? "disabled" : ""} onclick="openPickPack()">OPEN PICK PACK</button>
       </div>
+      <div class="itemShopCard">
+        <div class="itemEmoji">📦</div>
+        <div class="itemName">Big Pack</div>
+        <p class="itemDesc">1 doll from the Big Pack pool.</p>
+        <div class="shopPrice">${BIG_PACK_PRICE} Coins</div>
+        <button class="itemBuyButton" ${money < BIG_PACK_PRICE ? "disabled" : ""} onclick="openBigPack()">OPEN BIG PACK</button>
+      </div>
     </div>
   `;
 }
@@ -1295,7 +1311,7 @@ let dailyShopBought = false;
 let dailyShopDate = "";
 let dailyShopRerollCount = 0;
 
-let itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
+let itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0, superDoller: 0 };
 let cupcakeChargesLeft = 0;
 
 let lastBundleBuzzPurchase = 0; // epoch ms, 0 = never bought
@@ -1394,6 +1410,10 @@ window.openCardViewer = (image, name) => {
   document.getElementById("cardViewer").classList.remove("hidden");
 };
 
+window.openProfilePicFullscreen = (pic, name="Profile Picture") => {
+  openCardViewer(pic, name);
+};
+
 window.closeCardViewer = e => {
   if (e) e.stopPropagation();
   document.getElementById("cardViewer").classList.add("hidden");
@@ -1464,7 +1484,7 @@ window.playOffline = () => {
   claimedDollTrophyRewards = {};
   trophySystemVersion = 3;
 
-  itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
+  itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0, superDoller: 0 };
   cupcakeChargesLeft = 0;
   dailyShopRerollCount = 0;
   lastBundleBuzzPurchase = 0;
@@ -1586,7 +1606,7 @@ async function loadPlayerData() {
     ownedProfilePics = [DEFAULT_PROFILE_PIC];
     username = "";
     profilePic = DEFAULT_PROFILE_PIC;
-    itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
+    itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0, superDoller: 0 };
     cupcakeChargesLeft = 0;
     lastBundleBuzzPurchase = 0;
     redeemedCodes = [];
@@ -1642,7 +1662,7 @@ async function loadPlayerData() {
     if (!ownedProfilePics.includes(profilePic)) ownedProfilePics.push(profilePic);
 
     itemInventory = data.itemInventory && typeof data.itemInventory === "object"
-      ? { doubleOrNothing: 0, cupcake: 0, greedy: 0, ...data.itemInventory }
+      ? { doubleOrNothing: 0, cupcake: 0, greedy: 0, superDoller: 0, ...data.itemInventory }
       : { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
     cupcakeChargesLeft = typeof data.cupcakeChargesLeft === "number" ? Math.max(0, data.cupcakeChargesLeft) : 0;
     lastBundleBuzzPurchase = typeof data.lastBundleBuzzPurchase === "number" ? Math.max(0, data.lastBundleBuzzPurchase) : 0;
@@ -1847,9 +1867,12 @@ function renderSettingsProfilePicOptions() {
   }
 
   area.innerHTML = ownedProfilePics.map(pic => `
-    <img src="${escapeHtml(pic)}"
-      style="width:55px;height:55px;border-radius:50%;object-fit:cover;background:#091a2d;cursor:pointer;border:3px solid ${pic === profilePic ? "#2674d9" : "transparent"}"
-      onclick="selectProfilePic('${encoded(pic)}')">
+    <div style="display:inline-flex;flex-direction:column;align-items:center;vertical-align:top;margin:4px">
+      <img src="${escapeHtml(pic)}"
+        style="width:55px;height:55px;border-radius:50%;object-fit:cover;background:#091a2d;cursor:pointer;border:3px solid ${pic === profilePic ? "#2674d9" : "transparent"}"
+        onclick="selectProfilePic('${encoded(pic)}')" title="Select profile picture">
+      <button type="button" class="pfpFullscreenButton" style="width:70px;font-size:10px;padding:6px 4px" onclick="openProfilePicFullscreen('${encoded(pic)}','Profile Picture')">FULL SCREEN</button>
+    </div>
   `).join("");
 }
 
@@ -1877,7 +1900,7 @@ window.resetAccount = async () => {
   dollRanks = {};
   claimedTrophyRewards = [];
   trophySystemVersion = 2;
-  itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0 };
+  itemInventory = { doubleOrNothing: 0, cupcake: 0, greedy: 0, superDoller: 0 };
   cupcakeChargesLeft = 0;
   lastBundleBuzzPurchase = 0;
   redeemedCodes = [];
@@ -2124,6 +2147,7 @@ function renderShop() {
   }
 
   renderItemsShop();
+  renderSuperDollShop();
   renderEventShop();
 }
 
@@ -2208,6 +2232,65 @@ window.sellItem = async itemId => {
   await savePlayerData();
   updateUI();
   showMessage(item.name + " sold for " + item.sellPrice + " Dolb.");
+};
+
+/* ===== SUPER DOLLS ===== */
+const SUPER_DOLL_UPGRADES = {
+  "Baby Pickels":"Mr. Pickels",
+  "Wily":"Will",
+  "Waffle":"Cute Cake",
+  "Blossem":"Buzzy",
+  "Choper":"Bullet",
+  "Rem":"Eep",
+  "tax":"ax",
+  "ax":"drimy"
+};
+
+function renderSuperDollShop(){
+  const area=document.getElementById("superDollShopArea");
+  if(!area)return;
+  const owned=itemInventory.superDoller||0;
+  area.innerHTML=`<div class="itemShopCard" style="max-width:430px;margin:0 auto">
+    <div class="itemEmoji">SUPER</div>
+    <div class="itemName">SuperDoller</div>
+    <p class="itemDesc">A special item used in Super Dolls. It cannot be sold.</p>
+    <div class="itemOwnedCount">You own: ${owned}</div>
+    <button class="itemBuyButton" ${dolb<SUPER_DOLLER_PRICE?"disabled":""} onclick="buySuperDoller()">BUY FOR ${SUPER_DOLLER_PRICE} DOLB</button>
+    <button class="itemBuyButton" style="margin-top:8px;background:#8b5cf6" ${owned<=0?"disabled":""} onclick="openSuperDolls()">GO TO SUPER DOLLS</button>
+  </div>`;
+}
+
+window.buySuperDoller=async()=>{
+  if(dolb<SUPER_DOLLER_PRICE){showMessage("Not enough Dolb.");return;}
+  dolb-=SUPER_DOLLER_PRICE;
+  itemInventory.superDoller=(itemInventory.superDoller||0)+1;
+  await savePlayerData();updateUI();
+  showMessage("SuperDoller purchased!");
+};
+
+window.openSuperDolls=()=>{
+  const overlay=document.createElement("div");
+  Object.assign(overlay.style,{position:"fixed",inset:"0",background:"rgba(0,0,0,.96)",zIndex:"6000",overflowY:"auto",padding:"20px"});
+  const close=document.createElement("button");close.textContent="CLOSE";Object.assign(close.style,{position:"sticky",top:"0",float:"right",zIndex:"2"});close.onclick=()=>overlay.remove();overlay.appendChild(close);
+  const title=document.createElement("h1");title.textContent="SUPER DOLLS";title.style.clear="both";overlay.appendChild(title);
+  const desc=document.createElement("p");desc.textContent="Pick a doll with a Super Doll upgrade. One SuperDoller is used when you confirm.";overlay.appendChild(desc);
+  const count=document.createElement("div");count.id="superDollerCount";count.style.fontWeight="bold";count.textContent=`SuperDollers: ${itemInventory.superDoller||0}`;overlay.appendChild(count);
+  const grid=document.createElement("div");grid.className="superDollGrid";overlay.appendChild(grid);
+  let selected=null;
+  const eligible=Object.entries(SUPER_DOLL_UPGRADES).filter(([from])=>collection.some(c=>c.name===from));
+  if(!eligible.length){grid.innerHTML='<div class="itemShopCard"><h3>No Super Dolls available</h3><p>You need one of the upgradeable dolls in your collection.</p></div>';document.body.appendChild(overlay);return;}
+  const confirm=document.createElement("button");confirm.textContent="CONFIRM SUPER DOLL";confirm.disabled=true;Object.assign(confirm.style,{display:"block",width:"100%",maxWidth:"700px",margin:"20px auto",background:"#8b5cf6",color:"white"});
+  const redraw=()=>{grid.innerHTML="";eligible.forEach(([from,to])=>{const a=getCard(from),b=getCard(to);const box=document.createElement("div");box.className="superDollCard";if(selected===from)box.style.outline="3px solid #8b5cf6";box.innerHTML=`<img class="superDollImg" src="${escapeHtml(a.image)}"><div style="font-weight:bold;margin-top:8px">${escapeHtml(from)}</div><div class="superDollArrow">↓</div><img class="superDollImg" src="${escapeHtml(b.image)}"><div style="font-weight:bold;margin-top:8px">${escapeHtml(to)}</div>`;box.onclick=()=>{selected=from;redraw();confirm.disabled=(itemInventory.superDoller||0)<=0;};grid.appendChild(box);});};
+  confirm.onclick=async()=>{
+    if(!selected|| (itemInventory.superDoller||0)<=0)return;
+    const idx=collection.findIndex(c=>c.name===selected);
+    if(idx<0)return;
+    const target=SUPER_DOLL_UPGRADES[selected];
+    collection.splice(idx,1);collection.push(createCardCopy(target));
+    itemInventory.superDoller--;
+    await savePlayerData();updateUI();overlay.remove();showMessage(`${selected} became ${target}!`);
+  };
+  redraw();overlay.appendChild(confirm);document.body.appendChild(overlay);
 };
 
 /* ===== EVENT SHOP (Buzzy Event) ===== */
@@ -2529,17 +2612,6 @@ function createCardCopy(name, traded = false) {
   return { id: createCardId(), name, traded, level: 0, levelWins: 0 };
 }
 
-function weightedRandomCard() {
-  const total = cards.reduce((s, c) => s + c.weight, 0);
-  let r = Math.random() * total;
-
-  for (const card of cards) {
-    r -= card.weight;
-    if (r <= 0) return card;
-  }
-  return cards[cards.length - 1];
-}
-
 window.openPack = async () => {
   if (money < PACK_PRICE) {
     showMessage("Not enough coins.");
@@ -2559,6 +2631,52 @@ window.openPack = async () => {
   await savePlayerData();
   updateUI();
   showPackResults(pulled);
+};
+
+const SMALL_PACK_WEIGHTS = [
+  {name:"Baby Pickels", weight:10},
+  {name:"Wily", weight:10},
+  {name:"Waffle", weight:10},
+  {name:"Blossem", weight:2},
+  {name:"Nico", weight:5},
+  {name:"Choper", weight:7.25},
+  {name:"Rem", weight:3},
+  {name:"tax", weight:25}
+];
+
+const BIG_PACK_WEIGHTS = [
+  {name:"Buttyr", weight:10},
+  {name:"Turkmoon", weight:10},
+  {name:"egg", weight:15},
+  {name:"zevel", weight:15},
+  {name:"gice cream", weight:14},
+  {name:"King Eep", weight:1},
+  {name:"Bucket of Ax", weight:0.85}
+];
+
+function weightedFromPool(pool){
+  const total=pool.reduce((sum,x)=>sum+x.weight,0);
+  let r=Math.random()*total;
+  for(const item of pool){
+    r-=item.weight;
+    if(r<=0)return getCard(item.name);
+  }
+  return getCard(pool[pool.length-1].name);
+}
+
+function weightedRandomCard(){
+  return weightedFromPool(SMALL_PACK_WEIGHTS);
+}
+
+window.openBigPack=async()=>{
+  if(money<BIG_PACK_PRICE){showMessage("Not enough coins.");return;}
+  money-=BIG_PACK_PRICE;
+  const card=weightedFromPool(BIG_PACK_WEIGHTS);
+  const copy=createCardCopy(card.name);
+  collection.push(copy);
+  await savePlayerData();
+  updateUI();
+  showPackResults([{...card,copyId:copy.id}]);
 };
 
 function showPackResults(pulled) {
