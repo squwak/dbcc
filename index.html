@@ -299,6 +299,23 @@ h1,h2,h3{margin-top:0}
 .battleVs{margin:5px}
 .battleCardImage{width:100px;height:140px}
 }
+
+/* ===== SIMPLE BRAWL-STYLE LOBBY ===== */
+.brawlTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:#101b2b;border-bottom:2px solid #223553;position:sticky;top:0;z-index:20}
+.brawlPlayer{display:flex;align-items:center;gap:9px;min-width:0}
+.brawlPlayer img{width:42px;height:42px;border-radius:10px;object-fit:cover;background:#091525;border:2px solid #314768;cursor:pointer}
+.brawlPlayerText{min-width:0}.brawlPlayerText b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}.brawlPlayerText span{font-size:12px;opacity:.7}
+.brawlResources{display:flex;gap:7px;align-items:center}.brawlResource{background:#17263c;border-radius:10px;padding:7px 10px;font-weight:bold;font-size:13px}
+.brawlLobby{max-width:850px;margin:0 auto;padding:18px 14px 95px;text-align:center}
+.brawlHero{background:linear-gradient(145deg,#172a46,#0d1829);border:1px solid #29405f;border-radius:20px;padding:22px 16px;margin-bottom:14px;box-shadow:0 8px 24px rgba(0,0,0,.22)}
+.brawlHero h1{margin:4px 0 2px;font-size:30px}.brawlHero p{margin:5px 0 16px;opacity:.72}
+.brawlTrophy{display:inline-flex;align-items:center;gap:7px;background:#101d30;border-radius:999px;padding:7px 13px;font-weight:bold;margin-bottom:16px}
+.brawlBattleBtn{display:block;width:min(420px,100%);margin:0 auto;background:linear-gradient(180deg,#ffcc45,#e99b19);color:#17120a;border:3px solid #ffe28b;border-radius:15px;padding:17px;font-size:21px;box-shadow:0 5px 0 #9b6410;transform:translateY(0)}
+.brawlBattleBtn:active{transform:translateY(4px);box-shadow:0 1px 0 #9b6410}
+.brawlQuick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.brawlQuick button{background:#17263c;color:white;border:1px solid #29405f;padding:13px 8px}.brawlQuick button:hover{background:#20334f}
+.brawlBottom{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;background:#0c1625;border-top:2px solid #243957;padding:7px max(8px,env(safe-area-inset-left)) calc(7px + env(safe-area-inset-bottom));gap:6px}
+.brawlBottom button{flex:1;max-width:130px;background:#15243a;color:#cdd9e8;padding:9px 5px;font-size:11px;border-radius:10px}.brawlBottom button.active{background:#284466;color:white}
+@media(max-width:600px){.brawlResources{gap:4px}.brawlResource{padding:6px 7px;font-size:12px}.brawlQuick{grid-template-columns:1fr 1fr 1fr}.brawlBottom button{font-size:10px}}
 </style>
 </head>
 <body>
@@ -314,19 +331,40 @@ h1,h2,h3{margin-top:0}
 </div>
 
 <div id="gameScreen" class="hidden">
-  <div class="topBar">
-    <div class="moneyBox">Coins: <span id="money">0</span></div>
-    <div class="dolbBox">Dolb: <span id="dolb">0</span></div>
-    <div class="buzzyPointsBox hidden" id="buzzyPointsBoxWrap">Buzzy Points: <span id="buzzyPoints">0</span></div>
-    <button onclick="showPage('battle')">BATTLE</button>
-    <button onclick="showPage('shop')">SHOP</button>
-    <button onclick="showPage('collection')">COLLECTION</button>
-    <button onclick="showPage('dex')">DEX</button>
-    <button onclick="showPage('trade')">TRADE</button>
-    <button onclick="showPage('friends')">FRIENDS</button>
-    <button onclick="showPage('minigame')">MINIGAME</button>
-    <button onclick="openSettings()">SETTINGS</button>
-    <button class="logoutButton" onclick="logout()">LOG OUT</button>
+  <div class="brawlTop">
+    <div class="brawlPlayer" onclick="openSettings()">
+      <img id="lobbyProfilePic" src="basic_p.png" onclick="event.stopPropagation();openProfilePicFullscreen(this.src,'Profile Picture')">
+      <div class="brawlPlayerText"><b id="lobbyUsername">Player</b><span>PROFILE</span></div>
+    </div>
+    <div class="brawlResources">
+      <div class="brawlResource">C <span id="money">0</span></div>
+      <div class="brawlResource">D <span id="dolb">0</span></div>
+      <div class="brawlResource buzzyPointsBox hidden" id="buzzyPointsBoxWrap">B <span id="buzzyPoints">0</span></div>
+    </div>
+  </div>
+
+  <div id="homePage" class="page">
+    <div class="brawlLobby">
+      <div class="brawlHero">
+        <div class="brawlTrophy">TROPHIES <span id="lobbyTrophies">0</span></div>
+        <h1>Doll Ball</h1>
+        <p>Choose your doll and battle!</p>
+        <button class="brawlBattleBtn" onclick="showPage('battle')">BATTLE</button>
+      </div>
+      <div class="brawlQuick">
+        <button onclick="showPage('shop')">SHOP</button>
+        <button onclick="showPage('collection')">COLLECTION</button>
+        <button onclick="showPage('minigame')">MINIGAME</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="brawlBottom">
+    <button id="navHome" onclick="showPage('home')">HOME</button>
+    <button id="navBattle" onclick="showPage('battle')">BATTLE</button>
+    <button id="navShop" onclick="showPage('shop')">SHOP</button>
+    <button id="navCollection" onclick="showPage('collection')">COLLECTION</button>
+    <button id="navMore" onclick="showPage('friends')">MORE</button>
   </div>
 
   <div id="battlePage" class="page hidden">
@@ -1501,7 +1539,7 @@ window.playOffline = () => {
   document.getElementById("loginScreen").classList.add("hidden");
   document.getElementById("gameScreen").classList.remove("hidden");
 
-  showPage("shop");
+  showPage("home");
   updateUI();
   showMessage("Playing offline. Your progress will not be saved.");
 };
@@ -1741,7 +1779,7 @@ onAuthStateChanged(auth, async user => {
     document.getElementById("loginScreen").classList.add("hidden");
     document.getElementById("gameScreen").classList.remove("hidden");
 
-    showPage("shop");
+    showPage("home");
 
     const settingsEmailEl = document.getElementById("settingsAccountEmail");
     if (settingsEmailEl) settingsEmailEl.textContent = user.email || "";
@@ -1782,6 +1820,12 @@ function updateUI() {
   const settingsProfilePicEl = document.getElementById("settingsProfilePic");
   if (settingsUsernameEl) settingsUsernameEl.textContent = username;
   if (settingsProfilePicEl) settingsProfilePicEl.src = profilePic;
+  const lobbyUsernameEl=document.getElementById('lobbyUsername');
+  const lobbyProfilePicEl=document.getElementById('lobbyProfilePic');
+  const lobbyTrophiesEl=document.getElementById('lobbyTrophies');
+  if(lobbyUsernameEl) lobbyUsernameEl.textContent=username || 'Player';
+  if(lobbyProfilePicEl) lobbyProfilePicEl.src=profilePic || DEFAULT_PROFILE_PIC;
+  if(lobbyTrophiesEl) lobbyTrophiesEl.textContent=typeof trophyCount!=='undefined' ? trophyCount : (typeof totalTrophies!=='undefined' ? totalTrophies : 0);
 
   renderSettingsProfilePicOptions();
 
@@ -1806,6 +1850,9 @@ window.showPage = page => {
 
   const target = document.getElementById(page + "Page");
   if (target) target.classList.remove("hidden");
+  document.querySelectorAll('.brawlBottom button').forEach(b => b.classList.remove('active'));
+  const navMap={home:'navHome',battle:'navBattle',shop:'navShop',collection:'navCollection'};
+  if(navMap[page]) document.getElementById(navMap[page])?.classList.add('active');
 
   if (page === "shop") renderShop();
   if (page === "collection") renderCollection();
