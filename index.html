@@ -286,6 +286,7 @@ h1,h2,h3{margin-top:0}
 .bundleBuzzContents li{margin:4px 0}
 .bundleBuzzBuyButton{width:100%;background:#caa000;color:#1c1740;font-size:17px}
 .coinBackBanner{background:linear-gradient(135deg,#caa000,#7a5c00);border-radius:15px;padding:12px 16px;margin-bottom:12px;text-align:center;font-weight:bold}
+.seasonHero{background:linear-gradient(135deg,#163c63,#5b3bb8);border-radius:18px;padding:18px;margin-bottom:16px}.seasonHero h2{margin:0 0 6px}.seasonProgress{height:18px;background:#091a2d;border-radius:999px;overflow:hidden;margin:12px 0}.seasonProgress>div{height:100%;background:#36b9ff}.seasonMeta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.seasonGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}.seasonReward{background:#10243d;border:2px solid #244c70;border-radius:14px;padding:12px;text-align:center;position:relative}.seasonReward.current{border-color:#36b9ff}.seasonReward.claimed{opacity:.55}.seasonLevel{font-weight:bold;font-size:17px}.seasonRewardText{min-height:42px;margin:8px 0}.questGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}.questCard{background:#10243d;border-radius:14px;padding:14px}.questCard.done{border:2px solid #39d98a}.questBar{height:9px;background:#091a2d;border-radius:9px;overflow:hidden;margin:8px 0}.questBar>div{height:100%;background:#36b9ff}.questSmall{font-size:12px;opacity:.75}.superTrail{background:linear-gradient(135deg,#2b1b4e,#60409c);border:2px solid #9b7cff;border-radius:18px;padding:16px;margin-top:18px}.discountBadge{display:inline-block;background:#39d98a;color:#071525;border-radius:999px;padding:4px 9px;font-weight:bold;font-size:12px}.superRewardRow{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:12px}.superReward{background:rgba(0,0,0,.2);padding:9px;border-radius:10px;text-align:center}.seasonButton{background:#36b9ff;color:#071525}.seasonButton:disabled{background:#42566b;color:#aaa}.seasonLocked{opacity:.7}
 
 @media(max-width:650px){
 .tradeColumns{grid-template-columns:1fr}
@@ -331,7 +332,7 @@ h1,h2,h3{margin-top:0}
 
   <div id="battlePage" class="page hidden">
     <h1>Battle</h1>
-    <div class="tabs battleTabs"><button id="battleHomeTab" class="active" onclick="showBattleTab('battle')">BATTLE</button><button id="battleDollTrophyTab" onclick="showBattleTab('dollTrophies')">TROPHY WAY</button></div><div id="battleRankInfo" class="hidden"></div><div id="dollTrophyContent" class="hidden"></div>
+    <div class="tabs battleTabs"><button id="battleHomeTab" class="active" onclick="showBattleTab('battle')">BATTLE</button><button id="battleDollTrophyTab" onclick="showBattleTab('dollTrophies')">TROPHY WAY</button><button id="battleSeasonTab" onclick="showBattleTab('season')">SEASON TRAIL</button></div><div id="battleRankInfo" class="hidden"></div><div id="dollTrophyContent" class="hidden"></div><div id="seasonContent" class="hidden"></div>
     <div id="battleMain">
       <div class="battleHome">
         <h2>Choose a Battle</h2>
@@ -803,6 +804,32 @@ function claimDollTrophyRewardsFor(name){
   return {coins,dolbs,newRewards};
 }
 function claimAllDollTrophyRewardsFor(name){return claimDollTrophyRewardsFor(name);}
+/* ===== SEASON TRAIL ===== */
+const SEASON_QUESTS=[
+ {id:"use_buzzy",title:"Buzzy Time",desc:"Use Buzzy in battle 5 times",goal:5,reward:500,type:"use",target:"Buzzy"},
+ {id:"win_50_trophies",title:"Trophy Hunter",desc:"Win 50 trophies",goal:50,reward:750,type:"trophies"},
+ {id:"win_100_trophies",title:"Big Trophy Hunter",desc:"Win 100 trophies",goal:100,reward:1000,type:"trophies"},
+ {id:"win_10",title:"Battle Grinder",desc:"Win 10 battles",goal:10,reward:750,type:"wins"}
+];
+const DAILY_QUEST_POOL=[
+ {id:"daily_win_3",title:"Warm Up",desc:"Win 3 battles",goal:3,reward:150,type:"wins"},
+ {id:"daily_trophies_15",title:"Trophy Run",desc:"Win 15 trophies",goal:15,reward:200,type:"trophies"},
+ {id:"daily_use_buzzy",title:"Buzzy Boost",desc:"Use Buzzy in battle 2 times",goal:2,reward:100,type:"use",target:"Buzzy"},
+ {id:"daily_win_5",title:"Battle Rush",desc:"Win 5 battles",goal:5,reward:250,type:"wins"}
+];
+function seasonActive(){return new Date()>=SEASON_START&&new Date()<=SEASON_END;}
+function seasonLevelInfo(){let pts=Math.min(84200,Math.max(0,seasonPoints));let level=0,used=0;for(let l=0;l<100;l++){let need=l<5?100:l<10?200:l<15?500:l<20?700:1000;if(pts<used+need){return {level:l,progress:pts-used,need};}used+=need;}return {level:100,progress:0,need:0};}
+function seasonNeedForLevel(l){return l<5?100:l<10?200:l<15?500:l<20?700:1000;}
+function seasonReward(level){if(level===0)return "Nothing";if(level===1)return "+30 Dolb";if(level===2)return "+100 Coins";if(level===3)return "Small Pack";if(level===4)return "Big Pack";if(level===5)return "+10 Dolb";if(level===6)return "+50 Coins";if(level===7)return "Small Pack";if(level===8)return "+50 Coins";if(level===9)return "+65 Coins";if(level===10)return "+10 Dolb";if(level===11)return "Big Pack";if(level===12)return "+70 Coins";if(level===13)return "Small Pack";if(level===14)return "+75 Coins";if(level===15)return "+15 Dolb";if(level===16)return "Small Pack";if(level===17)return "+80 Coins";if(level===18)return "Big Pack";if(level===19)return "+85 Coins";if(level===20)return "Pass Profile Picture 1 + 20 Gems";if(level%10===0)return "+20 Gems + Big Pack";if(level>=80)return "Big Pack";if(level%5===0)return "Small Pack";return "+30 Coins";}
+function seasonRewardData(level){if(level===0)return {};if(level===20)return {pic:"pass1pfp.png",gems:20};if(level%10===0&&level>20)return {gems:20,big:1};if(level>=80)return {big:1};if(level%5===0)return {small:1};if(level===1)return {dolb:30};if(level===2)return {coins:100};if(level===5)return {dolb:10};if(level===6)return {coins:50};if(level===8)return {coins:50};if(level===9)return {coins:65};if(level===10)return {dolb:10};if(level===12)return {coins:70};if(level===14)return {coins:75};if(level===15)return {dolb:15};if(level===17)return {coins:80};if(level===19)return {coins:85};return {coins:30};}
+const SUPER_REWARDS={1:"10 Dolb",5:"10 Dolb",10:"10 Dolb",15:"10 Dolb",20:"10 Dolb",25:"Big Pack",30:"Big Pack",35:"Big Pack",40:"Big Pack",45:"Big Pack",50:"Pick Pack",60:"Pick Pack",70:"Pick Pack",80:"Pick Pack",90:"Pick Pack",100:"3 Pick Packs + 1 Big Pack"};
+function currentDailyQuests(){const today=getTodayString();if(dailyQuestState.date!==today){let pool=[...DAILY_QUEST_POOL];let qs=[];while(qs.length<3){const q=pool.splice(Math.floor(Math.random()*pool.length),1)[0];qs.push({...q,progress:0,done:false});}dailyQuestState={date:today,quests:Object.fromEntries(qs.map(q=>[q.id,q]))};}return Object.values(dailyQuestState.quests);}
+function questProgress(type,amount,cardName){if(!seasonActive())return;const all=[...SEASON_QUESTS.map(q=>[q,seasonQuestState]),...currentDailyQuests().map(q=>[q,dailyQuestState.quests])];let changed=false;for(const [q,state] of all){if(!state[q.id])state[q.id]={progress:0,done:false};const item=state[q.id];if(item.done)continue;if(q.type!==type)continue;if(q.target&&q.target!==cardName)continue;item.progress=Math.min(q.goal,(item.progress||0)+amount);if(item.progress>=q.goal){item.done=true;seasonPoints+=q.reward;showMessage(`${q.title} complete! +${q.reward} Season Points`);}changed=true;}if(changed)savePlayerData();}
+function seasonRecordBattle(won,cardName,trophyGain){if(!won)return;questProgress("wins",1,cardName);if(trophyGain>0)questProgress("trophies",trophyGain,cardName);if(cardName)questProgress("use",1,cardName);}
+function claimSeasonLevel(level,superTrail=false){if(!seasonActive()&&new Date()<SEASON_START){showMessage("The Buzzy Season starts September 28.");return;}const info=seasonLevelInfo();if(level<1||level>100||info.level<level||seasonClaimedLevels.includes(level)&&!superTrail){showMessage("Reach this level first.");return;}if(superTrail&&!superTrailPurchased){showMessage("Buy the Super Trail first.");return;}const key=superTrail?"S"+level:level;if(seasonClaimedLevels.includes(key)){showMessage("Already claimed.");return;}const r=superTrail?SUPER_REWARDS[level]:null;if(superTrail){if(!r)return; if(level===100){for(let i=0;i<3;i++)collection.push(createCardCopy(weightedRandomCard().name));const c=weightedFromPool(BIG_PACK_WEIGHTS);collection.push(createCardCopy(c.name));}else if(r==="Pick Pack"){const c=weightedRandomCard();collection.push(createCardCopy(c.name));}else if(r==="Big Pack"){const c=weightedFromPool(BIG_PACK_WEIGHTS);collection.push(createCardCopy(c.name));}else {dolb+=10;}}else{const d=seasonRewardData(level);money+=d.coins||0;dolb+=d.dolb||0;gems+=d.gems||0;if(d.pic&&!ownedProfilePics.includes(d.pic))ownedProfilePics.push(d.pic);if(d.small){const c=weightedRandomCard();collection.push(createCardCopy(c.name));}if(d.big){const c=weightedFromPool(BIG_PACK_WEIGHTS);collection.push(createCardCopy(c.name));}}seasonClaimedLevels.push(key);savePlayerData();updateUI();renderSeasonTrail();showMessage(`Level ${level} reward claimed!`);}
+function buySuperTrail(){if(superTrailPurchased){showMessage("Super Trail already unlocked.");return;}const price=1000;if(dolb<price){showMessage("Not enough Dolb.");return;}dolb-=price;superTrailPurchased=true;savePlayerData();updateUI();renderSeasonTrail();showMessage("Super Trail unlocked for the Season 1 discount price of 1,000 Dolb!");}
+function renderQuestCard(q,season){return `<div class="questCard ${q.done?"done":""}"><b>${escapeHtml(q.title)}</b><p>${escapeHtml(q.desc)}</p><div class="questBar"><div style="width:${Math.min(100,(q.progress||0)/q.goal*100)}%"></div></div><div class="questSmall">${Math.min(q.goal,q.progress||0)} / ${q.goal} • +${q.reward} Season Points ${q.done?"• COMPLETE":""}</div></div>`;}
+function renderSeasonTrail(){const el=document.getElementById("seasonContent");if(!el)return;currentDailyQuests();const info=seasonLevelInfo();const pct=info.level>=100?100:Math.round(info.progress/info.need*100);el.innerHTML=`<div class="seasonHero"><h2>Buzzy Season Trail</h2><p>September 28 – December 1</p>${!seasonActive()?`<p class="seasonLocked">The season is not active yet. The trail opens September 28.</p>`:""}<div class="seasonMeta"><b>Level ${info.level}/100</b><b>${seasonPoints} Season Points</b><b>${gems} Gems</b></div><div class="seasonProgress"><div style="width:${pct}%"></div></div><div>${info.level>=100?"MAX LEVEL":""} ${info.level<100?`${info.progress}/${info.need} to level ${info.level+1}`:""}</div></div><h2>Battle Quests</h2><div class="questGrid">${SEASON_QUESTS.map(q=>renderQuestCard({...q,...(seasonQuestState[q.id]||{progress:0,done:false})},true)).join("")}</div><h2 style="margin-top:20px">Daily Quests</h2><div class="questGrid">${currentDailyQuests().map(q=>renderQuestCard(q,false)).join("")}</div><h2 style="margin-top:20px">Regular Trail</h2><div class="seasonGrid">${Array.from({length:100},(_,i)=>{const l=i+1,claimed=seasonClaimedLevels.includes(l),unlocked=info.level>=l;return `<div class="seasonReward ${claimed?"claimed":""} ${info.level===l?"current":""}"><div class="seasonLevel">Level ${l}</div><div class="seasonRewardText">${seasonReward(l)}</div><button class="seasonButton" ${(!unlocked||claimed)?"disabled":""} onclick="claimSeasonLevel(${l})">${claimed?"CLAIMED":unlocked?"CLAIM":"LOCKED"}</button></div>`}).join("")}</div><div class="superTrail"><h2>Super Trail <span class="discountBadge">SEASON 1 DISCOUNT</span></h2><p>Normally 2,000 Dolb. First season only: <b>1,000 Dolb</b>.</p><button class="seasonButton" onclick="buySuperTrail()" ${superTrailPurchased?"disabled":""}>${superTrailPurchased?"SUPER TRAIL UNLOCKED":"BUY FOR 1,000 DOLB"}</button><div class="superRewardRow">${Object.entries(SUPER_REWARDS).map(([l,r])=>`<div class="superReward"><b>Lv ${l}</b><br>${r}<br><button class="seasonButton" style="margin-top:6px;padding:6px 8px" ${(!superTrailPurchased||info.level<Number(l)||seasonClaimedLevels.includes("S"+l))?"disabled":""} onclick="claimSeasonLevel(${l},true)">${seasonClaimedLevels.includes("S"+l)?"CLAIMED":"CLAIM"}</button></div>`).join("")}</div></div>`;}
 async function addBattleWinTrophies(names, multiplier=1, baseGain=5){
  names=[...new Set((Array.isArray(names)?names:[names]).filter(Boolean))];
  multiplier = multiplier === 2 ? 2 : 1;
@@ -1302,6 +1329,15 @@ let dollRanks={};
 let claimedTrophyRewards=[];
 let claimedDollTrophyRewards={};
 let trophySystemVersion=3;
+let gems=0;
+let seasonPoints=0;
+let seasonClaimedLevels=[];
+let superTrailPurchased=false;
+let seasonQuestState={};
+let dailyQuestState={date:"",quests:{}};
+const SEASON_START=new Date(2026,8,28,0,0,0);
+const SEASON_END=new Date(2026,11,1,23,59,59);
+const SEASON_TRAIL_MAX=100;
 
 let completedTradeIds = [];
 let ownedProfilePics = [DEFAULT_PROFILE_PIC];
@@ -1610,13 +1646,14 @@ async function loadPlayerData() {
     cupcakeChargesLeft = 0;
     lastBundleBuzzPurchase = 0;
     redeemedCodes = [];
+    gems=0; seasonPoints=0; seasonClaimedLevels=[]; superTrailPurchased=false; seasonQuestState={}; dailyQuestState={date:"",quests:{}};
 
     await setDoc(ref, {
       money, dolb, buzzyPoints, collection, favorites, completedTradeIds,
       ownedProfilePics, username, profilePic,
       trophyCount, dollTrophies, dollRanks, claimedTrophyRewards, claimedDollTrophyRewards, trophySystemVersion,
       itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase,
-      redeemedCodes
+      redeemedCodes, gems, seasonPoints, seasonClaimedLevels, superTrailPurchased, seasonQuestState, dailyQuestState
     });
   } else {
     const data = snap.data();
@@ -1667,6 +1704,12 @@ async function loadPlayerData() {
     cupcakeChargesLeft = typeof data.cupcakeChargesLeft === "number" ? Math.max(0, data.cupcakeChargesLeft) : 0;
     lastBundleBuzzPurchase = typeof data.lastBundleBuzzPurchase === "number" ? Math.max(0, data.lastBundleBuzzPurchase) : 0;
     redeemedCodes = Array.isArray(data.redeemedCodes) ? data.redeemedCodes : [];
+    gems=typeof data.gems==="number"?Math.max(0,data.gems):0;
+    seasonPoints=typeof data.seasonPoints==="number"?Math.max(0,data.seasonPoints):0;
+    seasonClaimedLevels=Array.isArray(data.seasonClaimedLevels)?data.seasonClaimedLevels.map(Number).filter(n=>n>=0&&n<=100):[];
+    superTrailPurchased=!!data.superTrailPurchased;
+    seasonQuestState=data.seasonQuestState&&typeof data.seasonQuestState==="object"?data.seasonQuestState:{};
+    dailyQuestState=data.dailyQuestState&&typeof data.dailyQuestState==="object"?data.dailyQuestState:{date:"",quests:{}};
   }
 
   if (!username) await askForUsername();
@@ -1692,7 +1735,7 @@ async function savePlayerData() {
       ownedProfilePics, username, profilePic,
       trophyCount, dollTrophies, dollRanks, claimedTrophyRewards, claimedDollTrophyRewards, trophySystemVersion,
       itemInventory, cupcakeChargesLeft, lastBundleBuzzPurchase,
-      redeemedCodes
+      redeemedCodes, gems, seasonPoints, seasonClaimedLevels, superTrailPurchased, seasonQuestState, dailyQuestState
     }, { merge: true });
   }).catch(e => {
     console.error("Player save failed:", e);
@@ -1791,12 +1834,13 @@ function updateUI() {
   renderFriendRequests();
   renderShop();
   renderBattleHome();
+  if(document.getElementById("seasonContent") && !document.getElementById("seasonContent").classList.contains("hidden")) renderSeasonTrail();
 }
 
 /* ===== PAGES ===== */
 
 
-window.showBattleTab=tab=>{const battle=document.getElementById("battleMain"),dollTrophy=document.getElementById("dollTrophyContent");const dollTab=tab==="dollTrophies";document.getElementById("battleHomeTab")?.classList.toggle("active",tab==="battle");document.getElementById("battleDollTrophyTab")?.classList.toggle("active",dollTab);battle?.classList.toggle("hidden",tab!=="battle");dollTrophy?.classList.toggle("hidden",!dollTab);if(dollTab)renderDollTrophyWay();};
+window.showBattleTab=tab=>{const battle=document.getElementById("battleMain"),dollTrophy=document.getElementById("dollTrophyContent"),season=document.getElementById("seasonContent");const dollTab=tab==="dollTrophies",seasonTab=tab==="season";document.getElementById("battleHomeTab")?.classList.toggle("active",tab==="battle");document.getElementById("battleDollTrophyTab")?.classList.toggle("active",dollTab);document.getElementById("battleSeasonTab")?.classList.toggle("active",seasonTab);battle?.classList.toggle("hidden",tab!=="battle");dollTrophy?.classList.toggle("hidden",!dollTab);season?.classList.toggle("hidden",!seasonTab);if(dollTab)renderDollTrophyWay();if(seasonTab)renderSeasonTrail();};
 window.showPage = page => {
   if (page !== "minigame" && typeof buzzyJumpRunning !== "undefined" && buzzyJumpRunning) {
     exitBuzzyJump(true);
@@ -4128,7 +4172,7 @@ async function finishBotBattle(won, playerCopy, botCopy, usedItem){
  if(won){
    if(usedItem==="greedy"){const stolen=getCard(botCopy.name);if(stolen)collection.push(createCardCopy(botCopy.name));}
    const easyBaseGain = battleDifficulty === "easy" ? 3 : 5;
-   const reward=await addBattleWinTrophies(playerCopy.name, usedItem==="doubleOrNothing" ? 2 : 1, easyBaseGain);
+   const gain=easyBaseGain*(usedItem==="doubleOrNothing"?2:1); seasonRecordBattle(true,playerCopy.name,gain); const reward=await addBattleWinTrophies(playerCopy.name, usedItem==="doubleOrNothing" ? 2 : 1, easyBaseGain);
    updateUI();
    arena.innerHTML=`<div class="battleResult"><div class="winText">YOU WIN!</div><div class="rewardText">+${(battleDifficulty === "easy" ? 3 : 5) * (usedItem==="doubleOrNothing"?2:1)} TROPHIES</div><p>You defeated ${escapeHtml(battleOpponentUsername)}!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${getDollTrophies(playerCopy.name)}</b></p>${reward.coinsReward||reward.dolbReward?`<p>Doll Trophy reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}${reward.unlocked&&reward.unlocked.length?`<div class="levelUpBox">PROFILE PICTURE UNLOCKED: ${reward.unlocked.map(x=>escapeHtml(x.name)).join(", ")}</div>`:""}${usedItem==="greedy"?'<div class="levelUpBox">GREEDY! You stole 1 copy of the opponent doll.</div>':""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
  }else{
@@ -4222,7 +4266,7 @@ async function finishFriendBattle(won, playerCopy, friendCopy, usedItem){
  battleRewardGiven = true;
  if(won){
    if(usedItem==="greedy"&&getCard(friendCopy.name))collection.push(createCardCopy(friendCopy.name));
-   const reward=await addBattleWinTrophies(playerCopy.name, usedItem==="doubleOrNothing" ? 2 : 1);updateUI();
+   const gain=5*(usedItem==="doubleOrNothing"?2:1); seasonRecordBattle(true,playerCopy.name,gain); const reward=await addBattleWinTrophies(playerCopy.name, usedItem==="doubleOrNothing" ? 2 : 1);updateUI();
    arena.innerHTML=`<div class="battleResult"><div class="winText">YOU WIN!</div><div class="rewardText">+${usedItem==="doubleOrNothing"?10:5} TROPHIES</div><p>You defeated ${escapeHtml(battleOpponentUsername)}!</p><p>${escapeHtml(playerCopy.name)} Doll Trophies: <b>${getDollTrophies(playerCopy.name)}</b></p>${reward.coinsReward||reward.dolbReward?`<p>Doll Trophy reward: <b>${reward.coinsReward?`+${reward.coinsReward} Coins`:""}${reward.coinsReward&&reward.dolbReward?" • ":""}${reward.dolbReward?`+${reward.dolbReward} Dolb`:""}</b></p>`:""}${reward.unlocked&&reward.unlocked.length?`<div class="levelUpBox">PROFILE PICTURE UNLOCKED: ${reward.unlocked.map(x=>escapeHtml(x.name)).join(", ")}</div>`:""}${usedItem==="greedy"?'<div class="levelUpBox">GREEDY! You stole 1 copy of the opponent doll.</div>':""}<button class="battleStartButton" onclick="exitBattle()">BACK TO BATTLE</button></div>`;
  }else{
    const losses=await addDollLossTrophies(playerCopy.name);
