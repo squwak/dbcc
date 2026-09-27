@@ -599,7 +599,7 @@ function unlockDollProfilePic(name){
   return false;
 }
 
-/* ===== TEMPORARY BUZZY EVENT (Sep 28, 2026 - Dec 1, 2026) =====
+/* ===== TEMPORARY BUZZY EVENT (Sep 27, 2026 22:45 - Dec 1, 2026) =====
    Everything under this event -- Buzzy Points, the event shop, the four
    color variants, the Golden Buzzy redemption, Bundle Buzz, and the EVENT
    tabs in DEX and Collection -- is only active while isEventActive() is
@@ -608,7 +608,7 @@ function unlockDollProfilePic(name){
    Uses the device's local clock, same as the rest of the game (see
    getTodayString). */
 
-const EVENT_START = new Date(2026, 8, 28, 0, 0, 0);  // Sep 28, 2026 00:00 local
+const EVENT_START = new Date(2026, 8, 27, 22, 45, 0);  // Sep 27, 2026 22:45 local
 const EVENT_END = new Date(2026, 11, 1, 23, 59, 59);  // Dec 1, 2026 23:59:59 local
 
 function isEventActive() {
@@ -653,7 +653,7 @@ const coinBackDeals = [
   { dolb: 150, coins: 150 }
 ];
 
-/* ===== BUNDLE BUZZ (event shop, Sep 28 - Dec 1, 2026) =====
+/* ===== BUNDLE BUZZ (event shop, Sep 27 22:45 - Dec 1, 2026) =====
    A one-off bundle: 3 Buzzy Packs (random color variants) + 1 regular pack
    (1 random doll, same as Home's Open a Pack) + 1 base Buzzy doll + 200
    bonus coins, for 300 Dolb. Once bought, it goes on a 2-day cooldown
