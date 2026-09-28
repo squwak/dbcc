@@ -599,7 +599,7 @@ function unlockDollProfilePic(name){
   return false;
 }
 
-/* ===== TEMPORARY BUZZY EVENT (Sep 27, 2026 22:45 - Dec 1, 2026) =====
+/* ===== TEMPORARY BUZZY EVENT (Sep 28, 2026 - Dec 1, 2026) =====
    Everything under this event -- Buzzy Points, the event shop, the four
    color variants, the Golden Buzzy redemption, Bundle Buzz, and the EVENT
    tabs in DEX and Collection -- is only active while isEventActive() is
@@ -608,7 +608,7 @@ function unlockDollProfilePic(name){
    Uses the device's local clock, same as the rest of the game (see
    getTodayString). */
 
-const EVENT_START = new Date(2026, 8, 27, 22, 45, 0);  // Sep 27, 2026 22:45 local
+const EVENT_START = new Date(2026, 8, 28, 0, 0, 0);  // Sep 28, 2026 00:00 local
 const EVENT_END = new Date(2026, 11, 1, 23, 59, 59);  // Dec 1, 2026 23:59:59 local
 
 function isEventActive() {
@@ -653,7 +653,7 @@ const coinBackDeals = [
   { dolb: 150, coins: 150 }
 ];
 
-/* ===== BUNDLE BUZZ (event shop, Sep 27 22:45 - Dec 1, 2026) =====
+/* ===== BUNDLE BUZZ (event shop, Sep 28 - Dec 1, 2026) =====
    A one-off bundle: 3 Buzzy Packs (random color variants) + 1 regular pack
    (1 random doll, same as Home's Open a Pack) + 1 base Buzzy doll + 200
    bonus coins, for 300 Dolb. Once bought, it goes on a 2-day cooldown
@@ -826,10 +826,38 @@ const SUPER_REWARDS={1:"10 Dolb",5:"10 Dolb",10:"10 Dolb",15:"10 Dolb",20:"10 Do
 function currentDailyQuests(){const today=getTodayString();if(dailyQuestState.date!==today){let pool=[...DAILY_QUEST_POOL];let qs=[];while(qs.length<3){const q=pool.splice(Math.floor(Math.random()*pool.length),1)[0];qs.push({...q,progress:0,done:false});}dailyQuestState={date:today,quests:Object.fromEntries(qs.map(q=>[q.id,q]))};}return Object.values(dailyQuestState.quests);}
 function questProgress(type,amount,cardName){if(!seasonActive())return;const all=[...SEASON_QUESTS.map(q=>[q,seasonQuestState]),...currentDailyQuests().map(q=>[q,dailyQuestState.quests])];let changed=false;for(const [q,state] of all){if(!state[q.id])state[q.id]={progress:0,done:false};const item=state[q.id];if(item.done)continue;if(q.type!==type)continue;if(q.target&&q.target!==cardName)continue;item.progress=Math.min(q.goal,(item.progress||0)+amount);if(item.progress>=q.goal){item.done=true;seasonPoints+=q.reward;showMessage(`${q.title} complete! +${q.reward} Season Points`);}changed=true;}if(changed)savePlayerData();}
 function seasonRecordBattle(won,cardName,trophyGain){if(!won)return;questProgress("wins",1,cardName);if(trophyGain>0)questProgress("trophies",trophyGain,cardName);if(cardName)questProgress("use",1,cardName);}
-function claimSeasonLevel(level,superTrail=false){if(!seasonActive()&&new Date()<SEASON_START){showMessage("The Buzzy Season starts September 28.");return;}const info=seasonLevelInfo();if(level<1||level>100||info.level<level||seasonClaimedLevels.includes(level)&&!superTrail){showMessage("Reach this level first.");return;}if(superTrail&&!superTrailPurchased){showMessage("Buy the Super Trail first.");return;}const key=superTrail?"S"+level:level;if(seasonClaimedLevels.includes(key)){showMessage("Already claimed.");return;}const r=superTrail?SUPER_REWARDS[level]:null;if(superTrail){if(!r)return; if(level===100){for(let i=0;i<3;i++)collection.push(createCardCopy(weightedRandomCard().name));const c=weightedFromPool(BIG_PACK_WEIGHTS);collection.push(createCardCopy(c.name));}else if(r==="Pick Pack"){const c=weightedRandomCard();collection.push(createCardCopy(c.name));}else if(r==="Big Pack"){const c=weightedFromPool(BIG_PACK_WEIGHTS);collection.push(createCardCopy(c.name));}else {dolb+=10;}}else{const d=seasonRewardData(level);money+=d.coins||0;dolb+=d.dolb||0;gems+=d.gems||0;if(d.pic&&!ownedProfilePics.includes(d.pic))ownedProfilePics.push(d.pic);if(d.small){const c=weightedRandomCard();collection.push(createCardCopy(c.name));}if(d.big){const c=weightedFromPool(BIG_PACK_WEIGHTS);collection.push(createCardCopy(c.name));}}seasonClaimedLevels.push(key);savePlayerData();updateUI();renderSeasonTrail();showMessage(`Level ${level} reward claimed!`);}
+async function claimSeasonLevel(level,superTrail=false){
+  level=Number(level);
+  const now=new Date();
+  if(now<SEASON_START){showMessage("The Buzzy Season has not started yet.");return;}
+  if(now>SEASON_END){showMessage("The Buzzy Season has ended.");return;}
+  const info=seasonLevelInfo();
+  if(!Number.isInteger(level)||level<1||level>100||info.level<level){showMessage("Reach this level first.");return;}
+  if(superTrail&&!superTrailPurchased){showMessage("Buy the Super Trail first.");return;}
+  const key=superTrail?"S"+level:level;
+  if(seasonClaimedLevels.some(v=>String(v)===String(key))){showMessage("Already claimed.");return;}
+  const r=superTrail?SUPER_REWARDS[level]:null;
+  if(superTrail){
+    if(!r)return;
+    if(level===100){for(let i=0;i<3;i++)collection.push(createCardCopy(weightedRandomCard().name));const c=weightedFromPool(BIG_PACK_WEIGHTS);collection.push(createCardCopy(c.name));}
+    else if(r==="Pick Pack"){const c=weightedRandomCard();collection.push(createCardCopy(c.name));}
+    else if(r==="Big Pack"){const c=weightedFromPool(BIG_PACK_WEIGHTS);collection.push(createCardCopy(c.name));}
+    else {dolb+=10;}
+  }else{
+    const d=seasonRewardData(level);money+=d.coins||0;dolb+=d.dolb||0;gems+=d.gems||0;
+    if(d.pic&&!ownedProfilePics.includes(d.pic))ownedProfilePics.push(d.pic);
+    if(d.small){const c=weightedRandomCard();collection.push(createCardCopy(c.name));}
+    if(d.big){const c=weightedFromPool(BIG_PACK_WEIGHTS);collection.push(createCardCopy(c.name));}
+  }
+  seasonClaimedLevels.push(key);
+  await savePlayerData();
+  updateUI();
+  renderSeasonTrail();
+  showMessage(`Level ${level} reward claimed!`);
+}
 function buySuperTrail(){if(superTrailPurchased){showMessage("Super Trail already unlocked.");return;}const price=1000;if(dolb<price){showMessage("Not enough Dolb.");return;}dolb-=price;superTrailPurchased=true;savePlayerData();updateUI();renderSeasonTrail();showMessage("Super Trail unlocked for the Season 1 discount price of 1,000 Dolb!");}
 function renderQuestCard(q,season){return `<div class="questCard ${q.done?"done":""}"><b>${escapeHtml(q.title)}</b><p>${escapeHtml(q.desc)}</p><div class="questBar"><div style="width:${Math.min(100,(q.progress||0)/q.goal*100)}%"></div></div><div class="questSmall">${Math.min(q.goal,q.progress||0)} / ${q.goal} • +${q.reward} Season Points ${q.done?"• COMPLETE":""}</div></div>`;}
-function renderSeasonTrail(){const el=document.getElementById("seasonContent");if(!el)return;currentDailyQuests();const info=seasonLevelInfo();const pct=info.level>=100?100:Math.round(info.progress/info.need*100);el.innerHTML=`<div class="seasonHero"><h2>Buzzy Season Trail</h2><p>September 28 – December 1</p>${!seasonActive()?`<p class="seasonLocked">The season is not active yet. The trail opens September 28.</p>`:""}<div class="seasonMeta"><b>Level ${info.level}/100</b><b>${seasonPoints} Season Points</b><b>${gems} Gems</b></div><div class="seasonProgress"><div style="width:${pct}%"></div></div><div>${info.level>=100?"MAX LEVEL":""} ${info.level<100?`${info.progress}/${info.need} to level ${info.level+1}`:""}</div></div><h2>Battle Quests</h2><div class="questGrid">${SEASON_QUESTS.map(q=>renderQuestCard({...q,...(seasonQuestState[q.id]||{progress:0,done:false})},true)).join("")}</div><h2 style="margin-top:20px">Daily Quests</h2><div class="questGrid">${currentDailyQuests().map(q=>renderQuestCard(q,false)).join("")}</div><h2 style="margin-top:20px">Regular Trail</h2><div class="seasonGrid">${Array.from({length:100},(_,i)=>{const l=i+1,claimed=seasonClaimedLevels.includes(l),unlocked=info.level>=l;return `<div class="seasonReward ${claimed?"claimed":""} ${info.level===l?"current":""}"><div class="seasonLevel">Level ${l}</div><div class="seasonRewardText">${seasonReward(l)}</div><button class="seasonButton" ${(!unlocked||claimed)?"disabled":""} onclick="claimSeasonLevel(${l})">${claimed?"CLAIMED":unlocked?"CLAIM":"LOCKED"}</button></div>`}).join("")}</div><div class="superTrail"><h2>Super Trail <span class="discountBadge">SEASON 1 DISCOUNT</span></h2><p>Normally 2,000 Dolb. First season only: <b>1,000 Dolb</b>.</p><button class="seasonButton" onclick="buySuperTrail()" ${superTrailPurchased?"disabled":""}>${superTrailPurchased?"SUPER TRAIL UNLOCKED":"BUY FOR 1,000 DOLB"}</button><div class="superRewardRow">${Object.entries(SUPER_REWARDS).map(([l,r])=>`<div class="superReward"><b>Lv ${l}</b><br>${r}<br><button class="seasonButton" style="margin-top:6px;padding:6px 8px" ${(!superTrailPurchased||info.level<Number(l)||seasonClaimedLevels.includes("S"+l))?"disabled":""} onclick="claimSeasonLevel(${l},true)">${seasonClaimedLevels.includes("S"+l)?"CLAIMED":"CLAIM"}</button></div>`).join("")}</div></div>`;}
+function renderSeasonTrail(){const el=document.getElementById("seasonContent");if(!el)return;currentDailyQuests();const info=seasonLevelInfo();const pct=info.level>=100?100:Math.round(info.progress/info.need*100);el.innerHTML=`<div class="seasonHero"><h2>Buzzy Season Trail</h2><p>September 27 22:45 – December 1</p>${!seasonActive()?`<p class="seasonLocked">The season is not active yet. The trail opens September 28.</p>`:""}<div class="seasonMeta"><b>Level ${info.level}/100</b><b>${seasonPoints} Season Points</b><b>${gems} Gems</b></div><div class="seasonProgress"><div style="width:${pct}%"></div></div><div>${info.level>=100?"MAX LEVEL":""} ${info.level<100?`${info.progress}/${info.need} to level ${info.level+1}`:""}</div></div><h2>Battle Quests</h2><div class="questGrid">${SEASON_QUESTS.map(q=>renderQuestCard({...q,...(seasonQuestState[q.id]||{progress:0,done:false})},true)).join("")}</div><h2 style="margin-top:20px">Daily Quests</h2><div class="questGrid">${currentDailyQuests().map(q=>renderQuestCard(q,false)).join("")}</div><h2 style="margin-top:20px">Regular Trail</h2><div class="seasonGrid">${Array.from({length:100},(_,i)=>{const l=i+1,claimed=seasonClaimedLevels.includes(l),unlocked=info.level>=l;return `<div class="seasonReward ${claimed?"claimed":""} ${info.level===l?"current":""}"><div class="seasonLevel">Level ${l}</div><div class="seasonRewardText">${seasonReward(l)}</div><button class="seasonButton" ${(!unlocked||claimed)?"disabled":""} onclick="claimSeasonLevel(${l})">${claimed?"CLAIMED":unlocked?"CLAIM":"LOCKED"}</button></div>`}).join("")}</div><div class="superTrail"><h2>Super Trail <span class="discountBadge">SEASON 1 DISCOUNT</span></h2><p>Normally 2,000 Dolb. First season only: <b>1,000 Dolb</b>.</p><button class="seasonButton" onclick="buySuperTrail()" ${superTrailPurchased?"disabled":""}>${superTrailPurchased?"SUPER TRAIL UNLOCKED":"BUY FOR 1,000 DOLB"}</button><div class="superRewardRow">${Object.entries(SUPER_REWARDS).map(([l,r])=>`<div class="superReward"><b>Lv ${l}</b><br>${r}<br><button class="seasonButton" style="margin-top:6px;padding:6px 8px" ${(!superTrailPurchased||info.level<Number(l)||seasonClaimedLevels.includes("S"+l))?"disabled":""} onclick="claimSeasonLevel(${l},true)">${seasonClaimedLevels.includes("S"+l)?"CLAIMED":"CLAIM"}</button></div>`).join("")}</div></div>`;}
 async function addBattleWinTrophies(names, multiplier=1, baseGain=5){
  names=[...new Set((Array.isArray(names)?names:[names]).filter(Boolean))];
  multiplier = multiplier === 2 ? 2 : 1;
@@ -1706,7 +1734,7 @@ async function loadPlayerData() {
     redeemedCodes = Array.isArray(data.redeemedCodes) ? data.redeemedCodes : [];
     gems=typeof data.gems==="number"?Math.max(0,data.gems):0;
     seasonPoints=typeof data.seasonPoints==="number"?Math.max(0,data.seasonPoints):0;
-    seasonClaimedLevels=Array.isArray(data.seasonClaimedLevels)?data.seasonClaimedLevels.map(Number).filter(n=>n>=0&&n<=100):[];
+    seasonClaimedLevels=Array.isArray(data.seasonClaimedLevels)?data.seasonClaimedLevels.filter(v=>{if(typeof v==="number")return Number.isFinite(v)&&v>=0&&v<=100;if(typeof v==="string"&&/^S(?:[1-9][0-9]?|100)$/.test(v))return true;return false;}).map(v=>typeof v==="number"?v:String(v)):[];
     superTrailPurchased=!!data.superTrailPurchased;
     seasonQuestState=data.seasonQuestState&&typeof data.seasonQuestState==="object"?data.seasonQuestState:{};
     dailyQuestState=data.dailyQuestState&&typeof data.dailyQuestState==="object"?data.dailyQuestState:{date:"",quests:{}};
