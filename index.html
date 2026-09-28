@@ -608,7 +608,7 @@ function unlockDollProfilePic(name){
    Uses the device's local clock, same as the rest of the game (see
    getTodayString). */
 
-const EVENT_START = new Date(2026, 8, 28, 0, 0, 0);  // Sep 28, 2026 00:00 local
+const EVENT_START = new Date(2026, 8, 27, 22, 45, 0);  // Sep 28, 2026 00:00 local
 const EVENT_END = new Date(2026, 11, 1, 23, 59, 59);  // Dec 1, 2026 23:59:59 local
 
 function isEventActive() {
@@ -854,7 +854,9 @@ async function claimSeasonLevel(level,superTrail=false){
   renderSeasonTrail();
   showMessage(`Level ${level} reward claimed!`);
 }
+window.claimSeasonLevel=claimSeasonLevel;
 function buySuperTrail(){if(superTrailPurchased){showMessage("Super Trail already unlocked.");return;}const price=1000;if(dolb<price){showMessage("Not enough Dolb.");return;}dolb-=price;superTrailPurchased=true;savePlayerData();updateUI();renderSeasonTrail();showMessage("Super Trail unlocked for the Season 1 discount price of 1,000 Dolb!");}
+window.buySuperTrail=buySuperTrail;
 function renderQuestCard(q,season){return `<div class="questCard ${q.done?"done":""}"><b>${escapeHtml(q.title)}</b><p>${escapeHtml(q.desc)}</p><div class="questBar"><div style="width:${Math.min(100,(q.progress||0)/q.goal*100)}%"></div></div><div class="questSmall">${Math.min(q.goal,q.progress||0)} / ${q.goal} • +${q.reward} Season Points ${q.done?"• COMPLETE":""}</div></div>`;}
 function renderSeasonTrail(){const el=document.getElementById("seasonContent");if(!el)return;currentDailyQuests();const info=seasonLevelInfo();const pct=info.level>=100?100:Math.round(info.progress/info.need*100);el.innerHTML=`<div class="seasonHero"><h2>Buzzy Season Trail</h2><p>September 28 – December 1</p>${!seasonActive()?`<p class="seasonLocked">The season is not active yet. The trail opens September 28.</p>`:""}<div class="seasonMeta"><b>Level ${info.level}/100</b><b>${seasonPoints} Season Points</b><b>${gems} Gems</b></div><div class="seasonProgress"><div style="width:${pct}%"></div></div><div>${info.level>=100?"MAX LEVEL":""} ${info.level<100?`${info.progress}/${info.need} to level ${info.level+1}`:""}</div></div><h2>Battle Quests</h2><div class="questGrid">${SEASON_QUESTS.map(q=>renderQuestCard({...q,...(seasonQuestState[q.id]||{progress:0,done:false})},true)).join("")}</div><h2 style="margin-top:20px">Daily Quests</h2><div class="questGrid">${currentDailyQuests().map(q=>renderQuestCard(q,false)).join("")}</div><h2 style="margin-top:20px">Regular Trail</h2><div class="seasonGrid">${Array.from({length:100},(_,i)=>{const l=i+1,claimed=seasonClaimedLevels.some(v=>String(v)===String(l)),unlocked=info.level>=l;return `<div class="seasonReward ${claimed?"claimed":""} ${info.level===l?"current":""}"><div class="seasonLevel">Level ${l}</div><div class="seasonRewardText">${seasonReward(l)}</div><button class="seasonButton" ${(!unlocked||claimed)?"disabled":""} onclick="claimSeasonLevel(${l})">${claimed?"CLAIMED":unlocked?"CLAIM":"LOCKED"}</button></div>`}).join("")}</div><div class="superTrail"><h2>Super Trail <span class="discountBadge">SEASON 1 DISCOUNT</span></h2><p>Normally 2,000 Dolb. First season only: <b>1,000 Dolb</b>.</p><button class="seasonButton" onclick="buySuperTrail()" ${superTrailPurchased?"disabled":""}>${superTrailPurchased?"SUPER TRAIL UNLOCKED":"BUY FOR 1,000 DOLB"}</button><div class="superRewardRow">${Object.entries(SUPER_REWARDS).map(([l,r])=>`<div class="superReward"><b>Lv ${l}</b><br>${r}<br><button class="seasonButton" style="margin-top:6px;padding:6px 8px" ${(!superTrailPurchased||info.level<Number(l)||seasonClaimedLevels.some(v=>String(v)===("S"+l)))?"disabled":""} onclick="claimSeasonLevel(${l},true)">${seasonClaimedLevels.some(v=>String(v)===("S"+l))?"CLAIMED":"CLAIM"}</button></div>`).join("")}</div></div>`;}
 async function addBattleWinTrophies(names, multiplier=1, baseGain=5){
@@ -1362,7 +1364,7 @@ let seasonClaimedLevels=[];
 let superTrailPurchased=false;
 let seasonQuestState={};
 let dailyQuestState={date:"",quests:{}};
-const SEASON_START=new Date(2026,8,28,0,0,0);
+const SEASON_START=new Date(2026,8,27,22,45,0);
 const SEASON_END=new Date(2026,11,1,23,59,59);
 const SEASON_TRAIL_MAX=100;
 
