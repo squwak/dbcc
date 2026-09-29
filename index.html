@@ -809,13 +809,27 @@ const SEASON_QUESTS=[
  {id:"use_buzzy",title:"Buzzy Time",desc:"Use Buzzy in battle 5 times",goal:5,reward:500,type:"use",target:"Buzzy"},
  {id:"win_50_trophies",title:"Trophy Hunter",desc:"Win 50 trophies",goal:50,reward:750,type:"trophies"},
  {id:"win_100_trophies",title:"Big Trophy Hunter",desc:"Win 100 trophies",goal:100,reward:1000,type:"trophies"},
- {id:"win_10",title:"Battle Grinder",desc:"Win 10 battles",goal:10,reward:750,type:"wins"}
+ {id:"win_10",title:"Battle Grinder",desc:"Win 10 battles",goal:10,reward:750,type:"wins"},
+ {id:"win_25",title:"Battle Marathon",desc:"Win 25 battles",goal:25,reward:1000,type:"wins"},
+ {id:"win_50",title:"Battle Master",desc:"Win 50 battles",goal:50,reward:1500,type:"wins"},
+ {id:"win_200_trophies",title:"Trophy Climber",desc:"Win 200 trophies",goal:200,reward:1500,type:"trophies"},
+ {id:"win_300_trophies",title:"Trophy Champion",desc:"Win 300 trophies",goal:300,reward:2000,type:"trophies"},
+ {id:"use_buzzy_15",title:"Buzzy Expert",desc:"Use Buzzy in battle 15 times",goal:15,reward:1000,type:"use",target:"Buzzy"},
+ {id:"use_buzzy_30",title:"Buzzy Pro",desc:"Use Buzzy in battle 30 times",goal:30,reward:1500,type:"use",target:"Buzzy"},
+ {id:"win_75",title:"Battle Legend",desc:"Win 75 battles",goal:75,reward:2000,type:"wins"},
+ {id:"win_100",title:"Century Club",desc:"Win 100 battles",goal:100,reward:2500,type:"wins"}
 ];
 const DAILY_QUEST_POOL=[
  {id:"daily_win_3",title:"Warm Up",desc:"Win 3 battles",goal:3,reward:150,type:"wins"},
  {id:"daily_trophies_15",title:"Trophy Run",desc:"Win 15 trophies",goal:15,reward:200,type:"trophies"},
  {id:"daily_use_buzzy",title:"Buzzy Boost",desc:"Use Buzzy in battle 2 times",goal:2,reward:100,type:"use",target:"Buzzy"},
- {id:"daily_win_5",title:"Battle Rush",desc:"Win 5 battles",goal:5,reward:250,type:"wins"}
+ {id:"daily_win_5",title:"Battle Rush",desc:"Win 5 battles",goal:5,reward:250,type:"wins"},
+ {id:"daily_win_2",title:"Quick Victory",desc:"Win 2 battles",goal:2,reward:100,type:"wins"},
+ {id:"daily_trophies_25",title:"Trophy Push",desc:"Win 25 trophies",goal:25,reward:250,type:"trophies"},
+ {id:"daily_use_buzzy_3",title:"Buzzy Again",desc:"Use Buzzy in battle 3 times",goal:3,reward:150,type:"use",target:"Buzzy"},
+ {id:"daily_win_4",title:"Four Wins",desc:"Win 4 battles",goal:4,reward:200,type:"wins"},
+ {id:"daily_trophies_10",title:"Small Trophy Run",desc:"Win 10 trophies",goal:10,reward:150,type:"trophies"},
+ {id:"daily_win_6",title:"Big Battle Day",desc:"Win 6 battles",goal:6,reward:300,type:"wins"}
 ];
 function seasonActive(){return new Date()>=SEASON_START&&new Date()<=SEASON_END;}
 function seasonLevelInfo(){let pts=Math.min(84200,Math.max(0,seasonPoints));let level=0,used=0;for(let l=0;l<100;l++){let need=l<5?100:l<10?200:l<15?500:l<20?700:1000;if(pts<used+need){return {level:l,progress:pts-used,need};}used+=need;}return {level:100,progress:0,need:0};}
@@ -823,7 +837,7 @@ function seasonNeedForLevel(l){return l<5?100:l<10?200:l<15?500:l<20?700:1000;}
 function seasonReward(level){if(level===0)return "Nothing";if(level===1)return "+30 Dolb";if(level===2)return "+100 Coins";if(level===3)return "Small Pack";if(level===4)return "Big Pack";if(level===5)return "+10 Dolb";if(level===6)return "+50 Coins";if(level===7)return "Small Pack";if(level===8)return "+50 Coins";if(level===9)return "+65 Coins";if(level===10)return "+10 Dolb";if(level===11)return "Big Pack";if(level===12)return "+70 Coins";if(level===13)return "Small Pack";if(level===14)return "+75 Coins";if(level===15)return "+15 Dolb";if(level===16)return "Small Pack";if(level===17)return "+80 Coins";if(level===18)return "Big Pack";if(level===19)return "+85 Coins";if(level===20)return "Pass Profile Picture 1 + 20 Gems";if(level%10===0)return "+20 Gems + Big Pack";if(level>=80)return "Big Pack";if(level%5===0)return "Small Pack";return "+30 Coins";}
 function seasonRewardData(level){if(level===0)return {};if(level===20)return {pic:"pass1pfp.png",gems:20};if(level%10===0&&level>20)return {gems:20,big:1};if(level>=80)return {big:1};if(level%5===0)return {small:1};if(level===1)return {dolb:30};if(level===2)return {coins:100};if(level===5)return {dolb:10};if(level===6)return {coins:50};if(level===8)return {coins:50};if(level===9)return {coins:65};if(level===10)return {dolb:10};if(level===12)return {coins:70};if(level===14)return {coins:75};if(level===15)return {dolb:15};if(level===17)return {coins:80};if(level===19)return {coins:85};return {coins:30};}
 const SUPER_REWARDS={1:"10 Dolb",5:"10 Dolb",10:"10 Dolb",15:"10 Dolb",20:"10 Dolb",25:"Big Pack",30:"Big Pack",35:"Big Pack",40:"Big Pack",45:"Big Pack",50:"Pick Pack",60:"Pick Pack",70:"Pick Pack",80:"Pick Pack",90:"Pick Pack",100:"3 Pick Packs + 1 Big Pack"};
-function currentDailyQuests(){const today=getTodayString();if(dailyQuestState.date!==today){let pool=[...DAILY_QUEST_POOL];let qs=[];while(qs.length<3){const q=pool.splice(Math.floor(Math.random()*pool.length),1)[0];qs.push({...q,progress:0,done:false});}dailyQuestState={date:today,quests:Object.fromEntries(qs.map(q=>[q.id,q]))};}return Object.values(dailyQuestState.quests);}
+function currentDailyQuests(){const today=getTodayString();if(dailyQuestState.date!==today){let pool=[...DAILY_QUEST_POOL];let qs=[];while(qs.length<4&&pool.length){const q=pool.splice(Math.floor(Math.random()*pool.length),1)[0];qs.push({...q,progress:0,done:false});}dailyQuestState={date:today,quests:Object.fromEntries(qs.map(q=>[q.id,q]))};}return Object.values(dailyQuestState.quests);}
 function questProgress(type,amount,cardName){if(!seasonActive())return;const all=[...SEASON_QUESTS.map(q=>[q,seasonQuestState]),...currentDailyQuests().map(q=>[q,dailyQuestState.quests])];let changed=false;for(const [q,state] of all){if(!state[q.id])state[q.id]={progress:0,done:false};const item=state[q.id];if(item.done)continue;if(q.type!==type)continue;if(q.target&&q.target!==cardName)continue;item.progress=Math.min(q.goal,(item.progress||0)+amount);if(item.progress>=q.goal){item.done=true;seasonPoints+=q.reward;showMessage(`${q.title} complete! +${q.reward} Season Points`);}changed=true;}if(changed)savePlayerData();}
 function seasonRecordBattle(won,cardName,trophyGain){if(!won)return;questProgress("wins",1,cardName);if(trophyGain>0)questProgress("trophies",trophyGain,cardName);if(cardName)questProgress("use",1,cardName);}
 async function claimSeasonLevel(level,superTrail=false){
